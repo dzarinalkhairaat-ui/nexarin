@@ -29,7 +29,7 @@ export const newsHeroData = {
   eyebrow: "News",
   title: "Ruang informasi digital Nexarin.",
   description:
-    "News Nexarin disiapkan sebagai portal informasi by-rins yang nantinya akan mengadaptasi pondasi RinsNews: headline, latest news, popular news, kategori, artikel detail, search, dan share button.",
+    "Ruang informasi digital by-rins untuk update, insight, teknologi, dan referensi pilihan dalam ekosistem Nexarin.",
   primaryCta: {
     label: "Baca Headline",
     href: "#headline-news",

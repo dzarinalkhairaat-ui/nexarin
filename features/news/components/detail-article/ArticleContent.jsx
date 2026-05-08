@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 const ARTICLE_IMAGES = {
@@ -19,6 +22,7 @@ const DEFAULT_FALLBACK_ARTICLE_IMAGE =
   "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1100&q=80";
 
 const NEXARIN_LOGO = "/images/logo/nexarin-logo.png";
+const SITE_URL = "https://nexarin.my.id";
 
 const SHARE_ICONS = {
   whatsapp: "https://cdn.simpleicons.org/whatsapp/25D366",
@@ -205,6 +209,49 @@ function getArticleParagraphs(article) {
   ];
 }
 
+function getArticleShareUrl(article) {
+  const slug = String(article?.slug || "preview").trim();
+
+  return `${SITE_URL}/news/artikel/${slug}`;
+}
+
+async function copyTextToClipboard(text) {
+  const value = String(text || "").trim();
+
+  if (!value || typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    // Fallback manual di bawah.
+  }
+
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    const success = document.execCommand("copy");
+    document.body.removeChild(textarea);
+
+    return success;
+  } catch {
+    return false;
+  }
+}
+
 function ArticleCoverPlaceholder({ article }) {
   const category = article?.category || "News";
 
@@ -291,54 +338,109 @@ function ArticleInfo({ article }) {
 }
 
 function ShareLinks({ article }) {
+  const [copyStatus, setCopyStatus] = useState("");
+
   const title = article?.title || "Artikel Nexarin News";
-  const slug = article?.slug || "preview";
-  const articleUrl = `https://nexarin.my.id/news/artikel/${slug}`;
+  const articleUrl = useMemo(() => getArticleShareUrl(article), [article]);
   const encodedUrl = encodeURIComponent(articleUrl);
   const encodedTitle = encodeURIComponent(title);
 
-  const links = [
-    {
-      label: "Bagikan ke WhatsApp",
-      icon: SHARE_ICONS.whatsapp,
-      href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
-    },
-    {
-      label: "Bagikan ke Facebook",
-      icon: SHARE_ICONS.facebook,
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-    },
-    {
-      label: "Buka link artikel",
-      icon: SHARE_ICONS.link,
-      href: articleUrl,
-    },
-  ];
+  const whatsappUrl = `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`;
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+  async function handleCopyFallback() {
+    const copied = await copyTextToClipboard(articleUrl);
+
+    setCopyStatus(
+      copied ? "Link artikel berhasil disalin." : "Link belum bisa disalin otomatis."
+    );
+
+    window.setTimeout(() => {
+      setCopyStatus("");
+    }, 2400);
+  }
+
+  async function handleNativeShare() {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: title,
+          url: articleUrl,
+        });
+
+        return;
+      } catch {
+        // User bisa membatalkan native share; tidak perlu dianggap error.
+        return;
+      }
+    }
+
+    await handleCopyFallback();
+  }
 
   return (
-    <div className="mt-3 flex justify-center">
+    <div className="mt-3 flex flex-col items-center justify-center">
       <div className="inline-flex max-w-full items-center justify-center gap-2.5 rounded-[22px] border border-white/10 bg-white/[0.04] px-3 py-2.5 shadow-lg shadow-black/10 backdrop-blur-xl">
-        {links.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={item.label}
-            title={item.label}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/15 bg-slate-950/60 p-2.5 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-400/10"
-          >
-            <img
-              src={item.icon}
-              alt=""
-              aria-hidden="true"
-              className="h-full w-full object-contain"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        ))}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Bagikan ke WhatsApp"
+          title="Bagikan ke WhatsApp"
+          className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/15 bg-slate-950/60 p-2.5 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-400/10"
+        >
+          <img
+            src={SHARE_ICONS.whatsapp}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+
+        <a
+          href={facebookUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Bagikan ke Facebook"
+          title="Bagikan ke Facebook"
+          className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/15 bg-slate-950/60 p-2.5 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-400/10"
+        >
+          <img
+            src={SHARE_ICONS.facebook}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+
+        <button
+          type="button"
+          onClick={handleNativeShare}
+          aria-label="Bagikan link artikel"
+          title="Bagikan link artikel"
+          className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/15 bg-slate-950/60 p-2.5 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-400/10"
+        >
+          <img
+            src={SHARE_ICONS.link}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+        </button>
       </div>
+
+      {copyStatus ? (
+        <p className="mt-2 rounded-full border border-emerald-300/15 bg-emerald-400/10 px-3 py-1.5 text-center text-[11px] font-bold text-emerald-300">
+          {copyStatus}
+        </p>
+      ) : null}
     </div>
   );
 }
