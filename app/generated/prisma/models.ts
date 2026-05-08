@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/NewsCategory.ts'
-export type * from './models/NewsArticle.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/NewsCategory'
+export type * from './models/NewsArticle'
+export type * from './models/AdminOtpChallenge'
+export type * from './commonInputTypes'

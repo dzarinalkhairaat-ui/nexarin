@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { requestAdminLoginOtpAction } from "@/features/admin/login/adminLoginOtp.actions";
 
 const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
-const ADMIN_SESSION_VALUE = "nexarin-admin-v2";
-const ADMIN_SESSION_MAX_AGE = 60 * 60 * 2;
 
 function getLoginErrorMessage(error) {
   const message = String(error?.message || "").toLowerCase();
@@ -34,12 +33,28 @@ function getSecureCookieSuffix() {
   return "";
 }
 
-function setAdminSessionCookie() {
-  document.cookie = `${ADMIN_SESSION_COOKIE}=${ADMIN_SESSION_VALUE}; path=/; Max-Age=${ADMIN_SESSION_MAX_AGE}; SameSite=Lax${getSecureCookieSuffix()}`;
+function clearLegacyAdminSessionCookie() {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  document.cookie = `${ADMIN_SESSION_COOKIE}=; path=/; Max-Age=0; SameSite=Lax${getSecureCookieSuffix()}`;
 }
 
-function clearAdminSessionCookie() {
-  document.cookie = `${ADMIN_SESSION_COOKIE}=; path=/; Max-Age=0; SameSite=Lax${getSecureCookieSuffix()}`;
+function createVerifyUrl({ email, redirectedFrom }) {
+  const params = new URLSearchParams();
+
+  if (email) {
+    params.set("email", email);
+  }
+
+  if (redirectedFrom) {
+    params.set("redirectedFrom", redirectedFrom);
+  }
+
+  const query = params.toString();
+
+  return query ? `/admin/login/verify?${query}` : "/admin/login/verify";
 }
 
 export default function AdminLoginPage() {
@@ -57,8 +72,9 @@ export default function AdminLoginPage() {
     setMessage(null);
 
     const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
 
-    if (!cleanEmail || !password.trim()) {
+    if (!cleanEmail || !cleanPassword) {
       setMessage({
         type: "error",
         text: "Email dan password admin wajib diisi.",
@@ -67,17 +83,17 @@ export default function AdminLoginPage() {
     }
 
     setIsLoading(true);
-    clearAdminSessionCookie();
+    clearLegacyAdminSessionCookie();
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: cleanEmail,
-      password,
+      password: cleanPassword,
     });
 
     if (error) {
       console.error("Supabase login error:", error);
 
-      clearAdminSessionCookie();
+      clearLegacyAdminSessionCookie();
       setIsLoading(false);
       setMessage({
         type: "error",
@@ -87,7 +103,7 @@ export default function AdminLoginPage() {
     }
 
     if (!data?.user) {
-      clearAdminSessionCookie();
+      clearLegacyAdminSessionCookie();
       setIsLoading(false);
       setMessage({
         type: "error",
@@ -96,17 +112,39 @@ export default function AdminLoginPage() {
       return;
     }
 
-    setAdminSessionCookie();
+    const redirectedFrom = searchParams.get("redirectedFrom") || "";
+    const otpResult = await requestAdminLoginOtpAction({
+      email: cleanEmail,
+      userId: data.user.id,
+    });
+
+    if (!otpResult.ok) {
+      console.error("Admin OTP request error:", otpResult);
+
+      await supabase.auth.signOut();
+      clearLegacyAdminSessionCookie();
+      setIsLoading(false);
+      setMessage({
+        type: "error",
+        text: otpResult.message || "OTP admin gagal dikirim. Coba lagi.",
+      });
+      return;
+    }
 
     setMessage({
       type: "success",
-      text: "Login berhasil. Mengalihkan ke dashboard...",
+      text:
+        otpResult.message ||
+        "Kode OTP sudah dikirim. Mengalihkan ke verifikasi...",
     });
 
-    const redirectedFrom = searchParams.get("redirectedFrom");
-
     setTimeout(() => {
-      router.replace(redirectedFrom || "/admin");
+      router.replace(
+        createVerifyUrl({
+          email: otpResult.email || cleanEmail,
+          redirectedFrom,
+        })
+      );
       router.refresh();
     }, 700);
   }
@@ -158,7 +196,7 @@ export default function AdminLoginPage() {
                 <div className="mt-1 flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/40" />
                   <p className="truncate text-xs font-bold text-slate-500">
-                    Nexarin by-rins
+                    Password + OTP Security
                   </p>
                 </div>
               </div>
@@ -223,11 +261,16 @@ export default function AdminLoginPage() {
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {message?.type === "success"
-                  ? "Login Berhasil"
+                  ? "OTP Dikirim"
                   : isLoading
-                    ? "Memproses..."
-                    : "Masuk Dashboard"}
+                    ? "Memproses OTP..."
+                    : "Lanjutkan dengan OTP"}
               </button>
+
+              <p className="text-center text-xs font-semibold leading-5 text-slate-600">
+                Setelah password benar, kode OTP 8 digit akan dikirim ke email
+                admin yang terdaftar.
+              </p>
             </div>
           </form>
         </div>

@@ -59,12 +59,12 @@ model NewsArticle {
   coverImageProvider NewsImageProvider?
   coverImageAlt      String?
 
-  sourceType        NewsSourceType?
-  sourceName        String?
-  sourceUrl         String?
-  sourceNote        String?
-  videoSourceName   String?
-  videoSourceUrl    String?
+  sourceType      NewsSourceType?
+  sourceName      String?
+  sourceUrl       String?
+  sourceNote      String?
+  videoSourceName String?
+  videoSourceUrl  String?
 
   categoryId String
   category   NewsCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
@@ -79,4 +79,37 @@ model NewsArticle {
   @@index([isFeatured])
   @@index([createdAt])
   @@map("news_articles")
+}
+
+model AdminOtpChallenge {
+  id String @id @default(cuid())
+
+  email  String
+  userId String?
+
+  purpose            String @default("ADMIN_LOGIN")
+  otpHash            String
+  challengeTokenHash String @unique
+
+  expiresAt DateTime
+  usedAt    DateTime?
+  lockedAt  DateTime?
+
+  attempts    Int @default(0)
+  maxAttempts Int @default(5)
+  resendCount Int @default(0)
+
+  lastSentAt DateTime @default(now())
+
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([email, usedAt])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("admin_otp_challenges")
 }

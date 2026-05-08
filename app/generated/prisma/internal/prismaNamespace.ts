@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models.ts"
-import { type PrismaClient } from "./class.ts"
+import type * as Prisma from "../models"
+import { type PrismaClient } from "./class"
 
-export type * from '../models.ts'
+export type * from '../models'
 
 export type DMMF = typeof runtime.DMMF
 
@@ -385,7 +385,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   NewsCategory: 'NewsCategory',
-  NewsArticle: 'NewsArticle'
+  NewsArticle: 'NewsArticle',
+  AdminOtpChallenge: 'AdminOtpChallenge'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle"
+    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +554,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdminOtpChallenge: {
+      payload: Prisma.$AdminOtpChallengePayload<ExtArgs>
+      fields: Prisma.AdminOtpChallengeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdminOtpChallengeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdminOtpChallengeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        findFirst: {
+          args: Prisma.AdminOtpChallengeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdminOtpChallengeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        findMany: {
+          args: Prisma.AdminOtpChallengeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>[]
+        }
+        create: {
+          args: Prisma.AdminOtpChallengeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        createMany: {
+          args: Prisma.AdminOtpChallengeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdminOtpChallengeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>[]
+        }
+        delete: {
+          args: Prisma.AdminOtpChallengeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        update: {
+          args: Prisma.AdminOtpChallengeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        deleteMany: {
+          args: Prisma.AdminOtpChallengeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdminOtpChallengeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdminOtpChallengeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>[]
+        }
+        upsert: {
+          args: Prisma.AdminOtpChallengeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminOtpChallengePayload>
+        }
+        aggregate: {
+          args: Prisma.AdminOtpChallengeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdminOtpChallenge>
+        }
+        groupBy: {
+          args: Prisma.AdminOtpChallengeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminOtpChallengeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdminOtpChallengeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminOtpChallengeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -633,6 +708,29 @@ export const NewsArticleScalarFieldEnum = {
 } as const
 
 export type NewsArticleScalarFieldEnum = (typeof NewsArticleScalarFieldEnum)[keyof typeof NewsArticleScalarFieldEnum]
+
+
+export const AdminOtpChallengeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  userId: 'userId',
+  purpose: 'purpose',
+  otpHash: 'otpHash',
+  challengeTokenHash: 'challengeTokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  lockedAt: 'lockedAt',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  resendCount: 'resendCount',
+  lastSentAt: 'lastSentAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -881,6 +979,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   newsCategory?: Prisma.NewsCategoryOmit
   newsArticle?: Prisma.NewsArticleOmit
+  adminOtpChallenge?: Prisma.AdminOtpChallengeOmit
 }
 
 /* Types for Logging */

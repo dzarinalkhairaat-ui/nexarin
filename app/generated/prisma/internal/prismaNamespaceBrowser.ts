@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models.ts'
-export type * from './prismaNamespace.ts'
+export type * from '../models'
+export type * from './prismaNamespace'
 
 export const Decimal = runtime.Decimal
 
@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   NewsCategory: 'NewsCategory',
-  NewsArticle: 'NewsArticle'
+  NewsArticle: 'NewsArticle',
+  AdminOtpChallenge: 'AdminOtpChallenge'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -112,6 +113,29 @@ export const NewsArticleScalarFieldEnum = {
 } as const
 
 export type NewsArticleScalarFieldEnum = (typeof NewsArticleScalarFieldEnum)[keyof typeof NewsArticleScalarFieldEnum]
+
+
+export const AdminOtpChallengeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  userId: 'userId',
+  purpose: 'purpose',
+  otpHash: 'otpHash',
+  challengeTokenHash: 'challengeTokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  lockedAt: 'lockedAt',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  resendCount: 'resendCount',
+  lastSentAt: 'lastSentAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
 
 
 export const SortOrder = {
