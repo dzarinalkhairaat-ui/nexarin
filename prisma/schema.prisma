@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum NewsArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum NewsImageProvider {
+  SUPABASE
+  EXTERNAL
+}
+
+enum NewsSourceType {
+  ARTICLE_WEBSITE
+  YOUTUBE
+  SOCIAL_MEDIA
+  DOCUMENT_RELEASE
+  OTHER
+}
+
+model NewsCategory {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?
+  isActive    Boolean       @default(true)
+  articles    NewsArticle[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("news_categories")
+}
+
+model NewsArticle {
+  id      String @id @default(cuid())
+  title   String
+  slug    String @unique
+  summary String
+  content String
+
+  youtubeUrl String?
+
+  status      NewsArticleStatus @default(DRAFT)
+  isHeadline  Boolean           @default(false)
+  isFeatured  Boolean           @default(false)
+  views       Int               @default(0)
+
+  coverImageUrl      String?
+  coverImagePath     String?
+  coverImageProvider NewsImageProvider?
+  coverImageAlt      String?
+
+  sourceType        NewsSourceType?
+  sourceName        String?
+  sourceUrl         String?
+  sourceNote        String?
+  videoSourceName   String?
+  videoSourceUrl    String?
+
+  categoryId String
+  category   NewsCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([isHeadline])
+  @@index([isFeatured])
+  @@index([createdAt])
+  @@map("news_articles")
+}
