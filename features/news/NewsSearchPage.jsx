@@ -9,9 +9,9 @@ import { prisma } from "@/lib/prisma";
 const SEARCH_ARTICLE_LIMIT = 100;
 const SEARCH_RESULT_LIMIT = 48;
 const DEFAULT_CATEGORY_SLUG = "news";
-const DEFAULT_CATEGORY_NAME = "News";
-const DEFAULT_AUTHOR_NAME = "Nexarin by-rins";
-const DEFAULT_READ_TIME = "3 min read";
+const DEFAULT_CATEGORY_NAME = "Nexarin News";
+const DEFAULT_AUTHOR_NAME = "Nexarin News";
+const DEFAULT_READ_TIME = "3 menit baca";
 
 function getSafeKeyword(value) {
   return String(value || "").trim();
@@ -25,7 +25,11 @@ function normalizeSearchText(value) {
 }
 
 function getFallbackArticles() {
-  return Array.isArray(fallbackNewsArticles) ? fallbackNewsArticles : [];
+  const articles = Array.isArray(fallbackNewsArticles)
+    ? fallbackNewsArticles
+    : [];
+
+  return articles.filter((article) => !isInternalPreviewArticle(article));
 }
 
 function formatPublicArticleDate(date) {
@@ -54,6 +58,19 @@ function getPlainText(value) {
     .trim();
 }
 
+function normalizeReadTime(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  return text
+    .replace(/(\d+)\s*min\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*minutes?\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*mins?\s*read/gi, "$1 menit baca");
+}
+
 function getReadTime(content) {
   const text = getPlainText(content);
 
@@ -64,7 +81,7 @@ function getReadTime(content) {
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 200));
 
-  return `${minutes} min read`;
+  return `${minutes} menit baca`;
 }
 
 function getSafeExcerpt(article) {
@@ -83,6 +100,26 @@ function getSafeExcerpt(article) {
   return contentPreview.length > 160
     ? `${contentPreview.slice(0, 157)}...`
     : contentPreview;
+}
+
+function isInternalPreviewArticle(article) {
+  const marker = [
+    article?.slug,
+    article?.title,
+    article?.source,
+    article?.category?.name,
+    article?.category,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return (
+    marker.includes("fallback") ||
+    marker.includes("rinsnews") ||
+    marker.includes("konten-awal") ||
+    marker.includes("mengadaptasi-pondasi")
+  );
 }
 
 function normalizePublicArticle(article, index = 0) {
@@ -116,7 +153,9 @@ function normalizePublicArticle(article, index = 0) {
       typeof article?.date === "string" && article.date.trim()
         ? article.date
         : formatPublicArticleDate(publishedDate),
-    readTime: article?.readTime || getReadTime(article?.content || article?.body),
+    readTime:
+      normalizeReadTime(article?.readTime) ||
+      getReadTime(article?.content || article?.body),
     image: article?.coverImageUrl || article?.image || "",
     isHeadline: Boolean(article?.isHeadline),
     isPopular: Boolean(article?.isPopular || article?.isFeatured),
@@ -128,7 +167,7 @@ function normalizePublicArticle(article, index = 0) {
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || "",
-    source: article?.source || "fallback",
+    source: article?.source === "database" ? "database" : "preview",
     searchContent: getPlainText(
       [
         article?.title,
@@ -192,6 +231,7 @@ function filterArticlesByKeyword(articles, keyword) {
   const query = normalizeSearchText(keyword);
 
   const normalizedArticles = safeArticles
+    .filter((article) => !isInternalPreviewArticle(article))
     .map((article, index) => normalizePublicArticle(article, index))
     .filter((article) => article.slug && article.title);
 
@@ -220,6 +260,7 @@ async function getDatabaseSearchResults(keyword) {
           select: {
             name: true,
             slug: true,
+            isActive: true,
           },
         },
       },
@@ -235,7 +276,9 @@ async function getDatabaseSearchResults(keyword) {
     });
 
     return filterArticlesByKeyword(
-      articles.map(mapDatabaseArticleToPublicArticle),
+      articles
+        .filter((article) => article?.category?.isActive !== false)
+        .map(mapDatabaseArticleToPublicArticle),
       keyword
     );
   } catch (error) {
@@ -260,6 +303,8 @@ async function getSearchResults(keyword) {
 }
 
 function SearchPageBackground({ keyword, results }) {
+  const safeResults = Array.isArray(results) ? results : [];
+
   return (
     <section className="relative overflow-hidden bg-slate-950 text-white">
       <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
@@ -281,11 +326,11 @@ function SearchPageBackground({ keyword, results }) {
 
       <div className="relative z-10">
         <ScrollReveal>
-          <SearchHero keyword={keyword} total={results.length} />
+          <SearchHero keyword={keyword} total={safeResults.length} />
         </ScrollReveal>
 
         <ScrollReveal delay={100}>
-          <SearchResults keyword={keyword} results={results} />
+          <SearchResults keyword={keyword} results={safeResults} />
         </ScrollReveal>
       </div>
     </section>

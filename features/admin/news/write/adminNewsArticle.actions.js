@@ -1,7 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { createServerClient } from "@supabase/ssr";
 import { prisma } from "@/lib/prisma";
+
+const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
+const ADMIN_SESSION_VALUE = "nexarin-admin-v2";
+const NEWS_IMAGE_BUCKET = "news-images";
 
 const articleStatusMap = {
   published: "PUBLISHED",
@@ -34,6 +40,112 @@ function createSlug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+function getSupabaseAnonKey() {
+  return (
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    ""
+  );
+}
+
+function getAllowedAdminEmails() {
+  return String(
+    process.env.NEXARIN_ADMIN_EMAILS ||
+      process.env.NEXARIN_ADMIN_EMAIL ||
+      process.env.ADMIN_EMAIL ||
+      ""
+  )
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function isAllowedAdminUser(user) {
+  const allowedEmails = getAllowedAdminEmails();
+
+  if (!allowedEmails.length) {
+    return true;
+  }
+
+  const userEmail = String(user?.email || "").trim().toLowerCase();
+
+  return allowedEmails.includes(userEmail);
+}
+
+async function requireAdminSession() {
+  try {
+    const cookieStore = await cookies();
+    const adminSessionValue =
+      cookieStore.get(ADMIN_SESSION_COOKIE)?.value || "";
+
+    if (adminSessionValue !== ADMIN_SESSION_VALUE) {
+      return {
+        ok: false,
+        message: "Sesi admin tidak valid atau sudah habis. Login ulang dulu.",
+      };
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = getSupabaseAnonKey();
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return {
+        ok: false,
+        message:
+          "Konfigurasi Supabase server belum lengkap. Cek environment variable Supabase.",
+      };
+    }
+
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
+          } catch {
+            // Aman diabaikan kalau cookie tidak bisa diset dari context tertentu.
+          }
+        },
+      },
+    });
+
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      return {
+        ok: false,
+        message: "Sesi Supabase admin tidak ditemukan. Login ulang dulu.",
+      };
+    }
+
+    if (!isAllowedAdminUser(user)) {
+      return {
+        ok: false,
+        message: "Akun ini tidak punya akses admin Nexarin.",
+      };
+    }
+
+    return {
+      ok: true,
+      user,
+    };
+  } catch (error) {
+    console.error("Gagal memverifikasi session admin News:", error);
+
+    return {
+      ok: false,
+      message: "Sesi admin gagal diverifikasi. Login ulang lalu coba lagi.",
+    };
+  }
+}
+
 function isValidCoverImageUrl(value) {
   const imageUrl = normalizeText(value);
 
@@ -57,6 +169,29 @@ function isValidCoverImageUrl(value) {
   return false;
 }
 
+function getStoragePathFromPublicUrl(publicUrl) {
+  const imageUrl = normalizeText(publicUrl);
+
+  if (!imageUrl) {
+    return "";
+  }
+
+  try {
+    const parsedUrl = new URL(imageUrl);
+    const marker = `/storage/v1/object/public/${NEWS_IMAGE_BUCKET}/`;
+    const decodedPath = decodeURIComponent(parsedUrl.pathname);
+    const markerIndex = decodedPath.indexOf(marker);
+
+    if (markerIndex === -1) {
+      return "";
+    }
+
+    return decodedPath.slice(markerIndex + marker.length);
+  } catch {
+    return "";
+  }
+}
+
 function getCoverImageProvider(coverImageUrl) {
   const imageUrl = normalizeText(coverImageUrl);
 
@@ -65,14 +200,32 @@ function getCoverImageProvider(coverImageUrl) {
   }
 
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return "EXTERNAL";
+    return getStoragePathFromPublicUrl(imageUrl) ? "SUPABASE" : "EXTERNAL";
   }
 
   if (imageUrl.startsWith("/")) {
-    return "LOCAL";
+    return null;
   }
 
   return null;
+}
+
+function getCoverImagePath(coverImageUrl, explicitPath = "") {
+  const safeExplicitPath = normalizeOptionalText(explicitPath);
+
+  if (safeExplicitPath) {
+    return safeExplicitPath;
+  }
+
+  const imageUrl = normalizeText(coverImageUrl);
+
+  if (!imageUrl) {
+    return null;
+  }
+
+  const storagePath = getStoragePathFromPublicUrl(imageUrl);
+
+  return storagePath || null;
 }
 
 function mapArticlePayload(payload) {
@@ -92,6 +245,7 @@ function mapArticlePayload(payload) {
   const videoSourceName = normalizeOptionalText(payload?.videoSourceName);
   const videoSourceUrl = normalizeOptionalText(payload?.videoSourceUrl);
   const coverImageUrl = normalizeOptionalText(payload?.coverImageUrl);
+  const coverImagePath = normalizeOptionalText(payload?.coverImagePath);
 
   return {
     title,
@@ -108,6 +262,7 @@ function mapArticlePayload(payload) {
     videoSourceName,
     videoSourceUrl,
     coverImageUrl,
+    coverImagePath,
     isHeadline: Boolean(payload?.isHeadline),
     isFeatured: Boolean(payload?.isFeatured),
   };
@@ -174,6 +329,7 @@ async function getActiveCategoryBySlug(categorySlug) {
 function revalidateNewsPublicPaths(articleSlug, categorySlug) {
   revalidatePath("/news");
   revalidatePath("/news/search");
+  revalidatePath("/sitemap.xml");
 
   if (articleSlug) {
     revalidatePath(`/news/artikel/${articleSlug}`);
@@ -185,6 +341,12 @@ function revalidateNewsPublicPaths(articleSlug, categorySlug) {
 }
 
 export async function createNewsArticleAction(payload) {
+  const adminSession = await requireAdminSession();
+
+  if (!adminSession.ok) {
+    return adminSession;
+  }
+
   const articlePayload = mapArticlePayload(payload);
   const validation = validateArticlePayload(articlePayload);
 
@@ -231,6 +393,10 @@ export async function createNewsArticleAction(payload) {
         isFeatured: articlePayload.isFeatured,
         views: 0,
         coverImageUrl: articlePayload.coverImageUrl,
+        coverImagePath: getCoverImagePath(
+          articlePayload.coverImageUrl,
+          articlePayload.coverImagePath
+        ),
         coverImageProvider: getCoverImageProvider(articlePayload.coverImageUrl),
         coverImageAlt: articlePayload.title,
         sourceType: articlePayload.sourceType,
@@ -277,6 +443,12 @@ export async function createNewsArticleAction(payload) {
 }
 
 export async function updateNewsArticleAction(payload) {
+  const adminSession = await requireAdminSession();
+
+  if (!adminSession.ok) {
+    return adminSession;
+  }
+
   const articleId = normalizeText(payload?.id);
   const articlePayload = mapArticlePayload(payload);
   const validation = validateArticlePayload(articlePayload);
@@ -362,6 +534,10 @@ export async function updateNewsArticleAction(payload) {
         isHeadline: articlePayload.isHeadline,
         isFeatured: articlePayload.isFeatured,
         coverImageUrl: articlePayload.coverImageUrl,
+        coverImagePath: getCoverImagePath(
+          articlePayload.coverImageUrl,
+          articlePayload.coverImagePath
+        ),
         coverImageProvider: getCoverImageProvider(articlePayload.coverImageUrl),
         coverImageAlt: articlePayload.title,
         sourceType: articlePayload.sourceType,

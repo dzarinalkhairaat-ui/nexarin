@@ -6,8 +6,11 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 const DEFAULT_TITLE = "Artikel Nexarin News";
+const NOT_FOUND_TITLE = "Artikel tidak ditemukan";
 const DEFAULT_DESCRIPTION =
-  "Artikel News Nexarin by-rins dengan data fallback aman.";
+  "Artikel News Nexarin by-rins dengan data aman dan mobile-first.";
+const NOT_FOUND_DESCRIPTION =
+  "Artikel yang dicari tidak ditemukan atau belum tersedia di News Nexarin.";
 const DEFAULT_AUTHOR = "Nexarin by-rins";
 const SITE_URL = "https://nexarin.my.id";
 
@@ -125,18 +128,25 @@ function mapDatabaseArticleForMetadata(article) {
     modifiedTime: getIsoDate(article?.updatedAt),
     section: article?.category?.name || "News",
     imageUrl,
+    isRealArticle: true,
   };
 }
 
-function mapFallbackArticleForMetadata(article) {
+function mapFallbackArticleForMetadata(article, requestedSlug) {
   if (!article) {
+    return null;
+  }
+
+  const slug = getSafeSlug(article?.slug);
+
+  if (!slug || slug !== requestedSlug) {
     return null;
   }
 
   const imageUrl = getAbsoluteImageUrl(article?.image);
 
   return {
-    slug: article?.slug || "",
+    slug,
     title: article?.title || DEFAULT_TITLE,
     description: article?.excerpt || DEFAULT_DESCRIPTION,
     author: article?.author || DEFAULT_AUTHOR,
@@ -144,17 +154,22 @@ function mapFallbackArticleForMetadata(article) {
     modifiedTime: getIsoDate(article?.date),
     section: article?.category || "News",
     imageUrl,
+    isRealArticle: true,
   };
 }
 
 async function getArticleMetadata(slug) {
-  const databaseArticle = await getDatabaseArticleBySlug(slug);
+  const safeSlug = getSafeSlug(slug);
+  const databaseArticle = await getDatabaseArticleBySlug(safeSlug);
 
   if (databaseArticle) {
     return mapDatabaseArticleForMetadata(databaseArticle);
   }
 
-  return mapFallbackArticleForMetadata(getFallbackArticleBySlug(slug));
+  return mapFallbackArticleForMetadata(
+    getFallbackArticleBySlug(safeSlug),
+    safeSlug
+  );
 }
 
 export async function generateMetadata({ params }) {
@@ -162,11 +177,11 @@ export async function generateMetadata({ params }) {
   const slug = getSafeSlug(resolvedParams?.slug);
   const article = await getArticleMetadata(slug);
 
-  const title = article?.title || DEFAULT_TITLE;
-  const description = article?.description || DEFAULT_DESCRIPTION;
+  const title = article?.title || NOT_FOUND_TITLE;
+  const description = article?.description || NOT_FOUND_DESCRIPTION;
   const canonicalPath = `/news/artikel/${slug || "preview"}`;
   const url = `${SITE_URL}${canonicalPath}`;
-  const isRealArticle = Boolean(article?.slug && article.slug === slug);
+  const isRealArticle = Boolean(article?.isRealArticle);
 
   const openGraph = {
     type: "article",

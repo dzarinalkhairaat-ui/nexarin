@@ -11,9 +11,10 @@ import { newsArticles as fallbackNewsArticles } from "@/features/news/news.data"
 
 const PUBLIC_NEWS_LIMIT = 12;
 const DATABASE_NEWS_TAKE_LIMIT = 24;
-const DEFAULT_CATEGORY_NAME = "News";
-const DEFAULT_AUTHOR_NAME = "Nexarin by-rins";
-const DEFAULT_READ_TIME = "3 min read";
+const DEFAULT_CATEGORY_NAME = "Nexarin News";
+const DEFAULT_CATEGORY_SLUG = "news";
+const DEFAULT_AUTHOR_NAME = "Nexarin News";
+const DEFAULT_READ_TIME = "3 menit baca";
 
 function formatPublicArticleDate(date) {
   if (!date) {
@@ -41,6 +42,19 @@ function getPlainText(value) {
     .trim();
 }
 
+function normalizeReadTime(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  return text
+    .replace(/(\d+)\s*min\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*minutes?\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*mins?\s*read/gi, "$1 menit baca");
+}
+
 function getReadTime(content) {
   const text = getPlainText(content);
 
@@ -51,7 +65,7 @@ function getReadTime(content) {
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 200));
 
-  return `${minutes} min read`;
+  return `${minutes} menit baca`;
 }
 
 function getSafeExcerpt(article) {
@@ -72,6 +86,26 @@ function getSafeExcerpt(article) {
     : contentPreview;
 }
 
+function isInternalPreviewArticle(article) {
+  const marker = [
+    article?.slug,
+    article?.title,
+    article?.source,
+    article?.category?.name,
+    article?.category,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return (
+    marker.includes("fallback") ||
+    marker.includes("rinsnews") ||
+    marker.includes("konten-awal") ||
+    marker.includes("mengadaptasi-pondasi")
+  );
+}
+
 function normalizePublicArticle(article, index = 0) {
   const publishedDate =
     article?.publishedAt || article?.createdAt || article?.date || "";
@@ -89,7 +123,9 @@ function normalizePublicArticle(article, index = 0) {
       article?.categoryName ||
       DEFAULT_CATEGORY_NAME,
     categorySlug:
-      article?.category?.slug || article?.categorySlug || "news",
+      article?.category?.slug ||
+      article?.categorySlug ||
+      DEFAULT_CATEGORY_SLUG,
     excerpt: getSafeExcerpt(article),
     author:
       article?.author ||
@@ -100,7 +136,8 @@ function normalizePublicArticle(article, index = 0) {
       typeof article?.date === "string" && article.date.trim()
         ? article.date
         : formatPublicArticleDate(publishedDate),
-    readTime: article?.readTime || getReadTime(article?.content),
+    readTime:
+      normalizeReadTime(article?.readTime) || getReadTime(article?.content),
     image: article?.coverImageUrl || article?.image || "",
     isHeadline: Boolean(article?.isHeadline),
     isPopular: Boolean(article?.isPopular || article?.isFeatured),
@@ -112,7 +149,7 @@ function normalizePublicArticle(article, index = 0) {
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || "",
-    source: article?.source || "fallback",
+    source: article?.source === "database" ? "database" : "preview",
   };
 }
 
@@ -120,6 +157,7 @@ function preparePublicNewsFeed(articles) {
   const safeArticles = Array.isArray(articles) ? articles : [];
 
   const normalizedArticles = safeArticles
+    .filter((article) => !isInternalPreviewArticle(article))
     .map((article, index) => normalizePublicArticle(article, index))
     .filter((article) => article.slug && article.title)
     .slice(0, PUBLIC_NEWS_LIMIT);
@@ -139,7 +177,11 @@ function preparePublicNewsFeed(articles) {
 }
 
 function getFallbackNewsFeed() {
-  const fallbackFeed = preparePublicNewsFeed(fallbackNewsArticles);
+  const fallbackArticles = Array.isArray(fallbackNewsArticles)
+    ? fallbackNewsArticles
+    : [];
+
+  const fallbackFeed = preparePublicNewsFeed(fallbackArticles);
 
   return fallbackFeed.length > 0 ? fallbackFeed : [];
 }
@@ -150,7 +192,7 @@ function mapDatabaseArticleToPublicArticle(article) {
     slug: article?.slug || "",
     title: article?.title || "Artikel Nexarin",
     category: article?.category?.name || DEFAULT_CATEGORY_NAME,
-    categorySlug: article?.category?.slug || "news",
+    categorySlug: article?.category?.slug || DEFAULT_CATEGORY_SLUG,
     summary: article?.summary || "",
     content: article?.content || "",
     author: article?.sourceName || DEFAULT_AUTHOR_NAME,
@@ -192,6 +234,7 @@ async function getPublishedNewsArticles() {
           select: {
             name: true,
             slug: true,
+            isActive: true,
           },
         },
       },
@@ -207,10 +250,12 @@ async function getPublishedNewsArticles() {
     });
 
     const databaseFeed = preparePublicNewsFeed(
-      articles.map(mapDatabaseArticleToPublicArticle)
+      articles
+        .filter((article) => article?.category?.isActive !== false)
+        .map(mapDatabaseArticleToPublicArticle)
     );
 
-    return databaseFeed.length > 0 ? databaseFeed : getFallbackNewsFeed();
+    return databaseFeed;
   } catch (error) {
     console.error("Gagal mengambil artikel public News:", error);
 

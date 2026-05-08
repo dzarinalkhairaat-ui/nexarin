@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import NewsFooter from "@/features/news/components/NewsFooter";
 import ArticleHeader from "@/features/news/components/detail-article/ArticleHeader";
@@ -11,7 +12,7 @@ const RELATED_ARTICLE_LIMIT = 4;
 const DEFAULT_CATEGORY_NAME = "News";
 const DEFAULT_CATEGORY_SLUG = "news";
 const DEFAULT_AUTHOR_NAME = "Nexarin by-rins";
-const DEFAULT_READ_TIME = "3 min read";
+const DEFAULT_READ_TIME = "3 menit baca";
 
 function getSafeText(value) {
   return String(value || "").trim();
@@ -80,6 +81,19 @@ function splitContentToParagraphs(content) {
     .filter(Boolean);
 }
 
+function normalizeReadTime(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  return text
+    .replace(/(\d+)\s*min\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*minutes?\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*mins?\s*read/gi, "$1 menit baca");
+}
+
 function getReadTime(content) {
   const text = getPlainText(content);
 
@@ -90,7 +104,7 @@ function getReadTime(content) {
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 200));
 
-  return `${minutes} min read`;
+  return `${minutes} menit baca`;
 }
 
 function getSafeExcerpt(article) {
@@ -146,7 +160,9 @@ function normalizePublicArticle(article, index = 0) {
         ? article.date
         : formatPublicArticleDate(publishedDate),
     publishedDate: getIsoDateOnly(publishedDate),
-    readTime: article?.readTime || getReadTime(article?.content || article?.body),
+    readTime:
+      normalizeReadTime(article?.readTime) ||
+      getReadTime(article?.content || article?.body),
     image: article?.coverImageUrl || article?.image || "",
     coverImageAlt:
       article?.coverImageAlt || article?.title || "Artikel Nexarin News",
@@ -165,10 +181,9 @@ function normalizePublicArticle(article, index = 0) {
     articleSourceUrl: article?.articleSourceUrl || article?.sourceUrl || "",
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
-    videoSourceUrl:
-      article?.videoSourceUrl || article?.youtubeUrl || "",
+    videoSourceUrl: article?.videoSourceUrl || article?.youtubeUrl || "",
     categoryId: article?.categoryId || "",
-    source: article?.source || "fallback",
+    source: article?.source === "database" ? "database" : "preview",
   };
 }
 
@@ -200,33 +215,19 @@ function mapDatabaseArticleToPublicArticle(article, index = 0) {
   );
 }
 
-function getPreviewArticle(slug = "preview") {
-  return normalizePublicArticle({
-    slug: slug || "preview",
-    title: "Artikel Nexarin News",
-    category: DEFAULT_CATEGORY_NAME,
-    categorySlug: DEFAULT_CATEGORY_SLUG,
-    excerpt:
-      "Artikel fallback Nexarin News disiapkan agar halaman tetap aman.",
-    author: DEFAULT_AUTHOR_NAME,
-    date: "2026-05-04",
-    readTime: DEFAULT_READ_TIME,
-    source: "preview",
-  });
-}
-
 function getFallbackArticle(slug) {
   const safeSlug = getSafeSlug(slug);
-  const fallbackArticles = getFallbackArticles();
 
+  if (!safeSlug) {
+    return null;
+  }
+
+  const fallbackArticles = getFallbackArticles();
   const article =
-    fallbackArticles.find((item) => item?.slug === safeSlug) ||
-    fallbackArticles[0] ||
+    fallbackArticles.find((item) => getSafeSlug(item?.slug) === safeSlug) ||
     null;
 
-  return article
-    ? normalizePublicArticle(article)
-    : getPreviewArticle(safeSlug || "preview");
+  return article ? normalizePublicArticle(article) : null;
 }
 
 function getPublicDateFilter() {
@@ -438,10 +439,98 @@ function ArticleDetailBackground({ article, relatedArticles }) {
   );
 }
 
+function ArticleNotFoundBackground({ slug }) {
+  const safeSlug = getSafeSlug(slug);
+
+  return (
+    <section className="relative overflow-hidden bg-slate-950 px-5 py-16 text-white sm:px-6 sm:py-20 lg:px-8">
+      <div className="pointer-events-none absolute -left-24 top-16 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-32 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
+
+      <img
+        src="/images/logo/nexarin-logo.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-10 top-10 h-80 w-80 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <div className="relative z-10 mx-auto flex min-h-[58vh] w-full max-w-3xl items-center justify-center">
+        <div className="w-full rounded-[34px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-8">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-300/20 bg-cyan-400/10 p-3 shadow-xl shadow-cyan-400/10">
+            <img
+              src="/images/logo/nexarin-logo.png"
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p className="mx-auto mt-6 inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-300">
+            News
+          </p>
+
+          <h1 className="mx-auto mt-5 max-w-2xl text-[2.35rem] font-black leading-[0.95] tracking-[-0.065em] text-white sm:text-5xl">
+            Artikel tidak ditemukan.
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
+            Artikel yang bro buka tidak tersedia, sudah dihapus, belum
+            dipublikasikan, atau URL artikelnya tidak valid.
+          </p>
+
+          {safeSlug ? (
+            <p className="mx-auto mt-4 max-w-xl rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3 text-xs font-semibold text-slate-500">
+              Slug: {safeSlug}
+            </p>
+          ) : null}
+
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/news"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/10 transition hover:-translate-y-0.5 hover:bg-emerald-300 sm:w-auto"
+            >
+              Kembali ke News
+            </Link>
+
+            <Link
+              href="/news/search"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-cyan-400/10 sm:w-auto"
+            >
+              Cari Artikel
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default async function NewsArticlePage({ slug }) {
   const safeSlug = getSafeSlug(slug);
   const databaseArticle = await getDatabaseArticle(safeSlug);
   const article = databaseArticle || getFallbackArticle(safeSlug);
+
+  if (!article) {
+    return (
+      <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
+        <ArticleHeader />
+
+        <ScrollReveal>
+          <ArticleNotFoundBackground slug={safeSlug} />
+        </ScrollReveal>
+
+        <ScrollReveal delay={100}>
+          <NewsFooter />
+        </ScrollReveal>
+      </main>
+    );
+  }
+
   const relatedArticles = await getRelatedArticles(article);
 
   return (

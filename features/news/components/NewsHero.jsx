@@ -191,17 +191,6 @@ function PreviewArticleCard({ article }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_24%,rgba(16,185,129,0.18),transparent_34%),radial-gradient(circle_at_75%_65%,rgba(6,182,212,0.16),transparent_36%)]" />
-
-        <div className="absolute bottom-3 left-3 flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-slate-950/75 p-1.5 shadow-lg shadow-cyan-400/10 backdrop-blur-md">
-          <img
-            src={NEXARIN_LOGO}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-contain"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
       </div>
 
       <div className="p-3 pb-4">
@@ -258,7 +247,10 @@ function NewsPreviewCard({ articles }) {
       <div className="relative z-10 mt-4">
         <div className="-mx-1 grid auto-cols-[minmax(132px,0.72fr)] grid-flow-col gap-3 overflow-x-auto px-1 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {previewArticles.map((article) => (
-            <PreviewArticleCard key={article.id || article.title} article={article} />
+            <PreviewArticleCard
+              key={article.id || article.title}
+              article={article}
+            />
           ))}
         </div>
       </div>

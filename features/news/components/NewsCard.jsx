@@ -71,16 +71,6 @@ function NewsImage({ article }) {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(16,185,129,0.18),transparent_34%),radial-gradient(circle_at_78%_70%,rgba(6,182,212,0.15),transparent_36%)]" />
-
-      <div className="absolute bottom-4 left-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/25 bg-slate-950/75 p-1.5 shadow-lg shadow-cyan-400/10 backdrop-blur-md">
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          className="h-full w-full object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
     </div>
   );
 }
