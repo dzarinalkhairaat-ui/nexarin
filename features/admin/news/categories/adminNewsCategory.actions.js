@@ -1,15 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
 import { prisma } from "@/lib/prisma";
-
-const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
-const ADMIN_SESSION_VALUE = "nexarin-admin-v2";
+import { requireAdminSession } from "@/features/admin/admin.helpers";
 
 function normalizeText(value) {
   return String(value || "").trim();
+}
+
+function normalizeBoolean(value) {
+  return value === true || value === "true" || value === 1 || value === "1";
 }
 
 function createSlug(value) {
@@ -21,110 +21,18 @@ function createSlug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function getSupabaseAnonKey() {
-  return (
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    ""
-  );
-}
-
-function getAllowedAdminEmails() {
-  return String(
-    process.env.NEXARIN_ADMIN_EMAILS ||
-      process.env.NEXARIN_ADMIN_EMAIL ||
-      process.env.ADMIN_EMAIL ||
-      ""
-  )
-    .split(",")
-    .map((email) => email.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-function isAllowedAdminUser(user) {
-  const allowedEmails = getAllowedAdminEmails();
-
-  if (!allowedEmails.length) {
-    return true;
-  }
-
-  const userEmail = String(user?.email || "").trim().toLowerCase();
-
-  return allowedEmails.includes(userEmail);
-}
-
-async function requireAdminSession() {
-  try {
-    const cookieStore = await cookies();
-    const adminSessionValue =
-      cookieStore.get(ADMIN_SESSION_COOKIE)?.value || "";
-
-    if (adminSessionValue !== ADMIN_SESSION_VALUE) {
-      return {
-        ok: false,
-        message: "Sesi admin tidak valid atau sudah habis. Login ulang dulu.",
-      };
-    }
-
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = getSupabaseAnonKey();
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return {
-        ok: false,
-        message:
-          "Konfigurasi Supabase server belum lengkap. Cek environment variable Supabase.",
-      };
-    }
-
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch {
-            // Aman diabaikan kalau cookie tidak bisa diset dari context tertentu.
-          }
-        },
-      },
-    });
-
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-
-    if (error || !user) {
-      return {
-        ok: false,
-        message: "Sesi Supabase admin tidak ditemukan. Login ulang dulu.",
-      };
-    }
-
-    if (!isAllowedAdminUser(user)) {
-      return {
-        ok: false,
-        message: "Akun ini tidak punya akses admin Nexarin.",
-      };
-    }
-
+function getDeleteCategoryPayload(payload) {
+  if (typeof payload === "string") {
     return {
-      ok: true,
-      user,
-    };
-  } catch (error) {
-    console.error("Gagal memverifikasi session admin kategori News:", error);
-
-    return {
-      ok: false,
-      message: "Sesi admin gagal diverifikasi. Login ulang lalu coba lagi.",
+      id: normalizeText(payload),
+      forceDeleteArticles: false,
     };
   }
+
+  return {
+    id: normalizeText(payload?.categoryId || payload?.id),
+    forceDeleteArticles: normalizeBoolean(payload?.forceDeleteArticles),
+  };
 }
 
 function revalidateNewsCategoryPaths(categorySlug) {
@@ -337,14 +245,14 @@ export async function updateNewsCategoryAction(payload) {
   }
 }
 
-export async function deleteNewsCategoryAction(categoryId) {
+export async function deleteNewsCategoryAction(payload) {
   const adminSession = await requireAdminSession();
 
   if (!adminSession.ok) {
     return adminSession;
   }
 
-  const id = normalizeText(categoryId);
+  const { id, forceDeleteArticles } = getDeleteCategoryPayload(payload);
 
   if (!id) {
     return {
@@ -378,23 +286,48 @@ export async function deleteNewsCategoryAction(categoryId) {
       },
     });
 
-    if (usedArticleCount > 0) {
+    if (usedArticleCount > 0 && !forceDeleteArticles) {
       return {
         ok: false,
-        message: `Kategori “${category.name}” masih dipakai oleh ${usedArticleCount} artikel. Hapus atau pindahkan artikelnya dulu.`,
+        needsConfirmation: true,
+        categoryId: category.id,
+        categoryName: category.name,
+        articleCount: usedArticleCount,
+        message: `Kategori “${category.name}” masih dipakai oleh ${usedArticleCount} artikel. Jika dilanjutkan, kategori dan semua artikel di dalamnya akan dihapus permanen.`,
       };
     }
 
-    await prisma.newsCategory.delete({
-      where: {
-        id,
-      },
+    const deleteResult = await prisma.$transaction(async (tx) => {
+      const deletedArticles = await tx.newsArticle.deleteMany({
+        where: {
+          categoryId: id,
+        },
+      });
+
+      await tx.newsCategory.delete({
+        where: {
+          id,
+        },
+      });
+
+      return {
+        deletedArticleCount: deletedArticles.count,
+      };
     });
 
     revalidateNewsCategoryPaths(category.slug);
 
+    if (deleteResult.deletedArticleCount > 0) {
+      return {
+        ok: true,
+        deletedArticleCount: deleteResult.deletedArticleCount,
+        message: `Kategori “${category.name}” dan ${deleteResult.deletedArticleCount} artikel di dalamnya berhasil dihapus permanen dari database.`,
+      };
+    }
+
     return {
       ok: true,
+      deletedArticleCount: 0,
       message: `Kategori “${category.name}” berhasil dihapus dari database.`,
     };
   } catch (error) {
@@ -411,7 +344,7 @@ export async function deleteNewsCategoryAction(categoryId) {
       return {
         ok: false,
         message:
-          "Kategori masih dipakai oleh artikel. Hapus atau pindahkan artikelnya dulu.",
+          "Kategori masih dipakai oleh data lain. Cek artikel terkait lalu coba lagi.",
       };
     }
 

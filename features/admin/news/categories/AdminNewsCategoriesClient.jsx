@@ -67,6 +67,7 @@ export default function AdminNewsCategoriesClient({
   const [isPending, startTransition] = useTransition();
   const [editingCategoryId, setEditingCategoryId] = useState("");
   const [deletingCategoryId, setDeletingCategoryId] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [statusMessage, setStatusMessage] = useState("");
   const [statusType, setStatusType] = useState("success");
@@ -135,6 +136,7 @@ export default function AdminNewsCategoriesClient({
       slug: category?.slug || "",
       description: category?.description || "",
     });
+    setDeleteConfirmation(null);
     setStatusType("success");
     setStatusMessage(
       `Mode edit aktif untuk kategori “${category?.name || "Kategori"}”.`
@@ -142,21 +144,39 @@ export default function AdminNewsCategoriesClient({
   }
 
   function handleDeleteCategory(category) {
-    const categoryName = category?.name || "kategori ini";
+    const categoryId = category?.id || "";
 
-    const isConfirmed = window.confirm(
-      `Hapus kategori “${categoryName}”? Kategori tidak bisa dihapus kalau masih dipakai artikel.`
-    );
-
-    if (!isConfirmed) {
+    if (!categoryId) {
+      setStatusType("error");
+      setStatusMessage("ID kategori tidak valid.");
       return;
     }
 
-    setDeletingCategoryId(category?.id || "");
+    setDeletingCategoryId(categoryId);
     setStatusMessage("");
+    setDeleteConfirmation(null);
 
     startTransition(async () => {
-      const result = await deleteNewsCategoryAction(category?.id);
+      const result = await deleteNewsCategoryAction({
+        categoryId,
+        forceDeleteArticles: false,
+      });
+
+      if (result?.needsConfirmation) {
+        setStatusType("error");
+        setStatusMessage("");
+        setDeleteConfirmation({
+          categoryId: result?.categoryId || categoryId,
+          categoryName:
+            result?.categoryName || category?.name || "Kategori ini",
+          articleCount: Number(result?.articleCount || 0),
+          message:
+            result?.message ||
+            "Kategori ini masih punya artikel. Konfirmasi untuk menghapus permanen.",
+        });
+        setDeletingCategoryId("");
+        return;
+      }
 
       if (!result?.ok) {
         setStatusType("error");
@@ -167,7 +187,7 @@ export default function AdminNewsCategoriesClient({
         return;
       }
 
-      if (editingCategoryId === category?.id) {
+      if (editingCategoryId === categoryId) {
         setEditingCategoryId("");
         setForm(initialForm);
       }
@@ -182,11 +202,69 @@ export default function AdminNewsCategoriesClient({
     });
   }
 
+  function handleConfirmDeleteWithArticles() {
+    const categoryId = deleteConfirmation?.categoryId || "";
+
+    if (!categoryId) {
+      setDeleteConfirmation(null);
+      setStatusType("error");
+      setStatusMessage("ID kategori tidak valid.");
+      return;
+    }
+
+    setDeletingCategoryId(categoryId);
+    setStatusMessage("");
+
+    startTransition(async () => {
+      const result = await deleteNewsCategoryAction({
+        categoryId,
+        forceDeleteArticles: true,
+      });
+
+      if (!result?.ok) {
+        setStatusType("error");
+        setStatusMessage(
+          result?.message ||
+            "Kategori dan artikel di dalamnya gagal dihapus dari database."
+        );
+        setDeletingCategoryId("");
+        return;
+      }
+
+      if (editingCategoryId === categoryId) {
+        setEditingCategoryId("");
+        setForm(initialForm);
+      }
+
+      setDeleteConfirmation(null);
+      setStatusType("success");
+      setStatusMessage(
+        result?.message ||
+          "Kategori dan artikel di dalamnya berhasil dihapus permanen."
+      );
+      setDeletingCategoryId("");
+
+      router.refresh();
+    });
+  }
+
+  function handleCancelDeleteConfirmation() {
+    if (isPending) {
+      return;
+    }
+
+    setDeleteConfirmation(null);
+    setDeletingCategoryId("");
+    setStatusMessage("");
+    setStatusType("success");
+  }
+
   function handleReset() {
     setForm(initialForm);
     setEditingCategoryId("");
     setStatusMessage("");
     setStatusType("success");
+    setDeleteConfirmation(null);
   }
 
   return (
@@ -417,7 +495,7 @@ export default function AdminNewsCategoriesClient({
                               onClick={() => handleDeleteCategory(category)}
                               className="inline-flex min-h-10 items-center justify-center rounded-2xl border border-red-400/20 bg-red-400/[0.08] px-3 py-2 text-xs font-black text-red-200 transition hover:bg-red-400/15 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                              {isDeleting ? "Menghapus..." : "Hapus"}
+                              {isDeleting ? "Mengecek..." : "Hapus"}
                             </button>
                           </div>
                         </article>
@@ -437,6 +515,60 @@ export default function AdminNewsCategoriesClient({
           </div>
         </div>
       </section>
+
+      {deleteConfirmation ? (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 px-5 pb-28 pt-6 backdrop-blur-md sm:px-6 sm:py-8">
+          <div className="w-full max-w-lg -translate-y-6 overflow-hidden rounded-[30px] border border-red-400/25 bg-slate-950 p-5 shadow-2xl shadow-black/50 sm:translate-y-0">
+            <div className="rounded-[24px] border border-red-400/15 bg-red-400/[0.08] p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-red-200">
+                Konfirmasi Hapus Permanen
+              </p>
+
+              <h2 className="mt-3 text-2xl font-black tracking-[-0.045em] text-white">
+                Hapus kategori dan semua artikelnya?
+              </h2>
+
+              <p className="mt-3 text-sm font-semibold leading-7 text-red-100/90">
+                Kategori{" "}
+                <span className="font-black text-white">
+                  “{deleteConfirmation.categoryName}”
+                </span>{" "}
+                masih memiliki{" "}
+                <span className="font-black text-white">
+                  {deleteConfirmation.articleCount} artikel
+                </span>
+                .
+              </p>
+
+              <p className="mt-3 text-sm font-semibold leading-7 text-slate-300">
+                Jika dilanjutkan, kategori ini dan semua artikel di dalamnya
+                akan dihapus permanen dari database. Tindakan ini tidak bisa
+                dibatalkan.
+              </p>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={handleCancelDeleteConfirmation}
+                disabled={isPending}
+                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.055] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.085] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Batal
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmDeleteWithArticles}
+                disabled={isPending}
+                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-red-400/25 bg-red-400 px-5 py-3 text-sm font-black text-white shadow-xl shadow-red-400/10 transition hover:bg-red-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isPending ? "Menghapus..." : "Hapus Permanen"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }

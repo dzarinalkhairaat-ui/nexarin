@@ -5,7 +5,6 @@ import ArticleHeader from "@/features/news/components/detail-article/ArticleHead
 import ArticleHero from "@/features/news/components/detail-article/ArticleHero";
 import ArticleContent from "@/features/news/components/detail-article/ArticleContent";
 import RelatedArticles from "@/features/news/components/detail-article/RelatedArticles";
-import { newsArticles as fallbackNewsArticles } from "@/features/news/news.data";
 import { prisma } from "@/lib/prisma";
 
 const RELATED_ARTICLE_LIMIT = 4;
@@ -20,10 +19,6 @@ function getSafeText(value) {
 
 function getSafeSlug(value) {
   return getSafeText(value);
-}
-
-function getFallbackArticles() {
-  return Array.isArray(fallbackNewsArticles) ? fallbackNewsArticles : [];
 }
 
 function getPlainText(value) {
@@ -137,7 +132,7 @@ function normalizePublicArticle(article, index = 0) {
 
   return {
     id: article?.id || slug || `news-article-${index + 1}`,
-    slug: slug || "preview",
+    slug,
     title: getSafeText(article?.title) || "Artikel Nexarin News",
     category:
       article?.category?.name ||
@@ -164,6 +159,7 @@ function normalizePublicArticle(article, index = 0) {
       normalizeReadTime(article?.readTime) ||
       getReadTime(article?.content || article?.body),
     image: article?.coverImageUrl || article?.image || "",
+    coverImageUrl: article?.coverImageUrl || article?.image || "",
     coverImageAlt:
       article?.coverImageAlt || article?.title || "Artikel Nexarin News",
     content: contentParagraphs,
@@ -183,7 +179,7 @@ function normalizePublicArticle(article, index = 0) {
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || article?.youtubeUrl || "",
     categoryId: article?.categoryId || "",
-    source: article?.source === "database" ? "database" : "preview",
+    source: "database",
   };
 }
 
@@ -209,25 +205,9 @@ function mapDatabaseArticleToPublicArticle(article, index = 0) {
       isFeatured: article?.isFeatured,
       publishedAt: article?.publishedAt,
       createdAt: article?.createdAt,
-      source: "database",
     },
     index
   );
-}
-
-function getFallbackArticle(slug) {
-  const safeSlug = getSafeSlug(slug);
-
-  if (!safeSlug) {
-    return null;
-  }
-
-  const fallbackArticles = getFallbackArticles();
-  const article =
-    fallbackArticles.find((item) => getSafeSlug(item?.slug) === safeSlug) ||
-    null;
-
-  return article ? normalizePublicArticle(article) : null;
 }
 
 function getPublicDateFilter() {
@@ -275,25 +255,6 @@ async function getDatabaseArticle(slug) {
 
     return null;
   }
-}
-
-function getFallbackRelatedArticles(currentArticle) {
-  const currentSlug = currentArticle?.slug || "";
-  const currentCategorySlug = currentArticle?.categorySlug || "";
-
-  const articles = getFallbackArticles()
-    .map((article, index) => normalizePublicArticle(article, index))
-    .filter((article) => article?.slug && article.slug !== currentSlug);
-
-  const sameCategory = articles.filter(
-    (article) => article?.categorySlug === currentCategorySlug
-  );
-
-  const otherArticles = articles.filter(
-    (article) => article?.categorySlug !== currentCategorySlug
-  );
-
-  return [...sameCategory, ...otherArticles].slice(0, RELATED_ARTICLE_LIMIT);
 }
 
 function mergeUniqueArticles(articles) {
@@ -395,15 +356,7 @@ async function getDatabaseRelatedArticles(currentArticle) {
 }
 
 async function getRelatedArticles(currentArticle) {
-  const databaseRelatedArticles = await getDatabaseRelatedArticles(
-    currentArticle
-  );
-
-  if (databaseRelatedArticles.length > 0) {
-    return databaseRelatedArticles;
-  }
-
-  return getFallbackRelatedArticles(currentArticle);
+  return getDatabaseRelatedArticles(currentArticle);
 }
 
 function ArticleDetailBackground({ article, relatedArticles }) {
@@ -434,6 +387,55 @@ function ArticleDetailBackground({ article, relatedArticles }) {
         <ScrollReveal delay={80}>
           <ArticleContent article={article} relatedArticles={relatedArticles} />
         </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+function RelatedArticlesEmptyState() {
+  return (
+    <section className="relative overflow-hidden bg-slate-950 px-5 pb-8 pt-2 text-white sm:px-6 sm:pb-10 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-3xl">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="h-9 w-1 rounded-full bg-lime-400" />
+
+          <div>
+            <h2 className="text-2xl font-black tracking-[-0.045em] text-white">
+              Artikel Terkait
+            </h2>
+
+            <p className="mt-1 text-sm font-semibold text-slate-500">
+              Rekomendasi artikel lain
+            </p>
+          </div>
+        </div>
+
+        <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
+          <div className="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-16 bottom-0 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
+
+          <div className="relative z-10">
+            <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">
+              Belum Ada Rekomendasi
+            </p>
+
+            <h3 className="mx-auto mt-4 max-w-xl text-2xl font-black leading-tight tracking-[-0.045em] text-white">
+              Artikel terkait masih kosong.
+            </h3>
+
+            <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-slate-400">
+              Setelah ada artikel lain yang sudah dipublikasikan di database,
+              rekomendasi artikel akan tampil otomatis di bagian ini.
+            </p>
+
+            <Link
+              href="/news"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-3 text-sm font-black text-emerald-200 transition hover:bg-emerald-400 hover:text-slate-950"
+            >
+              Kembali ke News
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -512,8 +514,7 @@ function ArticleNotFoundBackground({ slug }) {
 
 export default async function NewsArticlePage({ slug }) {
   const safeSlug = getSafeSlug(slug);
-  const databaseArticle = await getDatabaseArticle(safeSlug);
-  const article = databaseArticle || getFallbackArticle(safeSlug);
+  const article = await getDatabaseArticle(safeSlug);
 
   if (!article) {
     return (
@@ -543,7 +544,11 @@ export default async function NewsArticlePage({ slug }) {
       />
 
       <ScrollReveal delay={100}>
-        <RelatedArticles articles={relatedArticles} />
+        {relatedArticles.length > 0 ? (
+          <RelatedArticles articles={relatedArticles} />
+        ) : (
+          <RelatedArticlesEmptyState />
+        )}
       </ScrollReveal>
 
       <ScrollReveal delay={100}>

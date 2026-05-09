@@ -3,24 +3,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 
-const ARTICLE_IMAGES = {
-  "news-nexarin-akan-mengadaptasi-pondasi-rinsnews":
-    "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1100&q=80",
-  "struktur-artikel-kategori-dan-search-disiapkan":
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1100&q=80",
-  "konten-awal-masih-memakai-fallback-data":
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1100&q=80",
-  "nexarin-products-menjadi-bagian-ekosistem-digital":
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1100&q=80",
-  "portfolio-nexarin-disiapkan-sebagai-showcase-project":
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1100&q=80",
-  "contact-menjadi-jalur-komunikasi-awal-nexarin":
-    "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1100&q=80",
-};
-
-const DEFAULT_FALLBACK_ARTICLE_IMAGE =
-  "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1100&q=80";
-
 const NEXARIN_LOGO = "/images/logo/nexarin-logo.png";
 const SITE_URL = "https://nexarin.my.id";
 
@@ -45,10 +27,6 @@ const MONTH_NAMES = [
   "Desember",
 ];
 
-function isDatabaseArticle(article) {
-  return article?.source === "database";
-}
-
 function getDirectArticleImage(article) {
   return String(
     article?.image ||
@@ -59,28 +37,16 @@ function getDirectArticleImage(article) {
   ).trim();
 }
 
-function getArticleImage(article, options = {}) {
-  const { allowFallback = true } = options;
-  const safeArticle = article || {};
-  const directImage = getDirectArticleImage(safeArticle);
-
-  if (directImage) {
-    return directImage;
-  }
-
-  if (!allowFallback || isDatabaseArticle(safeArticle)) {
-    return "";
-  }
-
-  return ARTICLE_IMAGES[safeArticle.slug] || DEFAULT_FALLBACK_ARTICLE_IMAGE;
+function getArticleImage(article) {
+  return getDirectArticleImage(article);
 }
 
 function getPublishedDateLabel(article) {
-  const rawDate = article?.publishedDate || article?.date || "2026-05-04";
+  const rawDate = article?.publishedDate || article?.date || "";
   const [year, month, day] = String(rawDate).slice(0, 10).split("-");
 
   if (!year || !month || !day) {
-    return rawDate;
+    return rawDate || "";
   }
 
   const monthName = MONTH_NAMES[Number(month) - 1] || month;
@@ -173,6 +139,8 @@ function getYouTubeEmbedUrl(url) {
         videoId = parsedUrl.pathname.split("/embed/")[1]?.split("/")[0] || "";
       } else if (parsedUrl.pathname.startsWith("/shorts/")) {
         videoId = parsedUrl.pathname.split("/shorts/")[1]?.split("/")[0] || "";
+      } else if (parsedUrl.pathname.startsWith("/live/")) {
+        videoId = parsedUrl.pathname.split("/live/")[1]?.split("/")[0] || "";
       } else {
         videoId = parsedUrl.searchParams.get("v") || "";
       }
@@ -200,13 +168,11 @@ function getArticleParagraphs(article) {
       .filter(Boolean);
   }
 
-  return [
-    article?.excerpt ||
-      "Artikel ini memakai fallback data agar halaman detail tetap aman sebelum database dan admin dashboard dihubungkan.",
-    "Fondasi News Nexarin dibuat bertahap dengan pendekatan mobile-first, struktur file terpisah, dan fallback data. Tujuannya supaya halaman tetap stabil, tidak blank putih, dan mudah dikembangkan ke sistem berita penuh.",
-    "Nantinya modul News dapat dikembangkan menjadi portal informasi yang memiliki headline, artikel terbaru, artikel populer, kategori, pencarian, detail artikel, share button, dan integrasi data dari backend.",
-    "Desain awal ini mengambil arah dari pengalaman RinsNews, namun tetap disesuaikan dengan identitas Nexarin by-rins yang gelap, premium, ringan, dan rapi di tampilan mobile.",
-  ];
+  if (article?.excerpt) {
+    return [article.excerpt];
+  }
+
+  return [];
 }
 
 function getArticleShareUrl(article) {
@@ -303,7 +269,7 @@ function ArticleCover({ article }) {
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={safeArticle.title || "Artikel Nexarin News"}
+            alt={safeArticle.coverImageAlt || safeArticle.title || "Artikel Nexarin News"}
             className="h-full w-full object-cover opacity-85"
             loading="lazy"
             decoding="async"
@@ -352,7 +318,9 @@ function ShareLinks({ article }) {
     const copied = await copyTextToClipboard(articleUrl);
 
     setCopyStatus(
-      copied ? "Link artikel berhasil disalin." : "Link belum bisa disalin otomatis."
+      copied
+        ? "Link artikel berhasil disalin."
+        : "Link belum bisa disalin otomatis."
     );
 
     window.setTimeout(() => {
@@ -371,7 +339,6 @@ function ShareLinks({ article }) {
 
         return;
       } catch {
-        // User bisa membatalkan native share; tidak perlu dianggap error.
         return;
       }
     }
@@ -454,10 +421,27 @@ function ArticleVideo({ article }) {
   }
 
   return (
-    <div className="my-7 overflow-hidden rounded-[28px] border border-cyan-400/15 bg-white/[0.04] p-3 shadow-xl shadow-black/10 backdrop-blur-xl">
-      <p className="mb-3 px-1 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
-        Video Terkait Artikel Ini
-      </p>
+    <div className="mt-5 overflow-hidden rounded-[28px] border border-cyan-400/15 bg-white/[0.04] p-3 shadow-xl shadow-black/10 backdrop-blur-xl">
+      <div className="mb-3 flex items-center justify-between gap-3 px-1">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
+            Video Artikel
+          </p>
+
+          <p className="mt-1 text-xs font-semibold text-slate-500">
+            Tonton langsung dari halaman artikel.
+          </p>
+        </div>
+
+        <a
+          href={youtubeUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="shrink-0 rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-red-200 transition hover:bg-red-400/15 hover:text-white"
+        >
+          YouTube
+        </a>
+      </div>
 
       <div className="relative aspect-video overflow-hidden rounded-[22px] border border-white/10 bg-slate-950 shadow-lg shadow-black/20">
         <iframe
@@ -503,11 +487,11 @@ function BacaJugaThumbnail({ article }) {
 }
 
 function BacaJugaBox({ article }) {
-  if (!article) {
+  if (!article?.slug) {
     return null;
   }
 
-  const articleHref = `/news/artikel/${article.slug || "preview"}`;
+  const articleHref = `/news/artikel/${article.slug}`;
 
   return (
     <Link
@@ -530,8 +514,7 @@ function BacaJugaBox({ article }) {
         </h3>
 
         <p className="mt-1.5 line-clamp-1 text-xs font-medium leading-5 text-slate-400">
-          {article.excerpt ||
-            "Ringkasan artikel terkait akan ditampilkan di sini."}
+          {article.excerpt || "Ringkasan artikel terkait belum tersedia."}
         </p>
       </div>
     </Link>
@@ -587,6 +570,16 @@ function SourceArticleBox({ article }) {
   );
 }
 
+function ArticleEmptyContent() {
+  return (
+    <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-5 text-center">
+      <p className="text-sm font-black text-slate-400">
+        Isi artikel belum tersedia.
+      </p>
+    </div>
+  );
+}
+
 export default function ArticleContent({ article, relatedArticles }) {
   const paragraphs = getArticleParagraphs(article);
   const bacaJugaArticle = Array.isArray(relatedArticles)
@@ -606,21 +599,24 @@ export default function ArticleContent({ article, relatedArticles }) {
 
           <ShareLinks article={article} />
 
-          <div className="mt-6 border-t border-white/10 pt-5">
-            <div className="space-y-5 text-sm font-medium leading-8 text-slate-300 sm:text-base sm:leading-8">
-              {paragraphs.map((paragraph, index) => (
-                <div key={`${paragraph.slice(0, 18)}-${index}`}>
-                  <p>{paragraph}</p>
+          <ArticleVideo article={article} />
 
-                  {index === 1 ? (
-                    <>
-                      <ArticleVideo article={article} />
+          <div className="mt-6 border-t border-white/10 pt-5">
+            {paragraphs.length > 0 ? (
+              <div className="space-y-5 text-sm font-medium leading-8 text-slate-300 sm:text-base sm:leading-8">
+                {paragraphs.map((paragraph, index) => (
+                  <div key={`${paragraph.slice(0, 18)}-${index}`}>
+                    <p>{paragraph}</p>
+
+                    {index === 1 ? (
                       <BacaJugaBox article={bacaJugaArticle} />
-                    </>
-                  ) : null}
-                </div>
-              ))}
-            </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <ArticleEmptyContent />
+            )}
           </div>
 
           <SourceArticleBox article={article} />
