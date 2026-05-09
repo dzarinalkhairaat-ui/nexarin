@@ -1,24 +1,14 @@
 import Link from "next/link";
 
-const ARTICLE_IMAGES = {
-  "news-nexarin-akan-mengadaptasi-pondasi-rinsnews":
-    "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=900&q=80",
-  "struktur-artikel-kategori-dan-search-disiapkan":
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
-  "konten-awal-masih-memakai-fallback-data":
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-  "nexarin-products-menjadi-bagian-ekosistem-digital":
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",
-  "portfolio-nexarin-disiapkan-sebagai-showcase-project":
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80",
-  "contact-menjadi-jalur-komunikasi-awal-nexarin":
-    "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80",
-};
-
 function getArticleImage(article) {
   const safeArticle = article || {};
 
-  return safeArticle.image || ARTICLE_IMAGES[safeArticle.slug] || "";
+  return (
+    safeArticle.coverImageUrl ||
+    safeArticle.cover_image_url ||
+    safeArticle.image ||
+    ""
+  );
 }
 
 function NewsImagePlaceholder({ article }) {
@@ -45,6 +35,10 @@ function NewsImagePlaceholder({ article }) {
         <p className="mt-4 max-w-[13rem] text-xs font-black uppercase tracking-[0.18em] text-cyan-200">
           {safeArticle.category || "Nexarin News"}
         </p>
+
+        <p className="mt-2 max-w-[13rem] text-[11px] font-semibold leading-5 text-slate-500">
+          Gambar artikel belum tersedia
+        </p>
       </div>
     </div>
   );
@@ -59,7 +53,7 @@ function NewsImage({ article }) {
       {imageUrl ? (
         <img
           src={imageUrl}
-          alt={safeArticle.title || "Nexarin News"}
+          alt={safeArticle.coverImageAlt || safeArticle.title || "Nexarin News"}
           className="h-full w-full object-cover opacity-85 transition duration-500 group-hover:scale-105"
           loading="lazy"
           decoding="async"
@@ -77,7 +71,8 @@ function NewsImage({ article }) {
 
 export default function NewsCard({ article }) {
   const safeArticle = article || {};
-  const articleHref = `/news/artikel/${safeArticle.slug || "preview"}`;
+  const articleSlug = String(safeArticle.slug || "").trim();
+  const articleHref = articleSlug ? `/news/artikel/${articleSlug}` : "/news";
 
   return (
     <article className="group overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] shadow-xl shadow-black/20 transition hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-cyan-400/[0.055]">
@@ -93,28 +88,34 @@ export default function NewsCard({ article }) {
               {safeArticle.category || "News"}
             </span>
 
-            <span className="text-[11px] font-bold text-slate-500">
-              {safeArticle.readTime || "3 min read"}
-            </span>
+            {safeArticle.readTime ? (
+              <span className="text-[11px] font-bold text-slate-500">
+                {safeArticle.readTime}
+              </span>
+            ) : null}
           </div>
 
           <h3 className="mt-3 line-clamp-2 text-xl font-black leading-tight tracking-[-0.05em] text-white sm:text-2xl">
             {safeArticle.title || "Artikel Nexarin"}
           </h3>
 
-          <p className="mt-3 line-clamp-2 text-sm font-medium leading-7 text-slate-400">
-            {safeArticle.excerpt ||
-              "Ringkasan artikel akan ditampilkan di sini sebagai fallback agar halaman tetap aman."}
-          </p>
+          {safeArticle.excerpt ? (
+            <p className="mt-3 line-clamp-2 text-sm font-medium leading-7 text-slate-400">
+              {safeArticle.excerpt}
+            </p>
+          ) : null}
 
           <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
             <div className="min-w-0">
               <p className="truncate text-xs font-black text-white">
                 {safeArticle.author || "Nexarin by-rins"}
               </p>
-              <p className="mt-1 text-[11px] font-semibold text-slate-500">
-                {safeArticle.date || "2026-05-04"}
-              </p>
+
+              {safeArticle.date ? (
+                <p className="mt-1 text-[11px] font-semibold text-slate-500">
+                  {safeArticle.date}
+                </p>
+              ) : null}
             </div>
 
             <span className="shrink-0 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-black text-emerald-300 transition group-hover:border-cyan-300/25 group-hover:bg-cyan-400/10 group-hover:text-cyan-200">

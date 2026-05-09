@@ -1,24 +1,14 @@
 import Link from "next/link";
 
-const COMPACT_ARTICLE_IMAGES = {
-  "news-nexarin-akan-mengadaptasi-pondasi-rinsnews":
-    "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=500&q=80",
-  "struktur-artikel-kategori-dan-search-disiapkan":
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=80",
-  "konten-awal-masih-memakai-fallback-data":
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
-  "nexarin-products-menjadi-bagian-ekosistem-digital":
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80",
-  "portfolio-nexarin-disiapkan-sebagai-showcase-project":
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=500&q=80",
-  "contact-menjadi-jalur-komunikasi-awal-nexarin":
-    "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=500&q=80",
-};
-
 function getCompactImage(article) {
   const safeArticle = article || {};
 
-  return safeArticle.image || COMPACT_ARTICLE_IMAGES[safeArticle.slug] || "";
+  return (
+    safeArticle.coverImageUrl ||
+    safeArticle.cover_image_url ||
+    safeArticle.image ||
+    ""
+  );
 }
 
 function CompactImagePlaceholder({ article }) {
@@ -53,7 +43,7 @@ function CompactImage({ article }) {
       {imageUrl ? (
         <img
           src={imageUrl}
-          alt={safeArticle.title || "Nexarin News"}
+          alt={safeArticle.coverImageAlt || safeArticle.title || "Nexarin News"}
           className="h-full w-full object-cover opacity-85 transition duration-500 group-hover:scale-105"
           loading="lazy"
           decoding="async"
@@ -65,24 +55,14 @@ function CompactImage({ article }) {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(16,185,129,0.18),transparent_34%),radial-gradient(circle_at_78%_70%,rgba(6,182,212,0.14),transparent_36%)]" />
-
-      <div className="absolute bottom-2 left-2 flex h-7 w-7 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-slate-950/75 p-1 shadow-lg shadow-cyan-400/10 backdrop-blur-md">
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
     </div>
   );
 }
 
 export default function NewsCompactCard({ article, index }) {
   const safeArticle = article || {};
-  const articleHref = `/news/artikel/${safeArticle.slug || "preview"}`;
+  const articleSlug = String(safeArticle.slug || "").trim();
+  const articleHref = articleSlug ? `/news/artikel/${articleSlug}` : "/news";
 
   return (
     <Link
@@ -106,10 +86,11 @@ export default function NewsCompactCard({ article, index }) {
           {safeArticle.title || "Artikel Nexarin"}
         </h3>
 
-        <p className="mt-2 line-clamp-2 text-xs font-medium leading-5 text-slate-500">
-          {safeArticle.excerpt ||
-            "Ringkasan artikel Nexarin akan tampil di sini."}
-        </p>
+        {safeArticle.excerpt ? (
+          <p className="mt-2 line-clamp-2 text-xs font-medium leading-5 text-slate-500">
+            {safeArticle.excerpt}
+          </p>
+        ) : null}
       </div>
     </Link>
   );

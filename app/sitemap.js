@@ -1,4 +1,3 @@
-import { newsArticles, newsCategories } from "@/features/news/news.data";
 import { getPortfolioProjects } from "@/features/portfolio/portfolio.data";
 import { productMarketplaceData } from "@/features/products/products.data";
 import { prisma } from "@/lib/prisma";
@@ -9,7 +8,12 @@ export const revalidate = 0;
 const BASE_URL = "https://nexarin.my.id";
 const LAST_MODIFIED = new Date("2026-05-05");
 
-function createUrl(path, priority = 0.7, changeFrequency = "weekly", lastModified = LAST_MODIFIED) {
+function createUrl(
+  path,
+  priority = 0.7,
+  changeFrequency = "weekly",
+  lastModified = LAST_MODIFIED
+) {
   return {
     url: `${BASE_URL}${path}`,
     lastModified,
@@ -28,14 +32,6 @@ function getProductCategories() {
   return Array.isArray(productMarketplaceData?.categories)
     ? productMarketplaceData.categories
     : [];
-}
-
-function getFallbackNewsArticles() {
-  return Array.isArray(newsArticles) ? newsArticles : [];
-}
-
-function getFallbackNewsCategories() {
-  return Array.isArray(newsCategories) ? newsCategories : [];
 }
 
 function getValidDate(...dates) {
@@ -72,49 +68,38 @@ function uniqueRoutes(routes) {
   return Array.from(routeMap.values());
 }
 
-function getFallbackNewsArticleRoutes() {
-  return getFallbackNewsArticles()
-    .filter((article) => article?.slug)
-    .map((article) =>
-      createUrl(
-        `/news/artikel/${article.slug}`,
-        0.8,
-        "weekly",
-        getValidDate(article?.publishedAt, article?.date, article?.createdAt)
-      )
-    );
-}
+function getPublicDateFilter() {
+  const now = new Date();
 
-function getFallbackNewsCategoryRoutes() {
-  return getFallbackNewsCategories()
-    .filter((category) => category?.slug && category.slug !== "semua")
-    .map((category) =>
-      createUrl(`/news/kategori/${category.slug}`, 0.75, "weekly")
-    );
+  return [
+    {
+      publishedAt: null,
+    },
+    {
+      publishedAt: {
+        lte: now,
+      },
+    },
+  ];
 }
 
 async function getDatabaseNewsArticleRoutes() {
   try {
-    const now = new Date();
-
     const articles = await prisma.newsArticle.findMany({
       where: {
         status: "PUBLISHED",
-        OR: [
-          {
-            publishedAt: null,
+        OR: getPublicDateFilter(),
+        category: {
+          is: {
+            isActive: true,
           },
-          {
-            publishedAt: {
-              lte: now,
-            },
-          },
-        ],
+        },
       },
       select: {
         slug: true,
         publishedAt: true,
         createdAt: true,
+        updatedAt: true,
       },
       orderBy: [
         {
@@ -127,13 +112,13 @@ async function getDatabaseNewsArticleRoutes() {
     });
 
     return articles
-      .filter((article) => article?.slug)
+      .filter((article) => normalizeSlug(article?.slug))
       .map((article) =>
         createUrl(
-          `/news/artikel/${article.slug}`,
+          `/news/artikel/${normalizeSlug(article.slug)}`,
           0.8,
           "weekly",
-          getValidDate(article?.publishedAt, article?.createdAt)
+          getValidDate(article?.updatedAt, article?.publishedAt, article?.createdAt)
         )
       );
   } catch (error) {
@@ -151,6 +136,8 @@ async function getDatabaseNewsCategoryRoutes() {
       },
       select: {
         slug: true,
+        createdAt: true,
+        updatedAt: true,
       },
       orderBy: {
         name: "asc",
@@ -164,33 +151,18 @@ async function getDatabaseNewsCategoryRoutes() {
         return slug && slug !== "semua";
       })
       .map((category) =>
-        createUrl(`/news/kategori/${category.slug}`, 0.75, "weekly")
+        createUrl(
+          `/news/kategori/${normalizeSlug(category.slug)}`,
+          0.75,
+          "weekly",
+          getValidDate(category?.updatedAt, category?.createdAt)
+        )
       );
   } catch (error) {
     console.error("Gagal mengambil kategori News untuk sitemap:", error);
 
     return [];
   }
-}
-
-async function getNewsArticleRoutes() {
-  const databaseRoutes = await getDatabaseNewsArticleRoutes();
-
-  if (databaseRoutes.length > 0) {
-    return databaseRoutes;
-  }
-
-  return getFallbackNewsArticleRoutes();
-}
-
-async function getNewsCategoryRoutes() {
-  const databaseRoutes = await getDatabaseNewsCategoryRoutes();
-
-  if (databaseRoutes.length > 0) {
-    return databaseRoutes;
-  }
-
-  return getFallbackNewsCategoryRoutes();
 }
 
 export default async function sitemap() {
@@ -223,8 +195,8 @@ export default async function sitemap() {
     .filter((project) => project?.slug)
     .map((project) => createUrl(`/portfolio/${project.slug}`, 0.75, "monthly"));
 
-  const newsArticleRoutes = await getNewsArticleRoutes();
-  const newsCategoryRoutes = await getNewsCategoryRoutes();
+  const newsArticleRoutes = await getDatabaseNewsArticleRoutes();
+  const newsCategoryRoutes = await getDatabaseNewsCategoryRoutes();
 
   return uniqueRoutes([
     ...staticRoutes,

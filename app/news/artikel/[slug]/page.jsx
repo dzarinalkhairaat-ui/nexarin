@@ -1,5 +1,4 @@
 import NewsArticlePage from "@/features/news/NewsArticlePage";
-import { newsArticles as fallbackNewsArticles } from "@/features/news/news.data";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -16,22 +15,6 @@ const SITE_URL = "https://nexarin.my.id";
 
 function getSafeSlug(value) {
   return String(value || "").trim();
-}
-
-function getFallbackArticles() {
-  return Array.isArray(fallbackNewsArticles) ? fallbackNewsArticles : [];
-}
-
-function getFallbackArticleBySlug(slug) {
-  const safeSlug = getSafeSlug(slug);
-
-  if (!safeSlug) {
-    return null;
-  }
-
-  return (
-    getFallbackArticles().find((article) => article?.slug === safeSlug) || null
-  );
 }
 
 function getPublicDateFilter() {
@@ -62,12 +45,18 @@ async function getDatabaseArticleBySlug(slug) {
         slug: safeSlug,
         status: "PUBLISHED",
         OR: getPublicDateFilter(),
+        category: {
+          is: {
+            isActive: true,
+          },
+        },
       },
       include: {
         category: {
           select: {
             name: true,
             slug: true,
+            isActive: true,
           },
         },
       },
@@ -128,48 +117,13 @@ function mapDatabaseArticleForMetadata(article) {
     modifiedTime: getIsoDate(article?.updatedAt),
     section: article?.category?.name || "News",
     imageUrl,
-    isRealArticle: true,
-  };
-}
-
-function mapFallbackArticleForMetadata(article, requestedSlug) {
-  if (!article) {
-    return null;
-  }
-
-  const slug = getSafeSlug(article?.slug);
-
-  if (!slug || slug !== requestedSlug) {
-    return null;
-  }
-
-  const imageUrl = getAbsoluteImageUrl(article?.image);
-
-  return {
-    slug,
-    title: article?.title || DEFAULT_TITLE,
-    description: article?.excerpt || DEFAULT_DESCRIPTION,
-    author: article?.author || DEFAULT_AUTHOR,
-    publishedTime: getIsoDate(article?.date),
-    modifiedTime: getIsoDate(article?.date),
-    section: article?.category || "News",
-    imageUrl,
-    isRealArticle: true,
   };
 }
 
 async function getArticleMetadata(slug) {
-  const safeSlug = getSafeSlug(slug);
-  const databaseArticle = await getDatabaseArticleBySlug(safeSlug);
+  const databaseArticle = await getDatabaseArticleBySlug(slug);
 
-  if (databaseArticle) {
-    return mapDatabaseArticleForMetadata(databaseArticle);
-  }
-
-  return mapFallbackArticleForMetadata(
-    getFallbackArticleBySlug(safeSlug),
-    safeSlug
-  );
+  return mapDatabaseArticleForMetadata(databaseArticle);
 }
 
 export async function generateMetadata({ params }) {
@@ -177,11 +131,11 @@ export async function generateMetadata({ params }) {
   const slug = getSafeSlug(resolvedParams?.slug);
   const article = await getArticleMetadata(slug);
 
+  const isRealArticle = Boolean(article?.slug && article.slug === slug);
   const title = article?.title || NOT_FOUND_TITLE;
   const description = article?.description || NOT_FOUND_DESCRIPTION;
-  const canonicalPath = `/news/artikel/${slug || "preview"}`;
+  const canonicalPath = slug ? `/news/artikel/${slug}` : "/news";
   const url = `${SITE_URL}${canonicalPath}`;
-  const isRealArticle = Boolean(article?.isRealArticle);
 
   const openGraph = {
     type: "article",

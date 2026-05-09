@@ -1,5 +1,4 @@
 import NewsCategoryPage from "@/features/news/NewsCategoryPage";
-import { newsArticles, newsCategories } from "@/features/news/news.data";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -27,15 +26,7 @@ function createLabelFromSlug(slug) {
     .join(" ");
 }
 
-function getFallbackCategories() {
-  return Array.isArray(newsCategories) ? newsCategories : [];
-}
-
-function getFallbackArticles() {
-  return Array.isArray(newsArticles) ? newsArticles : [];
-}
-
-function normalizeCategory(category, fallbackSlug = "update") {
+function normalizeCategory(category, fallbackSlug = "news") {
   const slug = normalizeSlug(category?.slug || fallbackSlug);
 
   return {
@@ -50,46 +41,8 @@ function normalizeCategory(category, fallbackSlug = "update") {
       category?.label ||
       createLabelFromSlug(slug) ||
       "News",
-    slug: slug || "update",
+    slug: slug || "news",
   };
-}
-
-function getFallbackCategoryBySlug(slug) {
-  const cleanSlug = normalizeSlug(slug);
-  const categories = getFallbackCategories();
-
-  const matchedCategory =
-    categories.find(
-      (category) => normalizeSlug(category?.slug) === cleanSlug
-    ) ||
-    categories.find(
-      (category) => normalizeSlug(category?.slug) === "update"
-    );
-
-  if (matchedCategory) {
-    return normalizeCategory(matchedCategory);
-  }
-
-  return normalizeCategory(
-    {
-      label: createLabelFromSlug(cleanSlug || "update"),
-      slug: cleanSlug || "update",
-    },
-    cleanSlug || "update"
-  );
-}
-
-function getFallbackCategoryArticleTotal(slug) {
-  const cleanSlug = normalizeSlug(slug);
-  const articles = getFallbackArticles();
-
-  if (cleanSlug === "semua") {
-    return articles.length;
-  }
-
-  return articles.filter(
-    (article) => normalizeSlug(article?.categorySlug) === cleanSlug
-  ).length;
 }
 
 function getPublicDateFilter() {
@@ -120,6 +73,11 @@ async function getDatabaseCategoryMetadata(slug) {
         where: {
           status: "PUBLISHED",
           OR: getPublicDateFilter(),
+          category: {
+            is: {
+              isActive: true,
+            },
+          },
         },
       });
 
@@ -131,12 +89,14 @@ async function getDatabaseCategoryMetadata(slug) {
           slug: "semua",
         },
         total,
+        isRealCategory: true,
       };
     }
 
     const category = await prisma.newsCategory.findFirst({
       where: {
         slug: cleanSlug,
+        isActive: true,
       },
       select: {
         id: true,
@@ -160,6 +120,7 @@ async function getDatabaseCategoryMetadata(slug) {
     return {
       category: normalizeCategory(category, cleanSlug),
       total,
+      isRealCategory: true,
     };
   } catch (error) {
     console.error("Gagal mengambil metadata kategori News:", error);
@@ -169,32 +130,41 @@ async function getDatabaseCategoryMetadata(slug) {
 }
 
 async function getCategoryMetadata(slug) {
-  const cleanSlug = normalizeSlug(slug);
+  const cleanSlug = normalizeSlug(slug || "semua");
   const databaseMetadata = await getDatabaseCategoryMetadata(cleanSlug);
 
   if (databaseMetadata?.category) {
     return databaseMetadata;
   }
 
-  const fallbackCategory = getFallbackCategoryBySlug(cleanSlug);
-  const fallbackTotal = getFallbackCategoryArticleTotal(fallbackCategory?.slug);
-
   return {
-    category: fallbackCategory,
-    total: fallbackTotal,
+    category: {
+      id: "kategori-tidak-ditemukan",
+      label: cleanSlug ? createLabelFromSlug(cleanSlug) : "Kategori",
+      name: cleanSlug ? createLabelFromSlug(cleanSlug) : "Kategori",
+      slug: cleanSlug || "kategori",
+    },
+    total: 0,
+    isRealCategory: false,
   };
 }
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
-  const slug = normalizeSlug(resolvedParams?.slug || "update");
-  const { category, total } = await getCategoryMetadata(slug);
+  const slug = normalizeSlug(resolvedParams?.slug || "semua");
+  const { category, total, isRealCategory } = await getCategoryMetadata(slug);
 
   const categoryLabel = category?.label || "News";
-  const categorySlug = category?.slug || slug || "update";
+  const categorySlug = category?.slug || slug || "semua";
 
-  const title = `${categoryLabel} Nexarin`;
-  const description = `Kumpulan ${total || 0} artikel kategori ${categoryLabel} dari News Nexarin by-rins.`;
+  const title = isRealCategory
+    ? `${categoryLabel} Nexarin`
+    : "Kategori tidak ditemukan";
+
+  const description = isRealCategory
+    ? `Kumpulan ${total || 0} artikel kategori ${categoryLabel} dari News Nexarin by-rins.`
+    : `Kategori ${categoryLabel} tidak ditemukan, sudah dihapus, atau sedang nonaktif.`;
+
   const canonicalPath = `/news/kategori/${categorySlug}`;
   const url = `${SITE_URL}${canonicalPath}`;
 
@@ -218,7 +188,7 @@ export async function generateMetadata({ params }) {
       description,
     },
     robots: {
-      index: true,
+      index: Boolean(isRealCategory),
       follow: true,
     },
   };
@@ -227,5 +197,7 @@ export async function generateMetadata({ params }) {
 export default async function NewsCategoryRoute({ params }) {
   const resolvedParams = await params;
 
-  return <NewsCategoryPage slug={normalizeSlug(resolvedParams?.slug || "update")} />;
+  return (
+    <NewsCategoryPage slug={normalizeSlug(resolvedParams?.slug || "semua")} />
+  );
 }

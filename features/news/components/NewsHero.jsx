@@ -1,62 +1,14 @@
 import Link from "next/link";
-import {
-  newsArticles as fallbackNewsArticles,
-  newsHeroData,
-} from "@/features/news/news.data";
 
 const INDONESIA_MAP_IMAGE = "/images/backround/indonesia-map.png";
 const NEXARIN_LOGO = "/images/logo/nexarin-logo.png";
 
-const FALLBACK_PREVIEW_ARTICLES = [
-  {
-    category: "Update",
-    title: "News Nexarin disiapkan sebagai portal informasi by-rins.",
-    slug: "news-nexarin-akan-mengadaptasi-pondasi-rinsnews",
-    href: "/news/artikel/news-nexarin-akan-mengadaptasi-pondasi-rinsnews",
-    image:
-      "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    category: "Digital",
-    title: "Artikel, kategori, search, dan headline dibuat bertahap.",
-    slug: "struktur-artikel-kategori-dan-search-disiapkan",
-    href: "/news/artikel/struktur-artikel-kategori-dan-search-disiapkan",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    category: "Teknologi",
-    title: "Fallback data membantu halaman tetap stabil dan aman.",
-    slug: "konten-awal-masih-memakai-fallback-data",
-    href: "/news/artikel/konten-awal-masih-memakai-fallback-data",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    category: "Produk",
-    title: "Nexarin Products menjadi bagian ekosistem digital.",
-    slug: "nexarin-products-menjadi-bagian-ekosistem-digital",
-    href: "/news/artikel/nexarin-products-menjadi-bagian-ekosistem-digital",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    category: "Insight",
-    title: "Portfolio Nexarin disiapkan sebagai showcase project.",
-    slug: "portfolio-nexarin-disiapkan-sebagai-showcase-project",
-    href: "/news/artikel/portfolio-nexarin-disiapkan-sebagai-showcase-project",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    category: "Update",
-    title: "Contact menjadi jalur komunikasi awal Nexarin.",
-    slug: "contact-menjadi-jalur-komunikasi-awal-nexarin",
-    href: "/news/artikel/contact-menjadi-jalur-komunikasi-awal-nexarin",
-    image:
-      "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=500&q=80",
-  },
-];
+const NEWS_HERO_DATA = {
+  eyebrow: "News",
+  title: "Ruang informasi digital Nexarin.",
+  description:
+    "Ruang informasi digital by-rins untuk update, insight, teknologi, dan referensi pilihan dalam ekosistem Nexarin.",
+};
 
 function getSafeText(value) {
   return String(value || "").trim();
@@ -76,14 +28,14 @@ function normalizePreviewArticle(article, index = 0) {
   const slug = getSafeText(article?.slug);
 
   return {
-    id: article?.id || slug || `news-preview-${index + 1}`,
+    id: article?.id || slug || `news-db-preview-${index + 1}`,
     category:
       article?.category ||
       article?.categoryName ||
       article?.category?.name ||
       "News",
-    title: getSafeText(article?.title) || "Artikel Nexarin News",
-    href: article?.href || getArticleHref(article),
+    title: getSafeText(article?.title),
+    href: getArticleHref(article),
     image:
       article?.image ||
       article?.coverImageUrl ||
@@ -93,38 +45,13 @@ function normalizePreviewArticle(article, index = 0) {
   };
 }
 
-function getFallbackPreviewArticles() {
-  const staticArticles = Array.isArray(fallbackNewsArticles)
-    ? fallbackNewsArticles
-    : [];
-
-  const normalizedStaticArticles = staticArticles
-    .map((article, index) => normalizePreviewArticle(article, index))
-    .filter((article) => article.title && article.href)
-    .slice(0, 6);
-
-  if (normalizedStaticArticles.length > 0) {
-    return normalizedStaticArticles;
-  }
-
-  return FALLBACK_PREVIEW_ARTICLES.map((article, index) =>
-    normalizePreviewArticle(article, index)
-  ).slice(0, 6);
-}
-
 function getPreviewArticles(articles) {
   const safeArticles = Array.isArray(articles) ? articles : [];
 
-  const normalizedArticles = safeArticles
+  return safeArticles
     .map((article, index) => normalizePreviewArticle(article, index))
-    .filter((article) => article.title && article.href)
+    .filter((article) => article.slug && article.title)
     .slice(0, 6);
-
-  if (normalizedArticles.length > 0) {
-    return normalizedArticles;
-  }
-
-  return getFallbackPreviewArticles();
 }
 
 function PreviewArticleImage({ article }) {
@@ -206,6 +133,32 @@ function PreviewArticleCard({ article }) {
   );
 }
 
+function NewsPreviewEmptyState() {
+  return (
+    <div className="relative z-10 mt-4 rounded-[26px] border border-white/10 bg-slate-950/55 p-5 text-center shadow-xl shadow-black/20">
+      <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300">
+        Database
+      </p>
+
+      <h3 className="mt-4 text-xl font-black leading-tight tracking-[-0.045em] text-white">
+        Artikel News masih kosong.
+      </h3>
+
+      <p className="mt-3 text-xs font-semibold leading-6 text-slate-500">
+        Setelah artikel dipublish dari admin dashboard, preview artikel akan
+        tampil otomatis di sini.
+      </p>
+
+      <Link
+        href="/news/search"
+        className="mt-4 inline-flex min-h-10 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-black text-cyan-200 transition hover:bg-cyan-400 hover:text-slate-950"
+      >
+        Cari Artikel
+      </Link>
+    </div>
+  );
+}
+
 function NewsPreviewCard({ articles }) {
   const previewArticles = getPreviewArticles(articles);
 
@@ -244,22 +197,26 @@ function NewsPreviewCard({ articles }) {
         </div>
       </div>
 
-      <div className="relative z-10 mt-4">
-        <div className="-mx-1 grid auto-cols-[minmax(132px,0.72fr)] grid-flow-col gap-3 overflow-x-auto px-1 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {previewArticles.map((article) => (
-            <PreviewArticleCard
-              key={article.id || article.title}
-              article={article}
-            />
-          ))}
+      {previewArticles.length > 0 ? (
+        <div className="relative z-10 mt-4">
+          <div className="-mx-1 grid auto-cols-[minmax(132px,0.72fr)] grid-flow-col gap-3 overflow-x-auto px-1 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {previewArticles.map((article) => (
+              <PreviewArticleCard
+                key={article.id || article.slug || article.title}
+                article={article}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <NewsPreviewEmptyState />
+      )}
     </div>
   );
 }
 
 export default function NewsHero({ articles = [] }) {
-  const data = newsHeroData || {};
+  const data = NEWS_HERO_DATA;
 
   return (
     <section className="relative overflow-hidden px-5 pb-8 pt-7 text-white sm:px-6 sm:pb-10 sm:pt-10 lg:px-8 lg:pb-14 lg:pt-14">
@@ -280,16 +237,15 @@ export default function NewsHero({ articles = [] }) {
       <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-7 lg:grid-cols-[minmax(0,1.04fr)_minmax(320px,0.72fr)] lg:items-center">
         <div className="text-center lg:text-left">
           <p className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-300 shadow-lg shadow-cyan-400/5">
-            {data.eyebrow || "News"}
+            {data.eyebrow}
           </p>
 
           <h1 className="mx-auto mt-5 max-w-3xl text-[2.4rem] font-black leading-[0.95] tracking-[-0.065em] text-white sm:text-6xl lg:mx-0">
-            {data.title || "Ruang informasi digital Nexarin."}
+            {data.title}
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
-            {data.description ||
-              "News Nexarin disiapkan sebagai portal informasi by-rins yang aman, ringan, dan mobile-first."}
+            {data.description}
           </p>
         </div>
 

@@ -1,6 +1,38 @@
 import NewsCard from "@/features/news/components/NewsCard";
 import NewsCompactCard from "@/features/news/components/NewsCompactCard";
 
+function HeadlineEmptyState() {
+  return (
+    <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center shadow-xl shadow-black/10">
+      <div className="pointer-events-none absolute -left-16 -top-16 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 bottom-0 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
+
+      <div className="relative z-10">
+        <p className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
+          Database
+        </p>
+
+        <h3 className="mx-auto mt-4 max-w-xl text-2xl font-black leading-tight tracking-[-0.045em] text-white">
+          Headline belum tersedia.
+        </h3>
+
+        <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-slate-500">
+          Artikel headline akan tampil otomatis setelah ada artikel published
+          dari database yang ditandai sebagai headline.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SideHeadlineEmptyState() {
+  return (
+    <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
+      Headline tambahan belum tersedia.
+    </div>
+  );
+}
+
 export default function HeadlineNews({ articles: articlesProp = [] }) {
   const articles = Array.isArray(articlesProp) ? articlesProp : [];
   const headlineArticles = articles.filter((article) => article?.isHeadline);
@@ -70,18 +102,14 @@ export default function HeadlineNews({ articles: articlesProp = [] }) {
                       />
                     ))
                   ) : (
-                    <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
-                      Headline tambahan belum tersedia.
-                    </div>
+                    <SideHeadlineEmptyState />
                   )}
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
-            Headline belum tersedia.
-          </div>
+          <HeadlineEmptyState />
         )}
       </div>
     </section>

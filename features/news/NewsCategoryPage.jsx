@@ -1,19 +1,14 @@
+import Link from "next/link";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import NewsCategoryHeader from "@/features/news/components/news-category/NewsCategoryHeader";
 import NewsFooter from "@/features/news/components/NewsFooter";
 import NewsCategoryHero from "@/features/news/components/news-category/NewsCategoryHero";
 import NewsCategoryArticleList from "@/features/news/components/news-category/NewsCategoryArticleList";
-import {
-  newsArticles as fallbackNewsArticles,
-  newsCategories as fallbackNewsCategories,
-} from "@/features/news/news.data";
 import { prisma } from "@/lib/prisma";
 
 const CATEGORY_ARTICLE_LIMIT = 48;
-const DEFAULT_CATEGORY_SLUG = "update";
-const DEFAULT_CATEGORY_LABEL = "Update";
 const DEFAULT_AUTHOR_NAME = "Nexarin by-rins";
-const DEFAULT_READ_TIME = "3 min read";
+const DEFAULT_READ_TIME = "3 menit baca";
 
 function normalizeSlug(value) {
   return String(value || "")
@@ -35,77 +30,46 @@ function createLabelFromSlug(slug) {
     .join(" ");
 }
 
-function getFallbackCategories() {
-  return Array.isArray(fallbackNewsCategories) ? fallbackNewsCategories : [];
+function createAllCategory() {
+  return {
+    id: "semua",
+    label: "Semua News",
+    name: "Semua News",
+    slug: "semua",
+  };
 }
 
-function getFallbackArticles() {
-  return Array.isArray(fallbackNewsArticles) ? fallbackNewsArticles : [];
+function createNotFoundCategory(slug) {
+  const safeSlug = normalizeSlug(slug);
+
+  return {
+    id: "kategori-tidak-ditemukan",
+    label: safeSlug ? createLabelFromSlug(safeSlug) : "Kategori",
+    name: safeSlug ? createLabelFromSlug(safeSlug) : "Kategori",
+    slug: safeSlug || "kategori",
+  };
 }
 
-function normalizeCategory(category, fallbackSlug = DEFAULT_CATEGORY_SLUG) {
-  const slug = normalizeSlug(category?.slug || fallbackSlug);
+function normalizeCategory(category) {
+  const slug = normalizeSlug(category?.slug);
 
   return {
     id: category?.id || slug,
-    label:
-      category?.label ||
-      category?.name ||
-      createLabelFromSlug(slug) ||
-      DEFAULT_CATEGORY_LABEL,
-    name:
-      category?.name ||
-      category?.label ||
-      createLabelFromSlug(slug) ||
-      DEFAULT_CATEGORY_LABEL,
-    slug: slug || DEFAULT_CATEGORY_SLUG,
+    label: category?.label || category?.name || createLabelFromSlug(slug),
+    name: category?.name || category?.label || createLabelFromSlug(slug),
+    slug,
   };
 }
 
 function ensureCategoryListHasAll(categories) {
   const safeCategories = Array.isArray(categories) ? categories : [];
+
   const normalizedCategories = safeCategories
     .map((category) => normalizeCategory(category))
-    .filter((category) => category.slug);
+    .filter((category) => category.slug)
+    .filter((category) => normalizeSlug(category.slug) !== "semua");
 
-  const withoutAll = normalizedCategories.filter(
-    (category) => normalizeSlug(category?.slug) !== "semua"
-  );
-
-  return [
-    {
-      id: "semua",
-      label: "Semua",
-      name: "Semua",
-      slug: "semua",
-    },
-    ...withoutAll,
-  ];
-}
-
-function getFallbackCategory(slug) {
-  const cleanSlug = normalizeSlug(slug);
-  const categories = getFallbackCategories();
-
-  const matchedCategory =
-    categories.find(
-      (category) => normalizeSlug(category?.slug) === cleanSlug
-    ) ||
-    categories.find(
-      (category) => normalizeSlug(category?.slug) === DEFAULT_CATEGORY_SLUG
-    );
-
-  if (matchedCategory) {
-    return normalizeCategory(matchedCategory);
-  }
-
-  return normalizeCategory(
-    {
-      label: createLabelFromSlug(cleanSlug || DEFAULT_CATEGORY_SLUG),
-      slug: cleanSlug || DEFAULT_CATEGORY_SLUG,
-    },
-    cleanSlug || DEFAULT_CATEGORY_SLUG
-  );
+  return [createAllCategory(), ...normalizedCategories];
 }
 
 function formatPublicArticleDate(date) {
@@ -134,6 +98,19 @@ function getPlainText(value) {
     .trim();
 }
 
+function normalizeReadTime(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  return text
+    .replace(/(\d+)\s*min\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*minutes?\s*read/gi, "$1 menit baca")
+    .replace(/(\d+)\s*mins?\s*read/gi, "$1 menit baca");
+}
+
 function getReadTime(content) {
   const text = getPlainText(content);
 
@@ -144,7 +121,7 @@ function getReadTime(content) {
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 200));
 
-  return `${minutes} min read`;
+  return `${minutes} menit baca`;
 }
 
 function getSafeExcerpt(article) {
@@ -166,48 +143,32 @@ function getSafeExcerpt(article) {
 }
 
 function normalizePublicArticle(article, index = 0) {
-  const publishedDate =
-    article?.publishedAt || article?.createdAt || article?.date || "";
-
+  const publishedDate = article?.publishedAt || article?.createdAt || "";
   const slug = String(article?.slug || "").trim();
+  const title = String(article?.title || "").trim();
 
   return {
     id: article?.id || slug || `category-news-${index + 1}`,
     slug,
-    title: String(article?.title || "Artikel Nexarin").trim(),
-    category:
-      article?.category?.name ||
-      article?.category ||
-      article?.categoryName ||
-      "News",
-    categorySlug:
-      article?.category?.slug ||
-      article?.categorySlug ||
-      article?.category_slug ||
-      DEFAULT_CATEGORY_SLUG,
+    title,
+    category: article?.category?.name || "News",
+    categorySlug: article?.category?.slug || "",
     excerpt: getSafeExcerpt(article),
-    author:
-      article?.author ||
-      article?.sourceName ||
-      article?.articleSourceName ||
-      DEFAULT_AUTHOR_NAME,
-    date:
-      typeof article?.date === "string" && article.date.trim()
-        ? article.date
-        : formatPublicArticleDate(publishedDate),
-    readTime: article?.readTime || getReadTime(article?.content || article?.body),
-    image: article?.coverImageUrl || article?.image || "",
+    author: article?.sourceName || article?.articleSourceName || DEFAULT_AUTHOR_NAME,
+    date: formatPublicArticleDate(publishedDate),
+    readTime: normalizeReadTime(article?.readTime) || getReadTime(article?.content || article?.body),
+    image: article?.coverImageUrl || "",
+    coverImageUrl: article?.coverImageUrl || "",
+    coverImageAlt: article?.coverImageAlt || title || "Artikel Nexarin News",
     isHeadline: Boolean(article?.isHeadline),
     isPopular: Boolean(article?.isPopular || article?.isFeatured),
     youtubeUrl: article?.youtubeUrl || "",
-    articleSourceName:
-      article?.articleSourceName || article?.sourceName || "",
-    articleSourceUrl:
-      article?.articleSourceUrl || article?.sourceUrl || "",
+    articleSourceName: article?.articleSourceName || article?.sourceName || "",
+    articleSourceUrl: article?.articleSourceUrl || article?.sourceUrl || "",
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || "",
-    source: article?.source || "fallback",
+    source: "database",
   };
 }
 
@@ -227,11 +188,11 @@ function mapDatabaseArticleToPublicArticle(article, index = 0) {
       videoSourceUrl: article?.videoSourceUrl,
       youtubeUrl: article?.youtubeUrl,
       coverImageUrl: article?.coverImageUrl,
+      coverImageAlt: article?.coverImageAlt,
       isHeadline: article?.isHeadline,
       isFeatured: article?.isFeatured,
       publishedAt: article?.publishedAt,
       createdAt: article?.createdAt,
-      source: "database",
     },
     index
   );
@@ -254,6 +215,9 @@ function getPublicDateFilter() {
 
 async function getDatabaseCategories() {
   const categories = await prisma.newsCategory.findMany({
+    where: {
+      isActive: true,
+    },
     select: {
       id: true,
       name: true,
@@ -264,7 +228,9 @@ async function getDatabaseCategories() {
     },
   });
 
-  return categories.map((category) => normalizeCategory(category));
+  return categories
+    .map((category) => normalizeCategory(category))
+    .filter((category) => category.slug);
 }
 
 async function getDatabaseArticlesByCategory(category) {
@@ -277,6 +243,11 @@ async function getDatabaseArticlesByCategory(category) {
   const where = {
     status: "PUBLISHED",
     OR: getPublicDateFilter(),
+    category: {
+      is: {
+        isActive: true,
+      },
+    },
   };
 
   if (cleanSlug !== "semua") {
@@ -309,32 +280,22 @@ async function getDatabaseArticlesByCategory(category) {
     .filter((article) => article.slug && article.title);
 }
 
-async function getDatabaseCategoryPageData(slug) {
-  const cleanSlug = normalizeSlug(slug || DEFAULT_CATEGORY_SLUG);
+async function getNewsCategoryPageData(slug) {
+  const cleanSlug = normalizeSlug(slug || "semua");
 
   try {
     const databaseCategories = await getDatabaseCategories();
-
-    if (databaseCategories.length === 0) {
-      return null;
-    }
-
     const categories = ensureCategoryListHasAll(databaseCategories);
 
     if (cleanSlug === "semua") {
-      const allCategory = {
-        id: "semua",
-        label: "Semua News",
-        name: "Semua News",
-        slug: "semua",
-      };
-
+      const allCategory = createAllCategory();
       const articles = await getDatabaseArticlesByCategory(allCategory);
 
       return {
         category: allCategory,
         categories,
         articles,
+        notFound: false,
       };
     }
 
@@ -343,7 +304,12 @@ async function getDatabaseCategoryPageData(slug) {
     );
 
     if (!currentCategory) {
-      return null;
+      return {
+        category: createNotFoundCategory(cleanSlug),
+        categories,
+        articles: [],
+        notFound: true,
+      };
     }
 
     const articles = await getDatabaseArticlesByCategory(currentCategory);
@@ -352,54 +318,73 @@ async function getDatabaseCategoryPageData(slug) {
       category: currentCategory,
       categories,
       articles,
+      notFound: false,
     };
   } catch (error) {
     console.error("Gagal mengambil kategori News dari database:", error);
 
-    return null;
+    return {
+      category: createNotFoundCategory(cleanSlug),
+      categories: [createAllCategory()],
+      articles: [],
+      notFound: true,
+    };
   }
 }
 
-function getFallbackCategoryArticles(slug) {
-  const cleanSlug = normalizeSlug(slug);
-  const articles = getFallbackArticles();
+function CategoryNotFoundSection({ category }) {
+  return (
+    <section className="relative px-5 pb-10 pt-4 text-white sm:px-6 sm:pb-12 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-3xl">
+        <div className="overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-2xl shadow-black/25 backdrop-blur-xl">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-300/20 bg-cyan-400/10 p-3 shadow-xl shadow-cyan-400/10">
+            <img
+              src="/images/logo/nexarin-logo.png"
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
 
-  if (cleanSlug === "semua") {
-    return articles
-      .map(normalizePublicArticle)
-      .filter((article) => article.slug && article.title);
-  }
+          <p className="mx-auto mt-6 inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-cyan-300">
+            Kategori
+          </p>
 
-  return articles
-    .filter((article) => normalizeSlug(article?.categorySlug) === cleanSlug)
-    .map(normalizePublicArticle)
-    .filter((article) => article.slug && article.title);
-}
+          <h2 className="mx-auto mt-5 max-w-2xl text-[2.1rem] font-black leading-[0.95] tracking-[-0.065em] text-white sm:text-5xl">
+            Kategori tidak ditemukan.
+          </h2>
 
-function getFallbackCategoryPageData(slug) {
-  const category = getFallbackCategory(slug);
-  const categories = ensureCategoryListHasAll(getFallbackCategories());
-  const articles = getFallbackCategoryArticles(category?.slug);
+          <p className="mx-auto mt-5 max-w-xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
+            Kategori “{category?.name || "ini"}” tidak ada di database, sudah
+            dihapus, atau sedang nonaktif.
+          </p>
 
-  return {
-    category,
-    categories,
-    articles,
-  };
-}
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/news"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/10 transition hover:-translate-y-0.5 hover:bg-emerald-300 sm:w-auto"
+            >
+              Kembali ke News
+            </Link>
 
-async function getNewsCategoryPageData(slug) {
-  const databaseData = await getDatabaseCategoryPageData(slug);
-
-  if (databaseData?.category) {
-    return databaseData;
-  }
-
-  return getFallbackCategoryPageData(slug);
+            <Link
+              href="/news/search"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-cyan-400/10 sm:w-auto"
+            >
+              Cari Artikel
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default async function NewsCategoryPage({ slug }) {
-  const { category, categories, articles } = await getNewsCategoryPageData(slug);
+  const { category, categories, articles, notFound } =
+    await getNewsCategoryPageData(slug);
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
@@ -423,13 +408,24 @@ export default async function NewsCategoryPage({ slug }) {
         />
 
         <div className="relative z-10">
-          <ScrollReveal>
-            <NewsCategoryHero category={category} total={articles.length} />
-          </ScrollReveal>
+          {notFound ? (
+            <ScrollReveal>
+              <CategoryNotFoundSection category={category} />
+            </ScrollReveal>
+          ) : (
+            <>
+              <ScrollReveal>
+                <NewsCategoryHero category={category} total={articles.length} />
+              </ScrollReveal>
 
-          <ScrollReveal delay={80}>
-            <NewsCategoryArticleList category={category} articles={articles} />
-          </ScrollReveal>
+              <ScrollReveal delay={80}>
+                <NewsCategoryArticleList
+                  category={category}
+                  articles={articles}
+                />
+              </ScrollReveal>
+            </>
+          )}
         </div>
       </section>
 

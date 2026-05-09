@@ -3,7 +3,6 @@ import NewsFooter from "@/features/news/components/NewsFooter";
 import SearchHeader from "@/features/news/components/search-page/SearchHeader";
 import SearchHero from "@/features/news/components/search-page/SearchHero";
 import SearchResults from "@/features/news/components/search-page/SearchResults";
-import { newsArticles as fallbackNewsArticles } from "@/features/news/news.data";
 import { prisma } from "@/lib/prisma";
 
 const SEARCH_ARTICLE_LIMIT = 100;
@@ -22,14 +21,6 @@ function normalizeSearchText(value) {
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
-}
-
-function getFallbackArticles() {
-  const articles = Array.isArray(fallbackNewsArticles)
-    ? fallbackNewsArticles
-    : [];
-
-  return articles.filter((article) => !isInternalPreviewArticle(article));
 }
 
 function formatPublicArticleDate(date) {
@@ -102,32 +93,10 @@ function getSafeExcerpt(article) {
     : contentPreview;
 }
 
-function isInternalPreviewArticle(article) {
-  const marker = [
-    article?.slug,
-    article?.title,
-    article?.source,
-    article?.category?.name,
-    article?.category,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  return (
-    marker.includes("fallback") ||
-    marker.includes("rinsnews") ||
-    marker.includes("konten-awal") ||
-    marker.includes("mengadaptasi-pondasi")
-  );
-}
-
 function normalizePublicArticle(article, index = 0) {
-  const publishedDate =
-    article?.publishedAt || article?.createdAt || article?.date || "";
-
+  const publishedDate = article?.publishedAt || article?.createdAt || "";
   const slug = String(article?.slug || "").trim();
-  const title = String(article?.title || "Artikel Nexarin").trim();
+  const title = String(article?.title || "").trim();
 
   return {
     id: article?.id || slug || `search-news-${index + 1}`,
@@ -157,6 +126,9 @@ function normalizePublicArticle(article, index = 0) {
       normalizeReadTime(article?.readTime) ||
       getReadTime(article?.content || article?.body),
     image: article?.coverImageUrl || article?.image || "",
+    coverImageUrl: article?.coverImageUrl || article?.image || "",
+    coverImageAlt:
+      article?.coverImageAlt || article?.title || "Artikel Nexarin News",
     isHeadline: Boolean(article?.isHeadline),
     isPopular: Boolean(article?.isPopular || article?.isFeatured),
     youtubeUrl: article?.youtubeUrl || "",
@@ -167,7 +139,7 @@ function normalizePublicArticle(article, index = 0) {
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || "",
-    source: article?.source === "database" ? "database" : "preview",
+    source: "database",
     searchContent: getPlainText(
       [
         article?.title,
@@ -201,11 +173,11 @@ function mapDatabaseArticleToPublicArticle(article, index = 0) {
       videoSourceUrl: article?.videoSourceUrl,
       youtubeUrl: article?.youtubeUrl,
       coverImageUrl: article?.coverImageUrl,
+      coverImageAlt: article?.coverImageAlt,
       isHeadline: article?.isHeadline,
       isFeatured: article?.isFeatured,
       publishedAt: article?.publishedAt,
       createdAt: article?.createdAt,
-      source: "database",
     },
     index
   );
@@ -231,7 +203,6 @@ function filterArticlesByKeyword(articles, keyword) {
   const query = normalizeSearchText(keyword);
 
   const normalizedArticles = safeArticles
-    .filter((article) => !isInternalPreviewArticle(article))
     .map((article, index) => normalizePublicArticle(article, index))
     .filter((article) => article.slug && article.title);
 
@@ -254,6 +225,11 @@ async function getDatabaseSearchResults(keyword) {
       where: {
         status: "PUBLISHED",
         OR: getPublicDateFilter(),
+        category: {
+          is: {
+            isActive: true,
+          },
+        },
       },
       include: {
         category: {
@@ -276,30 +252,18 @@ async function getDatabaseSearchResults(keyword) {
     });
 
     return filterArticlesByKeyword(
-      articles
-        .filter((article) => article?.category?.isActive !== false)
-        .map(mapDatabaseArticleToPublicArticle),
+      articles.map(mapDatabaseArticleToPublicArticle),
       keyword
     );
   } catch (error) {
     console.error("Gagal mencari artikel News dari database:", error);
 
-    return null;
+    return [];
   }
-}
-
-function getFallbackSearchResults(keyword) {
-  return filterArticlesByKeyword(getFallbackArticles(), keyword);
 }
 
 async function getSearchResults(keyword) {
-  const databaseResults = await getDatabaseSearchResults(keyword);
-
-  if (Array.isArray(databaseResults)) {
-    return databaseResults;
-  }
-
-  return getFallbackSearchResults(keyword);
+  return getDatabaseSearchResults(keyword);
 }
 
 function SearchPageBackground({ keyword, results }) {

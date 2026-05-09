@@ -7,7 +7,6 @@ import LatestNews from "@/features/news/components/LatestNews";
 import PopularNews from "@/features/news/components/PopularNews";
 import NewsFooter from "@/features/news/components/NewsFooter";
 import { prisma } from "@/lib/prisma";
-import { newsArticles as fallbackNewsArticles } from "@/features/news/news.data";
 
 const PUBLIC_NEWS_LIMIT = 12;
 const DATABASE_NEWS_TAKE_LIMIT = 24;
@@ -86,124 +85,34 @@ function getSafeExcerpt(article) {
     : contentPreview;
 }
 
-function isInternalPreviewArticle(article) {
-  const marker = [
-    article?.slug,
-    article?.title,
-    article?.source,
-    article?.category?.name,
-    article?.category,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  return (
-    marker.includes("fallback") ||
-    marker.includes("rinsnews") ||
-    marker.includes("konten-awal") ||
-    marker.includes("mengadaptasi-pondasi")
-  );
-}
-
 function normalizePublicArticle(article, index = 0) {
-  const publishedDate =
-    article?.publishedAt || article?.createdAt || article?.date || "";
-
-  const title = String(article?.title || "Artikel Nexarin").trim();
+  const publishedDate = article?.publishedAt || article?.createdAt || "";
+  const title = String(article?.title || "").trim();
   const slug = String(article?.slug || "").trim();
 
   return {
     id: article?.id || slug || `news-${index + 1}`,
     slug,
     title,
-    category:
-      article?.category?.name ||
-      article?.category ||
-      article?.categoryName ||
-      DEFAULT_CATEGORY_NAME,
-    categorySlug:
-      article?.category?.slug ||
-      article?.categorySlug ||
-      DEFAULT_CATEGORY_SLUG,
+    category: article?.category?.name || DEFAULT_CATEGORY_NAME,
+    categorySlug: article?.category?.slug || DEFAULT_CATEGORY_SLUG,
     excerpt: getSafeExcerpt(article),
     author:
-      article?.author ||
       article?.sourceName ||
       article?.articleSourceName ||
       DEFAULT_AUTHOR_NAME,
-    date:
-      typeof article?.date === "string" && article.date.trim()
-        ? article.date
-        : formatPublicArticleDate(publishedDate),
+    date: formatPublicArticleDate(publishedDate),
     readTime:
       normalizeReadTime(article?.readTime) || getReadTime(article?.content),
-    image: article?.coverImageUrl || article?.image || "",
-    isHeadline: Boolean(article?.isHeadline),
-    isPopular: Boolean(article?.isPopular || article?.isFeatured),
-    youtubeUrl: article?.youtubeUrl || "",
-    articleSourceName:
-      article?.articleSourceName || article?.sourceName || "",
-    articleSourceUrl:
-      article?.articleSourceUrl || article?.sourceUrl || "",
-    sourceNote: article?.sourceNote || "",
-    videoSourceName: article?.videoSourceName || "",
-    videoSourceUrl: article?.videoSourceUrl || "",
-    source: article?.source === "database" ? "database" : "preview",
-  };
-}
-
-function preparePublicNewsFeed(articles) {
-  const safeArticles = Array.isArray(articles) ? articles : [];
-
-  const normalizedArticles = safeArticles
-    .filter((article) => !isInternalPreviewArticle(article))
-    .map((article, index) => normalizePublicArticle(article, index))
-    .filter((article) => article.slug && article.title)
-    .slice(0, PUBLIC_NEWS_LIMIT);
-
-  if (normalizedArticles.length === 0) {
-    return [];
-  }
-
-  const hasHeadline = normalizedArticles.some((article) => article.isHeadline);
-  const hasPopular = normalizedArticles.some((article) => article.isPopular);
-
-  return normalizedArticles.map((article, index) => ({
-    ...article,
-    isHeadline: hasHeadline ? article.isHeadline : index === 0,
-    isPopular: hasPopular ? article.isPopular : index > 0 && index <= 4,
-  }));
-}
-
-function getFallbackNewsFeed() {
-  const fallbackArticles = Array.isArray(fallbackNewsArticles)
-    ? fallbackNewsArticles
-    : [];
-
-  const fallbackFeed = preparePublicNewsFeed(fallbackArticles);
-
-  return fallbackFeed.length > 0 ? fallbackFeed : [];
-}
-
-function mapDatabaseArticleToPublicArticle(article) {
-  return {
-    id: article?.id,
-    slug: article?.slug || "",
-    title: article?.title || "Artikel Nexarin",
-    category: article?.category?.name || DEFAULT_CATEGORY_NAME,
-    categorySlug: article?.category?.slug || DEFAULT_CATEGORY_SLUG,
-    summary: article?.summary || "",
-    content: article?.content || "",
-    author: article?.sourceName || DEFAULT_AUTHOR_NAME,
-    publishedAt: article?.publishedAt,
-    createdAt: article?.createdAt,
+    image: article?.coverImageUrl || "",
     coverImageUrl: article?.coverImageUrl || "",
+    coverImageAlt:
+      article?.coverImageAlt || article?.title || "Artikel Nexarin News",
     isHeadline: Boolean(article?.isHeadline),
-    isFeatured: Boolean(article?.isFeatured),
+    isPopular: Boolean(article?.isFeatured),
     youtubeUrl: article?.youtubeUrl || "",
-    sourceName: article?.sourceName || "",
-    sourceUrl: article?.sourceUrl || "",
+    articleSourceName: article?.articleSourceName || article?.sourceName || "",
+    articleSourceUrl: article?.articleSourceUrl || article?.sourceUrl || "",
     sourceNote: article?.sourceNote || "",
     videoSourceName: article?.videoSourceName || "",
     videoSourceUrl: article?.videoSourceUrl || "",
@@ -211,23 +120,41 @@ function mapDatabaseArticleToPublicArticle(article) {
   };
 }
 
+function preparePublicNewsFeed(articles) {
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  return safeArticles
+    .map((article, index) => normalizePublicArticle(article, index))
+    .filter((article) => article.slug && article.title)
+    .slice(0, PUBLIC_NEWS_LIMIT);
+}
+
+function getPublicDateFilter() {
+  const now = new Date();
+
+  return [
+    {
+      publishedAt: null,
+    },
+    {
+      publishedAt: {
+        lte: now,
+      },
+    },
+  ];
+}
+
 async function getPublishedNewsArticles() {
   try {
-    const now = new Date();
-
     const articles = await prisma.newsArticle.findMany({
       where: {
         status: "PUBLISHED",
-        OR: [
-          {
-            publishedAt: null,
+        OR: getPublicDateFilter(),
+        category: {
+          is: {
+            isActive: true,
           },
-          {
-            publishedAt: {
-              lte: now,
-            },
-          },
-        ],
+        },
       },
       include: {
         category: {
@@ -249,17 +176,11 @@ async function getPublishedNewsArticles() {
       take: DATABASE_NEWS_TAKE_LIMIT,
     });
 
-    const databaseFeed = preparePublicNewsFeed(
-      articles
-        .filter((article) => article?.category?.isActive !== false)
-        .map(mapDatabaseArticleToPublicArticle)
-    );
-
-    return databaseFeed;
+    return preparePublicNewsFeed(articles);
   } catch (error) {
-    console.error("Gagal mengambil artikel public News:", error);
+    console.error("Gagal mengambil artikel public News dari database:", error);
 
-    return getFallbackNewsFeed();
+    return [];
   }
 }
 

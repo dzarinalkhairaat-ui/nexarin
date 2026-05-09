@@ -2,8 +2,53 @@ import Link from "next/link";
 import NewsCard from "@/features/news/components/NewsCard";
 import NewsCompactCard from "@/features/news/components/NewsCompactCard";
 
+function getValidArticles(articles) {
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  return safeArticles.filter((article) => article?.slug && article?.title);
+}
+
+function LatestEmptyState() {
+  return (
+    <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center shadow-xl shadow-black/10">
+      <div className="pointer-events-none absolute -left-16 -top-16 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 bottom-0 h-44 w-44 rounded-full bg-lime-400/10 blur-3xl" />
+
+      <div className="relative z-10">
+        <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
+          Database
+        </p>
+
+        <h3 className="mx-auto mt-4 max-w-xl text-2xl font-black leading-tight tracking-[-0.045em] text-white">
+          Berita terbaru belum tersedia.
+        </h3>
+
+        <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-slate-500">
+          Setelah artikel pertama dipublikasikan dari dashboard admin, berita
+          terbaru akan tampil otomatis di bagian ini.
+        </p>
+
+        <Link
+          href="/news/search"
+          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-3 text-sm font-black text-emerald-200 transition hover:bg-emerald-400 hover:text-slate-950"
+        >
+          Cari Artikel
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function CompactLatestEmptyState() {
+  return (
+    <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
+      Update ringkas belum tersedia.
+    </div>
+  );
+}
+
 export default function LatestNews({ articles: articlesProp = [] }) {
-  const articles = Array.isArray(articlesProp) ? articlesProp : [];
+  const articles = getValidArticles(articlesProp);
   const latestArticles = articles.slice(0, 6);
   const mainLatest = latestArticles.slice(0, 2);
   const compactLatest = latestArticles.slice(2, 6);
@@ -79,18 +124,14 @@ export default function LatestNews({ articles: articlesProp = [] }) {
                       />
                     ))
                   ) : (
-                    <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
-                      Update ringkas belum tersedia.
-                    </div>
+                    <CompactLatestEmptyState />
                   )}
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
-            Berita terbaru belum tersedia.
-          </div>
+          <LatestEmptyState />
         )}
       </div>
     </section>
