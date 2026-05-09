@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 const socialLinks = [
   {
@@ -91,7 +91,7 @@ function SupportIcon() {
   );
 }
 
-export default function ProductsFooter() {
+export default function AllProductsFooter() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-slate-950 px-5 pb-7 pt-9 text-white sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_20%,rgba(16,185,129,0.18),transparent_32%),radial-gradient(circle_at_85%_72%,rgba(6,182,212,0.12),transparent_34%)]" />
@@ -155,7 +155,7 @@ export default function ProductsFooter() {
 
         <div className="flex justify-center text-center lg:col-span-2">
           <p className="text-xs font-medium leading-6 text-slate-500">
-            © 2026 Nexarin by-rins
+            Â© 2026 Nexarin by-rins
           </p>
         </div>
       </div>

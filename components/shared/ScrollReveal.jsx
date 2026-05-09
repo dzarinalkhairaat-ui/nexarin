@@ -13,40 +13,81 @@ export default function ScrollReveal({
 
   useEffect(() => {
     const element = ref.current;
+    let observer = null;
+    let fallbackTimer = null;
+    let isMounted = true;
+
+    const showElement = () => {
+      if (!isMounted) {
+        return;
+      }
+
+      setIsVisible(true);
+    };
 
     if (!element) {
-      setIsVisible(true);
-      return;
+      showElement();
+      return () => {
+        isMounted = false;
+      };
     }
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    try {
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-    if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
-    }
+      if (prefersReducedMotion || typeof IntersectionObserver === "undefined") {
+        showElement();
+        return () => {
+          isMounted = false;
+        };
+      }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          window.requestAnimationFrame(() => {
-            setIsVisible(true);
-          });
+      fallbackTimer = window.setTimeout(() => {
+        showElement();
 
+        if (observer) {
           observer.disconnect();
         }
-      },
-      {
-        threshold: 0.08,
-        rootMargin: "0px 0px -12% 0px",
+      }, 900);
+
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry?.isIntersecting) {
+            window.requestAnimationFrame(() => {
+              showElement();
+            });
+
+            if (fallbackTimer) {
+              window.clearTimeout(fallbackTimer);
+            }
+
+            observer.disconnect();
+          }
+        },
+        {
+          threshold: 0.02,
+          rootMargin: "0px 0px 80px 0px",
+        }
+      );
+
+      observer.observe(element);
+    } catch {
+      showElement();
+    }
+
+    return () => {
+      isMounted = false;
+
+      if (fallbackTimer) {
+        window.clearTimeout(fallbackTimer);
       }
-    );
 
-    observer.observe(element);
-
-    return () => observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, []);
 
   return (
@@ -60,10 +101,10 @@ export default function ScrollReveal({
           : `translate3d(0, ${y}px, 0) scale(0.975)`,
         filter: isVisible ? "blur(0px)" : "blur(2px)",
         transitionProperty: "opacity, transform, filter",
-        transitionDuration: "1050ms",
+        transitionDuration: "850ms",
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
         transitionDelay: `${delay}ms`,
-        willChange: "opacity, transform, filter",
+        willChange: isVisible ? "auto" : "opacity, transform, filter",
       }}
     >
       {children}
