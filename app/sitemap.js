@@ -1,4 +1,5 @@
-﻿import { getPortfolioProjects } from "@/features/portfolio/portfolio.data";
+import { getPortfolioProjects } from "@/features/portfolio/portfolio.data";
+import { productMarketplaceData } from "@/features/products/products.data";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,18 @@ function createUrl(
     changeFrequency,
     priority,
   };
+}
+
+function getProducts() {
+  return Array.isArray(productMarketplaceData?.products)
+    ? productMarketplaceData.products
+    : [];
+}
+
+function getProductCategories() {
+  return Array.isArray(productMarketplaceData?.categories)
+    ? productMarketplaceData.categories
+    : [];
 }
 
 function getValidDate(...dates) {
@@ -155,7 +168,8 @@ async function getDatabaseNewsCategoryRoutes() {
 export default async function sitemap() {
   const staticRoutes = [
     createUrl("/", 1, "weekly"),
-    createUrl("/products", 0.55, "monthly"),
+    createUrl("/products", 0.9, "weekly"),
+    createUrl("/products/semua", 0.85, "weekly"),
     createUrl("/portfolio", 0.85, "weekly"),
     createUrl("/news", 0.9, "weekly"),
     createUrl("/news/search", 0.65, "weekly"),
@@ -163,6 +177,19 @@ export default async function sitemap() {
     createUrl("/contact", 0.75, "monthly"),
     createUrl("/support", 0.75, "monthly"),
   ];
+
+  const productRoutes = getProducts()
+    .filter((product) => product?.slug)
+    .flatMap((product) => [
+      createUrl(`/products/${product.slug}`, 0.8, "weekly"),
+      createUrl(`/products/checkout/${product.slug}`, 0.6, "monthly"),
+    ]);
+
+  const productCategoryRoutes = getProductCategories()
+    .filter((category) => category?.slug && category.slug !== "semua")
+    .map((category) =>
+      createUrl(`/products/kategori/${category.slug}`, 0.75, "weekly")
+    );
 
   const portfolioRoutes = getPortfolioProjects()
     .filter((project) => project?.slug)
@@ -173,6 +200,8 @@ export default async function sitemap() {
 
   return uniqueRoutes([
     ...staticRoutes,
+    ...productRoutes,
+    ...productCategoryRoutes,
     ...portfolioRoutes,
     ...newsArticleRoutes,
     ...newsCategoryRoutes,
