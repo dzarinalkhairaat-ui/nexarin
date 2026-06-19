@@ -1,5 +1,5 @@
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import NewsHeader from "@/features/news/components/NewsHeader";
+import Header from "@/components/shared/Header";
 import NewsHero from "@/features/news/components/NewsHero";
 import NewsCategoryChips from "@/features/news/components/NewsCategoryChips";
 import HeadlineNews from "@/features/news/components/HeadlineNews";
@@ -189,7 +189,7 @@ export default async function NewsPage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <NewsHeader />
+      <Header />
 
       <NewsCategoryChips />
 

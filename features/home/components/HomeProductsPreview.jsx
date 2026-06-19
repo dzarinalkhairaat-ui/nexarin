@@ -9,60 +9,60 @@ function ProductPreviewCard({ product, index }) {
   const icon = productIcons[index] || "✦";
 
   return (
-    <article className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.04] p-5 shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/25 hover:bg-emerald-400/10">
-      <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl transition group-hover:bg-emerald-400/20" />
-      <div className="pointer-events-none absolute -left-12 bottom-0 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
+    <Link href="/products" className="block group">
+      <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] p-6 shadow-xl shadow-black/20 transition hover:-translate-y-2 hover:border-emerald-400/25 hover:bg-white/[0.04]">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl transition group-hover:bg-emerald-400/20" />
+        <div className="pointer-events-none absolute -left-12 bottom-0 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <img
-        src="/images/logo/nexarin-logo.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-8 bottom-6 h-28 w-28 rotate-12 object-contain opacity-[0.035]"
-        loading="lazy"
-        decoding="async"
-      />
+        <img
+          src="/images/logo/nexarin-logo.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-8 bottom-6 h-32 w-32 rotate-12 object-contain opacity-[0.035]"
+          loading="lazy"
+          decoding="async"
+        />
 
-      <div className="relative z-10">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-xl shadow-lg shadow-emerald-400/10">
-              {icon}
+        <div className="relative z-10 flex h-full flex-col">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-2xl shadow-lg shadow-emerald-400/10 transition group-hover:scale-110">
+                {icon}
+              </div>
+
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">
+                  {number}
+                </p>
+                <p className="mt-1 text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                  {safeProduct.category || "Product"}
+                </p>
+              </div>
             </div>
 
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
-                {number}
-              </p>
-              <p className="mt-1 text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
-                {safeProduct.category || "Product"}
-              </p>
-            </div>
+            <span className="rounded-full border border-white/10 bg-slate-950/45 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-slate-300 backdrop-blur-md">
+              {safeProduct.status || "Soon"}
+            </span>
           </div>
 
-          <span className="rounded-full border border-white/10 bg-slate-950/45 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-slate-300">
-            {safeProduct.status || "Soon"}
-          </span>
+          <h3 className="mt-8 text-2xl font-black leading-tight tracking-[-0.04em] text-white group-hover:text-emerald-300 transition-colors">
+            {safeProduct.title || "Produk belum tersedia"}
+          </h3>
+
+          <p className="mt-4 flex-1 text-sm font-medium leading-relaxed text-slate-400 line-clamp-4">
+            {safeProduct.description ||
+              "Deskripsi produk akan ditambahkan saat data sudah siap."}
+          </p>
+
+          <div className="mt-8 border-t border-white/10 pt-5">
+            <span className="inline-flex w-full items-center justify-between text-sm font-black text-emerald-400 transition group-hover:text-emerald-300">
+              <span>Lihat Produk</span>
+              <span aria-hidden="true" className="text-xl transition-transform group-hover:translate-x-1">→</span>
+            </span>
+          </div>
         </div>
-
-        <h3 className="mt-6 text-2xl font-black leading-tight tracking-[-0.05em] text-white">
-          {safeProduct.title || "Produk belum tersedia"}
-        </h3>
-
-        <p className="mt-4 line-clamp-4 text-sm font-medium leading-7 text-slate-400">
-          {safeProduct.description ||
-            "Deskripsi produk akan ditambahkan saat data sudah siap."}
-        </p>
-
-        <div className="mt-5 h-px w-full bg-gradient-to-r from-emerald-400/25 via-white/10 to-transparent" />
-
-        <Link
-          href="/products"
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2.5 text-xs font-black text-emerald-200 transition hover:bg-emerald-400 hover:text-slate-950"
-        >
-          Lihat Detail
-        </Link>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 }
 
@@ -72,7 +72,7 @@ export default function HomeProductsPreview() {
   const cta = data.cta || {};
 
   return (
-    <section className="relative overflow-hidden border-t border-white/10 px-5 py-12 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(16,185,129,0.14),transparent_32%),radial-gradient(circle_at_90%_70%,rgba(6,182,212,0.1),transparent_34%)]" />
 
       <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
@@ -81,7 +81,7 @@ export default function HomeProductsPreview() {
         src="/images/logo/nexarin-logo.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -left-14 top-16 h-80 w-80 -rotate-12 object-contain opacity-[0.075]"
+        className="pointer-events-none absolute -left-14 top-16 h-80 w-80 -rotate-12 object-contain opacity-[0.05]"
         loading="lazy"
         decoding="async"
       />
@@ -105,7 +105,7 @@ export default function HomeProductsPreview() {
                 {data.title || "Produk digital Nexarin sedang disiapkan."}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base font-semibold leading-8 text-slate-300">
+              <p className="mt-5 max-w-2xl text-base font-medium leading-8 text-slate-300">
                 {data.description ||
                   "Section produk ini disiapkan sebagai preview awal."}
               </p>
@@ -120,7 +120,7 @@ export default function HomeProductsPreview() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {products.length > 0 ? (
             products.map((product, index) => (
               <ProductPreviewCard

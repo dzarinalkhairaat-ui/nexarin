@@ -8,47 +8,60 @@ export default function ProjectCard({ project }) {
     : "/portfolio";
 
   return (
-    <article className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/20 hover:bg-white/[0.06]">
-      <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl opacity-0 transition group-hover:opacity-100" />
+    <article className="group relative flex flex-col overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] shadow-xl shadow-black/20 transition hover:-translate-y-2 hover:border-emerald-400/20 hover:bg-white/[0.04]">
+      {/* Thumbnail */}
+      <div className="relative aspect-video w-full overflow-hidden border-b border-white/10 bg-slate-900">
+        <img 
+          src={safeProject.image && safeProject.image !== "/images/logo/nexarin-logo.png" ? safeProject.image : "/images/placeholders/image-placeholder.svg"} 
+          alt={safeProject.title || "Project"}
+          className="h-full w-full object-cover opacity-50 transition duration-500 group-hover:scale-105 group-hover:opacity-80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+        <div className="absolute bottom-4 left-4">
+           <p className="inline-flex rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md">
+            {safeProject.category || "Project"}
+          </p>
+        </div>
+      </div>
 
-      <div className="relative z-10">
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">
-          {safeProject.category || "Project"}
-        </p>
-
-        <h3 className="mt-4 line-clamp-2 text-2xl font-black leading-tight tracking-[-0.045em] text-white">
+      {/* Content */}
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="line-clamp-2 text-2xl font-black leading-tight tracking-[-0.04em] text-white group-hover:text-emerald-300 transition-colors">
           {safeProject.title || "Project Nexarin"}
         </h3>
 
-        <p className="mt-3 inline-flex rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-slate-300">
-          {safeProject.status || "Preview"}
-        </p>
-
-        <p className="mt-4 line-clamp-4 text-sm font-medium leading-7 text-slate-400">
+        <p className="mt-3 line-clamp-3 text-sm font-medium leading-relaxed text-slate-400 flex-1">
           {safeProject.description ||
             "Deskripsi project akan ditambahkan saat data portfolio sudah siap."}
         </p>
 
         {tags.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            {tags.slice(0, 5).map((tag) => (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-cyan-200"
+                className="rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold tracking-wider text-slate-300 border border-white/10"
               >
                 {tag}
               </span>
             ))}
+            {tags.length > 3 && (
+              <span className="rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold tracking-wider text-slate-400 border border-white/10">
+                +{tags.length - 3}
+              </span>
+            )}
           </div>
         )}
 
-        <Link
-          href={detailHref}
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-xs font-black text-emerald-200 transition hover:bg-emerald-400 hover:text-slate-950"
-        >
-          <span>Detail Project</span>
-          <span aria-hidden="true">→</span>
-        </Link>
+        <div className="mt-8 border-t border-white/10 pt-4">
+          <Link
+            href={detailHref}
+            className="inline-flex w-full items-center justify-between text-sm font-black text-emerald-400 transition hover:text-emerald-300"
+          >
+            <span>View Details</span>
+            <span aria-hidden="true" className="text-xl transition-transform group-hover:translate-x-1">→</span>
+          </Link>
+        </div>
       </div>
     </article>
   );

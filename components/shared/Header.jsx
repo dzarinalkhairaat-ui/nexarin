@@ -35,6 +35,31 @@ function HeaderLogo() {
   );
 }
 
+function DesktopNavigation({ navigation }) {
+  const safeNavigation = Array.isArray(navigation) ? navigation : [];
+
+  return (
+    <nav className="hidden lg:flex items-center gap-2">
+      {safeNavigation.map((item) => (
+        <Link
+          key={item?.href || item?.label}
+          href={item?.href || "/"}
+          className="group relative flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-slate-300 transition hover:text-white"
+        >
+          <span className="relative z-10">{item?.label || "Menu"}</span>
+          <span className="absolute inset-0 z-0 scale-95 rounded-xl bg-white/[0.05] opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 border border-white/5 group-hover:border-emerald-400/20" />
+        </Link>
+      ))}
+      <Link 
+        href="/support"
+        className="ml-2 inline-flex items-center justify-center rounded-xl bg-emerald-400/10 border border-emerald-400/20 px-4 py-2 text-sm font-bold text-emerald-300 transition hover:-translate-y-0.5 hover:bg-emerald-400/20 shadow-lg shadow-emerald-400/5"
+      >
+        Support Kami
+      </Link>
+    </nav>
+  );
+}
+
 function MenuButton({ isOpen, onClick }) {
   return (
     <button
@@ -42,7 +67,7 @@ function MenuButton({ isOpen, onClick }) {
       aria-label={isOpen ? "Tutup menu Nexarin" : "Buka menu Nexarin"}
       aria-expanded={isOpen}
       onClick={onClick}
-      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.065] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-emerald-400/25 hover:bg-emerald-400/10"
+      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.065] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-emerald-400/25 hover:bg-emerald-400/10 lg:hidden"
     >
       <span className="relative h-5 w-6">
         <span
@@ -69,8 +94,8 @@ function MenuPanel({ navigation, onClose }) {
   const safeNavigation = Array.isArray(navigation) ? navigation : [];
 
   return (
-    <div className="relative z-10 overflow-hidden border-t border-white/10">
-      <div className="mx-auto w-full max-w-7xl px-5 pb-5 pt-3 sm:px-6 lg:px-8">
+    <div className="relative z-10 overflow-hidden border-t border-white/10 lg:hidden">
+      <div className="mx-auto w-full max-w-7xl px-5 pb-5 pt-3 sm:px-6">
         <nav className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-black/30 backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(16,185,129,0.16),transparent_34%),radial-gradient(circle_at_85%_70%,rgba(6,182,212,0.1),transparent_34%)]" />
 
@@ -110,6 +135,19 @@ function MenuPanel({ navigation, onClose }) {
                 Menu belum tersedia.
               </div>
             )}
+            
+            <Link
+              href="/support"
+              onClick={onClose}
+              className="group flex mt-2 min-h-12 items-center justify-between rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/5 transition hover:bg-emerald-400/20"
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-400/20 text-xs text-emerald-400">
+                  💖
+                </span>
+                <span className="truncate">Support Kami</span>
+              </span>
+            </Link>
           </div>
         </nav>
       </div>
@@ -117,7 +155,7 @@ function MenuPanel({ navigation, onClose }) {
   );
 }
 
-export default function HomeHeader() {
+export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = Array.isArray(publicNavigation) ? publicNavigation : [];
 
@@ -132,28 +170,32 @@ export default function HomeHeader() {
       <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/35 to-transparent" />
       <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-[52px_1fr_52px] items-center gap-3 px-5 py-4 sm:px-6 lg:px-8">
-        <HeaderLogo />
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3">
+          <HeaderLogo />
 
-        <Link
-          href="/"
-          aria-label="Nexarin Home"
-          onClick={closeMenu}
-          className="min-w-0 text-center outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60"
-        >
-          <p className="truncate text-base font-black leading-tight tracking-[-0.04em] text-white">
-            Nexarin
-          </p>
-          <p className="mt-0.5 truncate text-xs font-semibold text-slate-400">
-            by-rins
-          </p>
-        </Link>
+          <Link
+            href="/"
+            aria-label="Nexarin Home"
+            onClick={closeMenu}
+            className="min-w-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60"
+          >
+            <p className="truncate text-base font-black leading-tight tracking-[-0.04em] text-white">
+              Nexarin
+            </p>
+            <p className="mt-0.5 truncate text-xs font-semibold text-slate-400">
+              by-rins
+            </p>
+          </Link>
+        </div>
+
+        <DesktopNavigation navigation={navigation} />
 
         <MenuButton isOpen={isOpen} onClick={() => setIsOpen((value) => !value)} />
       </div>
 
       <div
-        className={`grid transition-all duration-300 ease-out ${
+        className={`grid transition-all duration-300 ease-out lg:hidden ${
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >

@@ -1,12 +1,12 @@
 import Link from "next/link";
-import PortfolioHeader from "@/features/portfolio/components/PortfolioHeader";
+import Header from "@/components/shared/Header";
 import PortfolioFooter from "@/features/portfolio/components/PortfolioFooter";
 import { getPortfolioProjectBySlug } from "@/features/portfolio/portfolio.data";
 
 function DetailNotFound() {
     return (
         <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-            <PortfolioHeader />
+            <Header />
 
             <section className="relative px-5 py-10 sm:px-6 lg:px-8">
                 <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
@@ -167,7 +167,7 @@ export default function PortfolioDetailPage({ slug }) {
 
     return (
         <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-            <PortfolioHeader />
+            <Header />
 
             <section className="relative overflow-hidden px-5 py-7 sm:px-6 sm:py-10 lg:px-8">
                 <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />

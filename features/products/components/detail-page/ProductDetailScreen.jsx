@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import ProductDetailFooter from "@/features/products/components/detail-page/ProductDetailFooter";
 import ProductDetailHero from "@/features/products/components/detail-page/ProductDetailHero";
 import ProductDetailInfo from "@/features/products/components/detail-page/ProductDetailInfo";
 import ProductRelatedProducts from "@/features/products/components/detail-page/ProductRelatedProducts";
-import ProductsHeader from "@/features/products/components/products-page/ProductsHeader";
+import Header from "@/components/shared/Header";
 import { productMarketplaceData } from "@/features/products/products.data";
 import { getSafeProducts } from "@/features/products/products.helpers";
 
@@ -43,7 +43,7 @@ export default function ProductDetailScreen({ slug }) {
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <ProductsHeader />
+      <Header />
 
       <ScrollReveal>
         <ProductDetailHero product={product} />

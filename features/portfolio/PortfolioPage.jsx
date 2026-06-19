@@ -1,5 +1,5 @@
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import PortfolioHeader from "@/features/portfolio/components/PortfolioHeader";
+import Header from "@/components/shared/Header";
 import PortfolioHero from "@/features/portfolio/components/PortfolioHero";
 import FeaturedProject from "@/features/portfolio/components/FeaturedProject";
 import ProjectGrid from "@/features/portfolio/components/ProjectGrid";
@@ -8,7 +8,7 @@ import PortfolioFooter from "@/features/portfolio/components/PortfolioFooter";
 export default function PortfolioPage() {
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <PortfolioHeader />
+      <Header />
 
       <ScrollReveal>
         <PortfolioHero />
