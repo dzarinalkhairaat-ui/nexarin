@@ -7,24 +7,28 @@ const settingsAdminStats = [
     value: "Nanti",
     note: "Pengaturan nama, tagline, dan identitas brand belum aktif.",
     icon: "✨",
+    color: "emerald",
   },
   {
     label: "Logo",
     value: "Nanti",
     note: "Upload logo dan icon belum terhubung storage.",
     icon: "🖼️",
+    color: "cyan",
   },
   {
     label: "SEO",
     value: "Basic",
     note: "Metadata dasar sudah ada, dashboard SEO belum aktif.",
     icon: "🔎",
+    color: "amber",
   },
   {
     label: "Sitemap",
     value: "Ready",
     note: "Sitemap dan robots sudah tersedia untuk public route.",
     icon: "🗺️",
+    color: "emerald",
   },
 ];
 
@@ -36,143 +40,124 @@ const settingsAdminTasks = [
   "Menyimpan konfigurasi umum ke database.",
 ];
 
-function StatCard({ item }) {
-  const safeItem = item || {};
-
-  return (
-    <article className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20">
-      <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl" />
-
-      <div className="relative z-10">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
-              {safeItem.label || "Status"}
-            </p>
-
-            <p className="mt-2 text-2xl font-black tracking-[-0.05em] text-white">
-              {safeItem.value || "Preview"}
-            </p>
-          </div>
-
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-lg">
-            {safeItem.icon || "⚙️"}
-          </span>
-        </div>
-
-        <p className="mt-4 text-sm font-medium leading-6 text-slate-400">
-          {safeItem.note || "Status admin module akan ditampilkan di sini."}
-        </p>
-      </div>
-    </article>
-  );
-}
-
 export default function AdminSettingsPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
+    <main className="min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
       <AdminTopbar />
 
-      <section className="relative overflow-hidden px-5 pb-8 pt-7 text-white sm:px-6 sm:pb-10 sm:pt-10 lg:px-8">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
+      <section className="relative overflow-hidden px-5 pb-12 pt-8 text-white sm:px-6 lg:px-8">
+        {/* Background Glows */}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-cyan-400/[0.04] blur-[100px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
 
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl">
-          <div className="mb-5 flex items-center justify-between gap-3">
-            <Link
-              href="/admin"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.055] px-4 py-2 text-xs font-black text-slate-300 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-200"
-            >
-              ← Admin
-            </Link>
-
-            <Link
-              href="/"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-black text-emerald-300 transition hover:bg-emerald-400/15"
-            >
-              Public Site
-            </Link>
-          </div>
-
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/25">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-400/12 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-
-            <div className="relative z-10">
-              <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-emerald-300">
-                Admin Settings
-              </p>
-
-              <h1 className="mt-4 text-4xl font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl">
-                Kelola pengaturan Nexarin.
-              </h1>
-
-              <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
-                Halaman ini masih placeholder admin settings. Nanti di sini
-                akan ada pengaturan brand, logo, favicon, sosial media, SEO,
-                sitemap, robots, dan konfigurasi umum website.
-              </p>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Link
-                  href="/"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300"
-                >
-                  Preview Public
-                </Link>
-
-                <Link
-                  href="/admin"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-black text-white transition hover:border-emerald-400/25 hover:bg-emerald-400/10"
-                >
-                  Kembali Dashboard
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {settingsAdminStats.map((item) => (
-              <StatCard key={item.label} item={item} />
-            ))}
-          </div>
-
-          <div className="mt-6 rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/25">
-            <p className="inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
-              Roadmap Settings
+        <div className="relative z-10 mx-auto w-full max-w-4xl">
+          
+          {/* Header Section */}
+          <div className="flex flex-col items-center text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300 shadow-lg shadow-cyan-400/5">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              Settings
             </p>
 
-            <h2 className="mt-4 text-3xl font-black leading-[1] tracking-[-0.06em] text-white">
-              Settings dashboard dibuat setelah database siap.
-            </h2>
+            <h1 className="mt-6 text-3xl font-black leading-tight tracking-[-0.05em] text-white sm:text-5xl">
+              Konfigurasi <span className="text-cyan-300">Sistem.</span>
+            </h1>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {settingsAdminTasks.map((item, index) => (
+            <p className="mt-4 max-w-xl text-sm font-medium leading-relaxed text-slate-400 sm:text-base">
+              Halaman ini akan menjadi pusat kontrol untuk brand, SEO, dan konfigurasi umum website Nexarin. Saat ini masih dalam tahap kerangka UI.
+            </p>
+          </div>
+
+          {/* Module Settings Grid */}
+          <div className="mt-12">
+            <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5">
+                <span className="text-sm">⚙️</span>
+              </div>
+              <h2 className="text-lg font-black tracking-[-0.04em] text-white">
+                Status Modul Settings
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {settingsAdminStats.map((item) => (
                 <div
-                  key={item}
-                  className="flex items-start gap-3 rounded-[24px] border border-white/10 bg-slate-950/55 p-4"
+                  key={item.label}
+                  className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.025] p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.04]"
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-xs font-black text-slate-950">
-                    {index + 1}
-                  </span>
-
-                  <p className="text-sm font-semibold leading-6 text-slate-300">
-                    {item}
-                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] border bg-${item.color}-400/10 border-${item.color}-400/20 text-xl shadow-inner shadow-${item.color}-400/20`}>
+                      {item.icon}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between">
+                        <h3 className="truncate text-base font-black tracking-[-0.02em] text-white">
+                          {item.label}
+                        </h3>
+                        <span className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.1em] border-${item.color}-400/20 bg-${item.color}-400/10 text-${item.color}-300`}>
+                          {item.value}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs font-medium leading-relaxed text-slate-400">
+                        {item.note}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Roadmap Card */}
+          <div className="mt-10 overflow-hidden rounded-[28px] border border-cyan-400/20 bg-cyan-400/5 p-6 shadow-xl relative sm:p-8">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-400">
+                    Roadmap Pengembangan
+                  </p>
+                  <h3 className="mt-1 text-lg font-black tracking-[-0.03em] text-white">
+                    Target Konfigurasi Database
+                  </h3>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {settingsAdminTasks.map((task, index) => (
+                  <div
+                    key={task}
+                    className="flex items-center gap-3 rounded-[16px] border border-white/5 bg-slate-950/40 p-3 sm:px-4"
+                  >
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-[10px] font-black text-cyan-400 ring-1 ring-cyan-400/20">
+                      {index + 1}
+                    </span>
+                    <p className="text-sm font-medium text-slate-300">
+                      {task}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              href="/admin"
+              className="inline-flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-black text-white transition hover:bg-white/10"
+            >
+              ← Kembali ke Dashboard
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-6 text-sm font-black text-slate-950 shadow-lg shadow-cyan-400/20 transition hover:bg-cyan-300"
+            >
+              Lihat Website Publik
+            </Link>
+          </div>
+
         </div>
       </section>
     </main>

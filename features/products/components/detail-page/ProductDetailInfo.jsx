@@ -5,38 +5,55 @@ export default function ProductDetailInfo({ product }) {
     return null;
   }
 
-  const points = [
-    "Fondasi produk masih memakai data statis sementara.",
-    "Nanti bisa dihubungkan ke database dan admin dashboard.",
-    "Checkout masih manual/fondasi awal sebelum payment gateway.",
-    "Gambar produk bisa diganti dari backend saat sistem sudah siap.",
-  ];
+  // Use actual product features or fallback if none exist
+  const features = Array.isArray(product.features) && product.features.length > 0
+    ? product.features
+    : [
+        "Desain modern dan responsif untuk semua perangkat.",
+        "Komponen UI premium yang mudah disesuaikan.",
+        "Asset siap pakai tanpa perlu desain ulang.",
+        "Akses instan setelah pembelian berhasil.",
+      ];
 
   return (
-    <section className="px-5 py-7 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20">
-          <h2 className="text-2xl font-black tracking-[-0.05em] text-white">
-            Informasi Produk
-          </h2>
+    <section className="relative px-5 py-6 text-white sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-4xl">
+        <div className="overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.025] shadow-xl shadow-black/20 backdrop-blur-sm">
+          {/* Header Area */}
+          <div className="border-b border-white/10 bg-white/[0.015] px-6 py-6 sm:px-8 sm:py-8">
+            <h2 className="text-2xl font-black tracking-[-0.05em] text-white">
+              Highlight Produk
+            </h2>
+            <p className="mt-2 text-sm font-medium leading-relaxed text-slate-400">
+              Berikut adalah beberapa fitur dan keunggulan utama dari {product?.title || "produk ini"}.
+              Cocok digunakan untuk {product?.bestFor?.toLowerCase() || "berbagai kebutuhan digital"}.
+            </p>
+          </div>
 
-          <p className="mt-3 text-sm font-medium leading-7 text-slate-400">
-            {product?.title || "Produk"} adalah bagian dari katalog digital
-            Nexarin yang disiapkan bertahap untuk ekosistem by-rins.
-          </p>
-
-          <div className="mt-5 grid gap-3">
-            {points.map((point, index) => (
+          {/* Features Grid */}
+          <div className="grid gap-4 p-6 sm:grid-cols-2 sm:p-8">
+            {features.map((feature, index) => (
               <div
-                key={point}
-                className="flex gap-3 rounded-2xl border border-white/10 bg-slate-950/45 p-4"
+                key={index}
+                className="group flex items-start gap-4 rounded-[24px] border border-white/5 bg-slate-950/40 p-5 transition hover:border-emerald-400/20 hover:bg-emerald-400/5"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-xs font-black text-emerald-300">
-                  {index + 1}
-                </span>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] border border-emerald-400/20 bg-emerald-400/10 shadow-inner shadow-emerald-400/20 transition group-hover:scale-110 group-hover:bg-emerald-400/20">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-emerald-300"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
 
-                <p className="text-sm font-medium leading-6 text-slate-300">
-                  {point}
+                <p className="pt-2 text-sm font-semibold leading-relaxed text-slate-300 transition group-hover:text-emerald-50">
+                  {feature}
                 </p>
               </div>
             ))}

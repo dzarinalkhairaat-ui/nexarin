@@ -1,4 +1,5 @@
 import PortfolioDetailPage from "@/features/portfolio/PortfolioDetailPage";
+import JsonLd from "@/components/shared/JsonLd";
 import {
   getPortfolioProjectBySlug,
   getPortfolioProjects,
@@ -71,6 +72,34 @@ export async function generateMetadata({ params }) {
 
 export default async function PortfolioDetailRoute({ params }) {
   const resolvedParams = await params;
+  const slug = resolvedParams?.slug || "";
+  const project = getPortfolioProjectBySlug(slug);
 
-  return <PortfolioDetailPage slug={resolvedParams?.slug || ""} />;
+  let jsonLd = null;
+  if (project) {
+    const imageUrl = project.image 
+      ? (project.image.startsWith("http") ? project.image : `https://nexarin.my.id${project.image.startsWith('/') ? '' : '/'}${project.image}`)
+      : "https://nexarin.my.id/images/logo/nexarin-logo.png";
+
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title || "Project Portfolio Nexarin",
+      description: project.summary || project.description || "Detail project portfolio Nexarin by-rins.",
+      image: [imageUrl],
+      creator: {
+        "@type": "Organization",
+        name: "Nexarin by-rins",
+        url: "https://nexarin.my.id"
+      },
+      url: `https://nexarin.my.id/portfolio/${project.slug || slug}`,
+    };
+  }
+
+  return (
+    <>
+      {jsonLd && <JsonLd data={jsonLd} />}
+      <PortfolioDetailPage slug={slug} />
+    </>
+  );
 }

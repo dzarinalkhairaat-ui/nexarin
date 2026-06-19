@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 const socialLinks = [
   {
@@ -109,7 +109,7 @@ export default function ProductDetailFooter() {
 
       <div className="pointer-events-none absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-7 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.55fr)] lg:items-end">
+      <div className="relative z-10 mx-auto grid w-full max-w-4xl gap-7 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.55fr)] lg:items-end">
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
           <ProductFooterLogo />
 

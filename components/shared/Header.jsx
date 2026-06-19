@@ -51,10 +51,10 @@ function DesktopNavigation({ navigation }) {
         </Link>
       ))}
       <Link 
-        href="/support"
+        href="/admin/login"
         className="ml-2 inline-flex items-center justify-center rounded-xl bg-emerald-400/10 border border-emerald-400/20 px-4 py-2 text-sm font-bold text-emerald-300 transition hover:-translate-y-0.5 hover:bg-emerald-400/20 shadow-lg shadow-emerald-400/5"
       >
-        Support Kami
+        Admin Login
       </Link>
     </nav>
   );
@@ -137,15 +137,15 @@ function MenuPanel({ navigation, onClose }) {
             )}
             
             <Link
-              href="/support"
+              href="/admin/login"
               onClick={onClose}
               className="group flex mt-2 min-h-12 items-center justify-between rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/5 transition hover:bg-emerald-400/20"
             >
               <span className="flex min-w-0 items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-400/20 text-xs text-emerald-400">
-                  💖
+                  🔐
                 </span>
-                <span className="truncate">Support Kami</span>
+                <span className="truncate">Admin Login</span>
               </span>
             </Link>
           </div>

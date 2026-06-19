@@ -9,8 +9,8 @@ export default function ProductRelatedProducts({ products }) {
 
   return (
     <section className="px-5 py-7 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="mb-4 flex items-center justify-between gap-4">
+      <div className="mx-auto w-full max-w-4xl">
+        <div className="mb-6 flex items-end justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="h-8 w-1 shrink-0 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/25" />
 

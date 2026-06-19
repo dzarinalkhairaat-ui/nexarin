@@ -4,17 +4,27 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata = {
-  title: "News",
+  title: "Nexarin News - Portal Berita Digital",
   description:
-    "News Nexarin by-rins adalah portal informasi digital berisi headline, artikel terbaru, berita populer, kategori, dan informasi ekosistem Nexarin.",
+    "Nexarin News adalah portal informasi digital dari Nexarin by-rins. Temukan headline, artikel terbaru, berita populer, dan informasi seputar ekosistem Nexarin.",
+  keywords: [
+    "Nexarin News",
+    "berita Nexarin",
+    "artikel Nexarin",
+    "Nexarin by-rins news",
+    "berita digital Nexarin"
+  ],
   alternates: {
     canonical: "/news",
   },
   openGraph: {
-    title: "News - Nexarin by-rins",
+    title: "Nexarin News - Portal Berita Digital",
     description:
-      "Portal informasi digital Nexarin by-rins berisi headline, artikel terbaru, berita populer, kategori, dan update ekosistem Nexarin.",
+      "Portal informasi digital Nexarin News berisi headline, artikel terbaru, berita populer, dan update ekosistem Nexarin by-rins.",
     url: "https://nexarin.my.id/news",
+    siteName: "Nexarin",
+    locale: "id_ID",
+    type: "website",
   },
 };
 

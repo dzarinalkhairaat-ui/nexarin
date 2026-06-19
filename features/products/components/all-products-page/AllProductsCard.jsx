@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useCart } from "@/lib/cart/CartContext";
 
 const CART_ICON_URL =
   "https://api.iconify.design/solar:bag-4-bold.svg?color=%23a7f3d0";
@@ -81,6 +82,13 @@ export default function AllProductsCard({ product }) {
   const safeProduct = product || {};
   const slug = getProductSlug(safeProduct);
   const title = safeProduct.title || "Produk belum tersedia";
+  const { addToCart } = useCart();
+
+  function handleAddToCart(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    addToCart(safeProduct);
+  }
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-white/10 bg-white/[0.045] shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/25 hover:bg-white/[0.06]">
@@ -119,6 +127,7 @@ export default function AllProductsCard({ product }) {
             type="button"
             aria-label={`Tambah ${title} ke cart`}
             title="Cart"
+            onClick={handleAddToCart}
             className="inline-flex min-h-10 items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 transition hover:bg-emerald-400/20"
           >
             <img

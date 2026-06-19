@@ -151,34 +151,20 @@ export default function AdminLoginPage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <section className="relative min-h-screen overflow-hidden px-5 py-10 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute -left-24 top-16 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-36 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-10 sm:px-6 lg:px-8">
+        {/* Background effects */}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-emerald-400/[0.07] blur-[120px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
 
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-md flex-col justify-center">
-          <div className="text-center">
-            <h1 className="text-[2.35rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl">
-              Masuk ke pusat kontrol Nexarin.
-            </h1>
-          </div>
-
+        <div className="relative z-10 w-full max-w-[400px]">
+          {/* Card */}
           <form
             onSubmit={handleSubmit}
-            className="mt-7 overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/30 backdrop-blur-xl"
+            className="overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-7 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8"
           >
-            <div className="flex items-center gap-3">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-emerald-400/25 bg-slate-950 p-2 shadow-lg shadow-emerald-400/10">
+            {/* Logo & Title */}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-[22px] border border-emerald-400/25 bg-slate-950 p-2.5 shadow-lg shadow-emerald-400/10">
                 <img
                   src="/images/logo/nexarin-logo.png"
                   alt="Nexarin logo"
@@ -188,21 +174,20 @@ export default function AdminLoginPage() {
                 />
               </div>
 
-              <div className="min-w-0">
-                <p className="truncate text-xl font-black tracking-[-0.045em] text-white">
-                  Admin Login
-                </p>
+              <h1 className="mt-5 text-2xl font-black tracking-[-0.04em] text-white">
+                Admin Login
+              </h1>
 
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/40" />
-                  <p className="truncate text-xs font-bold text-slate-500">
-                    Password + OTP Security
-                  </p>
-                </div>
-              </div>
+              <p className="mt-2 text-xs font-medium text-slate-500">
+                Masuk ke dashboard Nexarin by-rins
+              </p>
             </div>
 
-            <div className="mt-6 grid gap-4">
+            {/* Divider */}
+            <div className="my-6 h-px bg-white/[0.08]" />
+
+            {/* Fields */}
+            <div className="grid gap-4">
               <label className="grid gap-2">
                 <span className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-300">
                   Email Admin
@@ -212,9 +197,9 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="Masukkan email admin"
+                  placeholder="admin@nexarin.my.id"
                   autoComplete="email"
-                  className="min-h-14 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50"
+                  className="min-h-12 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/50"
                 />
               </label>
 
@@ -227,9 +212,9 @@ export default function AdminLoginPage() {
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="Masukkan password admin"
+                  placeholder="••••••••"
                   autoComplete="current-password"
-                  className="min-h-14 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50"
+                  className="min-h-12 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/50"
                 />
               </label>
 
@@ -258,18 +243,21 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-1 inline-flex min-h-12 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {message?.type === "success"
-                  ? "OTP Dikirim"
+                  ? "OTP Dikirim ✓"
                   : isLoading
-                    ? "Memproses OTP..."
-                    : "Lanjutkan dengan OTP"}
+                    ? "Memproses..."
+                    : "Lanjutkan"}
               </button>
+            </div>
 
-              <p className="text-center text-xs font-semibold leading-5 text-slate-600">
-                Setelah password benar, kode OTP 8 digit akan dikirim ke email
-                admin yang terdaftar.
+            {/* Footer note */}
+            <div className="mt-5 flex items-center justify-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/60" />
+              <p className="text-center text-[11px] font-medium text-slate-600">
+                Kode OTP 8 digit dikirim setelah password benar
               </p>
             </div>
           </form>

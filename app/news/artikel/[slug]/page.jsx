@@ -1,4 +1,5 @@
 import NewsArticlePage from "@/features/news/NewsArticlePage";
+import JsonLd from "@/components/shared/JsonLd";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -189,6 +190,41 @@ export async function generateMetadata({ params }) {
 
 export default async function NewsArticleRoute({ params }) {
   const resolvedParams = await params;
+  const slug = getSafeSlug(resolvedParams?.slug);
 
-  return <NewsArticlePage slug={getSafeSlug(resolvedParams?.slug)} />;
+  const article = await getArticleMetadata(slug);
+  let jsonLd = null;
+
+  if (article && article.title !== NOT_FOUND_TITLE) {
+    jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      headline: article.title,
+      image: article.imageUrl ? [article.imageUrl] : [],
+      datePublished: article.publishedTime,
+      dateModified: article.modifiedTime || article.publishedTime,
+      author: [
+        {
+          "@type": "Person",
+          name: article.author,
+          url: SITE_URL,
+        }
+      ],
+      publisher: {
+        "@type": "Organization",
+        name: "Nexarin by-rins",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://nexarin.my.id/images/logo/nexarin-logo.png"
+        }
+      }
+    };
+  }
+
+  return (
+    <>
+      {jsonLd && <JsonLd data={jsonLd} />}
+      <NewsArticlePage slug={slug} />
+    </>
+  );
 }

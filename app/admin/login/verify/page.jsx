@@ -117,42 +117,20 @@ function AdminLoginVerifyContent() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <section className="relative min-h-screen overflow-hidden px-5 pb-28 pt-7 sm:px-6 sm:pb-12 sm:pt-10 lg:px-8">
-        <div className="pointer-events-none absolute -left-24 top-16 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-36 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-10 sm:px-6 lg:px-8">
+        {/* Background effects */}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-cyan-400/[0.07] blur-[120px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
 
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-md flex-col justify-center">
-          <div className="text-center">
-            <p className="mx-auto inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300 sm:text-[11px]">
-              Admin Security
-            </p>
-
-            <h1 className="mx-auto mt-4 max-w-sm text-[2rem] font-black leading-[0.98] tracking-[-0.06em] text-white sm:mt-5 sm:text-5xl">
-              Verifikasi OTP admin.
-            </h1>
-
-            <p className="mx-auto mt-4 max-w-xs text-sm font-medium leading-7 text-slate-400 sm:max-w-sm">
-              Masukkan kode OTP 8 digit yang dikirim ke email admin terdaftar.
-            </p>
-          </div>
-
+        <div className="relative z-10 w-full max-w-[400px]">
+          {/* Card */}
           <form
             onSubmit={handleVerify}
-            className="mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/30 backdrop-blur-xl sm:mt-7 sm:rounded-[34px] sm:p-5"
+            className="overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-7 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8"
           >
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-emerald-400/25 bg-slate-950 p-2 shadow-lg shadow-emerald-400/10 sm:h-14 sm:w-14">
+            {/* Logo & Title */}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-[22px] border border-cyan-400/25 bg-slate-950 p-2.5 shadow-lg shadow-cyan-400/10">
                 <img
                   src="/images/logo/nexarin-logo.png"
                   alt="Nexarin logo"
@@ -162,23 +140,22 @@ function AdminLoginVerifyContent() {
                 />
               </div>
 
-              <div className="min-w-0">
-                <p className="truncate text-lg font-black tracking-[-0.045em] text-white sm:text-xl">
-                  OTP Verification
-                </p>
+              <h1 className="mt-5 text-2xl font-black tracking-[-0.04em] text-white">
+                Verifikasi OTP
+              </h1>
 
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/40" />
-                  <p className="truncate text-xs font-bold text-slate-500">
-                    {email || "Nexarin admin"}
-                  </p>
-                </div>
-              </div>
+              <p className="mt-2 text-xs font-medium text-slate-500">
+                Masukkan kode dari email <span className="font-bold text-slate-400">{email || "admin"}</span>
+              </p>
             </div>
 
-            <div className="mt-5 grid gap-3.5 sm:mt-6 sm:gap-4">
+            {/* Divider */}
+            <div className="my-6 h-px bg-white/[0.08]" />
+
+            {/* Fields */}
+            <div className="grid gap-4">
               <label className="grid gap-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300 sm:text-[11px]">
+                <span className="text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
                   Kode OTP 8 Digit
                 </span>
 
@@ -187,9 +164,9 @@ function AdminLoginVerifyContent() {
                   inputMode="numeric"
                   value={otp}
                   onChange={(event) => setOtp(normalizeOtp(event.target.value))}
-                  placeholder="12345678"
+                  placeholder="••••••••"
                   autoComplete="one-time-code"
-                  className="min-h-14 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-3 text-center text-[1.35rem] font-black tracking-[0.2em] text-white outline-none transition placeholder:text-base placeholder:tracking-[0.12em] placeholder:text-slate-600 focus:border-emerald-400/50 sm:min-h-16 sm:px-4 sm:text-2xl sm:tracking-[0.26em]"
+                  className="min-h-12 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-center text-lg font-black tracking-[0.2em] text-white outline-none transition placeholder:text-sm placeholder:tracking-[0.12em] placeholder:text-slate-600 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50"
                 />
               </label>
 
@@ -215,45 +192,52 @@ function AdminLoginVerifyContent() {
                 </div>
               ) : null}
 
-              <button
-                type="submit"
-                disabled={isVerifying}
-                className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-14"
-              >
-                {isVerifying ? "Memverifikasi..." : "Verifikasi & Masuk"}
-              </button>
+              <div className="mt-1 grid gap-3">
+                <button
+                  type="submit"
+                  disabled={isVerifying}
+                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-400/20 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isVerifying ? "Memverifikasi..." : "Masuk ke Dashboard"}
+                </button>
 
-              <button
-                type="button"
-                onClick={handleResendOtp}
-                disabled={isResending || isVerifying}
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-cyan-300/15 bg-cyan-400/10 px-5 py-3 text-sm font-black text-cyan-100 transition hover:border-cyan-300/30 hover:bg-cyan-400/15 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isResending ? "Mengirim ulang..." : "Kirim Ulang OTP"}
-              </button>
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={isResending || isVerifying}
+                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isResending ? "Mengirim ulang..." : "Kirim Ulang OTP"}
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={handleBackToLogin}
+                  disabled={isVerifying || isResending}
+                  className="text-xs font-bold text-slate-500 hover:text-slate-300 transition py-2"
+                >
+                  Batal & Kembali ke Login
+                </button>
+              </div>
+            </div>
 
-              <button
-                type="button"
-                onClick={handleBackToLogin}
-                disabled={isVerifying || isResending}
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045] px-5 py-3 text-sm font-black text-slate-300 transition hover:bg-white/[0.075] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                Kembali ke Login
-              </button>
-
-              <p className="text-center text-[11px] font-semibold leading-5 text-slate-600 sm:text-xs">
-                OTP berlaku beberapa menit, hanya bisa digunakan satu kali, dan
-                akan terkunci jika terlalu banyak percobaan salah.
+            {/* Footer note */}
+            <div className="mt-5 flex items-center justify-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400/60" />
+              <p className="text-center text-[11px] font-medium text-slate-600">
+                OTP berlaku sementara dan hanya bisa sekali pakai
               </p>
             </div>
           </form>
 
-          <Link
-            href="/"
-            className="mx-auto mt-4 text-xs font-bold text-slate-600 transition hover:text-slate-300"
-          >
-            Kembali ke Website
-          </Link>
+          <div className="mt-6 flex justify-center">
+            <Link
+              href="/"
+              className="text-xs font-bold text-slate-600 transition hover:text-slate-300"
+            >
+              Kembali ke Website
+            </Link>
+          </div>
         </div>
       </section>
     </main>

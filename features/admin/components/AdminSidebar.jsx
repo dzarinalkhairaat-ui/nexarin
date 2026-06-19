@@ -122,8 +122,8 @@ function MenuContent({ isDropdown, onClose }) {
   }
 
   return (
-    <div className="relative z-10">
-      <div className="flex items-center gap-3">
+    <div className="relative z-10 flex flex-col h-full">
+      <div className="flex items-center gap-3 shrink-0">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-emerald-400/25 bg-slate-950 p-2 shadow-lg shadow-emerald-400/10">
           <img
             src="/images/logo/nexarin-logo.png"
@@ -156,7 +156,7 @@ function MenuContent({ isDropdown, onClose }) {
         ) : null}
       </div>
 
-      <div className="mt-5 border-t border-white/10 pt-4">
+      <div className="mt-5 flex-1 overflow-y-auto border-t border-white/10 pt-4 pr-2 -mr-2">
         <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-300">
           Navigasi Admin
         </p>
@@ -215,25 +215,17 @@ function MenuContent({ isDropdown, onClose }) {
         </div>
       </div>
 
-      <div className="mt-5 rounded-[24px] border border-emerald-400/15 bg-emerald-400/[0.07] p-4">
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">
-          Fokus
-        </p>
-
-        <p className="mt-2 text-sm font-medium leading-6 text-slate-300">
-          Prioritas sekarang adalah menyiapkan News Manager untuk CRUD artikel.
-        </p>
+      <div className="mt-4 shrink-0 pt-4 border-t border-white/5">
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-red-400/20 bg-red-400/[0.08] px-4 py-3 text-sm font-black text-red-200 shadow-lg shadow-black/20 transition hover:border-red-300/35 hover:bg-red-400/15 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <LogoutIcon />
+          <span>{isLoggingOut ? "Keluar..." : "Logout Admin"}</span>
+        </button>
       </div>
-
-      <button
-        type="button"
-        onClick={handleLogout}
-        disabled={isLoggingOut}
-        className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-red-400/20 bg-red-400/[0.08] px-4 py-3 text-sm font-black text-red-200 shadow-lg shadow-black/20 transition hover:border-red-300/35 hover:bg-red-400/15 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <LogoutIcon />
-        <span>{isLoggingOut ? "Keluar..." : "Logout Admin"}</span>
-      </button>
     </div>
   );
 }
@@ -252,7 +244,7 @@ export default function AdminSidebar({
   return (
     <aside
       className={[
-        "relative overflow-hidden border border-white/10 bg-white/[0.045] p-4 text-white shadow-2xl shadow-black/25 backdrop-blur-xl",
+        "relative overflow-hidden border border-white/10 bg-slate-900/60 p-4 text-white shadow-2xl shadow-black/50 backdrop-blur-2xl flex flex-col h-full",
         isDropdown ? "rounded-[30px]" : "rounded-[34px]",
       ].join(" ")}
     >
