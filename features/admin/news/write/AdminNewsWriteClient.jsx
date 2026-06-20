@@ -108,7 +108,7 @@ function isValidCoverImageUrl(value) {
     return true;
   }
 
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://") || imageUrl.startsWith("blob:")) {
     try {
       new URL(imageUrl);
       return true;
@@ -129,6 +129,10 @@ function getCoverImageHelpText(value) {
 
   if (imageUrl.startsWith("/")) {
     return "Path lokal hanya valid jika file-nya ada di folder public project.";
+  }
+
+  if (imageUrl.startsWith("blob:")) {
+    return "Gambar baru dipilih. Akan diunggah saat Anda menyimpan artikel.";
   }
 
   return "Gambar ini akan dipakai sebagai cover artikel public.";
@@ -412,6 +416,7 @@ export default function AdminNewsWriteClient({
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isDeletingImage, setIsDeletingImage] = useState(false);
   const [imageMeta, setImageMeta] = useState(null);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
 
   const isFormBusy = isPending || isUploadingImage || isDeletingImage;
 
@@ -440,51 +445,16 @@ export default function AdminNewsWriteClient({
       return;
     }
 
-    setIsUploadingImage(true);
+    setSelectedImageFile(file);
+    setImageMeta(null);
+    
+    setForm((current) => ({
+      ...current,
+      coverImageUrl: URL.createObjectURL(file),
+    }));
+
     setStatusType("success");
-    setStatusMessage(
-      `Mengompres gambar dengan sharp menjadi WEBP maksimal ${TARGET_IMAGE_SIZE_LABEL}...`
-    );
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("title", form.title || "");
-      formData.append("slug", form.slug || "");
-
-      const result = await uploadNewsCoverImageAction(formData);
-
-      if (!result?.ok) {
-        setStatusType("error");
-        setStatusMessage(result?.message || "Gambar gagal diupload.");
-        setImageMeta(null);
-        return;
-      }
-
-      setForm((current) => ({
-        ...current,
-        coverImageUrl: result.coverImageUrl || "",
-      }));
-
-      setImageMeta(result.meta || null);
-      setStatusType("success");
-      setStatusMessage(
-        result.message ||
-        `Gambar berhasil dikompres dan diupload. Klik ${isEditMode ? "Update Artikel" : "Simpan Artikel"
-        } agar masuk database.`
-      );
-    } catch (error) {
-      console.error("Gagal upload gambar artikel:", error);
-
-      setStatusType("error");
-      setStatusMessage(
-        error?.message ||
-        "Gambar gagal dikompres atau diupload. Coba gunakan gambar lain."
-      );
-      setImageMeta(null);
-    } finally {
-      setIsUploadingImage(false);
-    }
+    setStatusMessage(`Gambar dipilih: ${file.name}. Klik Simpan Artikel untuk mengunggah.`);
   }
 
   async function handleClearCoverImage() {
@@ -496,6 +466,13 @@ export default function AdminNewsWriteClient({
 
     setForm(nextForm);
     setImageMeta(null);
+    setSelectedImageFile(null);
+
+    if (previousCoverImageUrl && previousCoverImageUrl.startsWith("blob:")) {
+      setStatusType("success");
+      setStatusMessage("Gambar pilihan dibatalkan.");
+      return;
+    }
 
     if (!previousCoverImageUrl) {
       setStatusType("success");
@@ -599,16 +576,57 @@ export default function AdminNewsWriteClient({
       return;
     }
 
+    setIsUploadingImage(true);
+    setStatusType("success");
+    setStatusMessage("Menyimpan artikel...");
+
     startTransition(async () => {
+      let finalCoverUrl = form.coverImageUrl;
+
+      if (selectedImageFile) {
+        setStatusMessage("Mengunggah gambar...");
+        try {
+          const formData = new FormData();
+          formData.append("file", selectedImageFile);
+          formData.append("title", form.title || "");
+          formData.append("slug", form.slug || "");
+
+          const uploadResult = await uploadNewsCoverImageAction(formData);
+
+          if (!uploadResult?.ok) {
+            setStatusType("error");
+            setStatusMessage(uploadResult?.message || "Gambar gagal diupload.");
+            setIsUploadingImage(false);
+            return;
+          }
+
+          finalCoverUrl = uploadResult.coverImageUrl;
+          setImageMeta(uploadResult.meta || null);
+        } catch (error) {
+          console.error("Gagal upload gambar artikel:", error);
+          setStatusType("error");
+          setStatusMessage("Gambar gagal diupload. Coba gunakan gambar lain.");
+          setIsUploadingImage(false);
+          return;
+        }
+      }
+
+      const payload = { ...form, coverImageUrl: finalCoverUrl };
+
       const result = isEditMode
-        ? await updateNewsArticleAction(form)
-        : await createNewsArticleAction(form);
+        ? await updateNewsArticleAction(payload)
+        : await createNewsArticleAction(payload);
 
       if (!result?.ok) {
+        if (selectedImageFile && finalCoverUrl && finalCoverUrl !== form.coverImageUrl) {
+          await deleteNewsCoverImageAction(finalCoverUrl);
+        }
+        
         setStatusType("error");
         setStatusMessage(
           result?.message || "Artikel gagal disimpan ke database."
         );
+        setIsUploadingImage(false);
         return;
       }
 
@@ -623,6 +641,7 @@ export default function AdminNewsWriteClient({
   function handleReset() {
     setForm(createInitialForm(defaultCategorySlug, initialArticle));
     setImageMeta(null);
+    setSelectedImageFile(null);
     setStatusMessage("");
     setStatusType("success");
   }
@@ -633,36 +652,15 @@ export default function AdminNewsWriteClient({
       <AdminNewsNav />
 
       <section className="relative overflow-hidden bg-slate-950">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-24 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src={NEXARIN_LOGO}
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8">
-          <div className="text-center lg:text-left">
-            <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300 shadow-lg shadow-emerald-400/5">
-              {isEditMode ? "Edit Artikel" : "Tulis Artikel"}
-            </p>
-
-            <h1 className="mx-auto mt-4 max-w-3xl text-[2.1rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl lg:mx-0">
-              {isEditMode ? "Perbarui artikel News." : "Buat artikel News."}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl">
+              {isEditMode ? "Perbarui Artikel" : "Tulis Artikel"}
             </h1>
-
-            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
+            <p className="text-sm font-medium text-slate-400">
               {isEditMode
-                ? "Ubah judul, sumber, isi artikel, kategori, status, headline, featured, dan gambar artikel."
-                : "Lengkapi judul, sumber, isi artikel, kategori, status, dan gambar artikel."}
+                ? "Ubah judul, sumber, isi artikel, kategori, dan gambar."
+                : "Lengkapi judul, sumber, isi artikel, kategori, dan gambar."}
             </p>
           </div>
 
@@ -679,9 +677,7 @@ export default function AdminNewsWriteClient({
             className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start"
           >
             <div className="grid gap-5">
-              <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-
+              <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
                 <div className="relative z-10 grid gap-4">
                   <div className="grid gap-2">
                     <FieldLabel>Judul Artikel</FieldLabel>
@@ -733,9 +729,7 @@ export default function AdminNewsWriteClient({
                 </div>
               </section>
 
-              <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-                <div className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-
+              <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
                 <div className="relative z-10 grid gap-4">
                   <div>
                     <p className="text-lg font-black tracking-[-0.04em] text-white">
@@ -833,7 +827,7 @@ export default function AdminNewsWriteClient({
                 </div>
               </section>
 
-              <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
+              <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
                 <div className="relative z-10 grid gap-2">
                   <FieldLabel>Isi Artikel</FieldLabel>
 
@@ -852,9 +846,7 @@ export default function AdminNewsWriteClient({
             </div>
 
             <aside className="grid gap-5">
-              <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-
+              <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
                 <div className="relative z-10 grid gap-4">
                   <div>
                     <p className="text-lg font-black tracking-[-0.04em] text-white">
@@ -945,7 +937,7 @@ export default function AdminNewsWriteClient({
                 </div>
               </section>
 
-              <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-4">
+              <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
                 <div className="relative z-10 grid gap-3">
                   <div className="rounded-[24px] border border-white/10 bg-slate-950/35 p-3">
                     <p className="text-lg font-black tracking-[-0.04em] text-white">

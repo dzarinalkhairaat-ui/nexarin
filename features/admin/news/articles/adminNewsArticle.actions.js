@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/features/admin/admin.helpers";
+import { deleteNewsCoverImageAction } from "@/features/admin/news/write/adminNewsImage.actions";
 
 function normalizeText(value) {
   return String(value || "").trim();
@@ -48,6 +49,7 @@ export async function deleteNewsArticleAction(formData) {
       select: {
         id: true,
         slug: true,
+        coverImageUrl: true,
         category: {
           select: {
             slug: true,
@@ -58,6 +60,13 @@ export async function deleteNewsArticleAction(formData) {
 
     if (!article) {
       redirect("/admin/news/artikel");
+    }
+
+    if (article.coverImageUrl) {
+      const deleteImageResult = await deleteNewsCoverImageAction(article.coverImageUrl);
+      if (!deleteImageResult.ok) {
+        console.warn("Gagal menghapus gambar saat menghapus artikel:", deleteImageResult.message);
+      }
     }
 
     await prisma.newsArticle.delete({

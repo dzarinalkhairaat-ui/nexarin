@@ -1,7 +1,7 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import AdminNewsNav from "@/features/admin/news/components/AdminNewsNav";
-import { adminNewsArticles, adminNewsCategories } from "@/features/admin/news/adminNews.data";
+import { prisma } from "@/lib/prisma";
 
 const newsDashboardMenus = [
   {
@@ -38,12 +38,9 @@ function DashboardCard({ item }) {
   return (
     <Link
       href={item.href}
-      className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl transition hover:border-emerald-400/25 hover:bg-emerald-400/10"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-white/[0.05]"
     >
-      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-3">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/10">
             {item.icon}
@@ -62,7 +59,7 @@ function DashboardCard({ item }) {
           {item.description}
         </p>
 
-        <div className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-2 text-sm font-black text-white transition group-hover:border-emerald-400/25 group-hover:bg-emerald-400/10 group-hover:text-emerald-200">
+        <div className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-bold text-slate-300 transition group-hover:border-emerald-400/25 group-hover:bg-emerald-400/10 group-hover:text-emerald-300">
           Buka Halaman
         </div>
       </div>
@@ -70,88 +67,86 @@ function DashboardCard({ item }) {
   );
 }
 
-export default function AdminNewsPage() {
-  const articleCount = Array.isArray(adminNewsArticles) ? adminNewsArticles.length : 0;
-  const categoryCount = Array.isArray(adminNewsCategories)
-    ? adminNewsCategories.filter((item) => item?.slug && item.slug !== "semua").length
-    : 0;
+export default async function AdminNewsPage() {
+  const [articleCount, categoryCount, publishedCount] = await Promise.all([
+    prisma.newsArticle.count(),
+    prisma.newsCategory.count({ where: { isActive: true } }),
+    prisma.newsArticle.count({ where: { status: "PUBLISHED" } }),
+  ]);
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
       <AdminTopbar />
       <AdminNewsNav />
 
-      <section className="relative overflow-hidden bg-slate-950">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-24 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-slate-950 pb-20">
+        <div className="pointer-events-none absolute -left-20 top-0 h-96 w-96 rounded-full bg-emerald-400/5 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 top-40 h-96 w-96 rounded-full bg-cyan-400/5 blur-3xl" />
 
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8">
-          <div className="text-center lg:text-left">
-            <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300 shadow-lg shadow-emerald-400/5">
-              News Manager
-            </p>
-
-            <h1 className="mx-auto mt-4 max-w-3xl text-[2.1rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl lg:mx-0">
-              Dashboard News.
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+              Dashboard News
             </h1>
-
-            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
-              Pilih halaman admin News yang ingin dikelola.
+            <p className="max-w-xl text-sm font-medium leading-relaxed text-slate-400">
+              Kelola seluruh konten News Anda di sini. Pantau statistik artikel, kelola kategori, dan buat berita terbaru untuk pengunjung Nexarin.
             </p>
           </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[26px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/10 backdrop-blur-xl">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                Artikel
-              </p>
-              <p className="mt-1 text-xl font-black tracking-[-0.045em] text-emerald-300">
-                {articleCount}
-              </p>
-              <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
-                Data awal
-              </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-xl transition hover:bg-white/[0.04]">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-400/10 blur-2xl transition group-hover:bg-emerald-400/20" />
+              <div className="relative z-10">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-300/70">
+                  Total Artikel
+                </p>
+                <div className="mt-3 flex items-end gap-3">
+                  <p className="text-4xl font-black tracking-[-0.045em] text-white">
+                    {articleCount}
+                  </p>
+                  <p className="mb-1 text-sm font-semibold text-slate-500">
+                    Artikel DB
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-[26px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/10 backdrop-blur-xl">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                Kategori
-              </p>
-              <p className="mt-1 text-xl font-black tracking-[-0.045em] text-emerald-300">
-                {categoryCount}
-              </p>
-              <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
-                Aktif
-              </p>
+            <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-xl transition hover:bg-white/[0.04]">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyan-400/10 blur-2xl transition group-hover:bg-cyan-400/20" />
+              <div className="relative z-10">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-300/70">
+                  Kategori
+                </p>
+                <div className="mt-3 flex items-end gap-3">
+                  <p className="text-4xl font-black tracking-[-0.045em] text-white">
+                    {categoryCount}
+                  </p>
+                  <p className="mb-1 text-sm font-semibold text-slate-500">
+                    Aktif
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-[26px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/10 backdrop-blur-xl">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                Database
-              </p>
-              <p className="mt-1 text-xl font-black tracking-[-0.045em] text-emerald-300">
-                Next
-              </p>
-              <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
-                Tahap berikutnya
-              </p>
+            <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-xl transition hover:bg-white/[0.04]">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-lime-400/10 blur-2xl transition group-hover:bg-lime-400/20" />
+              <div className="relative z-10">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-lime-300/70">
+                  Published
+                </p>
+                <div className="mt-3 flex items-end gap-3">
+                  <p className="text-4xl font-black tracking-[-0.045em] text-white">
+                    {publishedCount}
+                  </p>
+                  <p className="mb-1 text-sm font-semibold text-slate-500">
+                    Artikel Live
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {newsDashboardMenus.map((item) => (
               <DashboardCard key={item.href} item={item} />
             ))}

@@ -226,9 +226,7 @@ async function getDatabaseSearchResults(keyword) {
         status: "PUBLISHED",
         OR: getPublicDateFilter(),
         category: {
-          is: {
-            isActive: true,
-          },
+          isActive: true,
         },
       },
       include: {

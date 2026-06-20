@@ -10,6 +10,6 @@ export const metadata = {
   },
 };
 
-export default function AdminNewsArticlesRoute() {
-  return <AdminNewsArticlesPage />;
+export default async function AdminNewsArticlesRoute({ searchParams }) {
+  return <AdminNewsArticlesPage searchParams={searchParams} />;
 }

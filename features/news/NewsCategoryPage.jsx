@@ -244,9 +244,7 @@ async function getDatabaseArticlesByCategory(category) {
     status: "PUBLISHED",
     OR: getPublicDateFilter(),
     category: {
-      is: {
-        isActive: true,
-      },
+      isActive: true,
     },
   };
 

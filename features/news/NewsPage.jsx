@@ -151,9 +151,7 @@ async function getPublishedNewsArticles() {
         status: "PUBLISHED",
         OR: getPublicDateFilter(),
         category: {
-          is: {
-            isActive: true,
-          },
+          isActive: true,
         },
       },
       include: {

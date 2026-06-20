@@ -1,6 +1,7 @@
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import Header from "@/components/shared/Header";
 import PortfolioHero from "@/features/portfolio/components/PortfolioHero";
+import PortfolioBiodata from "@/features/portfolio/components/PortfolioBiodata";
 import FeaturedProject from "@/features/portfolio/components/FeaturedProject";
 import ProjectGrid from "@/features/portfolio/components/ProjectGrid";
 import PortfolioFooter from "@/features/portfolio/components/PortfolioFooter";
@@ -12,6 +13,10 @@ export default function PortfolioPage() {
 
       <ScrollReveal>
         <PortfolioHero />
+      </ScrollReveal>
+
+      <ScrollReveal delay={40}>
+        <PortfolioBiodata />
       </ScrollReveal>
 
       <ScrollReveal delay={80}>

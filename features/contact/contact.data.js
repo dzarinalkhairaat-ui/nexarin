@@ -59,13 +59,9 @@ export const contactInfoItems = [
 ];
 
 export const contactNeedOptions = [
-  "Custom Project",
-  "Produk Digital",
-  "PPOB / Digiflazz",
-  "Payment Gateway",
-  "Portfolio",
-  "News Portal",
-  "Support",
+  "Jasa Pembuatan Website & Aplikasi",
+  "Kolaborasi",
+  "Lainnya",
 ];
 
 export const contactFooterData = {

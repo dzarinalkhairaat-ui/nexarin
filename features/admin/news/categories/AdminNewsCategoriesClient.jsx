@@ -273,45 +273,21 @@ export default function AdminNewsCategoriesClient({
       <AdminNewsNav />
 
       <section className="relative overflow-hidden bg-slate-950">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-24 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8">
-          <div className="text-center lg:text-left">
-            <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300 shadow-lg shadow-emerald-400/5">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl">
               Kategori News
-            </p>
-
-            <h1 className="mx-auto mt-4 max-w-3xl text-[2.1rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl lg:mx-0">
-              Kelola kategori News.
             </h1>
-
-            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
-              Tambah kategori, slug URL, dan deskripsi singkat untuk halaman
-              News.
+            <p className="text-sm font-medium text-slate-400">
+              Tambah kategori, slug URL, dan deskripsi singkat.
             </p>
           </div>
 
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(340px,1fr)] lg:items-start">
             <form
               onSubmit={handleSubmit}
-              className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl"
+              className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
             >
-              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
-
               <div className="relative z-10 grid gap-4">
                 <div>
                   <p className="text-lg font-black tracking-[-0.04em] text-white">
@@ -414,9 +390,7 @@ export default function AdminNewsCategoriesClient({
               </div>
             </form>
 
-            <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-              <div className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-
+            <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm">
               <div className="relative z-10">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="min-w-0">

@@ -31,50 +31,31 @@ export default function AdminNewsSettingsPage() {
       <AdminTopbar />
       <AdminNewsNav />
 
-      <section className="relative flex min-h-[calc(100vh-140px)] items-center overflow-hidden bg-slate-950 px-5 py-10 text-white sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-24 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
-        <div className="relative z-10 mx-auto w-full max-w-2xl text-center">
-          <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-[34px] border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 shadow-2xl shadow-emerald-400/10">
+      <section className="relative flex min-h-[calc(100vh-140px)] items-start pt-16 sm:items-center sm:pt-0 overflow-hidden bg-slate-950 px-4 pb-10 text-white sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-xl text-center">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 shadow-sm">
             <GearIcon />
           </div>
 
-          <p className="mt-7 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300 shadow-lg shadow-emerald-400/5">
+          <p className="mt-6 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-300">
             Pengaturan News
           </p>
 
-          <h1 className="mx-auto mt-5 max-w-xl text-[2.1rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl">
-            Fitur pengaturan disiapkan.
+          <h1 className="mx-auto mt-4 text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl">
+            Segera Hadir
           </h1>
 
-          <p className="mx-auto mt-5 max-w-xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
-            Halaman ini disediakan untuk update fitur News ke depannya, seperti
-            pengaturan tampilan, prioritas konten, konfigurasi SEO, dan opsi
-            lainnya.
+          <p className="mx-auto mt-3 text-sm font-medium leading-relaxed text-slate-400">
+            Halaman ini disediakan untuk pembaruan fitur News ke depannya, seperti pengaturan tampilan, prioritas konten, dan opsi SEO.
           </p>
 
-          <div className="mt-7 rounded-[30px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">
-              Status
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm text-left sm:text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-300">
+              Status Sistem
             </p>
 
-            <p className="mt-3 text-sm font-semibold leading-7 text-slate-300">
-              Belum ada pengaturan aktif. Fitur ini akan diisi setelah alur
-              artikel, kategori, backend, dan database News sudah siap.
+            <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-300">
+              Pengaturan saat ini belum aktif. Fitur ini akan terbuka setelah arsitektur konten dan database siap sepenuhnya.
             </p>
           </div>
         </div>

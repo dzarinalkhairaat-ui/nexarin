@@ -5,6 +5,7 @@ import HomeProductsPreview from "@/features/home/components/HomeProductsPreview"
 import HomePortfolioPreview from "@/features/home/components/HomePortfolioPreview";
 import HomeNewsPreview from "@/features/home/components/HomeNewsPreview";
 import HomeAboutPreview from "@/features/home/components/HomeAboutPreview";
+import HomeSlendroAi from "@/features/home/components/HomeSlendroAi";
 import HomeFooter from "@/features/home/components/HomeFooter";
 import { prisma } from "@/lib/prisma";
 
@@ -79,6 +80,10 @@ export default async function HomePage() {
 
       <ScrollReveal delay={0}>
         <HomeHero />
+      </ScrollReveal>
+
+      <ScrollReveal delay={60}>
+        <HomeSlendroAi />
       </ScrollReveal>
 
       <ScrollReveal delay={80}>

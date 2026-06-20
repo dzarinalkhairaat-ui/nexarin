@@ -40,10 +40,8 @@ function StatCard({ item }) {
   const safeItem = item || {};
 
   return (
-    <article className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20">
-      <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl" />
-
-      <div className="relative z-10">
+    <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-white/[0.05]">
+      <div className="relative z-10 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
@@ -73,20 +71,7 @@ export default function AdminProductsPage() {
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
       <AdminTopbar />
 
-      <section className="relative overflow-hidden px-5 pb-8 pt-7 text-white sm:px-6 sm:pb-10 sm:pt-10 lg:px-8">
-        <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-20 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:h-96 sm:w-96"
-          loading="lazy"
-          decoding="async"
-        />
-
+      <section className="relative overflow-hidden px-4 pb-8 pt-6 text-white sm:px-6 sm:py-8 lg:px-8">
         <div className="relative z-10 mx-auto w-full max-w-7xl">
           <div className="mb-5 flex items-center justify-between gap-3">
             <Link
@@ -104,16 +89,13 @@ export default function AdminProductsPage() {
             </Link>
           </div>
 
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/25">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-400/12 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 shadow-sm">
             <div className="relative z-10">
-              <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-emerald-300">
+              <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-300">
                 Admin Products
               </p>
 
-              <h1 className="mt-4 text-4xl font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl">
+              <h1 className="mt-4 text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl">
                 Kelola produk digital Nexarin.
               </h1>
 
@@ -147,12 +129,12 @@ export default function AdminProductsPage() {
             ))}
           </div>
 
-          <div className="mt-6 rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/25">
-            <p className="inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 shadow-sm">
+            <p className="inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-amber-300">
               Roadmap Products
             </p>
 
-            <h2 className="mt-4 text-3xl font-black leading-[1] tracking-[-0.06em] text-white">
+            <h2 className="mt-3 text-xl font-black tracking-[-0.04em] text-white sm:text-2xl">
               CRUD produk dibuat setelah database siap.
             </h2>
 
@@ -160,7 +142,7 @@ export default function AdminProductsPage() {
               {productAdminTasks.map((item, index) => (
                 <div
                   key={item}
-                  className="flex items-start gap-3 rounded-[24px] border border-white/10 bg-slate-950/55 p-4"
+                  className="flex items-start gap-3 rounded-xl border border-white/10 bg-slate-950/55 p-4"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-xs font-black text-slate-950">
                     {index + 1}

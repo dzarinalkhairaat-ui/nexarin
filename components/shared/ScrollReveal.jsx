@@ -99,12 +99,11 @@ export default function ScrollReveal({
         transform: isVisible
           ? "translate3d(0, 0, 0) scale(1)"
           : `translate3d(0, ${y}px, 0) scale(0.975)`,
-        filter: isVisible ? "blur(0px)" : "blur(2px)",
-        transitionProperty: "opacity, transform, filter",
+        transitionProperty: "opacity, transform",
         transitionDuration: "850ms",
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
         transitionDelay: `${delay}ms`,
-        willChange: isVisible ? "auto" : "opacity, transform, filter",
+        willChange: isVisible ? "auto" : "opacity, transform",
       }}
     >
       {children}

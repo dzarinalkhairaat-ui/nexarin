@@ -3,6 +3,7 @@ import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import AdminNewsNav from "@/features/admin/news/components/AdminNewsNav";
 import { prisma } from "@/lib/prisma";
 import { deleteNewsArticleAction } from "@/features/admin/news/articles/adminNewsArticle.actions";
+import AdminArticlesToolbarClient from "@/features/admin/news/articles/AdminArticlesToolbarClient";
 
 export const dynamic = "force-dynamic";
 
@@ -48,9 +49,24 @@ function mapNewsArticleToAdminTable(article) {
   };
 }
 
-async function getAdminNewsArticles() {
+async function getAdminNewsArticles(q, status, categoryId) {
   try {
+    const where = {};
+    
+    if (q) {
+      where.title = { contains: q, mode: "insensitive" };
+    }
+    
+    if (status && status !== "semua") {
+      where.status = status;
+    }
+    
+    if (categoryId && categoryId !== "semua") {
+      where.categoryId = categoryId;
+    }
+
     const articles = await prisma.newsArticle.findMany({
+      where,
       include: {
         category: {
           select: {
@@ -100,65 +116,7 @@ function AdminArticlesHeader() {
   );
 }
 
-function AdminArticlesToolbar() {
-  return (
-    <section className="relative px-5 pb-5 text-white sm:px-6 sm:pb-7 lg:px-8">
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
 
-          <div className="relative z-10 grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_170px_auto] lg:items-end">
-            <label className="grid gap-2">
-              <span className="text-[11px] font-black uppercase tracking-[0.16em] text-emerald-300">
-                Cari Artikel
-              </span>
-
-              <input
-                type="search"
-                placeholder="Cari judul artikel..."
-                className="min-h-11 rounded-2xl border border-white/10 bg-slate-950/65 px-4 text-sm font-semibold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50"
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-[11px] font-black uppercase tracking-[0.16em] text-emerald-300">
-                Status
-              </span>
-
-              <select className="min-h-11 rounded-2xl border border-white/10 bg-slate-950/65 px-4 text-sm font-bold text-white outline-none transition focus:border-emerald-400/50">
-                <option>Semua Status</option>
-                <option>Published</option>
-                <option>Draft</option>
-              </select>
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-[11px] font-black uppercase tracking-[0.16em] text-emerald-300">
-                Kategori
-              </span>
-
-              <select className="min-h-11 rounded-2xl border border-white/10 bg-slate-950/65 px-4 text-sm font-bold text-white outline-none transition focus:border-emerald-400/50">
-                <option>Semua Kategori</option>
-                <option>Teknologi</option>
-                <option>Digital</option>
-                <option>Produk</option>
-                <option>Update</option>
-                <option>Insight</option>
-              </select>
-            </label>
-
-            <Link
-              href="/admin/news/tulis-artikel"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300"
-            >
-              Tulis Artikel
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function DeleteArticleForm({ articleId }) {
   return (
@@ -268,23 +226,24 @@ function ArticleMobileCard({ article }) {
   );
 }
 
-function AdminArticlesEmptyState({ errorMessage }) {
+function AdminArticlesEmptyState({ errorMessage, isSearchActive }) {
   return (
     <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
       <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-2xl">
         <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
-          Belum Ada Artikel
+          {isSearchActive ? "Pencarian Kosong" : "Belum Ada Artikel"}
         </p>
 
         <h3 className="mt-3 text-2xl font-black tracking-[-0.045em] text-white">
-          Database artikel masih kosong.
+          {isSearchActive ? "Artikel tidak ditemukan." : "Database artikel masih kosong."}
         </h3>
 
         <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-slate-400">
-          Setelah artikel pertama dibuat dari halaman Tulis Artikel, data akan
-          tampil otomatis di tabel ini.
+          {isSearchActive
+            ? "Coba sesuaikan kata kunci pencarian, atau hapus filter status dan kategori untuk melihat semua artikel."
+            : "Setelah artikel pertama dibuat dari halaman Tulis Artikel, data akan tampil otomatis di tabel ini."}
         </p>
 
         {errorMessage ? (
@@ -293,18 +252,20 @@ function AdminArticlesEmptyState({ errorMessage }) {
           </p>
         ) : null}
 
-        <Link
-          href="/admin/news/tulis-artikel"
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300"
-        >
-          Tulis Artikel
-        </Link>
+        {!isSearchActive && (
+          <Link
+            href="/admin/news/tulis-artikel"
+            className="mt-5 inline-flex min-h-11 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300"
+          >
+            Tulis Artikel
+          </Link>
+        )}
       </div>
     </div>
   );
 }
 
-function AdminArticlesTable({ articles, errorMessage }) {
+function AdminArticlesTable({ articles, errorMessage, isSearchActive }) {
   const safeArticles = Array.isArray(articles) ? articles : [];
   const hasArticles = safeArticles.length > 0;
 
@@ -326,7 +287,7 @@ function AdminArticlesTable({ articles, errorMessage }) {
         </div>
 
         {!hasArticles ? (
-          <AdminArticlesEmptyState errorMessage={errorMessage} />
+          <AdminArticlesEmptyState errorMessage={errorMessage} isSearchActive={isSearchActive} />
         ) : (
           <>
             <div className="grid gap-3 lg:hidden">
@@ -437,8 +398,19 @@ function AdminArticlesTable({ articles, errorMessage }) {
   );
 }
 
-export default async function AdminNewsArticlesPage() {
-  const { articles, errorMessage } = await getAdminNewsArticles();
+export default async function AdminNewsArticlesPage({ searchParams }) {
+  const params = await searchParams;
+  const q = params?.q || "";
+  const status = params?.status || "semua";
+  const categoryId = params?.category || "semua";
+
+  const { articles, errorMessage } = await getAdminNewsArticles(q, status, categoryId);
+  const isSearchActive = Boolean(q || (status && status !== "semua") || (categoryId && categoryId !== "semua"));
+
+  const categories = await prisma.newsCategory.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: "asc" }
+  });
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
@@ -464,8 +436,8 @@ export default async function AdminNewsArticlesPage() {
 
         <div className="relative z-10">
           <AdminArticlesHeader />
-          <AdminArticlesToolbar />
-          <AdminArticlesTable articles={articles} errorMessage={errorMessage} />
+          <AdminArticlesToolbarClient categories={categories} />
+          <AdminArticlesTable articles={articles} errorMessage={errorMessage} isSearchActive={isSearchActive} />
         </div>
       </section>
     </main>
