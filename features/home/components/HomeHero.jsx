@@ -9,9 +9,7 @@ export default function HomeHero() {
 
   return (
     <section className="relative overflow-hidden px-5 py-20 text-center sm:px-6 lg:px-8 lg:py-32">
-      {/* Background Gradients */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-400/10 blur-[120px]" />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:40px_40px]" />
 
       <div className="relative z-10 mx-auto max-w-5xl">
         <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-emerald-300 shadow-lg shadow-emerald-400/10 backdrop-blur-sm">
@@ -48,15 +46,15 @@ export default function HomeHero() {
         </div>
 
         {/* Feature Tags */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/10 text-sm font-bold text-slate-400">
-          <span className="flex items-center gap-2">
+        <div className="mt-6 flex items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 overflow-hidden">
+          <span className="flex items-center gap-1 whitespace-nowrap">
             <span className="text-emerald-400">✓</span> Marketplace
           </span>
-          <span className="flex items-center gap-2">
-            <span className="text-emerald-400">✓</span> Portal Informasi
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <span className="text-emerald-400">✓</span> Portal Info
           </span>
-          <span className="flex items-center gap-2">
-            <span className="text-emerald-400">✓</span> Portfolio Digital
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <span className="text-emerald-400">✓</span> Portfolio
           </span>
         </div>
       </div>

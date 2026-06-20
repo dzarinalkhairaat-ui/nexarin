@@ -56,3 +56,13 @@ export type NewsArticle = Prisma.NewsArticleModel
  * 
  */
 export type AdminOtpChallenge = Prisma.AdminOtpChallengeModel
+/**
+ * Model ScrapedNewsArticle
+ * 
+ */
+export type ScrapedNewsArticle = Prisma.ScrapedNewsArticleModel
+/**
+ * Model ScraperLog
+ * 
+ */
+export type ScraperLog = Prisma.ScraperLogModel

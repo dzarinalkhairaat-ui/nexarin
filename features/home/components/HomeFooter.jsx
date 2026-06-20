@@ -137,7 +137,7 @@ export default function HomeFooter() {
         <div className="mt-7 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         <p className="mt-4 text-xs font-medium leading-6 text-slate-500">
-          © 2026 Nexarin by-rins. Built mobile-first.
+          © 2026 Nexarin by-rins.
         </p>
       </div>
     </footer>

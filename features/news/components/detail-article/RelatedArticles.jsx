@@ -24,22 +24,17 @@ export default function RelatedArticles({ articles }) {
         </div>
 
         {related.length > 0 ? (
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-lime-400/10 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
-
-            <div className="relative z-10 grid gap-3">
-              {related.map((article, index) => (
-                <NewsCompactCard
-                  key={article?.slug || `related-${index}`}
-                  article={article}
-                  index={index}
-                />
-              ))}
-            </div>
+          <div className="relative z-10 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {related.map((article, index) => (
+              <NewsCompactCard
+                key={article?.slug || `related-${index}`}
+                article={article}
+                index={index}
+              />
+            ))}
           </div>
         ) : (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
+          <div className="rounded-xl border border-white/5 bg-slate-900/40 p-6 text-center text-sm font-medium text-slate-400">
             Artikel terkait belum tersedia.
           </div>
         )}

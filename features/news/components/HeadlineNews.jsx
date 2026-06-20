@@ -70,41 +70,32 @@ export default function HeadlineNews({ articles: articlesProp = [] }) {
         </div>
 
         {mainHeadline ? (
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/70 p-3 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-4">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(16,185,129,0.14),transparent_34%),radial-gradient(circle_at_90%_30%,rgba(6,182,212,0.11),transparent_34%)]" />
-
-            <div className="relative z-10 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div className="w-full">
               <NewsCard article={mainHeadline} />
+            </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-white/[0.04] p-3 shadow-xl shadow-black/10 backdrop-blur-xl">
-                <div className="mb-3 flex items-center justify-between gap-3 px-1">
-                  <div>
-                    <p className="text-sm font-black text-white">
-                      Headline Lain
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-slate-500">
-                      Pilihan berita headline lainnya
-                    </p>
-                  </div>
-
-                  <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-300">
-                    Headline
-                  </span>
+            <div className="w-full flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-3 px-1">
+                <div>
+                  <p className="text-lg font-black text-white">
+                    Headline Lainnya
+                  </p>
                 </div>
+              </div>
 
-                <div className="grid gap-3">
-                  {sideHeadlines.length > 0 ? (
-                    sideHeadlines.map((article, index) => (
-                      <NewsCompactCard
-                        key={article?.slug || `headline-${index}`}
-                        article={article}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <SideHeadlineEmptyState />
-                  )}
-                </div>
+              <div className="grid gap-3">
+                {sideHeadlines.length > 0 ? (
+                  sideHeadlines.map((article, index) => (
+                    <NewsCompactCard
+                      key={article?.slug || `headline-${index}`}
+                      article={article}
+                      index={index}
+                    />
+                  ))
+                ) : (
+                  <SideHeadlineEmptyState />
+                )}
               </div>
             </div>
           </div>

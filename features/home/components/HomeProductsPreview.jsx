@@ -10,19 +10,7 @@ function ProductPreviewCard({ product, index }) {
 
   return (
     <Link href="/products" className="block group">
-      <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] p-6 shadow-xl shadow-black/20 transition hover:-translate-y-2 hover:border-emerald-400/25 hover:bg-white/[0.04]">
-        <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl transition group-hover:bg-emerald-400/20" />
-        <div className="pointer-events-none absolute -left-12 bottom-0 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-8 bottom-6 h-32 w-32 rotate-12 object-contain opacity-[0.035]"
-          loading="lazy"
-          decoding="async"
-        />
-
+      <article className="relative h-full overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2 hover:bg-slate-800/60">
         <div className="relative z-10 flex h-full flex-col">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -73,28 +61,9 @@ export default function HomeProductsPreview() {
 
   return (
     <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(16,185,129,0.14),transparent_32%),radial-gradient(circle_at_90%_70%,rgba(6,182,212,0.1),transparent_34%)]" />
-
-      <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-      <img
-        src="/images/logo/nexarin-logo.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-14 top-16 h-80 w-80 -rotate-12 object-contain opacity-[0.05]"
-        loading="lazy"
-        decoding="async"
-      />
-
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
-            <div className="pointer-events-none absolute -right-28 -top-10 h-80 w-80 rounded-full bg-gradient-to-l from-emerald-400/24 via-cyan-400/12 to-transparent blur-3xl" />
-
-            <div className="pointer-events-none absolute -right-16 top-3 h-48 w-80 rounded-full bg-[radial-gradient(circle_at_right,rgba(16,185,129,0.24),rgba(6,182,212,0.1),transparent_70%)] blur-2xl" />
-
-            <div className="pointer-events-none absolute -right-4 top-0 h-36 w-56 rounded-full bg-emerald-300/10 blur-xl" />
-
             <div className="relative z-10">
               <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-emerald-300 shadow-lg shadow-emerald-400/10">
                 <span className="text-sm">🛒</span>

@@ -49,10 +49,10 @@ model NewsArticle {
 
   youtubeUrl String?
 
-  status      NewsArticleStatus @default(DRAFT)
-  isHeadline  Boolean           @default(false)
-  isFeatured  Boolean           @default(false)
-  views       Int               @default(0)
+  status     NewsArticleStatus @default(DRAFT)
+  isHeadline Boolean           @default(false)
+  isFeatured Boolean           @default(false)
+  views      Int               @default(0)
 
   coverImageUrl      String?
   coverImagePath     String?
@@ -112,4 +112,31 @@ model AdminOtpChallenge {
   @@index([expiresAt])
   @@index([createdAt])
   @@map("admin_otp_challenges")
+}
+
+model ScrapedNewsArticle {
+  id                String    @id @default(cuid())
+  sourceName        String
+  sourceUrl         String    @unique
+  title             String
+  excerpt           String?
+  content           String?
+  imageUrl          String?
+  sourcePublishedAt DateTime?
+
+  scrapedAt DateTime @default(now())
+
+  @@index([scrapedAt])
+  @@map("scraped_news_articles")
+}
+
+model ScraperLog {
+  id        String   @id @default(cuid())
+  status    String // "SUCCESS" atau "ERROR"
+  message   String
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("scraper_logs")
 }

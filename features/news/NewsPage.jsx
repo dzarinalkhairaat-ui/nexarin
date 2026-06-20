@@ -187,7 +187,7 @@ export default async function NewsPage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <Header />
+      <Header showSearch={true} />
 
       <NewsCategoryChips />
 

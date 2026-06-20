@@ -32,6 +32,14 @@ const adminModules = [
     active: true,
   },
   {
+    title: "Scraping News",
+    description: "Kumpulkan kandidat berita otomatis dan kurasi untuk diterbitkan.",
+    href: "/admin/scraping-news",
+    badge: "Beta",
+    icon: "S",
+    active: true,
+  },
+  {
     title: "Products",
     description: "Kelola produk digital, kategori, harga, dan status produk.",
     href: "/admin/products",

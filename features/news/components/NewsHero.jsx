@@ -110,22 +110,17 @@ function PreviewArticleCard({ article }) {
   return (
     <Link
       href={safeArticle.href || "/news"}
-      className="group snap-start overflow-hidden rounded-[22px] border border-white/10 bg-slate-950/72 shadow-xl shadow-black/20 transition hover:border-cyan-300/25 hover:bg-cyan-400/10"
+      className="group flex gap-3 items-center rounded-xl p-2 transition hover:bg-white/5"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-950">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-900">
         <PreviewArticleImage article={safeArticle} />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
-
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_24%,rgba(16,185,129,0.18),transparent_34%),radial-gradient(circle_at_75%_65%,rgba(6,182,212,0.16),transparent_36%)]" />
       </div>
 
-      <div className="p-3 pb-4">
-        <span className="inline-flex rounded-full border border-cyan-300/20 bg-cyan-400/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.1em] text-cyan-200">
+      <div className="flex-1 min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-1">
           {safeArticle.category || "News"}
-        </span>
-
-        <h3 className="mt-2 line-clamp-2 text-[13px] font-black leading-[1.22] tracking-[-0.035em] text-white">
+        </p>
+        <h3 className="truncate text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">
           {safeArticle.title || "Artikel Nexarin News"}
         </h3>
       </div>
@@ -160,53 +155,36 @@ function NewsPreviewEmptyState() {
 }
 
 function NewsPreviewCard({ articles }) {
-  const previewArticles = getPreviewArticles(articles);
+  // Hanya ambil 3 artikel untuk daftar yang lebih bersih
+  const previewArticles = getPreviewArticles(articles).slice(0, 3);
 
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/82 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl lg:mx-0">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(16,185,129,0.16),transparent_34%),radial-gradient(circle_at_90%_38%,rgba(6,182,212,0.13),transparent_34%),radial-gradient(circle_at_50%_100%,rgba(16,185,129,0.08),transparent_36%)]" />
-
-      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/20 backdrop-blur-xl">
-        <div
-          className="pointer-events-none absolute inset-0 bg-center bg-no-repeat opacity-[0.08]"
-          style={{
-            backgroundImage: `url(${INDONESIA_MAP_IMAGE})`,
-            backgroundSize: "115%",
-          }}
-        />
-
-        <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <div className="relative z-10">
-          <h2 className="text-3xl font-black leading-none tracking-[-0.06em] text-white">
-            Nexarin<span className="text-cyan-300">News</span>
+    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-white/5 bg-slate-900/40 p-5 shadow-2xl backdrop-blur-xl lg:mx-0">
+      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <h2 className="text-xl font-black text-white">
+            Top<span className="text-emerald-400">News</span>
           </h2>
-
-          <p className="mt-2 max-w-[13rem] text-sm font-black leading-5 text-slate-300">
-            Informasi, Digital, dan Referensi by-rins
+          <p className="text-xs font-medium text-slate-400 mt-1">
+            Sorotan terbaru by-rins
           </p>
-
-          <Link
-            href="/news/search"
-            className="group relative mt-4 inline-flex min-h-11 items-center justify-center overflow-hidden rounded-2xl border border-emerald-300/25 bg-white/[0.12] px-5 py-2.5 text-sm font-black text-white shadow-xl shadow-emerald-400/10 backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-emerald-300/40 hover:bg-emerald-400/15"
-          >
-            <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-400/28 via-cyan-300/16 to-white/[0.03]" />
-            <span className="relative z-10 drop-shadow-sm">Lihat Semua</span>
-          </Link>
         </div>
+        <Link
+          href="/news/search"
+          className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300"
+        >
+          Lihat Semua &rarr;
+        </Link>
       </div>
 
       {previewArticles.length > 0 ? (
-        <div className="relative z-10 mt-4">
-          <div className="-mx-1 grid auto-cols-[minmax(132px,0.72fr)] grid-flow-col gap-3 overflow-x-auto px-1 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {previewArticles.map((article) => (
-              <PreviewArticleCard
-                key={article.id || article.slug || article.title}
-                article={article}
-              />
-            ))}
-          </div>
+        <div className="flex flex-col gap-1">
+          {previewArticles.map((article) => (
+            <PreviewArticleCard
+              key={article.id || article.slug || article.title}
+              article={article}
+            />
+          ))}
         </div>
       ) : (
         <NewsPreviewEmptyState />

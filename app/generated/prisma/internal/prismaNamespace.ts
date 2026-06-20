@@ -386,7 +386,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
-  AdminOtpChallenge: 'AdminOtpChallenge'
+  AdminOtpChallenge: 'AdminOtpChallenge',
+  ScrapedNewsArticle: 'ScrapedNewsArticle',
+  ScraperLog: 'ScraperLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge"
+    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "scrapedNewsArticle" | "scraperLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +630,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ScrapedNewsArticle: {
+      payload: Prisma.$ScrapedNewsArticlePayload<ExtArgs>
+      fields: Prisma.ScrapedNewsArticleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ScrapedNewsArticleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ScrapedNewsArticleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        findFirst: {
+          args: Prisma.ScrapedNewsArticleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ScrapedNewsArticleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        findMany: {
+          args: Prisma.ScrapedNewsArticleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>[]
+        }
+        create: {
+          args: Prisma.ScrapedNewsArticleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        createMany: {
+          args: Prisma.ScrapedNewsArticleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ScrapedNewsArticleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>[]
+        }
+        delete: {
+          args: Prisma.ScrapedNewsArticleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        update: {
+          args: Prisma.ScrapedNewsArticleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        deleteMany: {
+          args: Prisma.ScrapedNewsArticleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ScrapedNewsArticleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ScrapedNewsArticleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>[]
+        }
+        upsert: {
+          args: Prisma.ScrapedNewsArticleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScrapedNewsArticlePayload>
+        }
+        aggregate: {
+          args: Prisma.ScrapedNewsArticleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateScrapedNewsArticle>
+        }
+        groupBy: {
+          args: Prisma.ScrapedNewsArticleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScrapedNewsArticleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ScrapedNewsArticleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScrapedNewsArticleCountAggregateOutputType> | number
+        }
+      }
+    }
+    ScraperLog: {
+      payload: Prisma.$ScraperLogPayload<ExtArgs>
+      fields: Prisma.ScraperLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ScraperLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ScraperLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        findFirst: {
+          args: Prisma.ScraperLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ScraperLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        findMany: {
+          args: Prisma.ScraperLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>[]
+        }
+        create: {
+          args: Prisma.ScraperLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        createMany: {
+          args: Prisma.ScraperLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ScraperLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>[]
+        }
+        delete: {
+          args: Prisma.ScraperLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        update: {
+          args: Prisma.ScraperLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.ScraperLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ScraperLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ScraperLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.ScraperLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScraperLogPayload>
+        }
+        aggregate: {
+          args: Prisma.ScraperLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateScraperLog>
+        }
+        groupBy: {
+          args: Prisma.ScraperLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScraperLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ScraperLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScraperLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -731,6 +881,32 @@ export const AdminOtpChallengeScalarFieldEnum = {
 } as const
 
 export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
+
+
+export const ScrapedNewsArticleScalarFieldEnum = {
+  id: 'id',
+  sourceName: 'sourceName',
+  sourceUrl: 'sourceUrl',
+  title: 'title',
+  excerpt: 'excerpt',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  sourcePublishedAt: 'sourcePublishedAt',
+  scrapedAt: 'scrapedAt'
+} as const
+
+export type ScrapedNewsArticleScalarFieldEnum = (typeof ScrapedNewsArticleScalarFieldEnum)[keyof typeof ScrapedNewsArticleScalarFieldEnum]
+
+
+export const ScraperLogScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  message: 'message',
+  count: 'count',
+  createdAt: 'createdAt'
+} as const
+
+export type ScraperLogScalarFieldEnum = (typeof ScraperLogScalarFieldEnum)[keyof typeof ScraperLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -980,6 +1156,8 @@ export type GlobalOmitConfig = {
   newsCategory?: Prisma.NewsCategoryOmit
   newsArticle?: Prisma.NewsArticleOmit
   adminOtpChallenge?: Prisma.AdminOtpChallengeOmit
+  scrapedNewsArticle?: Prisma.ScrapedNewsArticleOmit
+  scraperLog?: Prisma.ScraperLogOmit
 }
 
 /* Types for Logging */

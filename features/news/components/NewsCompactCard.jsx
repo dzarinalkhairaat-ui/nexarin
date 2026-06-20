@@ -39,22 +39,18 @@ function CompactImage({ article }) {
   const imageUrl = getCompactImage(safeArticle);
 
   return (
-    <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[22px] border border-cyan-300/15 bg-slate-950 shadow-lg shadow-black/20">
+    <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-900">
       {imageUrl ? (
         <img
           src={imageUrl}
           alt={safeArticle.coverImageAlt || safeArticle.title || "Nexarin News"}
-          className="h-full w-full object-cover opacity-85 transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           loading="lazy"
           decoding="async"
         />
       ) : (
         <CompactImagePlaceholder article={safeArticle} />
       )}
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
-
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(16,185,129,0.18),transparent_34%),radial-gradient(circle_at_78%_70%,rgba(6,182,212,0.14),transparent_36%)]" />
     </div>
   );
 }
@@ -67,30 +63,24 @@ export default function NewsCompactCard({ article, index }) {
   return (
     <Link
       href={articleHref}
-      className="group flex gap-3 rounded-[26px] border border-white/10 bg-white/[0.045] p-3 shadow-lg shadow-black/15 outline-none transition hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-cyan-400/[0.06] focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+      className="group flex gap-3 rounded-2xl border border-white/5 bg-slate-900/40 p-3 transition hover:-translate-y-0.5 hover:border-white/10 hover:bg-slate-900/70 focus-visible:ring-2 focus-visible:ring-emerald-400/60"
     >
       <CompactImage article={safeArticle} />
 
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-[10px] font-black text-emerald-300">
-            {String((index || 0) + 1).padStart(2, "0")}
+      <div className="min-w-0 flex-1 flex flex-col justify-center">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-400/10 text-[10px] font-bold text-emerald-400">
+            {String((index || 0) + 1)}
           </span>
 
-          <span className="truncate rounded-full border border-cyan-400/15 bg-cyan-400/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-cyan-300">
+          <span className="truncate text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {safeArticle.category || "News"}
           </span>
         </div>
 
-        <h3 className="mt-2 line-clamp-2 text-sm font-black leading-tight tracking-[-0.035em] text-white">
+        <h3 className="line-clamp-2 text-sm font-bold leading-tight tracking-tight text-white group-hover:text-emerald-300 transition-colors">
           {safeArticle.title || "Artikel Nexarin"}
         </h3>
-
-        {safeArticle.excerpt ? (
-          <p className="mt-2 line-clamp-2 text-xs font-medium leading-5 text-slate-500">
-            {safeArticle.excerpt}
-          </p>
-        ) : null}
       </div>
     </Link>
   );

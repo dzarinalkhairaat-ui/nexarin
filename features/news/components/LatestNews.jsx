@@ -84,49 +84,37 @@ export default function LatestNews({ articles: articlesProp = [] }) {
         </div>
 
         {latestArticles.length > 0 ? (
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-lime-400/10 blur-3xl" />
+          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
+              {mainLatest.map((article, index) => (
+                <NewsCard
+                  key={article?.slug || `latest-main-${index}`}
+                  article={article}
+                />
+              ))}
+            </div>
 
-            <div className="relative z-10 grid gap-4 lg:grid-cols-[1fr_0.86fr]">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
-                {mainLatest.map((article, index) => (
-                  <NewsCard
-                    key={article?.slug || `latest-main-${index}`}
-                    article={article}
-                  />
-                ))}
+            <div className="w-full flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-3 px-1">
+                <div>
+                  <p className="text-lg font-black text-white">
+                    Update Ringkas
+                  </p>
+                </div>
               </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-slate-950/45 p-3 shadow-xl shadow-black/10">
-                <div className="mb-3 flex items-center justify-between gap-3 px-1">
-                  <div>
-                    <p className="text-sm font-black text-white">
-                      Update Ringkas
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-slate-500">
-                      Berita terbaru lainnya
-                    </p>
-                  </div>
-
-                  <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-300">
-                    Latest
-                  </span>
-                </div>
-
-                <div className="grid gap-3">
-                  {compactLatest.length > 0 ? (
-                    compactLatest.map((article, index) => (
-                      <NewsCompactCard
-                        key={article?.slug || `latest-compact-${index}`}
-                        article={article}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <CompactLatestEmptyState />
-                  )}
-                </div>
+              <div className="grid gap-3">
+                {compactLatest.length > 0 ? (
+                  compactLatest.map((article, index) => (
+                    <NewsCompactCard
+                      key={article?.slug || `latest-compact-${index}`}
+                      article={article}
+                      index={index}
+                    />
+                  ))
+                ) : (
+                  <CompactLatestEmptyState />
+                )}
               </div>
             </div>
           </div>

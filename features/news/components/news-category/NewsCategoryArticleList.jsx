@@ -31,45 +31,34 @@ export default function NewsCategoryArticleList({ category, articles }) {
         </div>
 
         {mainArticle ? (
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-lime-400/10 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
-
-            <div className="relative z-10 grid gap-4 lg:grid-cols-[1fr_0.86fr]">
+          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div className="w-full">
               <NewsCard article={mainArticle} />
+            </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-slate-950/45 p-3 shadow-xl shadow-black/10">
-                <div className="mb-3 flex items-center justify-between gap-3 px-1">
-                  <div className="min-w-0">
-                    <p className="text-sm font-black text-white">
-                      Artikel Lain
-                    </p>
+            <div className="w-full flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-3 px-1">
+                <div className="min-w-0">
+                  <p className="text-lg font-black text-white">
+                    Artikel Lainnya
+                  </p>
+                </div>
+              </div>
 
-                    <p className="mt-1 text-xs font-semibold text-slate-500">
-                      Masih dalam kategori {categoryLabel}
-                    </p>
+              <div className="grid gap-3">
+                {restArticles.length > 0 ? (
+                  restArticles.map((article, index) => (
+                    <NewsCompactCard
+                      key={article?.slug || `category-${index}`}
+                      article={article}
+                      index={index}
+                    />
+                  ))
+                ) : (
+                  <div className="rounded-xl border border-white/5 bg-slate-900/40 p-6 text-center text-sm font-medium leading-7 text-slate-400">
+                    Belum ada artikel tambahan di kategori ini.
                   </div>
-
-                  <span className="shrink-0 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-lime-300">
-                    Feed
-                  </span>
-                </div>
-
-                <div className="grid gap-3">
-                  {restArticles.length > 0 ? (
-                    restArticles.map((article, index) => (
-                      <NewsCompactCard
-                        key={article?.slug || `category-${index}`}
-                        article={article}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium leading-7 text-slate-400">
-                      Belum ada artikel tambahan di kategori ini.
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </div>
           </div>

@@ -264,22 +264,19 @@ function ArticleCover({ article }) {
   const imageUrl = getArticleImage(safeArticle);
 
   return (
-    <div className="relative overflow-hidden rounded-[30px] border border-cyan-300/15 bg-slate-950 shadow-2xl shadow-black/25">
+    <div className="relative overflow-hidden rounded-xl bg-slate-900 shadow-xl shadow-black/20">
       <div className="relative aspect-[16/9] overflow-hidden">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={safeArticle.coverImageAlt || safeArticle.title || "Artikel Nexarin News"}
-            className="h-full w-full object-cover opacity-85"
+            className="h-full w-full object-cover"
             loading="lazy"
             decoding="async"
           />
         ) : (
           <ArticleCoverPlaceholder article={safeArticle} />
         )}
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/28 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(16,185,129,0.2),transparent_34%),radial-gradient(circle_at_82%_70%,rgba(6,182,212,0.16),transparent_36%)]" />
       </div>
     </div>
   );
@@ -496,12 +493,10 @@ function BacaJugaBox({ article }) {
   return (
     <Link
       href={articleHref}
-      className="my-6 flex items-center gap-3 overflow-hidden rounded-[24px] border border-cyan-400/15 bg-cyan-400/[0.07] p-3 shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-cyan-400/10"
+      className="my-6 flex items-center gap-4 overflow-hidden rounded-xl border border-white/5 bg-slate-900/40 p-4 transition-colors hover:bg-slate-900/60 hover:border-emerald-400/30"
     >
-      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[18px] border border-white/10 bg-slate-950">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-950">
         <BacaJugaThumbnail article={article} />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
       </div>
 
       <div className="min-w-0 flex-1">
@@ -588,9 +583,7 @@ export default function ArticleContent({ article, relatedArticles }) {
 
   return (
     <section className="relative px-5 pb-8 pt-2 text-white sm:px-6 sm:pb-10 sm:pt-3 lg:px-8">
-      <article className="relative z-10 mx-auto w-full max-w-3xl overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.045] p-4 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(16,185,129,0.13),transparent_34%),radial-gradient(circle_at_88%_42%,rgba(6,182,212,0.1),transparent_34%)]" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
+      <article className="relative z-10 mx-auto w-full max-w-3xl">
 
         <div className="relative z-10">
           <ArticleCover article={article} />

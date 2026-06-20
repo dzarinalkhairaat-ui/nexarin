@@ -75,36 +75,14 @@ export default function PopularNews({ articles: articlesProp = [] }) {
         </div>
 
         {popularArticles.length > 0 ? (
-          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-lime-400/10 blur-3xl" />
-            <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
-
-            <div className="relative z-10">
-              <div className="mb-4 flex items-center justify-between gap-3 px-1">
-                <div>
-                  <p className="text-sm font-black text-white">
-                    Paling Banyak Dibaca
-                  </p>
-                  <p className="mt-1 text-xs font-semibold text-slate-500">
-                    Ringkasan artikel populer
-                  </p>
-                </div>
-
-                <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-lime-300">
-                  Popular
-                </span>
-              </div>
-
-              <div className="grid gap-3">
-                {popularArticles.map((article, index) => (
-                  <NewsCompactCard
-                    key={article?.slug || `popular-${index}`}
-                    article={article}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="relative z-10 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {popularArticles.map((article, index) => (
+              <NewsCompactCard
+                key={article?.slug || `popular-${index}`}
+                article={article}
+                index={index}
+              />
+            ))}
           </div>
         ) : (
           <PopularEmptyState />

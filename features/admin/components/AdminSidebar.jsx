@@ -26,6 +26,12 @@ const adminMenus = [
     status: "Prioritas",
   },
   {
+    label: "Scraping",
+    href: "/admin/scraping-news",
+    icon: "R",
+    status: "Beta",
+  },
+  {
     label: "Products",
     href: "/admin/products",
     icon: "P",

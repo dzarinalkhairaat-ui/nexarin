@@ -35,22 +35,8 @@ function NewsImagePlaceholder({ src, alt }) {
       </div>
     );
   }
-
   return (
-    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/75 p-5">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(132,204,22,0.2),transparent_34%),radial-gradient(circle_at_78%_70%,rgba(16,185,129,0.15),transparent_36%)]" />
-
-      <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:24px_24px]" />
-
-      <img
-        src="/images/logo/nexarin-logo.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-8 -bottom-6 h-40 w-40 rotate-12 object-contain opacity-[0.08]"
-        loading="lazy"
-        decoding="async"
-      />
-
+    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-5">
       <div className="relative z-10 flex min-h-32 items-end">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-lime-300">
@@ -78,9 +64,7 @@ function CompactNewsCard({ item, index }) {
 
   return (
     <Link href={href} className="block group">
-      <article className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.04] p-4 shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-lime-400/25 hover:bg-lime-400/10">
-        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-lime-400/10 blur-3xl transition group-hover:bg-lime-400/20" />
-
+      <article className="relative overflow-hidden rounded-[26px] border border-white/10 bg-slate-900/40 p-4 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-slate-800/60">
         <div className="relative z-10 flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-lime-400/20 bg-lime-400/10 text-xs font-black text-lime-300 shadow-lg shadow-lime-400/10">
             {number}
@@ -123,24 +107,9 @@ export default function HomeNewsPreview({ articles = [] }) {
 
   return (
     <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(132,204,22,0.16),transparent_34%),radial-gradient(circle_at_10%_80%,rgba(6,182,212,0.12),transparent_36%)]" />
-
-      <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-      <img
-        src="/images/logo/nexarin-logo.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-20 top-20 h-80 w-80 -rotate-12 object-contain opacity-[0.045]"
-        loading="lazy"
-        decoding="async"
-      />
-
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
-            <div className="pointer-events-none absolute -right-20 -top-10 h-72 w-72 rounded-full bg-gradient-to-l from-lime-400/20 via-emerald-400/10 to-transparent blur-3xl" />
-
             <div className="relative z-10">
               <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-lime-300 shadow-lg shadow-lime-400/10">
                 <span className="text-sm">📰</span>
@@ -168,10 +137,7 @@ export default function HomeNewsPreview({ articles = [] }) {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_0.8fr]">
           <Link href={featuredHref} className="block group">
-            <article className="relative h-full overflow-hidden rounded-[34px] border border-lime-400/15 bg-white/[0.03] p-6 shadow-2xl shadow-black/30 transition hover:border-lime-400/30 hover:bg-white/[0.05]">
-              <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime-400/18 blur-3xl transition group-hover:bg-lime-400/25" />
-              <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-cyan-400/12 blur-3xl" />
-
+            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
               <div className="relative z-10">
                 <NewsImagePlaceholder src={featured.image} alt={featured.title} />
 
@@ -207,9 +173,7 @@ export default function HomeNewsPreview({ articles = [] }) {
           </Link>
 
           <div className="flex flex-col gap-5">
-            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-5 shadow-xl shadow-black/20">
-              <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-lime-400/10 blur-3xl" />
-
+            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-slate-900/40 p-5 shadow-xl backdrop-blur-md">
               <div className="relative z-10">
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-lime-300">
                   Latest News
@@ -231,7 +195,7 @@ export default function HomeNewsPreview({ articles = [] }) {
                   />
                 ))
               ) : (
-                <div className="flex h-full min-h-32 items-center justify-center rounded-[28px] border border-white/10 bg-white/[0.02] p-6 text-center text-sm font-medium text-slate-400">
+                <div className="flex h-full min-h-32 items-center justify-center rounded-[28px] border border-white/10 bg-slate-900/40 p-6 text-center text-sm font-medium text-slate-400">
                   Berita belum tersedia.
                 </div>
               )}

@@ -2,31 +2,20 @@ import Link from "next/link";
 
 export default function HomeSlendroAi() {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-16 sm:py-24">
-      {/* Background glow */}
-      <div className="pointer-events-none absolute -left-32 top-0 h-[500px] w-[500px] rounded-full bg-cyan-400/[0.06] blur-[120px]" />
-      <div className="pointer-events-none absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-emerald-400/[0.06] blur-[100px]" />
-
+    <section className="relative overflow-hidden pt-8 pb-16 sm:pt-12 sm:pb-24 border-t border-white/10">
       <div className="relative z-10 mx-auto w-full max-w-5xl px-5 sm:px-6 lg:px-8">
-        <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.02] shadow-2xl shadow-black/30 backdrop-blur-xl transition hover:border-cyan-400/20">
-          {/* Inner glow accents */}
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl transition-all duration-700 group-hover:bg-cyan-400/20" />
-          <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl transition-all duration-700 group-hover:bg-emerald-400/20" />
-
+        <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
           <div className="relative z-10 flex flex-col items-center gap-8 p-8 sm:flex-row sm:gap-12 sm:p-12">
             {/* Image — 1:1 ratio */}
             <div className="relative w-full max-w-[220px] shrink-0 sm:max-w-[260px]">
-              <div className="relative aspect-square overflow-hidden rounded-[24px] border border-white/10 shadow-xl shadow-cyan-400/10">
+              <div className="relative aspect-square">
                 <img
                   src="/images/slendro-ai.png"
                   alt="Slendro AI — Unlimited AI Video, Music, Image"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                   decoding="async"
                 />
-
-                {/* Overlay shimmer */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
               </div>
             </div>
 

@@ -30,19 +30,7 @@ function MiniProjectCard({ project, index }) {
 
   return (
     <Link href="/portfolio" className="block group">
-      <article className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.02] p-6 shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-white/[0.04] h-full flex flex-col">
-        <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl transition group-hover:bg-cyan-400/20" />
-        <div className="pointer-events-none absolute -left-14 bottom-0 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <img
-          src="/images/logo/nexarin-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-8 bottom-6 h-28 w-28 rotate-12 object-contain opacity-[0.035]"
-          loading="lazy"
-          decoding="async"
-        />
-
+      <article className="relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-slate-800/60 h-full flex flex-col">
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-xl shadow-lg shadow-cyan-400/10 transition group-hover:scale-110">
@@ -93,24 +81,9 @@ export default function HomePortfolioPreview() {
 
   return (
     <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_18%,rgba(34,211,238,0.18),transparent_34%),radial-gradient(circle_at_12%_75%,rgba(16,185,129,0.12),transparent_36%)]" />
-
-      <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
-
-      <img
-        src="/images/logo/nexarin-logo.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-16 top-20 h-80 w-80 rotate-12 object-contain opacity-[0.05]"
-        loading="lazy"
-        decoding="async"
-      />
-
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
-            <div className="pointer-events-none absolute -right-20 -top-8 h-72 w-72 rounded-full bg-gradient-to-l from-cyan-400/20 via-emerald-400/10 to-transparent blur-3xl" />
-
             <div className="relative z-10">
               <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300 shadow-lg shadow-cyan-400/10">
                 <span className="text-sm">💼</span>
@@ -138,19 +111,7 @@ export default function HomePortfolioPreview() {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <Link href="/portfolio" className="block group">
-            <article className="relative h-full overflow-hidden rounded-[34px] border border-cyan-400/15 bg-white/[0.03] p-6 shadow-2xl shadow-black/30 transition hover:border-cyan-400/30 hover:bg-white/[0.05]">
-              <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-400/18 blur-3xl transition group-hover:bg-cyan-400/25" />
-              <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-emerald-400/12 blur-3xl" />
-
-              <img
-                src="/images/logo/nexarin-logo.png"
-                alt=""
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-10 bottom-8 h-44 w-44 rotate-12 object-contain opacity-[0.04]"
-                loading="lazy"
-                decoding="async"
-              />
-
+            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
               <div className="relative z-10 flex flex-col h-full">
                 <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-2xl shadow-lg shadow-cyan-400/10 transition group-hover:scale-110">
                   📰

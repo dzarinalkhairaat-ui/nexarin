@@ -9,6 +9,7 @@ const adminMenus = [
   { label: "Dashboard", href: "/admin", icon: "⌂", status: "Main" },
   { label: "Home", href: "", icon: "H", status: "Soon", disabled: true },
   { label: "News", href: "/admin/news", icon: "N", status: "Prioritas" },
+  { label: "Scraping", href: "/admin/scraping-news", icon: "R", status: "Beta" },
   { label: "Products", href: "/admin/products", icon: "P", status: "Next" },
   { label: "Portfolio", href: "/admin/portfolio", icon: "C", status: "Next" },
   { label: "Support", href: "/admin/support", icon: "S", status: "Ready" },

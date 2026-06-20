@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
-  AdminOtpChallenge: 'AdminOtpChallenge'
+  AdminOtpChallenge: 'AdminOtpChallenge',
+  ScrapedNewsArticle: 'ScrapedNewsArticle',
+  ScraperLog: 'ScraperLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,6 +138,32 @@ export const AdminOtpChallengeScalarFieldEnum = {
 } as const
 
 export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
+
+
+export const ScrapedNewsArticleScalarFieldEnum = {
+  id: 'id',
+  sourceName: 'sourceName',
+  sourceUrl: 'sourceUrl',
+  title: 'title',
+  excerpt: 'excerpt',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  sourcePublishedAt: 'sourcePublishedAt',
+  scrapedAt: 'scrapedAt'
+} as const
+
+export type ScrapedNewsArticleScalarFieldEnum = (typeof ScrapedNewsArticleScalarFieldEnum)[keyof typeof ScrapedNewsArticleScalarFieldEnum]
+
+
+export const ScraperLogScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  message: 'message',
+  count: 'count',
+  createdAt: 'createdAt'
+} as const
+
+export type ScraperLogScalarFieldEnum = (typeof ScraperLogScalarFieldEnum)[keyof typeof ScraperLogScalarFieldEnum]
 
 
 export const SortOrder = {
