@@ -2,27 +2,39 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  DashboardIcon,
+  ArticleIcon,
+  WriteIcon,
+  CategoryIcon,
+  SettingsIcon
+} from "@/components/shared/MenuIcons";
 
 const adminNewsNavItems = [
   {
     label: "Dashboard",
     href: "/admin/news",
+    icon: <DashboardIcon className="h-3.5 w-3.5 mr-1.5" />
   },
   {
     label: "Artikel",
     href: "/admin/news/artikel",
+    icon: <ArticleIcon className="h-3.5 w-3.5 mr-1.5" />
   },
   {
     label: "Tulis Artikel",
     href: "/admin/news/tulis-artikel",
+    icon: <WriteIcon className="h-3.5 w-3.5 mr-1.5" />
   },
   {
     label: "Kategori",
     href: "/admin/news/kategori",
+    icon: <CategoryIcon className="h-3.5 w-3.5 mr-1.5" />
   },
   {
     label: "Pengaturan",
     href: "/admin/news/pengaturan",
+    icon: <SettingsIcon className="h-3.5 w-3.5 mr-1.5" />
   },
 ];
 
@@ -54,6 +66,7 @@ export default function AdminNewsNav() {
                     : "border-white/10 bg-white/[0.055] text-slate-300 hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-200",
                 ].join(" ")}
               >
+                {item.icon}
                 {item.label}
               </Link>
             );

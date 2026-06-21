@@ -2,6 +2,7 @@ import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import AdminNewsNav from "@/features/admin/news/components/AdminNewsNav";
 import { prisma } from "@/lib/prisma";
+import { ArticleIcon, WriteIcon, CategoryIcon, SettingsIcon } from "@/components/shared/MenuIcons";
 
 const newsDashboardMenus = [
   {
@@ -9,28 +10,28 @@ const newsDashboardMenus = [
     description: "Lihat, edit, hapus, dan pantau seluruh artikel News.",
     href: "/admin/news/artikel",
     badge: "Table",
-    icon: "A",
+    icon: <ArticleIcon className="h-6 w-6" />,
   },
   {
     title: "Tulis Artikel",
     description: "Buat artikel baru lengkap dengan sumber, kategori, dan gambar.",
     href: "/admin/news/tulis-artikel",
     badge: "Editor",
-    icon: "T",
+    icon: <WriteIcon className="h-6 w-6" />,
   },
   {
     title: "Kategori",
     description: "Tambah dan kelola kategori untuk halaman News.",
     href: "/admin/news/kategori",
     badge: "Manage",
-    icon: "K",
+    icon: <CategoryIcon className="h-6 w-6" />,
   },
   {
     title: "Pengaturan",
     description: "Area kosong untuk update fitur News ke depannya.",
     href: "/admin/news/pengaturan",
     badge: "Soon",
-    icon: "P",
+    icon: <SettingsIcon className="h-6 w-6" />,
   },
 ];
 

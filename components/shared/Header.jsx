@@ -124,15 +124,6 @@ function MenuPanel({ navigation, onClose }) {
         <nav className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-black/30 backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(16,185,129,0.16),transparent_34%),radial-gradient(circle_at_85%_70%,rgba(6,182,212,0.1),transparent_34%)]" />
 
-          <img
-            src="/images/logo/nexarin-logo.png"
-            alt=""
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-10 top-5 h-40 w-40 rotate-12 object-contain opacity-[0.035]"
-            loading="lazy"
-            decoding="async"
-          />
-
           <div className="relative z-10 grid gap-2">
             {safeNavigation.length > 0 ? (
               safeNavigation.map((item) => {

@@ -1,11 +1,13 @@
+import { NewsIcon } from "@/components/shared/MenuIcons";
+
 export default function AdminNewsEmptyState() {
   return (
     <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
       <div className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 shadow-lg shadow-emerald-400/10">
-        <span className="text-xl font-black text-emerald-300">N</span>
+      <div className="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 shadow-lg shadow-emerald-400/10">
+        <NewsIcon className="h-6 w-6" />
       </div>
 
       <div className="relative z-10 mt-5">

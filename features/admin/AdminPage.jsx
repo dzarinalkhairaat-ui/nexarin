@@ -1,5 +1,15 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
+import {
+  HomeIcon,
+  NewsIcon,
+  ScrapingIcon,
+  ProductsIcon,
+  PortfolioIcon,
+  ContactIcon,
+  SettingsIcon,
+  DashboardIcon
+} from "@/components/shared/MenuIcons";
 
 const adminStats = [
   {
@@ -28,7 +38,7 @@ const adminModules = [
     description: "Kelola artikel, kategori, status publish, dan konten berita.",
     href: "/admin/news",
     badge: "Prioritas",
-    icon: "N",
+    icon: <NewsIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -36,7 +46,7 @@ const adminModules = [
     description: "Kumpulkan kandidat berita otomatis dan kurasi untuk diterbitkan.",
     href: "/admin/scraping-news",
     badge: "Beta",
-    icon: "S",
+    icon: <ScrapingIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -44,7 +54,7 @@ const adminModules = [
     description: "Kelola produk digital, kategori, harga, dan status produk.",
     href: "/admin/products",
     badge: "Next",
-    icon: "P",
+    icon: <ProductsIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -52,7 +62,7 @@ const adminModules = [
     description: "Kelola project, case study, tech stack, dan showcase karya.",
     href: "/admin/portfolio",
     badge: "Next",
-    icon: "C", // Changed from F to C (Case Study) or P (Portfolio) -> Using C to avoid duplicate P
+    icon: <PortfolioIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -60,7 +70,7 @@ const adminModules = [
     description: "Kelola pesan, request, dan kebutuhan bantuan user.",
     href: "/admin/support",
     badge: "Ready",
-    icon: "S",
+    icon: <ContactIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -68,7 +78,7 @@ const adminModules = [
     description: "Kelola pengaturan dasar website dan konfigurasi admin.",
     href: "/admin/settings",
     badge: "Config",
-    icon: "⚙",
+    icon: <SettingsIcon className="h-6 w-6" />,
     active: true,
   },
   {
@@ -76,7 +86,7 @@ const adminModules = [
     description: "Pengaturan halaman utama Nexarin akan disiapkan berikutnya.",
     href: "",
     badge: "Soon",
-    icon: "H",
+    icon: <HomeIcon className="h-6 w-6" />,
     active: false,
   },
 ];
@@ -179,8 +189,8 @@ function AdminDashboardModules() {
     <section className="relative overflow-hidden px-5 pb-12 pt-4 text-white sm:px-6 lg:px-8">
       <div className="relative z-10 mx-auto w-full max-w-5xl">
         <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-            <span className="text-sm">▦</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-emerald-300">
+            <DashboardIcon className="h-4 w-4" />
           </div>
           <div>
             <h2 className="text-lg font-black tracking-[-0.04em] text-white">

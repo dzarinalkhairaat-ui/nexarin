@@ -1,12 +1,13 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
+import { KeyIcon, SparkleIcon, SearchIcon, SettingsIcon, LockIcon, LeftArrowIcon } from "@/components/shared/MenuIcons";
 
 const settingsMenus = [
   {
     label: "API Keys",
     href: "/admin/settings/api-key",
     note: "Kelola API Key Gemini & Groq untuk fitur AI.",
-    icon: "🔑",
+    icon: <KeyIcon className="h-6 w-6" />,
     color: "cyan",
     locked: false,
   },
@@ -14,7 +15,7 @@ const settingsMenus = [
     label: "Brand & Logo",
     href: "/admin/settings/brand",
     note: "Pengaturan nama, tagline, logo, dan identitas brand.",
-    icon: "✨",
+    icon: <SparkleIcon className="h-6 w-6" />,
     color: "emerald",
     locked: true,
   },
@@ -22,7 +23,7 @@ const settingsMenus = [
     label: "SEO Metadata",
     href: "/admin/settings/seo",
     note: "Pengaturan global SEO dan open graph.",
-    icon: "🔎",
+    icon: <SearchIcon className="h-6 w-6" />,
     color: "amber",
     locked: true,
   },
@@ -30,7 +31,7 @@ const settingsMenus = [
     label: "Konfigurasi Umum",
     href: "/admin/settings/general",
     note: "Pengaturan SMTP, Analytics, dan konfigurasi dasar.",
-    icon: "⚙️",
+    icon: <SettingsIcon className="h-6 w-6" />,
     color: "purple",
     locked: true,
   },
@@ -68,7 +69,7 @@ export default function AdminSettingsPage() {
           <div className="mt-12">
             <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-                <span className="text-sm">🎛️</span>
+                <SettingsIcon className="h-4 w-4 text-slate-300" />
               </div>
               <h2 className="text-lg font-black tracking-[-0.04em] text-white">
                 Menu Pengaturan
@@ -91,7 +92,7 @@ export default function AdminSettingsPage() {
                         </h3>
                         {isLocked && (
                           <span className="rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.1em] border-slate-400/20 bg-slate-400/10 text-slate-300 flex items-center gap-1">
-                            <span>🔒</span> Locked
+                            <LockIcon className="h-2 w-2" /> Locked
                           </span>
                         )}
                       </div>
@@ -130,9 +131,9 @@ export default function AdminSettingsPage() {
           <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 border-t border-white/5 pt-8">
             <Link
               href="/admin"
-              className="inline-flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-black text-white transition hover:bg-white/10"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-black text-white transition hover:bg-white/10"
             >
-              ← Kembali ke Dashboard
+              <LeftArrowIcon className="h-4 w-4" /> Kembali ke Dashboard
             </Link>
           </div>
 

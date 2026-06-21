@@ -5,15 +5,27 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
+import {
+  DashboardIcon,
+  HomeIcon,
+  NewsIcon,
+  ScrapingIcon,
+  ProductsIcon,
+  PortfolioIcon,
+  ContactIcon,
+  SettingsIcon,
+  LogoutIcon
+} from "@/components/shared/MenuIcons";
+
 const adminMenus = [
-  { label: "Dashboard", href: "/admin", icon: "⌂", status: "Main" },
-  { label: "Home", href: "", icon: "H", status: "Soon", disabled: true },
-  { label: "News", href: "/admin/news", icon: "N", status: "Prioritas" },
-  { label: "Scraping", href: "/admin/scraping-news", icon: "R", status: "Beta" },
-  { label: "Products", href: "/admin/products", icon: "P", status: "Next" },
-  { label: "Portfolio", href: "/admin/portfolio", icon: "C", status: "Next" },
-  { label: "Support", href: "/admin/support", icon: "S", status: "Ready" },
-  { label: "Settings", href: "/admin/settings", icon: "⚙", status: "Config" },
+  { label: "Dashboard", href: "/admin", icon: <DashboardIcon className="h-4 w-4" />, status: "Main" },
+  { label: "Home", href: "", icon: <HomeIcon className="h-4 w-4" />, status: "Soon", disabled: true },
+  { label: "News", href: "/admin/news", icon: <NewsIcon className="h-4 w-4" />, status: "Prioritas" },
+  { label: "Scraping", href: "/admin/scraping-news", icon: <ScrapingIcon className="h-4 w-4" />, status: "Beta" },
+  { label: "Products", href: "/admin/products", icon: <ProductsIcon className="h-4 w-4" />, status: "Next" },
+  { label: "Portfolio", href: "/admin/portfolio", icon: <PortfolioIcon className="h-4 w-4" />, status: "Next" },
+  { label: "Support", href: "/admin/support", icon: <ContactIcon className="h-4 w-4" />, status: "Ready" },
+  { label: "Settings", href: "/admin/settings", icon: <SettingsIcon className="h-4 w-4" />, status: "Config" },
 ];
 
 function MenuButton({ isOpen, onClick }) {
@@ -23,22 +35,22 @@ function MenuButton({ isOpen, onClick }) {
       aria-label={isOpen ? "Tutup menu admin" : "Buka menu admin"}
       aria-expanded={isOpen}
       onClick={onClick}
-      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.065] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-emerald-400/25 hover:bg-emerald-400/10"
+      className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.065] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-emerald-400/25 hover:bg-emerald-400/10"
     >
-      <span className="relative h-5 w-6">
+      <span className="relative h-4 w-5">
         <span
-          className={`absolute left-0 top-0 block h-0.5 w-6 rounded-full bg-white transition duration-300 ${
-            isOpen ? "translate-y-2 rotate-45" : ""
+          className={`absolute left-0 top-0 block h-[1.5px] w-5 rounded-full bg-white transition duration-300 ${
+            isOpen ? "translate-y-1.5 rotate-45" : ""
           }`}
         />
         <span
-          className={`absolute left-0 top-2 block h-0.5 w-6 rounded-full bg-white transition duration-300 ${
+          className={`absolute left-0 top-1.5 block h-[1.5px] w-5 rounded-full bg-white transition duration-300 ${
             isOpen ? "opacity-0" : "opacity-100"
           }`}
         />
         <span
-          className={`absolute left-0 top-4 block h-0.5 w-6 rounded-full bg-white transition duration-300 ${
-            isOpen ? "-translate-y-2 -rotate-45" : ""
+          className={`absolute left-0 top-3 block h-[1.5px] w-5 rounded-full bg-white transition duration-300 ${
+            isOpen ? "-translate-y-1.5 -rotate-45" : ""
           }`}
         />
       </span>
@@ -135,7 +147,7 @@ function AdminMenuPanel({ onClose }) {
             >
               <span className="flex min-w-0 items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-red-400/15 text-xs text-red-400">
-                  ⏻
+                  <LogoutIcon className="h-4 w-4" />
                 </span>
                 <span className="truncate">
                   {isLoggingOut ? "Keluar..." : "Logout Admin"}

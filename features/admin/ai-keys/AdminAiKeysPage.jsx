@@ -4,6 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import { processManualAiKeys, processAiKeysUpload, getAiKeysStats, getActiveAiKeys, deleteAiKey } from "./aiKeys.actions";
+import { SuccessIcon, ErrorIcon, WarningIcon, DeleteIcon, FileIcon, UploadIcon, WriteIcon, DatabaseIcon } from "@/components/shared/MenuIcons";
+
+const LoadingSpinner = ({ className = "h-6 w-6" }) => (
+  <svg className={`animate-spin ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+);
 
 export default function AdminAiKeysPage() {
   const [email, setEmail] = useState("");
@@ -157,14 +165,14 @@ export default function AdminAiKeysPage() {
           {/* Stats Grid */}
           <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
             {[
-              { label: "Total Akun", value: isLoadingStats ? "-" : stats.totalAccounts, note: "Email terdaftar" },
-              { label: "Gemini Key", value: isLoadingStats ? "-" : stats.geminiKeys, note: "Key aktif" },
-              { label: "Groq Key", value: isLoadingStats ? "-" : stats.groqKeys, note: "Key aktif" },
-              { label: "Total Key", value: isLoadingStats ? "-" : stats.totalKeys, note: "Seluruh provider" },
+              { label: "Total Akun", value: isLoadingStats ? <LoadingSpinner className="h-8 w-8 text-emerald-400" /> : stats.totalAccounts, note: "Email terdaftar" },
+              { label: "Gemini Key", value: isLoadingStats ? <LoadingSpinner className="h-8 w-8 text-blue-400" /> : stats.geminiKeys, note: "Key aktif" },
+              { label: "Groq Key", value: isLoadingStats ? <LoadingSpinner className="h-8 w-8 text-orange-400" /> : stats.groqKeys, note: "Key aktif" },
+              { label: "Total Key", value: isLoadingStats ? <LoadingSpinner className="h-8 w-8 text-emerald-400" /> : stats.totalKeys, note: "Seluruh provider" },
             ].map((stat, i) => (
               <div key={i} className="rounded-[24px] border border-white/10 bg-white/[0.025] p-5 shadow-xl backdrop-blur-md">
                 <p className="text-xs font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
-                <p className="mt-2 text-3xl font-black text-white">{stat.value}</p>
+                <div className="mt-2 flex h-9 items-center text-3xl font-black text-white">{stat.value}</div>
                 <p className="mt-1 text-xs font-medium text-slate-500">{stat.note}</p>
               </div>
             ))}
@@ -175,8 +183,8 @@ export default function AdminAiKeysPage() {
             {/* Upload File Section */}
             <div className={`flex flex-col rounded-[28px] border border-white/10 bg-white/[0.02] p-6 sm:p-8 transition-opacity ${isUploading ? "opacity-50 pointer-events-none" : ""}`}>
               <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-emerald-400/10 text-emerald-400 border border-emerald-400/20">
-                  📄
+                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 shadow-inner shadow-emerald-400/10">
+                  <FileIcon className="h-5 w-5" />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-white">Upload File .txt</h2>
@@ -192,8 +200,8 @@ export default function AdminAiKeysPage() {
                   className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                   disabled={isUploading}
                 />
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/5 text-2xl mb-4">
-                  {isUploading ? "⏳" : "📤"}
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/5 text-2xl mb-4 text-emerald-400 shadow-sm border border-white/5">
+                  {isUploading ? <UploadIcon className="h-6 w-6 animate-bounce" /> : <UploadIcon className="h-6 w-6" />}
                 </div>
                 <p className="text-sm font-bold text-white">
                   {isUploading ? "Memproses File..." : "Klik atau drag file .txt ke sini"}
@@ -207,8 +215,8 @@ export default function AdminAiKeysPage() {
             {/* Manual Input Section */}
             <div className={`flex flex-col rounded-[28px] border border-white/10 bg-white/[0.02] p-6 sm:p-8 transition-opacity ${isSubmitting ? "opacity-50 pointer-events-none" : ""}`}>
               <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">
-                  ✍️
+                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-cyan-400/10 text-cyan-400 border border-cyan-400/20 shadow-inner shadow-cyan-400/10">
+                  <WriteIcon className="h-5 w-5" />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-white">Input Manual</h2>
@@ -282,8 +290,8 @@ export default function AdminAiKeysPage() {
           <div className="mt-10 mb-8 rounded-[28px] border border-white/10 bg-white/[0.02] p-6 sm:p-8">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
-                  🗄️
+                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-indigo-400/10 text-indigo-400 border border-indigo-400/20 shadow-inner shadow-indigo-400/10">
+                  <DatabaseIcon className="h-5 w-5" />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-white">Daftar Key Aktif</h2>
@@ -306,8 +314,11 @@ export default function AdminAiKeysPage() {
                 <tbody className="divide-y divide-white/5">
                   {isLoadingKeys ? (
                     <tr>
-                      <td colSpan={5} className="px-4 py-8 text-center text-slate-400">
-                        <span className="inline-block animate-pulse">Memuat data...</span>
+                      <td colSpan={5} className="px-4 py-12 text-center text-slate-400">
+                        <div className="flex flex-col items-center justify-center gap-3">
+                          <LoadingSpinner className="h-8 w-8 text-emerald-400" />
+                          <span className="animate-pulse text-sm font-medium">Memuat data API Keys...</span>
+                        </div>
                       </td>
                     </tr>
                   ) : activeKeys.length === 0 ? (
@@ -320,12 +331,16 @@ export default function AdminAiKeysPage() {
                     activeKeys.map((key) => (
                       <tr key={key.id} className="transition-colors hover:bg-white/[0.01]">
                         <td className="px-4 py-4">
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                          <span className={`inline-flex h-8 items-center justify-center rounded-lg px-3 shadow-sm ${
                             key.provider === "GEMINI" 
-                              ? "bg-blue-400/10 text-blue-400 border border-blue-400/20" 
-                              : "bg-orange-400/10 text-orange-400 border border-orange-400/20"
+                              ? "bg-blue-400/10 border border-blue-400/20 shadow-blue-400/5" 
+                              : "bg-orange-400/10 border border-orange-400/20 shadow-orange-400/5"
                           }`}>
-                            {key.provider}
+                            {key.provider === "GEMINI" ? (
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" alt="Gemini" className="h-4 w-auto object-contain drop-shadow-sm" />
+                            ) : (
+                              <span className="text-[13px] font-black tracking-tight text-orange-400 drop-shadow-sm">Groq</span>
+                            )}
                           </span>
                         </td>
                         <td className="px-4 py-4 font-medium text-white">
@@ -397,8 +412,8 @@ export default function AdminAiKeysPage() {
                     log.status === 'warning' ? 'bg-amber-400/5 border-amber-400/20 text-amber-300' :
                     'bg-rose-400/5 border-rose-400/20 text-rose-300'
                   } text-sm font-medium leading-relaxed`}>
-                    <span className="font-bold uppercase tracking-wider text-[10px] bg-black/20 px-2 py-1 rounded-md mr-2">
-                      {log.status === 'success' ? '✅ Sukses' : log.status === 'warning' ? '⚠️ Duplikat' : '❌ Ditolak'}
+                    <span className="font-bold uppercase tracking-wider text-[10px] bg-black/20 px-2 py-1 rounded-md mr-2 inline-flex items-center gap-1">
+                      {log.status === 'success' ? <><SuccessIcon className="h-3 w-3" /> Sukses</> : log.status === 'warning' ? <><WarningIcon className="h-3 w-3" /> Duplikat</> : <><ErrorIcon className="h-3 w-3" /> Ditolak</>}
                     </span>
                     {log.message}
                   </div>
@@ -414,7 +429,7 @@ export default function AdminAiKeysPage() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
             <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-amber-400/10 text-amber-400'} mb-4`}>
-              {alertModal.isError ? '❌' : '⚠️'}
+              {alertModal.isError ? <ErrorIcon className="h-6 w-6" /> : <WarningIcon className="h-6 w-6" />}
             </div>
             <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Perhatian'}</h3>
             <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
@@ -433,7 +448,7 @@ export default function AdminAiKeysPage() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-400/10 text-red-400 mb-4">
-              🗑️
+              <DeleteIcon className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Hapus</h3>
             <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>

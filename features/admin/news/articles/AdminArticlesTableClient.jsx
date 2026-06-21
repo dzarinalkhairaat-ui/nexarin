@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { deleteNewsArticleAction, updateArticleQuickAction, deleteMultipleNewsArticlesAction, updateMultipleArticlesQuickAction } from "./adminNewsArticle.actions";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import { QuestionIcon, SuccessIcon, ErrorIcon } from "@/components/shared/MenuIcons";
 
 const adminArticleStatusLabels = {
   PUBLISHED: "Published",
@@ -460,7 +461,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
             <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
-              {alertModal.isError ? '❌' : '✅'}
+              {alertModal.isError ? <ErrorIcon className="h-6 w-6" /> : <SuccessIcon className="h-6 w-6" />}
             </div>
             <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Berhasil'}</h3>
             <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
@@ -479,7 +480,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-400 mb-4">
-              ❓
+              <QuestionIcon className="h-6 w-6" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Aksi</h3>
             <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>
