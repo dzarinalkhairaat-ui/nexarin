@@ -35,6 +35,12 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
   const [selectedIds, setSelectedIds] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
 
+  const [alertModal, setAlertModal] = useState({ isOpen: false, message: "", isError: false });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: "", onConfirm: null });
+
+  const showAlert = (message, isError = true) => setAlertModal({ isOpen: true, message, isError });
+  const showConfirm = (message, onConfirm) => setConfirmModal({ isOpen: true, message, onConfirm });
+
   const safeArticles = Array.isArray(articles) ? articles : [];
   const hasArticles = safeArticles.length > 0;
 
@@ -72,7 +78,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
         router.refresh();
       });
     } else {
-      alert(result.message);
+      showAlert(result.message);
     }
   };
 
@@ -90,7 +96,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
         router.refresh();
       });
     } else {
-      alert(result.message);
+      showAlert(result.message);
     }
   };
 
@@ -110,31 +116,32 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
   };
 
   const handleBulkDelete = async () => {
-    if (!window.confirm(`Apakah Anda yakin ingin menghapus ${selectedIds.length} artikel yang dipilih? Data tidak bisa dikembalikan.`)) return;
-    
-    setLoadingId("bulk");
-    const result = await deleteMultipleNewsArticlesAction(selectedIds);
-    setLoadingId(null);
+    showConfirm(`Apakah Anda yakin ingin menghapus ${selectedIds.length} artikel yang dipilih? Data tidak bisa dikembalikan.`, async () => {
+      setLoadingId("bulk");
+      const result = await deleteMultipleNewsArticlesAction(selectedIds);
+      setLoadingId(null);
 
-    if (result.ok) {
-      setSelectedIds([]);
-      startTransition(() => {
-        router.refresh();
-      });
-    } else {
-      alert(result.message);
-    }
+      if (result.ok) {
+        setSelectedIds([]);
+        startTransition(() => {
+          router.refresh();
+        });
+      } else {
+        showAlert(result.message);
+      }
+    });
   };
 
   const handleDeleteSingle = async (articleId) => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus artikel ini?")) return;
-    setLoadingId(articleId);
-    
-    const formData = new FormData();
-    formData.append("articleId", articleId);
-    await deleteNewsArticleAction(formData);
-    
-    setLoadingId(null);
+    showConfirm("Apakah Anda yakin ingin menghapus artikel ini?", async () => {
+      setLoadingId(articleId);
+      
+      const formData = new FormData();
+      formData.append("articleId", articleId);
+      await deleteNewsArticleAction(formData);
+      
+      setLoadingId(null);
+    });
   };
 
   if (!hasArticles) {
@@ -183,6 +190,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
   }
 
   return (
+    <>
     <section className="relative px-5 pb-10 pt-3 text-white sm:px-6 sm:pb-12 lg:px-8">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -239,7 +247,7 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
                       <span>AKSI</span>
                       <button 
                         onClick={() => {
-                          if (selectedIds.length === 0) return alert("Silakan centang minimal 1 artikel terlebih dahulu di sebelah kiri untuk menggunakan Edit Cepat.");
+                          if (selectedIds.length === 0) return showAlert("Silakan centang minimal 1 artikel terlebih dahulu di sebelah kiri untuk menggunakan Edit Cepat.", true);
                           if (isBulkEditing || editingId) return cancelEdit();
                           
                           if (selectedIds.length === 1) {
@@ -446,5 +454,55 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
         </div>
       </div>
     </section>
+
+      {/* Alert Modal */}
+      {alertModal.isOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
+              {alertModal.isError ? '❌' : '✅'}
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Berhasil'}</h3>
+            <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
+            <button 
+              onClick={() => setAlertModal({ isOpen: false, message: "", isError: false })}
+              className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-400 mb-4">
+              ❓
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Aksi</h3>
+            <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setConfirmModal({ isOpen: false, message: "", onConfirm: null })}
+                className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  if (confirmModal.onConfirm) confirmModal.onConfirm();
+                  setConfirmModal({ isOpen: false, message: "", onConfirm: null });
+                }}
+                className="flex-1 rounded-xl bg-cyan-500/20 border border-cyan-500/30 px-4 py-3 text-sm font-bold text-cyan-400 hover:bg-cyan-500/30 transition-colors"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

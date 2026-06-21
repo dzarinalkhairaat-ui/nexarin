@@ -1,43 +1,39 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 
-const settingsAdminStats = [
+const settingsMenus = [
   {
-    label: "Brand",
-    value: "Nanti",
-    note: "Pengaturan nama, tagline, dan identitas brand belum aktif.",
+    label: "API Keys",
+    href: "/admin/settings/api-key",
+    note: "Kelola API Key Gemini & Groq untuk fitur AI.",
+    icon: "🔑",
+    color: "cyan",
+    locked: false,
+  },
+  {
+    label: "Brand & Logo",
+    href: "/admin/settings/brand",
+    note: "Pengaturan nama, tagline, logo, dan identitas brand.",
     icon: "✨",
     color: "emerald",
+    locked: true,
   },
   {
-    label: "Logo",
-    value: "Nanti",
-    note: "Upload logo dan icon belum terhubung storage.",
-    icon: "🖼️",
-    color: "cyan",
-  },
-  {
-    label: "SEO",
-    value: "Basic",
-    note: "Metadata dasar sudah ada, dashboard SEO belum aktif.",
+    label: "SEO Metadata",
+    href: "/admin/settings/seo",
+    note: "Pengaturan global SEO dan open graph.",
     icon: "🔎",
     color: "amber",
+    locked: true,
   },
   {
-    label: "Sitemap",
-    value: "Ready",
-    note: "Sitemap dan robots sudah tersedia untuk public route.",
-    icon: "🗺️",
-    color: "emerald",
+    label: "Konfigurasi Umum",
+    href: "/admin/settings/general",
+    note: "Pengaturan SMTP, Analytics, dan konfigurasi dasar.",
+    icon: "⚙️",
+    color: "purple",
+    locked: true,
   },
-];
-
-const settingsAdminTasks = [
-  "Menyiapkan pengaturan brand dan identitas Nexarin.",
-  "Membuat form settings untuk logo, favicon, dan sosial media.",
-  "Menyiapkan dashboard SEO metadata per halaman.",
-  "Mengatur sitemap dan robots dari data backend.",
-  "Menyimpan konfigurasi umum ke database.",
 ];
 
 export default function AdminSettingsPage() {
@@ -64,7 +60,7 @@ export default function AdminSettingsPage() {
             </h1>
 
             <p className="mt-4 max-w-xl text-sm font-medium leading-relaxed text-slate-400 sm:text-base">
-              Halaman ini akan menjadi pusat kontrol untuk brand, SEO, dan konfigurasi umum website Nexarin. Saat ini masih dalam tahap kerangka UI.
+              Halaman ini merupakan pusat kontrol website Nexarin. Beberapa pengaturan masih dikunci selama proses pengembangan.
             </p>
           </div>
 
@@ -72,20 +68,19 @@ export default function AdminSettingsPage() {
           <div className="mt-12">
             <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-                <span className="text-sm">⚙️</span>
+                <span className="text-sm">🎛️</span>
               </div>
               <h2 className="text-lg font-black tracking-[-0.04em] text-white">
-                Status Modul Settings
+                Menu Pengaturan
               </h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {settingsAdminStats.map((item) => (
-                <div
-                  key={item.label}
-                  className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.025] p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.04]"
-                >
-                  <div className="flex items-center gap-4">
+              {settingsMenus.map((item) => {
+                const isLocked = item.locked;
+
+                const CardContent = (
+                  <div className={`flex items-center gap-4 ${isLocked ? "opacity-60" : ""}`}>
                     <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] border bg-${item.color}-400/10 border-${item.color}-400/20 text-xl shadow-inner shadow-${item.color}-400/20`}>
                       {item.icon}
                     </div>
@@ -94,67 +89,50 @@ export default function AdminSettingsPage() {
                         <h3 className="truncate text-base font-black tracking-[-0.02em] text-white">
                           {item.label}
                         </h3>
-                        <span className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.1em] border-${item.color}-400/20 bg-${item.color}-400/10 text-${item.color}-300`}>
-                          {item.value}
-                        </span>
+                        {isLocked && (
+                          <span className="rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.1em] border-slate-400/20 bg-slate-400/10 text-slate-300 flex items-center gap-1">
+                            <span>🔒</span> Locked
+                          </span>
+                        )}
                       </div>
                       <p className="mt-1 text-xs font-medium leading-relaxed text-slate-400">
                         {item.note}
                       </p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                );
 
-          {/* Roadmap Card */}
-          <div className="mt-10 overflow-hidden rounded-[28px] border border-cyan-400/20 bg-cyan-400/5 p-6 shadow-xl relative sm:p-8">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-            
-            <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-400">
-                    Roadmap Pengembangan
-                  </p>
-                  <h3 className="mt-1 text-lg font-black tracking-[-0.03em] text-white">
-                    Target Konfigurasi Database
-                  </h3>
-                </div>
-              </div>
+                if (isLocked) {
+                  return (
+                    <div
+                      key={item.label}
+                      className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/5 bg-white/[0.015] p-5 cursor-not-allowed"
+                    >
+                      {CardContent}
+                    </div>
+                  );
+                }
 
-              <div className="space-y-3">
-                {settingsAdminTasks.map((task, index) => (
-                  <div
-                    key={task}
-                    className="flex items-center gap-3 rounded-[16px] border border-white/5 bg-slate-950/40 p-3 sm:px-4"
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.025] p-5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/[0.05] hover:shadow-cyan-400/10"
                   >
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-[10px] font-black text-cyan-400 ring-1 ring-cyan-400/20">
-                      {index + 1}
-                    </span>
-                    <p className="text-sm font-medium text-slate-300">
-                      {task}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                    {CardContent}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
           {/* Actions */}
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+          <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 border-t border-white/5 pt-8">
             <Link
               href="/admin"
               className="inline-flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-black text-white transition hover:bg-white/10"
             >
               ← Kembali ke Dashboard
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-6 text-sm font-black text-slate-950 shadow-lg shadow-cyan-400/20 transition hover:bg-cyan-300"
-            >
-              Lihat Website Publik
             </Link>
           </div>
 

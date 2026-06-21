@@ -33,6 +33,12 @@ export type ScrapedNewsArticleMinAggregateOutputType = {
   content: string | null
   imageUrl: string | null
   sourcePublishedAt: Date | null
+  aiTitle: string | null
+  aiSummary: string | null
+  aiContent: string | null
+  aiProvider: $Enums.AiProvider | null
+  aiProcessedAt: Date | null
+  aiError: string | null
   scrapedAt: Date | null
 }
 
@@ -45,6 +51,12 @@ export type ScrapedNewsArticleMaxAggregateOutputType = {
   content: string | null
   imageUrl: string | null
   sourcePublishedAt: Date | null
+  aiTitle: string | null
+  aiSummary: string | null
+  aiContent: string | null
+  aiProvider: $Enums.AiProvider | null
+  aiProcessedAt: Date | null
+  aiError: string | null
   scrapedAt: Date | null
 }
 
@@ -57,6 +69,12 @@ export type ScrapedNewsArticleCountAggregateOutputType = {
   content: number
   imageUrl: number
   sourcePublishedAt: number
+  aiTitle: number
+  aiSummary: number
+  aiContent: number
+  aiProvider: number
+  aiProcessedAt: number
+  aiError: number
   scrapedAt: number
   _all: number
 }
@@ -71,6 +89,12 @@ export type ScrapedNewsArticleMinAggregateInputType = {
   content?: true
   imageUrl?: true
   sourcePublishedAt?: true
+  aiTitle?: true
+  aiSummary?: true
+  aiContent?: true
+  aiProvider?: true
+  aiProcessedAt?: true
+  aiError?: true
   scrapedAt?: true
 }
 
@@ -83,6 +107,12 @@ export type ScrapedNewsArticleMaxAggregateInputType = {
   content?: true
   imageUrl?: true
   sourcePublishedAt?: true
+  aiTitle?: true
+  aiSummary?: true
+  aiContent?: true
+  aiProvider?: true
+  aiProcessedAt?: true
+  aiError?: true
   scrapedAt?: true
 }
 
@@ -95,6 +125,12 @@ export type ScrapedNewsArticleCountAggregateInputType = {
   content?: true
   imageUrl?: true
   sourcePublishedAt?: true
+  aiTitle?: true
+  aiSummary?: true
+  aiContent?: true
+  aiProvider?: true
+  aiProcessedAt?: true
+  aiError?: true
   scrapedAt?: true
   _all?: true
 }
@@ -180,6 +216,12 @@ export type ScrapedNewsArticleGroupByOutputType = {
   content: string | null
   imageUrl: string | null
   sourcePublishedAt: Date | null
+  aiTitle: string | null
+  aiSummary: string | null
+  aiContent: string | null
+  aiProvider: $Enums.AiProvider | null
+  aiProcessedAt: Date | null
+  aiError: string | null
   scrapedAt: Date
   _count: ScrapedNewsArticleCountAggregateOutputType | null
   _min: ScrapedNewsArticleMinAggregateOutputType | null
@@ -213,6 +255,12 @@ export type ScrapedNewsArticleWhereInput = {
   content?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   sourcePublishedAt?: Prisma.DateTimeNullableFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiTitle?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiSummary?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiContent?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiProvider?: Prisma.EnumAiProviderNullableFilter<"ScrapedNewsArticle"> | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.DateTimeNullableFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiError?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   scrapedAt?: Prisma.DateTimeFilter<"ScrapedNewsArticle"> | Date | string
 }
 
@@ -225,6 +273,12 @@ export type ScrapedNewsArticleOrderByWithRelationInput = {
   content?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourcePublishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiProcessedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiError?: Prisma.SortOrderInput | Prisma.SortOrder
   scrapedAt?: Prisma.SortOrder
 }
 
@@ -240,6 +294,12 @@ export type ScrapedNewsArticleWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   sourcePublishedAt?: Prisma.DateTimeNullableFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiTitle?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiSummary?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiContent?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
+  aiProvider?: Prisma.EnumAiProviderNullableFilter<"ScrapedNewsArticle"> | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.DateTimeNullableFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiError?: Prisma.StringNullableFilter<"ScrapedNewsArticle"> | string | null
   scrapedAt?: Prisma.DateTimeFilter<"ScrapedNewsArticle"> | Date | string
 }, "id" | "sourceUrl">
 
@@ -252,6 +312,12 @@ export type ScrapedNewsArticleOrderByWithAggregationInput = {
   content?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourcePublishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiProcessedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiError?: Prisma.SortOrderInput | Prisma.SortOrder
   scrapedAt?: Prisma.SortOrder
   _count?: Prisma.ScrapedNewsArticleCountOrderByAggregateInput
   _max?: Prisma.ScrapedNewsArticleMaxOrderByAggregateInput
@@ -270,6 +336,12 @@ export type ScrapedNewsArticleScalarWhereWithAggregatesInput = {
   content?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
   sourcePublishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiTitle?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
+  aiSummary?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
+  aiContent?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
+  aiProvider?: Prisma.EnumAiProviderNullableWithAggregatesFilter<"ScrapedNewsArticle"> | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ScrapedNewsArticle"> | Date | string | null
+  aiError?: Prisma.StringNullableWithAggregatesFilter<"ScrapedNewsArticle"> | string | null
   scrapedAt?: Prisma.DateTimeWithAggregatesFilter<"ScrapedNewsArticle"> | Date | string
 }
 
@@ -282,6 +354,12 @@ export type ScrapedNewsArticleCreateInput = {
   content?: string | null
   imageUrl?: string | null
   sourcePublishedAt?: Date | string | null
+  aiTitle?: string | null
+  aiSummary?: string | null
+  aiContent?: string | null
+  aiProvider?: $Enums.AiProvider | null
+  aiProcessedAt?: Date | string | null
+  aiError?: string | null
   scrapedAt?: Date | string
 }
 
@@ -294,6 +372,12 @@ export type ScrapedNewsArticleUncheckedCreateInput = {
   content?: string | null
   imageUrl?: string | null
   sourcePublishedAt?: Date | string | null
+  aiTitle?: string | null
+  aiSummary?: string | null
+  aiContent?: string | null
+  aiProvider?: $Enums.AiProvider | null
+  aiProcessedAt?: Date | string | null
+  aiError?: string | null
   scrapedAt?: Date | string
 }
 
@@ -306,6 +390,12 @@ export type ScrapedNewsArticleUpdateInput = {
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourcePublishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiProvider?: Prisma.NullableEnumAiProviderFieldUpdateOperationsInput | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scrapedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -318,6 +408,12 @@ export type ScrapedNewsArticleUncheckedUpdateInput = {
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourcePublishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiProvider?: Prisma.NullableEnumAiProviderFieldUpdateOperationsInput | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scrapedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -330,6 +426,12 @@ export type ScrapedNewsArticleCreateManyInput = {
   content?: string | null
   imageUrl?: string | null
   sourcePublishedAt?: Date | string | null
+  aiTitle?: string | null
+  aiSummary?: string | null
+  aiContent?: string | null
+  aiProvider?: $Enums.AiProvider | null
+  aiProcessedAt?: Date | string | null
+  aiError?: string | null
   scrapedAt?: Date | string
 }
 
@@ -342,6 +444,12 @@ export type ScrapedNewsArticleUpdateManyMutationInput = {
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourcePublishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiProvider?: Prisma.NullableEnumAiProviderFieldUpdateOperationsInput | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scrapedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -354,6 +462,12 @@ export type ScrapedNewsArticleUncheckedUpdateManyInput = {
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourcePublishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiProvider?: Prisma.NullableEnumAiProviderFieldUpdateOperationsInput | $Enums.AiProvider | null
+  aiProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scrapedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -366,6 +480,12 @@ export type ScrapedNewsArticleCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourcePublishedAt?: Prisma.SortOrder
+  aiTitle?: Prisma.SortOrder
+  aiSummary?: Prisma.SortOrder
+  aiContent?: Prisma.SortOrder
+  aiProvider?: Prisma.SortOrder
+  aiProcessedAt?: Prisma.SortOrder
+  aiError?: Prisma.SortOrder
   scrapedAt?: Prisma.SortOrder
 }
 
@@ -378,6 +498,12 @@ export type ScrapedNewsArticleMaxOrderByAggregateInput = {
   content?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourcePublishedAt?: Prisma.SortOrder
+  aiTitle?: Prisma.SortOrder
+  aiSummary?: Prisma.SortOrder
+  aiContent?: Prisma.SortOrder
+  aiProvider?: Prisma.SortOrder
+  aiProcessedAt?: Prisma.SortOrder
+  aiError?: Prisma.SortOrder
   scrapedAt?: Prisma.SortOrder
 }
 
@@ -390,7 +516,17 @@ export type ScrapedNewsArticleMinOrderByAggregateInput = {
   content?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   sourcePublishedAt?: Prisma.SortOrder
+  aiTitle?: Prisma.SortOrder
+  aiSummary?: Prisma.SortOrder
+  aiContent?: Prisma.SortOrder
+  aiProvider?: Prisma.SortOrder
+  aiProcessedAt?: Prisma.SortOrder
+  aiError?: Prisma.SortOrder
   scrapedAt?: Prisma.SortOrder
+}
+
+export type NullableEnumAiProviderFieldUpdateOperationsInput = {
+  set?: $Enums.AiProvider | null
 }
 
 
@@ -404,6 +540,12 @@ export type ScrapedNewsArticleSelect<ExtArgs extends runtime.Types.Extensions.In
   content?: boolean
   imageUrl?: boolean
   sourcePublishedAt?: boolean
+  aiTitle?: boolean
+  aiSummary?: boolean
+  aiContent?: boolean
+  aiProvider?: boolean
+  aiProcessedAt?: boolean
+  aiError?: boolean
   scrapedAt?: boolean
 }, ExtArgs["result"]["scrapedNewsArticle"]>
 
@@ -416,6 +558,12 @@ export type ScrapedNewsArticleSelectCreateManyAndReturn<ExtArgs extends runtime.
   content?: boolean
   imageUrl?: boolean
   sourcePublishedAt?: boolean
+  aiTitle?: boolean
+  aiSummary?: boolean
+  aiContent?: boolean
+  aiProvider?: boolean
+  aiProcessedAt?: boolean
+  aiError?: boolean
   scrapedAt?: boolean
 }, ExtArgs["result"]["scrapedNewsArticle"]>
 
@@ -428,6 +576,12 @@ export type ScrapedNewsArticleSelectUpdateManyAndReturn<ExtArgs extends runtime.
   content?: boolean
   imageUrl?: boolean
   sourcePublishedAt?: boolean
+  aiTitle?: boolean
+  aiSummary?: boolean
+  aiContent?: boolean
+  aiProvider?: boolean
+  aiProcessedAt?: boolean
+  aiError?: boolean
   scrapedAt?: boolean
 }, ExtArgs["result"]["scrapedNewsArticle"]>
 
@@ -440,10 +594,16 @@ export type ScrapedNewsArticleSelectScalar = {
   content?: boolean
   imageUrl?: boolean
   sourcePublishedAt?: boolean
+  aiTitle?: boolean
+  aiSummary?: boolean
+  aiContent?: boolean
+  aiProvider?: boolean
+  aiProcessedAt?: boolean
+  aiError?: boolean
   scrapedAt?: boolean
 }
 
-export type ScrapedNewsArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceName" | "sourceUrl" | "title" | "excerpt" | "content" | "imageUrl" | "sourcePublishedAt" | "scrapedAt", ExtArgs["result"]["scrapedNewsArticle"]>
+export type ScrapedNewsArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceName" | "sourceUrl" | "title" | "excerpt" | "content" | "imageUrl" | "sourcePublishedAt" | "aiTitle" | "aiSummary" | "aiContent" | "aiProvider" | "aiProcessedAt" | "aiError" | "scrapedAt", ExtArgs["result"]["scrapedNewsArticle"]>
 
 export type $ScrapedNewsArticlePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ScrapedNewsArticle"
@@ -457,6 +617,12 @@ export type $ScrapedNewsArticlePayload<ExtArgs extends runtime.Types.Extensions.
     content: string | null
     imageUrl: string | null
     sourcePublishedAt: Date | null
+    aiTitle: string | null
+    aiSummary: string | null
+    aiContent: string | null
+    aiProvider: $Enums.AiProvider | null
+    aiProcessedAt: Date | null
+    aiError: string | null
     scrapedAt: Date
   }, ExtArgs["result"]["scrapedNewsArticle"]>
   composites: {}
@@ -889,6 +1055,12 @@ export interface ScrapedNewsArticleFieldRefs {
   readonly content: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
   readonly imageUrl: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
   readonly sourcePublishedAt: Prisma.FieldRef<"ScrapedNewsArticle", 'DateTime'>
+  readonly aiTitle: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
+  readonly aiSummary: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
+  readonly aiContent: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
+  readonly aiProvider: Prisma.FieldRef<"ScrapedNewsArticle", 'AiProvider'>
+  readonly aiProcessedAt: Prisma.FieldRef<"ScrapedNewsArticle", 'DateTime'>
+  readonly aiError: Prisma.FieldRef<"ScrapedNewsArticle", 'String'>
   readonly scrapedAt: Prisma.FieldRef<"ScrapedNewsArticle", 'DateTime'>
 }
     

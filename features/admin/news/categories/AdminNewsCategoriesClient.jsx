@@ -72,6 +72,12 @@ export default function AdminNewsCategoriesClient({
   const [statusMessage, setStatusMessage] = useState("");
   const [statusType, setStatusType] = useState("success");
 
+  const [alertModal, setAlertModal] = useState({ isOpen: false, message: "", isError: false });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: "", onConfirm: null });
+
+  const showAlert = (message, isError = true) => setAlertModal({ isOpen: true, message, isError });
+  const showConfirm = (message, onConfirm) => setConfirmModal({ isOpen: true, message, onConfirm });
+
   const safeCategories = Array.isArray(categories)
     ? categories.filter((category) => category?.slug !== "semua")
     : [];
@@ -144,61 +150,63 @@ export default function AdminNewsCategoriesClient({
   }
 
   function handleDeleteCategory(category) {
-    const categoryId = category?.id || "";
+    showConfirm(`Apakah Anda yakin ingin menghapus kategori "${category?.name || "Kategori"}"?`, () => {
+      const categoryId = category?.id || "";
 
-    if (!categoryId) {
-      setStatusType("error");
-      setStatusMessage("ID kategori tidak valid.");
-      return;
-    }
-
-    setDeletingCategoryId(categoryId);
-    setStatusMessage("");
-    setDeleteConfirmation(null);
-
-    startTransition(async () => {
-      const result = await deleteNewsCategoryAction({
-        categoryId,
-        forceDeleteArticles: false,
-      });
-
-      if (result?.needsConfirmation) {
+      if (!categoryId) {
         setStatusType("error");
-        setStatusMessage("");
-        setDeleteConfirmation({
-          categoryId: result?.categoryId || categoryId,
-          categoryName:
-            result?.categoryName || category?.name || "Kategori ini",
-          articleCount: Number(result?.articleCount || 0),
-          message:
-            result?.message ||
-            "Kategori ini masih punya artikel. Konfirmasi untuk menghapus permanen.",
-        });
-        setDeletingCategoryId("");
+        setStatusMessage("ID kategori tidak valid.");
         return;
       }
 
-      if (!result?.ok) {
-        setStatusType("error");
+      setDeletingCategoryId(categoryId);
+      setStatusMessage("");
+      setDeleteConfirmation(null);
+
+      startTransition(async () => {
+        const result = await deleteNewsCategoryAction({
+          categoryId,
+          forceDeleteArticles: false,
+        });
+
+        if (result?.needsConfirmation) {
+          setStatusType("error");
+          setStatusMessage("");
+          setDeleteConfirmation({
+            categoryId: result?.categoryId || categoryId,
+            categoryName:
+              result?.categoryName || category?.name || "Kategori ini",
+            articleCount: Number(result?.articleCount || 0),
+            message:
+              result?.message ||
+              "Kategori ini masih punya artikel. Konfirmasi untuk menghapus permanen.",
+          });
+          setDeletingCategoryId("");
+          return;
+        }
+
+        if (!result?.ok) {
+          setStatusType("error");
+          setStatusMessage(
+            result?.message || "Kategori gagal dihapus dari database."
+          );
+          setDeletingCategoryId("");
+          return;
+        }
+
+        if (editingCategoryId === categoryId) {
+          setEditingCategoryId("");
+          setForm(initialForm);
+        }
+
+        setStatusType("success");
         setStatusMessage(
-          result?.message || "Kategori gagal dihapus dari database."
+          result?.message || "Kategori berhasil dihapus dari database."
         );
         setDeletingCategoryId("");
-        return;
-      }
 
-      if (editingCategoryId === categoryId) {
-        setEditingCategoryId("");
-        setForm(initialForm);
-      }
-
-      setStatusType("success");
-      setStatusMessage(
-        result?.message || "Kategori berhasil dihapus dari database."
-      );
-      setDeletingCategoryId("");
-
-      router.refresh();
+        router.refresh();
+      });
     });
   }
 
@@ -543,6 +551,55 @@ export default function AdminNewsCategoriesClient({
           </div>
         </div>
       ) : null}
+
+      {/* Alert Modal */}
+      {alertModal.isOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
+              {alertModal.isError ? '❌' : '✅'}
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Berhasil'}</h3>
+            <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
+            <button 
+              onClick={() => setAlertModal({ isOpen: false, message: "", isError: false })}
+              className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-400 mb-4">
+              ❓
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Aksi</h3>
+            <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setConfirmModal({ isOpen: false, message: "", onConfirm: null })}
+                className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  if (confirmModal.onConfirm) confirmModal.onConfirm();
+                  setConfirmModal({ isOpen: false, message: "", onConfirm: null });
+                }}
+                className="flex-1 rounded-xl bg-cyan-500/20 border border-cyan-500/30 px-4 py-3 text-sm font-bold text-cyan-400 hover:bg-cyan-500/30 transition-colors"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

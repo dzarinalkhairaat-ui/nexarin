@@ -285,11 +285,11 @@ export default function Header({ showSearch = false }) {
 
       <div
         className={`grid transition-all duration-300 ease-out lg:hidden ${
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
         }`}
       >
         <div className="overflow-hidden">
-          {isOpen && <MenuPanel navigation={navigation} onClose={closeMenu} />}
+          <MenuPanel navigation={navigation} onClose={closeMenu} />
         </div>
       </div>
     </header>

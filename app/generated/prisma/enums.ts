@@ -35,3 +35,11 @@ export const NewsSourceType = {
 } as const
 
 export type NewsSourceType = (typeof NewsSourceType)[keyof typeof NewsSourceType]
+
+
+export const AiProvider = {
+  GEMINI: 'GEMINI',
+  GROQ: 'GROQ'
+} as const
+
+export type AiProvider = (typeof AiProvider)[keyof typeof AiProvider]

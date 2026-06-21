@@ -418,6 +418,12 @@ export default function AdminNewsWriteClient({
   const [imageMeta, setImageMeta] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
 
+  const [alertModal, setAlertModal] = useState({ isOpen: false, message: "", isError: false });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: "", onConfirm: null });
+
+  const showAlert = (message, isError = true) => setAlertModal({ isOpen: true, message, isError });
+  const showConfirm = (message, onConfirm) => setConfirmModal({ isOpen: true, message, onConfirm });
+
   const isFormBusy = isPending || isUploadingImage || isDeletingImage;
 
   function updateField(field, value) {
@@ -458,79 +464,81 @@ export default function AdminNewsWriteClient({
   }
 
   async function handleClearCoverImage() {
-    const previousCoverImageUrl = form.coverImageUrl;
-    const nextForm = {
-      ...form,
-      coverImageUrl: "",
-    };
+    showConfirm("Apakah Anda yakin ingin menghapus gambar cover ini?", async () => {
+      const previousCoverImageUrl = form.coverImageUrl;
+      const nextForm = {
+        ...form,
+        coverImageUrl: "",
+      };
 
-    setForm(nextForm);
-    setImageMeta(null);
-    setSelectedImageFile(null);
+      setForm(nextForm);
+      setImageMeta(null);
+      setSelectedImageFile(null);
 
-    if (previousCoverImageUrl && previousCoverImageUrl.startsWith("blob:")) {
-      setStatusType("success");
-      setStatusMessage("Gambar pilihan dibatalkan.");
-      return;
-    }
+      if (previousCoverImageUrl && previousCoverImageUrl.startsWith("blob:")) {
+        setStatusType("success");
+        setStatusMessage("Gambar pilihan dibatalkan.");
+        return;
+      }
 
-    if (!previousCoverImageUrl) {
-      setStatusType("success");
-      setStatusMessage("Gambar sudah kosong.");
-      return;
-    }
+      if (!previousCoverImageUrl) {
+        setStatusType("success");
+        setStatusMessage("Gambar sudah kosong.");
+        return;
+      }
 
-    if (!isEditMode) {
-      const deleteResult = await deleteNewsCoverImageAction(previousCoverImageUrl);
+      if (!isEditMode) {
+        const deleteResult = await deleteNewsCoverImageAction(previousCoverImageUrl);
 
-      setStatusType(deleteResult?.ok ? "success" : "error");
-      setStatusMessage(
-        deleteResult?.message ||
-        "Gambar dihapus dari form. Simpan artikel jika ingin menyimpan perubahan."
-      );
-      return;
-    }
-
-    setIsDeletingImage(true);
-    setStatusType("success");
-    setStatusMessage("Menghapus gambar dari database dan storage...");
-
-    try {
-      const updateResult = await updateNewsArticleAction(nextForm);
-
-      if (!updateResult?.ok) {
-        setForm(form);
-        setStatusType("error");
+        setStatusType(deleteResult?.ok ? "success" : "error");
         setStatusMessage(
-          updateResult?.message ||
-          "Gambar gagal dihapus dari database. Coba lagi."
+          deleteResult?.message ||
+          "Gambar dihapus dari form. Simpan artikel jika ingin menyimpan perubahan."
         );
         return;
       }
 
-      const deleteResult = await deleteNewsCoverImageAction(
-        previousCoverImageUrl
-      );
+      setIsDeletingImage(true);
+      setStatusType("success");
+      setStatusMessage("Menghapus gambar dari database dan storage...");
 
-      setStatusType(deleteResult?.ok ? "success" : "error");
-      setStatusMessage(
-        deleteResult?.ok
-          ? "Gambar berhasil dihapus dari database dan storage."
-          : "Database sudah dikosongkan, tapi file storage gagal dihapus. Cek Supabase Storage."
-      );
+      try {
+        const updateResult = await updateNewsArticleAction(nextForm);
 
-      router.refresh();
-    } catch (error) {
-      console.error("Gagal menghapus gambar artikel:", error);
+        if (!updateResult?.ok) {
+          setForm(form);
+          setStatusType("error");
+          setStatusMessage(
+            updateResult?.message ||
+            "Gambar gagal dihapus dari database. Coba lagi."
+          );
+          return;
+        }
 
-      setForm(form);
-      setStatusType("error");
-      setStatusMessage(
-        error?.message || "Gambar gagal dihapus. Cek database dan coba lagi."
-      );
-    } finally {
-      setIsDeletingImage(false);
-    }
+        const deleteResult = await deleteNewsCoverImageAction(
+          previousCoverImageUrl
+        );
+
+        setStatusType(deleteResult?.ok ? "success" : "error");
+        setStatusMessage(
+          deleteResult?.ok
+            ? "Gambar berhasil dihapus dari database dan storage."
+            : "Database sudah dikosongkan, tapi file storage gagal dihapus. Cek Supabase Storage."
+        );
+
+        router.refresh();
+      } catch (error) {
+        console.error("Gagal menghapus gambar artikel:", error);
+
+        setForm(form);
+        setStatusType("error");
+        setStatusMessage(
+          error?.message || "Gambar gagal dihapus. Cek database dan coba lagi."
+        );
+      } finally {
+        setIsDeletingImage(false);
+      }
+    });
   }
 
   function handleSubmit(event) {
@@ -639,11 +647,13 @@ export default function AdminNewsWriteClient({
   }
 
   function handleReset() {
-    setForm(createInitialForm(defaultCategorySlug, initialArticle));
-    setImageMeta(null);
-    setSelectedImageFile(null);
-    setStatusMessage("");
-    setStatusType("success");
+    showConfirm(isEditMode ? "Apakah Anda yakin ingin membatalkan perubahan dan mereset form?" : "Apakah Anda yakin ingin mengosongkan form?", () => {
+      setForm(createInitialForm(defaultCategorySlug, initialArticle));
+      setImageMeta(null);
+      setSelectedImageFile(null);
+      setStatusMessage("");
+      setStatusType("success");
+    });
   }
 
   return (
@@ -1064,6 +1074,55 @@ export default function AdminNewsWriteClient({
           </form>
         </div>
       </section>
+
+      {/* Alert Modal */}
+      {alertModal.isOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
+              {alertModal.isError ? '❌' : '✅'}
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Berhasil'}</h3>
+            <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
+            <button 
+              onClick={() => setAlertModal({ isOpen: false, message: "", isError: false })}
+              className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-400 mb-4">
+              ❓
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Aksi</h3>
+            <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setConfirmModal({ isOpen: false, message: "", onConfirm: null })}
+                className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  if (confirmModal.onConfirm) confirmModal.onConfirm();
+                  setConfirmModal({ isOpen: false, message: "", onConfirm: null });
+                }}
+                className="flex-1 rounded-xl bg-cyan-500/20 border border-cyan-500/30 px-4 py-3 text-sm font-bold text-cyan-400 hover:bg-cyan-500/30 transition-colors"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

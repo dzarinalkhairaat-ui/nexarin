@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/features/admin/admin.helpers";
 import crypto from "crypto";
 import { runScraperTask } from "./scraper";
+import { executeWithRotatedKey } from "@/lib/ai/aiKeyRuntime";
 
 export async function runManualScraper(targetUrl) {
   const adminSession = await requireAdminSession();
@@ -106,10 +107,10 @@ export async function pickScrapedNews(id) {
       // Simpan ke NewsArticle utama sebagai DRAFT
       await tx.newsArticle.create({
         data: {
-          title: scrapedArticle.title,
+          title: scrapedArticle.aiTitle || scrapedArticle.title,
           slug: uniqueSlug,
-          summary: scrapedArticle.excerpt || "Ringkasan belum tersedia",
-          content: scrapedArticle.content || "",
+          summary: scrapedArticle.aiSummary || scrapedArticle.excerpt || "Ringkasan belum tersedia",
+          content: scrapedArticle.aiContent || scrapedArticle.content || "",
           status: "DRAFT",
           coverImageUrl: scrapedArticle.imageUrl,
           coverImageProvider: scrapedArticle.imageUrl ? "EXTERNAL" : null,
@@ -253,10 +254,10 @@ export async function pickMultipleScrapedNews(ids) {
 
         await tx.newsArticle.create({
           data: {
-            title: scraped.title,
+            title: scraped.aiTitle || scraped.title,
             slug: finalSlug,
-            summary: scraped.excerpt || "Ringkasan belum tersedia",
-            content: scraped.content || "",
+            summary: scraped.aiSummary || scraped.excerpt || "Ringkasan belum tersedia",
+            content: scraped.aiContent || scraped.content || "",
             status: "DRAFT",
             coverImageUrl: scraped.imageUrl,
             coverImageProvider: scraped.imageUrl ? "EXTERNAL" : null,
@@ -279,5 +280,100 @@ export async function pickMultipleScrapedNews(ids) {
   } catch (error) {
     console.error("Gagal pick multiple:", error);
     return { ok: false, message: error.message || "Gagal memindah kandidat berita." };
+  }
+}
+
+export async function applyAiPolishToScrapedNews(id) {
+  const adminSession = await requireAdminSession();
+  if (!adminSession.ok) return { ok: false, message: "Akses ditolak." };
+
+  try {
+    const article = await prisma.scrapedNewsArticle.findUnique({ where: { id } });
+    if (!article) return { ok: false, message: "Artikel tidak ditemukan." };
+
+    const prompt = `Anda adalah seorang jurnalis senior dan editor profesional dari media berita terkemuka. Tugas Anda adalah mengembangkan dan menulis ulang artikel berita berikut menjadi sangat komprehensif, panjang, detail, dan mendalam. 
+Gunakan bahasa jurnalistik tingkat tinggi yang profesional, mengalir, dan memikat pembaca. 
+Eksplorasi setiap fakta secara mendetail, berikan konteks tambahan yang relevan dan logis jika diperlukan, serta susun alur cerita berita secara runtut dari awal hingga akhir. Jangan menghilangkan fakta penting.
+Berikan output dalam format JSON murni dengan key:
+- "title" (judul berita click-worthy, profesional, dan kuat)
+- "summary" (ringkasan inti berita 2-4 kalimat)
+- "content" (Isi artikel berita yang PANJANG dan MENDETAIL (minimal 7-10 paragraf). JANGAN GUNAKAN TAG HTML SAMA SEKALI. Gunakan format plain text biasa, dan gunakan karakter newline/enter ganda (\\n\\n) murni untuk memisahkan antar paragraf agar sangat rapi untuk dibaca).
+
+Judul Asli: ${article.title}
+Kutipan Asli: ${article.excerpt || ""}
+Konten Asli: ${article.content || ""}`;
+
+    const executorFn = async (plainKey, provider) => {
+      if (provider === "GEMINI") {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${plainKey}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: "application/json" }
+          })
+        });
+        
+        if (!res.ok) {
+          const error = new Error("Gemini API Error");
+          error.status = res.status;
+          throw error;
+        }
+        
+        const data = await res.json();
+        return { provider: "GEMINI", result: JSON.parse(data.candidates[0].content.parts[0].text) };
+      } 
+      else if (provider === "GROQ") {
+        const res = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${plainKey}`
+          },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [{ role: "user", content: prompt }],
+            response_format: { type: "json_object" }
+          })
+        });
+        
+        if (!res.ok) {
+          const error = new Error("Groq API Error");
+          error.status = res.status;
+          throw error;
+        }
+        
+        const data = await res.json();
+        return { provider: "GROQ", result: JSON.parse(data.choices[0].message.content) };
+      }
+    };
+
+    const { provider, result } = await executeWithRotatedKey(executorFn);
+
+    if (!result.title || !result.content) {
+      throw new Error("Hasil AI tidak memiliki format JSON yang benar (hilang title/content).");
+    }
+
+    await prisma.scrapedNewsArticle.update({
+      where: { id },
+      data: {
+        aiTitle: result.title,
+        aiSummary: result.summary,
+        aiContent: result.content,
+        aiProvider: provider,
+        aiProcessedAt: new Date(),
+        aiError: null
+      }
+    });
+
+    revalidatePath("/admin/scraping-news");
+    return { ok: true, message: "Artikel berhasil dipoles menggunakan " + provider };
+  } catch (error) {
+    console.error("Gagal AI Polish:", error);
+    await prisma.scrapedNewsArticle.update({
+      where: { id },
+      data: { aiError: error.message }
+    });
+    return { ok: false, message: error.message || "Gagal memoles artikel dengan AI." };
   }
 }

@@ -8,7 +8,8 @@ import {
   runManualScraper, 
   clearScraperLogs,
   deleteMultipleScrapedNews,
-  pickMultipleScrapedNews 
+  pickMultipleScrapedNews,
+  applyAiPolishToScrapedNews
 } from "./scraping.actions";
 import { useRouter } from "next/navigation";
 
@@ -72,6 +73,14 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
   const [isPending, startTransition] = useTransition();
   const [loadingId, setLoadingId] = useState(null);
   
+  // Custom Modal States
+  const [alertModal, setAlertModal] = useState({ isOpen: false, message: "", isError: false });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, message: "", onConfirm: null });
+  const [aiProgress, setAiProgress] = useState({});
+
+  const showAlert = (message, isError = true) => setAlertModal({ isOpen: true, message, isError });
+  const showConfirm = (message, onConfirm) => setConfirmModal({ isOpen: true, message, onConfirm });
+  
   // Scraper State
   const [isScraping, setIsScraping] = useState(false);
   const [scrapeProgress, setScrapeProgress] = useState(0);
@@ -82,20 +91,21 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
   const [selectedCategory, setSelectedCategory] = useState("Tekno");
   
   const targetUrl = RSS_SOURCES[selectedProvider]?.[selectedCategory] || null;
+  const activePolishId = typeof loadingId === 'string' && loadingId.startsWith('ai-') ? loadingId.replace('ai-', '') : null;
+  const activePolishNews = activePolishId ? initialData.find(n => n.id === activePolishId) : null;
   
   // Bulk Selection State
   const [selectedIds, setSelectedIds] = useState([]);
 
   const handleRunScraper = async () => {
-    if (!targetUrl) return alert("URL Sumber RSS tidak tersedia untuk kategori ini.");
+    if (!targetUrl) return showAlert("URL Sumber RSS tidak tersedia untuk kategori ini.");
     
     setIsScraping(true);
     setScrapeProgress(0);
     
-    // Simulasi progress bar pintar
     const interval = setInterval(() => {
       setScrapeProgress((prev) => {
-        if (prev >= 90) return 90; // Tertahan di 90% sampai fetch selesai
+        if (prev >= 90) return 90;
         return prev + Math.floor(Math.random() * 10) + 5;
       });
     }, 600);
@@ -103,70 +113,94 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
     const result = await runManualScraper(targetUrl);
     
     clearInterval(interval);
-    setScrapeProgress(100); // Meloncat ke 100% setelah selesai
+    setScrapeProgress(100);
     
     setTimeout(() => {
       setIsScraping(false);
       setScrapeProgress(0);
       
       if (result.ok) {
-        alert(result.message);
+        showAlert(result.message, false);
         startTransition(() => {
           router.refresh();
         });
       } else {
-        alert("Gagal menjalankan scraper: " + result.message);
+        showAlert("Gagal menjalankan scraper: " + result.message);
       }
-    }, 500); // Jeda sebentar agar user sempat melihat tulisan 100%
+    }, 500);
   };
 
   const handleClearLogs = async () => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh log? Data ini tidak dapat dikembalikan.")) return;
-    
-    setIsClearing(true);
-    const result = await clearScraperLogs();
-    setIsClearing(false);
+    showConfirm("Apakah Anda yakin ingin menghapus seluruh log? Data ini tidak dapat dikembalikan.", async () => {
+      setIsClearing(true);
+      const result = await clearScraperLogs();
+      setIsClearing(false);
 
-    if (result.ok) {
-      startTransition(() => {
-        router.refresh();
-      });
-    } else {
-      alert(result.message);
-    }
+      if (result.ok) {
+        startTransition(() => router.refresh());
+      } else {
+        showAlert(result.message);
+      }
+    });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus kandidat berita ini?")) return;
-    
-    setLoadingId(id);
-    const result = await deleteScrapedNews(id);
-    
-    if (result.ok) {
-      startTransition(() => {
-        router.refresh();
-      });
-    } else {
-      alert(result.message);
-    }
-    setLoadingId(null);
+    showConfirm("Apakah Anda yakin ingin menghapus kandidat berita ini?", async () => {
+      setLoadingId(id);
+      const result = await deleteScrapedNews(id);
+      
+      if (result.ok) {
+        startTransition(() => router.refresh());
+      } else {
+        showAlert(result.message);
+      }
+      setLoadingId(null);
+    });
   };
 
   const handlePick = async (id) => {
-    if (!window.confirm("Pindahkan berita ini ke Draf Artikel Utama?")) return;
+    showConfirm("Pindahkan berita ini ke Draf Artikel Utama?", async () => {
+      setLoadingId(id);
+      const result = await pickScrapedNews(id);
+      
+      if (result.ok) {
+        showAlert("Berhasil dipindahkan ke Draf!", false);
+        startTransition(() => router.refresh());
+      } else {
+        showAlert(result.message);
+      }
+      setLoadingId(null);
+    });
+  };
 
-    setLoadingId(id);
-    const result = await pickScrapedNews(id);
-    
-    if (result.ok) {
-      alert("Berhasil dipindahkan ke Draf!");
-      startTransition(() => {
-        router.refresh();
-      });
-    } else {
-      alert(result.message);
-    }
-    setLoadingId(null);
+  const handleAiPolish = async (id) => {
+    showConfirm("Mulai memoles artikel ini dengan AI? Proses mungkin memakan waktu beberapa detik.", async () => {
+      setLoadingId(`ai-${id}`);
+      setAiProgress(prev => ({ ...prev, [id]: 0 }));
+      
+      const interval = setInterval(() => {
+        setAiProgress(prev => {
+          const current = prev[id] || 0;
+          if (current >= 95) return prev;
+          return { ...prev, [id]: current + Math.floor(Math.random() * 5) + 2 };
+        });
+      }, 500);
+
+      const result = await applyAiPolishToScrapedNews(id);
+      
+      clearInterval(interval);
+      setAiProgress(prev => ({ ...prev, [id]: 100 }));
+      
+      setTimeout(() => {
+        if (result.ok) {
+          showAlert(result.message, false);
+          startTransition(() => router.refresh());
+        } else {
+          showAlert(result.message);
+        }
+        setLoadingId(null);
+      }, 500);
+    });
   };
 
   const handleToggleSelect = (id) => {
@@ -184,26 +218,28 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
   };
 
   const handleBulkDelete = async () => {
-    if (!window.confirm(`Hapus ${selectedIds.length} berita terpilih?`)) return;
-    setLoadingId("bulk");
-    const result = await deleteMultipleScrapedNews(selectedIds);
-    setLoadingId(null);
-    if (result.ok) {
-      setSelectedIds([]);
-      startTransition(() => router.refresh());
-    } else alert(result.message);
+    showConfirm(`Hapus ${selectedIds.length} berita terpilih?`, async () => {
+      setLoadingId("bulk");
+      const result = await deleteMultipleScrapedNews(selectedIds);
+      setLoadingId(null);
+      if (result.ok) {
+        setSelectedIds([]);
+        startTransition(() => router.refresh());
+      } else showAlert(result.message);
+    });
   };
 
   const handleBulkPick = async () => {
-    if (!window.confirm(`Pindah ${selectedIds.length} berita terpilih ke Draf?`)) return;
-    setLoadingId("bulk");
-    const result = await pickMultipleScrapedNews(selectedIds);
-    setLoadingId(null);
-    if (result.ok) {
-      alert(result.message);
-      setSelectedIds([]);
-      startTransition(() => router.refresh());
-    } else alert(result.message);
+    showConfirm(`Pindah ${selectedIds.length} berita terpilih ke Draf?`, async () => {
+      setLoadingId("bulk");
+      const result = await pickMultipleScrapedNews(selectedIds);
+      setLoadingId(null);
+      if (result.ok) {
+        showAlert(result.message, false);
+        setSelectedIds([]);
+        startTransition(() => router.refresh());
+      } else showAlert(result.message);
+    });
   };
 
   return (
@@ -354,7 +390,7 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                       </tr>
                     ) : (
                       initialData.map((news) => (
-                        <tr key={news.id} className={`transition-colors hover:bg-white/[0.02] ${loadingId === news.id ? "opacity-50 pointer-events-none" : ""}`}>
+                        <tr key={news.id} className={`transition-colors hover:bg-white/[0.02] ${loadingId === news.id || loadingId === `ai-${news.id}` ? "opacity-50 pointer-events-none" : ""}`}>
                           <td className="p-5 text-center">
                             <input 
                               type="checkbox" 
@@ -394,13 +430,23 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                             </div>
                           </td>
                           <td className="p-5 min-w-[300px] align-top">
-                            <p className="font-bold text-white text-base mb-1">{news.title}</p>
-                            <p className="text-slate-400 text-xs leading-relaxed mb-3">{news.excerpt}</p>
+                            {news.aiProcessedAt ? (
+                              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+                                ✨ Dipoles AI ({news.aiProvider})
+                              </div>
+                            ) : news.aiError ? (
+                              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-red-400/20 bg-red-400/10 px-2.5 py-1 text-[10px] font-bold text-red-400">
+                                ⚠️ Gagal AI: {news.aiError.slice(0, 30)}...
+                              </div>
+                            ) : null}
                             
-                            {news.content && (
+                            <p className="font-bold text-white text-base mb-1">{news.aiTitle || news.title}</p>
+                            <p className="text-slate-400 text-xs leading-relaxed mb-3">{news.aiSummary || news.excerpt}</p>
+                            
+                            {(news.aiContent || news.content) && (
                               <details className="text-xs text-slate-400 mb-3 bg-black/30 p-3 rounded-lg border border-white/5">
                                 <summary className="cursor-pointer text-emerald-400 font-bold mb-2">Lihat Isi Artikel Draf</summary>
-                                <div className="prose prose-invert prose-sm max-w-none line-clamp-6 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: news.content }} />
+                                <div className="prose prose-invert prose-sm max-w-none line-clamp-6 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: news.aiContent || news.content }} />
                               </details>
                             )}
                             
@@ -414,21 +460,33 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                             </a>
                           </td>
                           <td className="p-5 whitespace-nowrap text-right align-top">
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                onClick={() => handleDelete(news.id)}
-                                disabled={loadingId === news.id || loadingId === "bulk"}
-                                className="inline-flex items-center px-4 py-2 border border-red-400/20 bg-red-400/10 text-red-400 hover:bg-red-400/20 rounded-xl text-xs font-black uppercase tracking-wider transition-colors disabled:opacity-50"
-                              >
-                                Hapus
-                              </button>
-                              <button
-                                onClick={() => handlePick(news.id)}
-                                disabled={loadingId === news.id || loadingId === "bulk"}
-                                className="inline-flex items-center px-4 py-2 border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20 rounded-xl text-xs font-black uppercase tracking-wider transition-colors shadow-lg shadow-emerald-400/5 disabled:opacity-50"
-                              >
-                                Pilih
-                              </button>
+                            <div className="flex flex-col items-end gap-2">
+                              {!news.aiProcessedAt && (
+                                <button
+                                  onClick={() => handleAiPolish(news.id)}
+                                  disabled={loadingId === `ai-${news.id}` || loadingId === "bulk"}
+                                  className="inline-flex items-center px-4 py-2 border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/20 rounded-xl text-xs font-black tracking-wider transition-colors w-full justify-center disabled:opacity-50"
+                                >
+                                  ✨ Poles AI
+                                </button>
+                              )}
+                              
+                              <div className="flex gap-2 w-full justify-end">
+                                <button
+                                  onClick={() => handleDelete(news.id)}
+                                  disabled={loadingId === news.id || loadingId === "bulk"}
+                                  className="inline-flex flex-1 items-center justify-center px-3 py-2 border border-red-400/20 bg-red-400/10 text-red-400 hover:bg-red-400/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors disabled:opacity-50"
+                                >
+                                  Hapus
+                                </button>
+                                <button
+                                  onClick={() => handlePick(news.id)}
+                                  disabled={loadingId === news.id || loadingId === "bulk"}
+                                  className="inline-flex flex-1 items-center justify-center px-3 py-2 border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors disabled:opacity-50"
+                                >
+                                  Pilih
+                                </button>
+                              </div>
                             </div>
                           </td>
                         </tr>
@@ -481,8 +539,6 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
             </div>
           </div>
         </section>
-      </main>
-
       {/* MODAL PROGRESS BAR */}
       {isScraping && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-5">
@@ -510,12 +566,89 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
         </div>
       )}
 
+      {/* MODAL AI POLISH PROGRESS */}
+      {activePolishNews && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-5">
+          <div className="bg-slate-900 border border-white/10 rounded-[28px] p-8 max-w-md w-full shadow-2xl flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-2xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mb-6 animate-pulse">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-black text-white mb-2">Memoles Artikel dengan AI...</h3>
+            <p className="text-sm text-slate-400 mb-8 line-clamp-2">
+              Mengirim artikel <strong>"{activePolishNews.title}"</strong> ke server AI. Mohon tunggu sebentar.
+            </p>
+            
+            <div className="w-full bg-slate-800 rounded-full h-4 mb-2 overflow-hidden border border-white/5 relative">
+              <div 
+                className="bg-cyan-400 h-4 rounded-full transition-all duration-300 ease-out" 
+                style={{ width: `${aiProgress[activePolishId] || 0}%` }}
+              ></div>
+              <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
+            </div>
+            
+            <p className="text-sm font-black text-cyan-400">{aiProgress[activePolishId] || 0}%</p>
+          </div>
+        </div>
+      )}
+
       <style jsx global>{`
         @keyframes shimmer {
           100% { transform: translateX(100%); }
           0% { transform: translateX(-100%); }
         }
       `}</style>
+      {/* Alert Modal */}
+      {alertModal.isOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
+              {alertModal.isError ? '❌' : '✅'}
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">{alertModal.isError ? 'Terjadi Kesalahan' : 'Berhasil'}</h3>
+            <p className="text-sm text-slate-400 mb-6">{alertModal.message}</p>
+            <button 
+              onClick={() => setAlertModal({ isOpen: false, message: "", isError: false })}
+              className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-400 mb-4">
+              ❓
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2">Konfirmasi Aksi</h3>
+            <p className="text-sm text-slate-400 mb-8 leading-relaxed">{confirmModal.message}</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setConfirmModal({ isOpen: false, message: "", onConfirm: null })}
+                className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white hover:bg-white/10 transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  if (confirmModal.onConfirm) confirmModal.onConfirm();
+                  setConfirmModal({ isOpen: false, message: "", onConfirm: null });
+                }}
+                className="flex-1 rounded-xl bg-cyan-500/20 border border-cyan-500/30 px-4 py-3 text-sm font-bold text-cyan-400 hover:bg-cyan-500/30 transition-colors"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </main>
     </>
   );
 }

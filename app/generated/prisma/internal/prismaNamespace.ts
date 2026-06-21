@@ -387,6 +387,8 @@ export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
   AdminOtpChallenge: 'AdminOtpChallenge',
+  AiApiAccount: 'AiApiAccount',
+  AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog'
 } as const
@@ -404,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "scrapedNewsArticle" | "scraperLog"
+    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -627,6 +629,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AdminOtpChallengeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AdminOtpChallengeCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiApiAccount: {
+      payload: Prisma.$AiApiAccountPayload<ExtArgs>
+      fields: Prisma.AiApiAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiApiAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiApiAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.AiApiAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiApiAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        findMany: {
+          args: Prisma.AiApiAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>[]
+        }
+        create: {
+          args: Prisma.AiApiAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        createMany: {
+          args: Prisma.AiApiAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiApiAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.AiApiAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        update: {
+          args: Prisma.AiApiAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiApiAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiApiAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiApiAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiApiAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.AiApiAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiApiAccount>
+        }
+        groupBy: {
+          args: Prisma.AiApiAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiApiAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiApiAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiApiAccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiApiKey: {
+      payload: Prisma.$AiApiKeyPayload<ExtArgs>
+      fields: Prisma.AiApiKeyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiApiKeyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiApiKeyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        findFirst: {
+          args: Prisma.AiApiKeyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiApiKeyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        findMany: {
+          args: Prisma.AiApiKeyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>[]
+        }
+        create: {
+          args: Prisma.AiApiKeyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        createMany: {
+          args: Prisma.AiApiKeyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiApiKeyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>[]
+        }
+        delete: {
+          args: Prisma.AiApiKeyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        update: {
+          args: Prisma.AiApiKeyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiApiKeyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiApiKeyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiApiKeyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiApiKeyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiApiKeyPayload>
+        }
+        aggregate: {
+          args: Prisma.AiApiKeyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiApiKey>
+        }
+        groupBy: {
+          args: Prisma.AiApiKeyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiApiKeyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiApiKeyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiApiKeyCountAggregateOutputType> | number
         }
       }
     }
@@ -883,6 +1033,32 @@ export const AdminOtpChallengeScalarFieldEnum = {
 export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
 
 
+export const AiApiAccountScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiApiAccountScalarFieldEnum = (typeof AiApiAccountScalarFieldEnum)[keyof typeof AiApiAccountScalarFieldEnum]
+
+
+export const AiApiKeyScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  provider: 'provider',
+  keyCipher: 'keyCipher',
+  keyHash: 'keyHash',
+  keyPreview: 'keyPreview',
+  lastUsedAt: 'lastUsedAt',
+  lastErrorAt: 'lastErrorAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiApiKeyScalarFieldEnum = (typeof AiApiKeyScalarFieldEnum)[keyof typeof AiApiKeyScalarFieldEnum]
+
+
 export const ScrapedNewsArticleScalarFieldEnum = {
   id: 'id',
   sourceName: 'sourceName',
@@ -892,6 +1068,12 @@ export const ScrapedNewsArticleScalarFieldEnum = {
   content: 'content',
   imageUrl: 'imageUrl',
   sourcePublishedAt: 'sourcePublishedAt',
+  aiTitle: 'aiTitle',
+  aiSummary: 'aiSummary',
+  aiContent: 'aiContent',
+  aiProvider: 'aiProvider',
+  aiProcessedAt: 'aiProcessedAt',
+  aiError: 'aiError',
   scrapedAt: 'scrapedAt'
 } as const
 
@@ -1031,6 +1213,20 @@ export type ListEnumNewsSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'AiProvider'
+ */
+export type EnumAiProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'AiProvider[]'
+ */
+export type ListEnumAiProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiProvider[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1156,6 +1352,8 @@ export type GlobalOmitConfig = {
   newsCategory?: Prisma.NewsCategoryOmit
   newsArticle?: Prisma.NewsArticleOmit
   adminOtpChallenge?: Prisma.AdminOtpChallengeOmit
+  aiApiAccount?: Prisma.AiApiAccountOmit
+  aiApiKey?: Prisma.AiApiKeyOmit
   scrapedNewsArticle?: Prisma.ScrapedNewsArticleOmit
   scraperLog?: Prisma.ScraperLogOmit
 }

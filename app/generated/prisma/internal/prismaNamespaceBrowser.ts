@@ -54,6 +54,8 @@ export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
   AdminOtpChallenge: 'AdminOtpChallenge',
+  AiApiAccount: 'AiApiAccount',
+  AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog'
 } as const
@@ -140,6 +142,32 @@ export const AdminOtpChallengeScalarFieldEnum = {
 export type AdminOtpChallengeScalarFieldEnum = (typeof AdminOtpChallengeScalarFieldEnum)[keyof typeof AdminOtpChallengeScalarFieldEnum]
 
 
+export const AiApiAccountScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiApiAccountScalarFieldEnum = (typeof AiApiAccountScalarFieldEnum)[keyof typeof AiApiAccountScalarFieldEnum]
+
+
+export const AiApiKeyScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  provider: 'provider',
+  keyCipher: 'keyCipher',
+  keyHash: 'keyHash',
+  keyPreview: 'keyPreview',
+  lastUsedAt: 'lastUsedAt',
+  lastErrorAt: 'lastErrorAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiApiKeyScalarFieldEnum = (typeof AiApiKeyScalarFieldEnum)[keyof typeof AiApiKeyScalarFieldEnum]
+
+
 export const ScrapedNewsArticleScalarFieldEnum = {
   id: 'id',
   sourceName: 'sourceName',
@@ -149,6 +177,12 @@ export const ScrapedNewsArticleScalarFieldEnum = {
   content: 'content',
   imageUrl: 'imageUrl',
   sourcePublishedAt: 'sourcePublishedAt',
+  aiTitle: 'aiTitle',
+  aiSummary: 'aiSummary',
+  aiContent: 'aiContent',
+  aiProvider: 'aiProvider',
+  aiProcessedAt: 'aiProcessedAt',
+  aiError: 'aiError',
   scrapedAt: 'scrapedAt'
 } as const
 

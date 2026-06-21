@@ -26,6 +26,11 @@ enum NewsSourceType {
   OTHER
 }
 
+enum AiProvider {
+  GEMINI
+  GROQ
+}
+
 model NewsCategory {
   id          String        @id @default(cuid())
   name        String
@@ -114,6 +119,40 @@ model AdminOtpChallenge {
   @@map("admin_otp_challenges")
 }
 
+model AiApiAccount {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  keys      AiApiKey[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("ai_api_accounts")
+}
+
+model AiApiKey {
+  id         String       @id @default(cuid())
+  accountId  String
+  account    AiApiAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  provider   AiProvider
+  keyCipher  String
+  keyHash    String       @unique
+  keyPreview String
+
+  lastUsedAt  DateTime?
+  lastErrorAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId])
+  @@index([provider])
+  @@index([createdAt])
+  @@map("ai_api_keys")
+}
+
 model ScrapedNewsArticle {
   id                String    @id @default(cuid())
   sourceName        String
@@ -124,9 +163,17 @@ model ScrapedNewsArticle {
   imageUrl          String?
   sourcePublishedAt DateTime?
 
+  aiTitle       String?
+  aiSummary     String?
+  aiContent     String?
+  aiProvider    AiProvider?
+  aiProcessedAt DateTime?
+  aiError       String?
+
   scrapedAt DateTime @default(now())
 
   @@index([scrapedAt])
+  @@index([aiProcessedAt])
   @@map("scraped_news_articles")
 }
 

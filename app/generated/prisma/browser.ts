@@ -33,6 +33,16 @@ export type NewsArticle = Prisma.NewsArticleModel
  */
 export type AdminOtpChallenge = Prisma.AdminOtpChallengeModel
 /**
+ * Model AiApiAccount
+ * 
+ */
+export type AiApiAccount = Prisma.AiApiAccountModel
+/**
+ * Model AiApiKey
+ * 
+ */
+export type AiApiKey = Prisma.AiApiKeyModel
+/**
  * Model ScrapedNewsArticle
  * 
  */
