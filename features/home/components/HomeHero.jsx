@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { homeData } from "@/features/home/home.data";
 
+const CheckIcon = ({ className = "h-3 w-3" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+  </svg>
+);
+
 const HERO_DESCRIPTION =
   "Website All-in-One by-rins untuk portal informasi, marketplace digital, dan portfolio.";
 
@@ -47,14 +53,14 @@ export default function HomeHero() {
 
         {/* Feature Tags */}
         <div className="mt-6 flex items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 overflow-hidden">
-          <span className="flex items-center gap-1 whitespace-nowrap">
-            <span className="text-emerald-400">✓</span> Marketplace
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <CheckIcon className="text-emerald-400" /> Marketplace
           </span>
-          <span className="flex items-center gap-1 whitespace-nowrap">
-            <span className="text-emerald-400">✓</span> Portal Info
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <CheckIcon className="text-emerald-400" /> Portal Info
           </span>
-          <span className="flex items-center gap-1 whitespace-nowrap">
-            <span className="text-emerald-400">✓</span> Portfolio
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <CheckIcon className="text-emerald-400" /> Portfolio
           </span>
         </div>
       </div>

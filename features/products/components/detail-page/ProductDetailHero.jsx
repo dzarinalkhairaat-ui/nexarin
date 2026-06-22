@@ -45,7 +45,13 @@ function ProductImage({ product }) {
 
           <div className="flex items-end justify-between gap-3">
             <div className="flex h-16 w-16 items-center justify-center rounded-[24px] border border-white/10 bg-white/[0.065] text-3xl shadow-xl shadow-black/20 backdrop-blur-md">
-              {safeProduct.icon || "✦"}
+              {(() => {
+                const icon = safeProduct.icon || "✦";
+                if (typeof icon === "string" && icon.startsWith("http")) {
+                  return <img src={icon} alt="" aria-hidden="true" className="h-8 w-8 object-contain opacity-90 drop-shadow-[0_0_14px_rgba(52,211,153,0.3)]" loading="lazy" decoding="async" />;
+                }
+                return icon;
+              })()}
             </div>
 
             <img

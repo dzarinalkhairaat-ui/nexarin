@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { homeNewsPreview } from "@/features/home/home.data";
 
+const GlobeNewsIcon = ({ className = "h-6 w-6" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+  </svg>
+);
+
 function TopicChips({ topics }) {
   const safeTopics = Array.isArray(topics) ? topics : [];
 
@@ -40,7 +46,7 @@ function NewsImagePlaceholder({ src, alt }) {
       <div className="relative z-10 flex min-h-32 items-end">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-lime-300">
-            <span>📰</span>
+            <GlobeNewsIcon className="h-4 w-4" />
             <span>Headline Preview</span>
           </p>
 
@@ -112,7 +118,7 @@ export default function HomeNewsPreview({ articles = [] }) {
           <div className="relative max-w-3xl">
             <div className="relative z-10">
               <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-lime-300 shadow-lg shadow-lime-400/10">
-                <span className="text-sm">📰</span>
+                <GlobeNewsIcon className="h-4 w-4" />
                 <span>{data.eyebrow || "News"}</span>
               </p>
 

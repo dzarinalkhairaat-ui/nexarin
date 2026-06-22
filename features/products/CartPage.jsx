@@ -56,7 +56,13 @@ function CartItem({ item, onUpdateQuantity, onRemove }) {
     <div className="group relative flex gap-4 rounded-[28px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/15 transition hover:border-emerald-400/15 sm:p-5">
       {/* Icon / Image */}
       <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] border border-emerald-400/20 bg-emerald-400/10 text-2xl shadow-lg shadow-emerald-400/10 sm:h-20 sm:w-20 sm:text-3xl">
-        {item.icon || "✦"}
+        {(() => {
+          const icon = item.icon || "✦";
+          if (typeof icon === "string" && icon.startsWith("http")) {
+            return <img src={icon} alt="" aria-hidden="true" className="h-6 w-6 object-contain opacity-90 drop-shadow-[0_0_10px_rgba(52,211,153,0.25)] sm:h-7 sm:w-7" loading="lazy" decoding="async" />;
+          }
+          return icon;
+        })()}
       </div>
 
       {/* Info */}

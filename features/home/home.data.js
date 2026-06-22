@@ -64,21 +64,21 @@ export const homeProductsPreview = {
     {
       title: "Tools AI",
       category: "Ai Tools",
-      status: "Preview",
+      status: "Coming Soon",
       description:
         "Kumpulan tools, prompt, dan workflow berbasis AI untuk membantu pembuatan konten, ide produk, copywriting, dan pekerjaan digital.",
     },
     {
       title: "Fashion",
       category: "Fashion",
-      status: "Planned",
+      status: "Coming Soon",
       description:
         "Etalase produk fashion yang nantinya bisa dikembangkan untuk katalog, produk pilihan, promo, dan sistem checkout.",
     },
     {
       title: "Undangan Website",
       category: "Website",
-      status: "Soon",
+      status: "Coming Soon",
       description:
         "Undangan website premium untuk pernikahan, ulang tahun, syukuran, event, dan acara lainnya dengan tampilan mobile-first.",
     },

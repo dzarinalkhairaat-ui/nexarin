@@ -1,4 +1,4 @@
-﻿export const ppobHeroData = {
+export const ppobHeroData = {
   eyebrow: "Digital Payment",
   title: "Nexarin PPOB",
   description:
@@ -14,25 +14,25 @@ export const ppobSections = [
       {
         label: "Pulsa",
         href: "/products/kategori/ppob/pulsa",
-        icon: "📱",
+        icon: "pulsa",
         tone: "from-cyan-400/20 to-slate-950",
       },
       {
         label: "Data",
         href: "/products/kategori/ppob/data",
-        icon: "📶",
+        icon: "data",
         tone: "from-sky-400/20 to-slate-950",
       },
       {
         label: "PLN",
         href: "/products/kategori/ppob/pln",
-        icon: "⚡",
+        icon: "pln",
         tone: "from-yellow-400/20 to-slate-950",
       },
       {
         label: "Lainnya",
         href: "/products/kategori/ppob/lainnya",
-        icon: "•••",
+        icon: "lainnya",
         tone: "from-slate-400/15 to-slate-950",
       },
     ],

@@ -54,7 +54,13 @@ export default function ProductCategoryScroller({ categories }) {
                 <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:18px_18px]" />
 
                 <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-[14px] border border-white/10 bg-slate-950/72 text-base shadow-lg shadow-black/10 transition group-hover:border-emerald-400/25 group-hover:bg-emerald-400/10 sm:h-10 sm:w-10 sm:rounded-2xl sm:text-lg">
-                  {getCategoryIcon(category, index)}
+                  {(() => {
+                    const iconContent = getCategoryIcon(category, index);
+                    if (typeof iconContent === "string" && iconContent.startsWith("http")) {
+                      return <img src={iconContent} alt="" aria-hidden="true" className="h-5 w-5 object-contain opacity-90 drop-shadow-[0_0_10px_rgba(52,211,153,0.3)] sm:h-6 sm:w-6" loading="lazy" decoding="async" />;
+                    }
+                    return iconContent;
+                  })()}
                 </span>
 
                 <span className="relative z-10 mt-2 line-clamp-2 text-[10.5px] font-black leading-[1.12] tracking-[-0.02em] text-white sm:text-xs">

@@ -1,7 +1,25 @@
 import Link from "next/link";
 import { homePortfolioPreview } from "@/features/home/home.data";
 
-const projectIcons = ["📰", "🚀", "▣"];
+const BriefcaseIcon = ({ className = "h-5 w-5" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.896 1.982-2.007 1.996H5.757c-1.11.014-2.007-.874-2.007-1.996v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
+  </svg>
+);
+
+const CodeIcon = ({ className = "h-6 w-6" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+  </svg>
+);
+
+const LayoutIcon = ({ className = "h-6 w-6" }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6Zm0 9.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25v-2.25Zm9.75-9.75A2.25 2.25 0 0 1 15.75 3.75h2.25A2.25 2.25 0 0 1 20.25 6v2.25a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25V6Zm0 9.75A2.25 2.25 0 0 1 15.75 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
+  </svg>
+);
+
+const projectIcons = [<CodeIcon key="1" />, <LayoutIcon key="2" />];
 
 function StackBadges({ stacks }) {
   const safeStacks = Array.isArray(stacks) ? stacks : [];
@@ -26,7 +44,7 @@ function StackBadges({ stacks }) {
 
 function MiniProjectCard({ project, index }) {
   const safeProject = project || {};
-  const icon = projectIcons[index + 1] || "◈";
+  const icon = projectIcons[index] || <LayoutIcon className="h-6 w-6" />;
 
   return (
     <Link href="/portfolio" className="block group">
@@ -75,7 +93,6 @@ function MiniProjectCard({ project, index }) {
 
 export default function HomePortfolioPreview() {
   const data = homePortfolioPreview || {};
-  const featured = data.featured || {};
   const projects = Array.isArray(data.items) ? data.items : [];
   const cta = data.cta || {};
 
@@ -86,7 +103,7 @@ export default function HomePortfolioPreview() {
           <div className="relative max-w-3xl">
             <div className="relative z-10">
               <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300 shadow-lg shadow-cyan-400/10">
-                <span className="text-sm">💼</span>
+                <BriefcaseIcon className="h-4 w-4" />
                 <span>{data.eyebrow || "Portfolio"}</span>
               </p>
 
@@ -109,90 +126,20 @@ export default function HomePortfolioPreview() {
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <Link href="/portfolio" className="block group">
-            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-2xl shadow-lg shadow-cyan-400/10 transition group-hover:scale-110">
-                  📰
-                </div>
-
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
-                      {featured.type || "Featured Project"}
-                    </p>
-
-                    <h3 className="mt-3 text-3xl font-black leading-tight tracking-[-0.055em] text-white sm:text-4xl group-hover:text-cyan-300 transition-colors">
-                      {featured.title || "Featured project belum tersedia"}
-                    </h3>
-                  </div>
-
-                  <span className="inline-flex w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-emerald-300">
-                    {featured.status || "Preview"}
-                  </span>
-                </div>
-
-                <p className="mt-5 flex-1 text-sm font-medium leading-7 text-slate-300 sm:text-base">
-                  {featured.description ||
-                    "Project utama akan ditampilkan di bagian ini."}
-                </p>
-
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[26px] border border-white/10 bg-slate-950/45 p-5">
-                    <p className="flex items-center gap-2 text-sm font-black text-white">
-                      <span className="text-emerald-400">⚠</span>
-                      <span>Masalah</span>
-                    </p>
-
-                    <p className="mt-3 text-sm leading-7 text-slate-400">
-                      {featured.problem ||
-                        "Konteks masalah project akan ditambahkan nanti."}
-                    </p>
-                  </div>
-
-                  <div className="rounded-[26px] border border-white/10 bg-slate-950/45 p-5">
-                    <p className="flex items-center gap-2 text-sm font-black text-white">
-                      <span className="text-cyan-400">✅</span>
-                      <span>Solusi</span>
-                    </p>
-
-                    <p className="mt-3 text-sm leading-7 text-slate-400">
-                      {featured.solution ||
-                        "Solusi project akan ditambahkan nanti."}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <StackBadges stacks={featured.stacks} />
-                </div>
-
-                <div className="mt-8 border-t border-white/10 pt-5">
-                  <span className="inline-flex w-full items-center justify-between text-sm font-black text-cyan-400 transition group-hover:text-cyan-300">
-                    <span>Lihat Portfolio</span>
-                    <span aria-hidden="true" className="text-xl transition-transform group-hover:translate-x-1">→</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-          </Link>
-
-          <div className="grid gap-6">
-            {projects.length > 0 ? (
-              projects.map((project, index) => (
-                <MiniProjectCard
-                  key={project?.title || index}
-                  project={project}
-                  index={index}
-                />
-              ))
-            ) : (
-              <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400">
-                Project belum tersedia.
-              </div>
-            )}
-          </div>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {projects.length > 0 ? (
+            projects.map((project, index) => (
+              <MiniProjectCard
+                key={project?.title || index}
+                project={project}
+                index={index}
+              />
+            ))
+          ) : (
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400 sm:col-span-2">
+              Project belum tersedia.
+            </div>
+          )}
         </div>
       </div>
     </section>

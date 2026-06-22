@@ -1,8 +1,18 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+import { SmartphoneIcon, WifiIcon, LightningIcon, MoreDotsIcon } from "@/components/shared/MenuIcons";
+
+const iconMap = {
+  pulsa: SmartphoneIcon,
+  data: WifiIcon,
+  pln: LightningIcon,
+  lainnya: MoreDotsIcon,
+};
 
 export default function PpobServiceCard({ item }) {
   const safeItem = item || {};
   const hasImage = Boolean(safeItem.image);
+  
+  const IconComponent = typeof safeItem.icon === 'string' && iconMap[safeItem.icon] ? iconMap[safeItem.icon] : null;
 
   return (
     <Link
@@ -27,7 +37,16 @@ export default function PpobServiceCard({ item }) {
             decoding="async"
           />
         ) : (
-          safeItem.icon
+          (() => {
+            if (IconComponent) {
+              return <IconComponent className="h-6 w-6 opacity-90 drop-shadow-md" />;
+            }
+            const icon = safeItem.icon;
+            if (typeof icon === "string" && icon.startsWith("http")) {
+              return <img src={icon} alt="" aria-hidden="true" className="h-7 w-7 object-contain opacity-90 drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]" loading="lazy" decoding="async" />;
+            }
+            return icon;
+          })()
         )}
       </span>
 
