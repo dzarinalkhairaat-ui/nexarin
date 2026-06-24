@@ -8,7 +8,7 @@ const CheckIcon = ({ className = "h-3 w-3" }) => (
 );
 
 const HERO_DESCRIPTION =
-  "Website All-in-One by-rins untuk portal informasi, marketplace digital, dan portfolio.";
+  "Website All-in-One by-rins untuk portal informasi, showcase, dan portfolio.";
 
 export default function HomeHero() {
   const data = homeData || {};
@@ -37,10 +37,10 @@ export default function HomeHero() {
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <Link
-            href="/products"
+            href="/coming-soon"
             className="group relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-2xl bg-emerald-400 px-8 py-4 text-sm font-black text-slate-950 shadow-2xl shadow-emerald-400/25 transition hover:-translate-y-1 hover:bg-emerald-300"
           >
-            <span className="relative z-10">Jelajahi Produk</span>
+            <span className="relative z-10">Coming Soon</span>
           </Link>
 
           <Link
@@ -54,7 +54,7 @@ export default function HomeHero() {
         {/* Feature Tags */}
         <div className="mt-6 flex items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 overflow-hidden">
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <CheckIcon className="text-emerald-400" /> Marketplace
+            <CheckIcon className="text-emerald-400" /> Coming Soon
           </span>
           <span className="flex items-center gap-1.5 whitespace-nowrap">
             <CheckIcon className="text-emerald-400" /> Portal Info

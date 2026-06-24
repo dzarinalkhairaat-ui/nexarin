@@ -1,6 +1,6 @@
 export const publicNavigation = [
   { label: "Home", href: "/" },
-  { label: "Products", href: "/products" },
+  { label: "Nexarin Dagang", href: "/dagang" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "News", href: "/news" },
   { label: "About", href: "/about" },

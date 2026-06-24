@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 import {
   HomeIcon,
-  ProductsIcon,
+  DagangIcon,
   PortfolioIcon,
   NewsIcon,
   AboutIcon,
@@ -19,7 +19,7 @@ import {
 function getMenuIcon(label) {
   switch (label) {
     case "Home": return <HomeIcon className="h-4 w-4" />;
-    case "Products": return <ProductsIcon className="h-4 w-4" />;
+    case "Nexarin Dagang": return <DagangIcon className="h-4 w-4" />;
     case "Portfolio": return <PortfolioIcon className="h-4 w-4" />;
     case "News": return <NewsIcon className="h-4 w-4" />;
     case "About": return <AboutIcon className="h-4 w-4" />;

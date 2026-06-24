@@ -1,21 +1,17 @@
 export const homeData = {
   eyebrow: "Nexarin by-rins",
-  title: "Digital ecosystem untuk karya, produk, portfolio, dan news.",
+  title: "Digital ecosystem untuk karya, portfolio, dan news.",
   description:
-    "Nexarin adalah rumah utama untuk ekosistem digital by-rins: tempat produk digital, showcase project, portal informasi, dan identitas brand dibangun dalam satu platform yang rapi, stabil, dan mobile-first.",
+    "Nexarin adalah rumah utama untuk ekosistem digital by-rins: tempat showcase project, portal informasi, dan identitas brand dibangun dalam satu platform yang rapi, stabil, dan mobile-first.",
   primaryCta: {
-    label: "Lihat Produk",
-    href: "/products",
-  },
-  secondaryCta: {
     label: "Lihat Portfolio",
     href: "/portfolio",
   },
+  secondaryCta: {
+    label: "Baca Berita",
+    href: "/news",
+  },
   highlights: [
-    {
-      icon: "🛒",
-      label: "Digital Products",
-    },
     {
       icon: "💼",
       label: "Portfolio Showcase",
@@ -31,12 +27,6 @@ export const homeData = {
   ],
   ecosystemCards: [
     {
-      icon: "🛒",
-      title: "Products System",
-      description:
-        "Etalase produk digital, template, source code, PPOB, dan layanan custom.",
-    },
-    {
       icon: "💼",
       title: "Portfolio Showcase",
       description:
@@ -47,40 +37,6 @@ export const homeData = {
       title: "News Portal",
       description:
         "Portal informasi yang nanti dikembangkan mengikuti pondasi RinsNews.",
-    },
-  ],
-};
-
-export const homeProductsPreview = {
-  eyebrow: "Products",
-  title: "Produk digital yang disiapkan untuk kebutuhan kreator dan developer.",
-  description:
-    "Nexarin akan menjadi etalase untuk produk digital, template, source code, dan layanan custom yang dibangun secara rapi.",
-  cta: {
-    label: "Buka Products",
-    href: "/products",
-  },
-  items: [
-    {
-      title: "Tools AI",
-      category: "Ai Tools",
-      status: "Coming Soon",
-      description:
-        "Kumpulan tools, prompt, dan workflow berbasis AI untuk membantu pembuatan konten, ide produk, copywriting, dan pekerjaan digital.",
-    },
-    {
-      title: "Fashion",
-      category: "Fashion",
-      status: "Coming Soon",
-      description:
-        "Etalase produk fashion yang nantinya bisa dikembangkan untuk katalog, produk pilihan, promo, dan sistem checkout.",
-    },
-    {
-      title: "Undangan Website",
-      category: "Website",
-      status: "Coming Soon",
-      description:
-        "Undangan website premium untuk pernikahan, ulang tahun, syukuran, event, dan acara lainnya dengan tampilan mobile-first.",
     },
   ],
 };
@@ -114,13 +70,6 @@ export const homePortfolioPreview = {
       description:
         "Halaman awal Nexarin dengan tampilan premium, gear animation, dan static deploy ke Cloudflare Pages.",
       stacks: ["Next.js", "Tailwind", "Cloudflare"],
-    },
-    {
-      title: "Digital Product System",
-      type: "Planned System",
-      description:
-        "Rencana sistem etalase produk digital yang ringan, clean, dan mudah dikembangkan menjadi katalog penuh.",
-      stacks: ["Next.js", "Static-first", "UI System"],
     },
   ],
 };
@@ -166,7 +115,7 @@ export const homeAboutPreview = {
   eyebrow: "About",
   title: "Dibangun sebagai rumah digital utama untuk brand by-rins.",
   description:
-    "Nexarin dirancang sebagai pusat ekosistem digital yang menggabungkan karya, produk, portfolio, informasi, dan identitas brand dalam satu platform yang rapi dan mudah dikembangkan.",
+    "Nexarin dirancang sebagai pusat ekosistem digital yang menggabungkan karya, portfolio, informasi, dan identitas brand dalam satu platform yang rapi dan mudah dikembangkan.",
   story:
     "Fokus utama Nexarin adalah membangun pondasi digital yang stabil dulu, lalu dipoles menjadi platform yang premium, cepat, dan nyaman dipakai di mobile.",
   values: [
@@ -190,7 +139,7 @@ export const homeAboutPreview = {
     eyebrow: "Mulai kerja sama",
     title: "Punya ide digital yang ingin dibangun?",
     description:
-      "Nexarin nantinya bisa menjadi pintu untuk custom project, produk digital, kolaborasi, atau kebutuhan sistem sederhana.",
+      "Nexarin nantinya bisa menjadi pintu untuk custom project, kolaborasi, atau kebutuhan sistem sederhana.",
     primary: {
       label: "Hubungi Nexarin",
       href: "/contact",

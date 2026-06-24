@@ -110,7 +110,7 @@ export default function HomeFooter() {
         </h2>
 
         <p className="mt-3 max-w-md text-sm font-medium leading-7 text-slate-400 sm:text-base">
-          Follow updates, digital products, portfolio project, news, tools, and
+          Follow updates, portfolio project, news, tools, and
           creative ecosystem by-rins.
         </p>
 

@@ -4,7 +4,6 @@ import {
   HomeIcon,
   NewsIcon,
   ScrapingIcon,
-  ProductsIcon,
   PortfolioIcon,
   ContactIcon,
   SettingsIcon,
@@ -47,14 +46,6 @@ const adminModules = [
     href: "/admin/scraping-news",
     badge: "Beta",
     icon: <ScrapingIcon className="h-6 w-6" />,
-    active: true,
-  },
-  {
-    title: "Products",
-    description: "Kelola produk digital, kategori, harga, dan status produk.",
-    href: "/admin/products",
-    badge: "Next",
-    icon: <ProductsIcon className="h-6 w-6" />,
     active: true,
   },
   {

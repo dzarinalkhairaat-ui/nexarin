@@ -1,7 +1,5 @@
 import "./globals.css";
 import JsonLd from "@/components/shared/JsonLd";
-import { CartProvider } from "@/lib/cart/CartContext";
-import FloatingCart from "@/components/shared/FloatingCart";
 import GlobalLoader from "@/components/shared/GlobalLoader";
 import { Suspense } from "react";
 
@@ -108,10 +106,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning>
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
-        <CartProvider>
-          {children}
-          <FloatingCart />
-        </CartProvider>
+        {children}
         <Suspense fallback={null}>
           <GlobalLoader />
         </Suspense>
