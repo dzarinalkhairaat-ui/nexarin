@@ -13,11 +13,13 @@ import {
   PortfolioIcon,
   ContactIcon,
   SettingsIcon,
-  LogoutIcon
+  LogoutIcon,
+  DagangIcon
 } from "@/components/shared/MenuIcons";
 
 const adminMenus = [
   { label: "Dashboard", href: "/admin", icon: <DashboardIcon className="h-4 w-4" />, status: "Main" },
+  { label: "Dagang", href: "/admin/dagang", icon: <DagangIcon className="h-4 w-4" />, status: "Ready" },
   { label: "Home", href: "", icon: <HomeIcon className="h-4 w-4" />, status: "Soon", disabled: true },
   { label: "News", href: "/admin/news", icon: <NewsIcon className="h-4 w-4" />, status: "Prioritas" },
   { label: "Scraping", href: "/admin/scraping-news", icon: <ScrapingIcon className="h-4 w-4" />, status: "Beta" },

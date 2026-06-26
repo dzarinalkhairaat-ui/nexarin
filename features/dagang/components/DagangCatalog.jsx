@@ -227,29 +227,36 @@ export default function DagangCatalog() {
       <div className="relative z-10 mx-auto w-full max-w-5xl">
         
         {/* Categories Filter */}
-        <div className="mb-8 relative -mx-4 sm:mx-0">
-          {/* Gradient Edges for Premium Look on Mobile */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-6 bg-gradient-to-r from-slate-950 to-transparent sm:hidden" />
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-6 bg-gradient-to-l from-slate-950 to-transparent sm:hidden" />
-          
-          <div className="flex overflow-x-auto overflow-y-hidden px-4 sm:px-0 gap-2 pb-2 sm:justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                disabled={isLoadingCategory !== null}
-                className={`shrink-0 flex items-center gap-2 rounded-full px-4 sm:px-5 py-2 text-[10px] sm:text-xs font-black tracking-wide transition-all ${
-                  activeCategory === cat
-                    ? "bg-emerald-400 text-slate-950 shadow-[0_0_15px_rgba(52,211,153,0.3)] border border-emerald-300"
-                    : "bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white"
-                } disabled:opacity-70`}
-              >
-                {isLoadingCategory === cat && (
-                  <span className={`h-3 w-3 shrink-0 animate-spin rounded-full border-2 ${activeCategory === cat ? 'border-slate-900/30 border-t-slate-900' : 'border-white/20 border-t-white'}`} />
-                )}
-                <span className="whitespace-nowrap">{cat}</span>
-              </button>
-            ))}
+        <div className="mb-8 relative py-4 sm:py-6">
+          {/* Garis atas premium */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-70" />
+          {/* Garis bawah premium */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-70" />
+
+          <div className="relative -mx-4 sm:mx-0">
+            {/* Gradient Edges for Premium Look on Mobile */}
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-6 bg-gradient-to-r from-slate-950 to-transparent sm:hidden" />
+            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-6 bg-gradient-to-l from-slate-950 to-transparent sm:hidden" />
+            
+            <div className="flex overflow-x-auto overflow-y-hidden px-4 sm:px-0 gap-2 sm:justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryClick(cat)}
+                  disabled={isLoadingCategory !== null}
+                  className={`shrink-0 flex items-center gap-2 rounded-full px-4 sm:px-5 py-2 text-[10px] sm:text-xs font-black tracking-wide transition-all ${
+                    activeCategory === cat
+                      ? "bg-emerald-400 text-slate-950 shadow-[0_0_15px_rgba(52,211,153,0.3)] border border-emerald-300"
+                      : "bg-white/[0.03] text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white"
+                  } disabled:opacity-70`}
+                >
+                  {isLoadingCategory === cat && (
+                    <span className={`h-3 w-3 shrink-0 animate-spin rounded-full border-2 ${activeCategory === cat ? 'border-slate-900/30 border-t-slate-900' : 'border-white/20 border-t-white'}`} />
+                  )}
+                  <span className="whitespace-nowrap">{cat}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

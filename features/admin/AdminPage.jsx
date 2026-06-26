@@ -7,7 +7,8 @@ import {
   PortfolioIcon,
   ContactIcon,
   SettingsIcon,
-  DashboardIcon
+  DashboardIcon,
+  DagangIcon
 } from "@/components/shared/MenuIcons";
 
 const adminStats = [
@@ -33,6 +34,14 @@ const adminStats = [
 
 const adminModules = [
   {
+    title: "Dagang",
+    description: "Kelola produk dagang, layanan digital, aset grafis, dan pantau data penjualan.",
+    href: "/admin/dagang",
+    badge: "Ready",
+    icon: <DagangIcon className="h-6 w-6" />,
+    active: true,
+  },
+  {
     title: "News",
     description: "Kelola artikel, kategori, status publish, dan konten berita.",
     href: "/admin/news",
@@ -44,7 +53,7 @@ const adminModules = [
     title: "Scraping News",
     description: "Kumpulkan kandidat berita otomatis dan kurasi untuk diterbitkan.",
     href: "/admin/scraping-news",
-    badge: "Beta",
+    badge: "V1.0.0",
     icon: <ScrapingIcon className="h-6 w-6" />,
     active: true,
   },
@@ -52,17 +61,17 @@ const adminModules = [
     title: "Portfolio",
     description: "Kelola project, case study, tech stack, dan showcase karya.",
     href: "/admin/portfolio",
-    badge: "Next",
+    badge: "Maintenance",
     icon: <PortfolioIcon className="h-6 w-6" />,
-    active: true,
+    active: false,
   },
   {
     title: "Support",
     description: "Kelola pesan, request, dan kebutuhan bantuan user.",
     href: "/admin/support",
-    badge: "Ready",
+    badge: "Maintenance",
     icon: <ContactIcon className="h-6 w-6" />,
-    active: true,
+    active: false,
   },
   {
     title: "Settings",
@@ -76,7 +85,7 @@ const adminModules = [
     title: "Home",
     description: "Pengaturan halaman utama Nexarin akan disiapkan berikutnya.",
     href: "",
-    badge: "Soon",
+    badge: "Maintenance",
     icon: <HomeIcon className="h-6 w-6" />,
     active: false,
   },

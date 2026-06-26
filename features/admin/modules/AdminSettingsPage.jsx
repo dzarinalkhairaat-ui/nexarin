@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
-import { KeyIcon, SparkleIcon, SearchIcon, SettingsIcon, LockIcon, LeftArrowIcon } from "@/components/shared/MenuIcons";
+import { KeyIcon, LockIcon, LeftArrowIcon, ContactIcon, WalletIcon } from "@/components/shared/MenuIcons";
 
 const settingsMenus = [
   {
@@ -12,28 +12,20 @@ const settingsMenus = [
     locked: false,
   },
   {
-    label: "Brand & Logo",
-    href: "/admin/settings/brand",
-    note: "Pengaturan nama, tagline, logo, dan identitas brand.",
-    icon: <SparkleIcon className="h-6 w-6" />,
+    label: "Kontak Admin",
+    href: "/admin/settings/contact",
+    note: "Pengaturan Nomor WhatsApp dan Email Admin.",
+    icon: <ContactIcon className="h-6 w-6" />,
     color: "emerald",
-    locked: true,
+    locked: false,
   },
   {
-    label: "SEO Metadata",
-    href: "/admin/settings/seo",
-    note: "Pengaturan global SEO dan open graph.",
-    icon: <SearchIcon className="h-6 w-6" />,
+    label: "Pengaturan Pembayaran",
+    href: "/admin/settings/payment",
+    note: "Integrasi payment gateway dan rekening bank.",
+    icon: <WalletIcon className="h-6 w-6" />,
     color: "amber",
-    locked: true,
-  },
-  {
-    label: "Konfigurasi Umum",
-    href: "/admin/settings/general",
-    note: "Pengaturan SMTP, Analytics, dan konfigurasi dasar.",
-    icon: <SettingsIcon className="h-6 w-6" />,
-    color: "purple",
-    locked: true,
+    locked: false,
   },
 ];
 
@@ -69,7 +61,7 @@ export default function AdminSettingsPage() {
           <div className="mt-12">
             <div className="mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-                <SettingsIcon className="h-4 w-4 text-slate-300" />
+                <KeyIcon className="h-4 w-4 text-slate-300" />
               </div>
               <h2 className="text-lg font-black tracking-[-0.04em] text-white">
                 Menu Pengaturan

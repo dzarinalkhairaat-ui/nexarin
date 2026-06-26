@@ -40,13 +40,10 @@ export default function GlobalLoader() {
         }
       }
       
-      // 2. Handle Form Submissions (where applicable)
-      if (submitButton && targetForm) {
-        // Just a simple heuristic: if they submit a form, show loader
-        // Not perfect for AJAX forms, but for traditional forms or NextJS server actions it works well
-        // We will assume any form submission might take time.
-        setIsNavigating(true);
-      }
+      // Form handling has been removed because Next.js App Router uses 
+      // client-side AJAX mutations (e.preventDefault()) in React forms.
+      // A global click listener cannot know when an AJAX request finishes.
+      // Individual components must handle their own loading states for forms.
     };
 
     document.addEventListener('click', handleClick);

@@ -15,10 +15,10 @@ export const adminHeroData = {
 
 export const adminStats = [
   {
-    label: "Products",
+    label: "Dagang",
     value: "Static",
-    note: "Data produk masih dari file lokal.",
-    icon: "🛒",
+    note: "Data produk dagang masih dari file lokal.",
+    icon: "🛍️",
   },
   {
     label: "Portfolio",
@@ -42,13 +42,13 @@ export const adminStats = [
 
 export const adminModules = [
   {
-    title: "Kelola Products",
+    title: "Kelola Dagang",
     description:
-      "Nanti dipakai untuk CRUD produk, harga, kategori, gambar, stok/status, checkout, dan produk digital.",
+      "Nanti dipakai untuk CRUD katalog produk dagang, layanan, gambar, dan monitoring penjualan.",
     status: "Belum backend",
-    href: "/admin/products",
-    previewHref: "/products",
-    icon: "🛒",
+    href: "/admin/dagang",
+    previewHref: "/dagang",
+    icon: "🛍️",
   },
   {
     title: "Kelola Portfolio",
@@ -90,7 +90,7 @@ export const adminModules = [
 
 export const adminRoadmapItems = [
   "Login admin aman sebelum dashboard asli dibuka.",
-  "Database untuk products, portfolio, news, media, support, dan settings.",
+  "Database untuk dagang, portfolio, news, media, support, dan settings.",
   "CRUD data dengan validasi agar tidak bikin blank putih.",
   "Upload media dan gambar setelah storage siap.",
   "Payment gateway dan Digiflazz dikerjakan setelah fondasi admin stabil.",
