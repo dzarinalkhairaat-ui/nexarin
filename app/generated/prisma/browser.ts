@@ -52,3 +52,8 @@ export type ScrapedNewsArticle = Prisma.ScrapedNewsArticleModel
  * 
  */
 export type ScraperLog = Prisma.ScraperLogModel
+/**
+ * Model PortfolioProject
+ * 
+ */
+export type PortfolioProject = Prisma.PortfolioProjectModel

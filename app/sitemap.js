@@ -162,6 +162,7 @@ export default async function sitemap() {
     createUrl("/about", 0.75, "monthly"),
     createUrl("/contact", 0.75, "monthly"),
     createUrl("/support", 0.75, "monthly"),
+    createUrl("/dagang", 0.9, "weekly"),
   ];
 
   const portfolioRoutes = getPortfolioProjects()

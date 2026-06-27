@@ -41,8 +41,8 @@ export const portfolioHeroData = {
 };
 
 export const featuredProjectData = {
-  slug: "rinsnews-portal",
-  title: "RinsNews Portal",
+  slug: "nexarin-news-portal",
+  title: "Nexarin News Portal",
   category: "Featured Project",
   status: "Reference Project",
   description:
@@ -56,14 +56,14 @@ export const featuredProjectData = {
 
 export const portfolioProjects = [
   {
-    slug: "rinsnews-portal",
-    title: "RinsNews Portal",
+    slug: "nexarin-news-portal",
+    title: "Nexarin News Portal",
     category: "News Platform",
     status: "Reference Project",
     description:
-      "Portal berita custom dengan frontend public, kategori, artikel, media, SEO dasar, dan admin dashboard.",
+      "Portal Informasi Independent dengan desain premium, menyajikan berita terkini secara cepat, transparan, dan terpercaya.",
     summary:
-      "RinsNews menjadi project referensi untuk membangun sistem berita Nexarin yang ringan, rapi, dan mudah dikembangkan.",
+      "Nexarin News Portal menjadi project referensi untuk membangun sistem berita Nexarin yang ringan, rapi, dan mudah dikembangkan.",
     problem:
       "Dibutuhkan portal berita custom yang tidak bergantung pada CMS berat, tetap cepat di mobile, dan mudah dipoles bertahap.",
     solution:
@@ -72,7 +72,7 @@ export const portfolioProjects = [
       "Fondasi portal berita berhasil dibuat dengan halaman publik, kategori, artikel, search, media, SEO dasar, dan admin dashboard.",
     year: "2026",
     role: "Frontend, UI polish, struktur project, dan integrasi Supabase",
-    image: "/images/logo/nexarin-logo.png",
+    image: "/images/portfolio/nexarin-news.jpg",
     tags: ["HTML", "CSS", "JavaScript", "Supabase", "Cloudflare"],
     features: [
       "Homepage berita responsif",

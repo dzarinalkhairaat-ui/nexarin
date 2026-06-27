@@ -57,7 +57,8 @@ export const ModelName = {
   AiApiAccount: 'AiApiAccount',
   AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
-  ScraperLog: 'ScraperLog'
+  ScraperLog: 'ScraperLog',
+  PortfolioProject: 'PortfolioProject'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -198,6 +199,29 @@ export const ScraperLogScalarFieldEnum = {
 } as const
 
 export type ScraperLogScalarFieldEnum = (typeof ScraperLogScalarFieldEnum)[keyof typeof ScraperLogScalarFieldEnum]
+
+
+export const PortfolioProjectScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  title: 'title',
+  category: 'category',
+  status: 'status',
+  description: 'description',
+  summary: 'summary',
+  problem: 'problem',
+  solution: 'solution',
+  result: 'result',
+  year: 'year',
+  role: 'role',
+  image: 'image',
+  tags: 'tags',
+  features: 'features',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
 
 
 export const SortOrder = {

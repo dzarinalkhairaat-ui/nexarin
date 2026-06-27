@@ -1,8 +1,7 @@
 import ProjectCard from "@/features/portfolio/components/ProjectCard";
-import { portfolioProjects } from "@/features/portfolio/portfolio.data";
 
-export default function ProjectGrid() {
-  const projects = Array.isArray(portfolioProjects) ? portfolioProjects : [];
+export default function ProjectGrid({ projects = [] }) {
+  const safeProjects = Array.isArray(projects) ? projects : [];
 
   return (
     <section id="portfolio-projects" className="px-5 py-8 text-white sm:px-6 lg:px-8">
@@ -22,10 +21,10 @@ export default function ProjectGrid() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {projects.length > 0 ? (
-            projects.map((project, index) => (
+          {safeProjects.length > 0 ? (
+            safeProjects.map((project, index) => (
               <ProjectCard
-                key={`${project?.title || "project"}-${index}`}
+                key={project.id || `${project?.title || "project"}-${index}`}
                 project={project}
               />
             ))

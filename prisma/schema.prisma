@@ -187,3 +187,27 @@ model ScraperLog {
   @@index([createdAt])
   @@map("scraper_logs")
 }
+
+model PortfolioProject {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  status      String
+  description String
+  summary     String?
+  problem     String?
+  solution    String?
+  result      String?
+  year        String?
+  role        String?
+  image       String?
+  tags        String[] // Uses native array in PostgreSQL
+  features    String[] // Uses native array in PostgreSQL
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("portfolio_projects")
+}
