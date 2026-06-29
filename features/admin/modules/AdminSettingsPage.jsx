@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
-import { KeyIcon, LockIcon, LeftArrowIcon, ContactIcon, WalletIcon } from "@/components/shared/MenuIcons";
+import { KeyIcon, LockIcon, LeftArrowIcon, ContactIcon, WalletIcon, MapIcon } from "@/components/shared/MenuIcons";
 
 const settingsMenus = [
   {
@@ -25,6 +25,14 @@ const settingsMenus = [
     note: "Integrasi payment gateway dan rekening bank.",
     icon: <WalletIcon className="h-6 w-6" />,
     color: "amber",
+    locked: false,
+  },
+  {
+    label: "Pengaturan Lokasi/Peta",
+    href: "/admin/settings/maps",
+    note: "Alamat dan tautan Google Maps untuk kontak.",
+    icon: <MapIcon className="h-6 w-6" />,
+    color: "indigo",
     locked: false,
   },
 ];

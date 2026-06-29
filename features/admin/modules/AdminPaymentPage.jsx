@@ -5,6 +5,7 @@ import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import { WalletIcon, ContactIcon, WriteIcon, SuccessIcon, LeftArrowIcon, DatabaseIcon, DeleteIcon, WarningIcon } from "@/components/shared/MenuIcons";
 import Image from "next/image";
+import { uploadQrisImageAction, deleteQrisImageAction } from "@/features/admin/modules/payment/paymentImage.actions";
 
 const makeSvg = (text, color, isItalic = false, size = 22) => 
   `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><text x="50%" y="55%" dominant-baseline="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-style="${isItalic ? 'italic' : 'normal'}" font-size="${size}" fill="%23${color}" text-anchor="middle" letter-spacing="-0.5">${text}</text></svg>`;
@@ -39,11 +40,27 @@ export default function AdminPaymentPage() {
   const [editingPayment, setEditingPayment] = useState(null);
   const [confirmAction, setConfirmAction] = useState(null);
 
-  // Data Dummy Payment Methods
-  const [savedPayments, setSavedPayments] = useState([
-    { id: 1, methodId: "bca", accountNumber: "1234567890", accountName: "Ahmad Fulan", createdAt: "2026-06-25T10:00:00Z" },
-    { id: 2, methodId: "dana", accountNumber: "081234567890", accountName: "Ahmad Fulan", createdAt: "2026-06-25T10:05:00Z" }
-  ]);
+  const [savedPayments, setSavedPayments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchPayments = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/payments");
+      if (res.ok) {
+        const data = await res.json();
+        setSavedPayments(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   const selectedMethod = PAYMENT_METHODS.find(m => m.id === selectedMethodId);
 
@@ -64,47 +81,68 @@ export default function AdminPaymentPage() {
     
     const isQris = selectedMethod?.type === 'qris';
     if (isQris && !qrisImage && !editingPayment?.qrisImage) return;
+    if (isQris && !accountName) return;
     if (!isQris && (!accountNumber || !accountName)) return;
 
     setConfirmAction({ type: 'save' });
   };
 
-  const performSave = () => {
+  const performSave = async () => {
     const isQris = selectedMethod?.type === 'qris';
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
+      let finalQrisUrl = editingPayment?.qrisImage || null;
+
+      if (isQris && qrisImage && qrisImage instanceof File) {
+        const formData = new FormData();
+        formData.append("file", qrisImage);
+        
+        const uploadResult = await uploadQrisImageAction(formData);
+        if (!uploadResult.ok) {
+          throw new Error(uploadResult.message || "Gagal mengunggah gambar QRIS");
+        }
+        finalQrisUrl = uploadResult.qrisImageUrl;
+
+        if (editingPayment?.qrisImage) {
+          await deleteQrisImageAction(editingPayment.qrisImage);
+        }
+      }
+
+      const payload = {
+        methodId: selectedMethodId,
+        accountNumber: isQris ? '' : accountNumber,
+        accountName: accountName,
+        qrisImage: finalQrisUrl,
+      };
+
       if (editingPayment) {
-        setSavedPayments(prev => prev.map(p => {
-          if (p.id === editingPayment.id) {
-            return { 
-              ...p, 
-              methodId: selectedMethodId, 
-              accountNumber: isQris ? '' : accountNumber,
-              accountName: isQris ? '' : accountName,
-              qrisImage: isQris ? (qrisImage ? qrisImage.name : p.qrisImage) : null
-            };
-          }
-          return p;
-        }));
+        const res = await fetch(`/api/payments/${editingPayment.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Gagal menyimpan perubahan");
         setSuccessMsg("Perubahan metode pembayaran berhasil disimpan!");
       } else {
-        const newPayment = {
-          id: Date.now(),
-          methodId: selectedMethodId,
-          accountNumber: isQris ? '' : accountNumber,
-          accountName: isQris ? '' : accountName,
-          qrisImage: isQris ? qrisImage?.name : null,
-          createdAt: new Date().toISOString()
-        };
-        setSavedPayments([newPayment, ...savedPayments]);
+        const res = await fetch('/api/payments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Gagal menambah rekening");
         setSuccessMsg("Metode pembayaran berhasil ditambahkan!");
       }
 
+      await fetchPayments();
       resetForm();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
       setIsSubmitting(false);
       setTimeout(() => setSuccessMsg(""), 3000);
-    }, 800);
+    }
   };
 
   const resetForm = () => {
@@ -115,28 +153,38 @@ export default function AdminPaymentPage() {
     setEditingPayment(null);
   };
 
-  const executeConfirmAction = () => {
+  const executeConfirmAction = async () => {
     if (confirmAction.type === 'delete') {
       setIsDeleting(confirmAction.payment.id);
-      setTimeout(() => {
-        setSavedPayments(savedPayments.filter((p) => p.id !== confirmAction.payment.id));
+      try {
+        const payment = confirmAction.payment;
+        if (payment.qrisImage) {
+          await deleteQrisImageAction(payment.qrisImage);
+        }
+        await fetch(`/api/payments/${payment.id}`, { method: 'DELETE' });
+        await fetchPayments();
+      } catch (err) {
+        console.error(err);
+      } finally {
         setIsDeleting(null);
-      }, 600);
+        setConfirmAction(null);
+      }
+      return;
     } else if (confirmAction.type === 'edit') {
       const payment = confirmAction.payment;
       setEditingPayment(payment);
       setSelectedMethodId(payment.methodId);
       setAccountNumber(payment.accountNumber || "");
-      setAccountName(payment.accountName);
-      // Simulate existing qris image name if it was qris
+      setAccountName(payment.accountName || "");
       if (payment.qrisImage) {
-        setQrisImage({ name: payment.qrisImage });
+        setQrisImage({ name: "Gambar Tersimpan (Pilih baru jika ingin mengganti)" });
       } else {
         setQrisImage(null);
       }
     } else if (confirmAction.type === 'save') {
-      performSave();
-      return; // prevent setting confirmAction to null here since performSave resets it during its flow, wait no, we just let it fall through to setConfirmAction(null) below
+      await performSave();
+      setConfirmAction(null);
+      return;
     }
     setConfirmAction(null);
   };
@@ -286,7 +334,7 @@ export default function AdminPaymentPage() {
                   </div>
                 )}
 
-                {selectedMethod?.type !== 'qris' && (
+                {selectedMethodId && (
                   <div>
                     <label className="mb-2 block text-xs font-bold tracking-wide text-slate-400">
                       Atas Nama (A.N)
@@ -299,7 +347,7 @@ export default function AdminPaymentPage() {
                         type="text"
                         value={accountName}
                         onChange={(e) => setAccountName(e.target.value)}
-                        placeholder="Nama Lengkap Pemilik Rekening"
+                        placeholder="Nama Lengkap Pemilik Rekening / QRIS"
                         disabled={isSubmitting}
                         className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/50 pl-11 pr-4 text-sm font-medium text-white placeholder-slate-600 outline-none transition focus:border-emerald-400/50 focus:bg-emerald-400/5 focus:ring-1 focus:ring-emerald-400/50 disabled:opacity-50"
                       />
@@ -322,7 +370,8 @@ export default function AdminPaymentPage() {
                     disabled={
                       isSubmitting || 
                       !selectedMethodId || 
-                      (selectedMethod?.type !== 'qris' && (!accountNumber || !accountName)) ||
+                      !accountName ||
+                      (selectedMethod?.type !== 'qris' && !accountNumber) ||
                       (selectedMethod?.type === 'qris' && !qrisImage && !editingPayment?.qrisImage)
                     }
                     className="flex h-12 flex-[2] items-center justify-center rounded-xl bg-amber-400 px-8 text-sm font-black text-slate-950 transition hover:bg-amber-300 active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-amber-400/20"
@@ -379,9 +428,9 @@ export default function AdminPaymentPage() {
                             </td>
                             <td className="px-4 py-4 font-mono font-medium text-slate-300">
                               {method?.type === 'qris' ? (
-                                <span className="inline-flex items-center gap-1 rounded bg-blue-400/10 px-2 py-1 text-[10px] font-bold text-blue-400">
-                                  {payment.qrisImage || "Terdapat QRIS"}
-                                </span>
+                                <a href={payment.qrisImage} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded bg-blue-400/10 px-2 py-1 text-[10px] font-bold text-blue-400 hover:bg-blue-400/20 transition">
+                                  Lihat QRIS
+                                </a>
                               ) : (
                                 payment.accountNumber
                               )}
@@ -451,15 +500,27 @@ export default function AdminPaymentPage() {
             <div className="mt-6 flex w-full gap-3">
               <button 
                 onClick={() => setConfirmAction(null)}
-                className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-black text-slate-300 transition hover:bg-white/10 hover:text-white"
+                disabled={isSubmitting || isDeleting !== null}
+                className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-black text-slate-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50 disabled:hover:bg-white/5"
               >
                 Batal
               </button>
               <button 
                 onClick={executeConfirmAction}
-                className={`flex-1 rounded-xl py-2.5 text-xs font-black text-slate-950 transition shadow-lg ${confirmAction.type === 'delete' ? 'bg-red-400 hover:bg-red-300 shadow-red-400/20' : confirmAction.type === 'save' ? 'bg-blue-400 hover:bg-blue-300 shadow-blue-400/20' : 'bg-amber-400 hover:bg-amber-300 shadow-amber-400/20'}`}
+                disabled={isSubmitting || isDeleting !== null}
+                className={`flex-1 rounded-xl py-2.5 text-xs font-black text-slate-950 transition shadow-lg ${confirmAction.type === 'delete' ? 'bg-red-400 hover:bg-red-300 shadow-red-400/20' : confirmAction.type === 'save' ? 'bg-blue-400 hover:bg-blue-300 shadow-blue-400/20' : 'bg-amber-400 hover:bg-amber-300 shadow-amber-400/20'} disabled:opacity-50`}
               >
-                Ya, {confirmAction.type === 'delete' ? 'Hapus' : 'Lanjutkan'}
+                {isSubmitting || isDeleting !== null ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Proses...
+                  </span>
+                ) : (
+                  `Ya, ${confirmAction.type === 'delete' ? 'Hapus' : 'Lanjutkan'}`
+                )}
               </button>
             </div>
           </div>

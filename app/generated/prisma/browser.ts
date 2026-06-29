@@ -57,3 +57,18 @@ export type ScraperLog = Prisma.ScraperLogModel
  * 
  */
 export type PortfolioProject = Prisma.PortfolioProjectModel
+/**
+ * Model ContactSetting
+ * 
+ */
+export type ContactSetting = Prisma.ContactSettingModel
+/**
+ * Model MapSetting
+ * 
+ */
+export type MapSetting = Prisma.MapSettingModel
+/**
+ * Model PaymentSetting
+ * 
+ */
+export type PaymentSetting = Prisma.PaymentSettingModel

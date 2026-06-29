@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import { ContactIcon, WhatsappIcon, EmailIcon, SuccessIcon, LeftArrowIcon, DatabaseIcon, DeleteIcon, WriteIcon, WarningIcon } from "@/components/shared/MenuIcons";
@@ -15,59 +15,92 @@ export default function AdminContactPage() {
   const [editingContact, setEditingContact] = useState(null);
   const [confirmAction, setConfirmAction] = useState(null);
 
-  // Data Dummy Kontak
-  const [savedContacts, setSavedContacts] = useState([
-    { id: 1, type: "WhatsApp", value: "6281234567890", createdAt: "2026-06-25T10:00:00Z" },
-    { id: 2, type: "Email", value: "admin@nexarin.com", createdAt: "2026-06-25T10:05:00Z" }
-  ]);
+  // Data Kontak Database
+  const [savedContacts, setSavedContacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSave = (e) => {
+  useEffect(() => {
+    fetch('/api/contacts')
+      .then(res => res.json())
+      .then(data => {
+        setSavedContacts(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Gagal mengambil kontak:", err);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!waNumber && !email) return;
 
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
       if (editingContact) {
-        setSavedContacts(prev => prev.map(c => {
-          if (c.id === editingContact.id) {
-            return { ...c, value: c.type === 'WhatsApp' ? waNumber : email };
-          }
-          return c;
-        }));
-        setSuccessMsg("Perubahan kontak berhasil disimpan!");
+        const platform = editingContact.platform;
+        const value = platform === 'WhatsApp' ? waNumber : email;
+        const res = await fetch(`/api/contacts/${editingContact.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value })
+        });
+        
+        if (res.ok) {
+          const updated = await res.json();
+          setSavedContacts(prev => prev.map(c => c.id === updated.id ? updated : c));
+          setSuccessMsg("Perubahan kontak berhasil disimpan!");
+        }
       } else {
-        const newContacts = [];
+        const promises = [];
         if (waNumber) {
-          newContacts.push({ id: Date.now(), type: "WhatsApp", value: waNumber, createdAt: new Date().toISOString() });
+          promises.push(fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ platform: 'WhatsApp', value: waNumber })
+          }).then(res => res.json()));
         }
         if (email) {
-          newContacts.push({ id: Date.now() + 1, type: "Email", value: email, createdAt: new Date().toISOString() });
+          promises.push(fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ platform: 'Email', value: email })
+          }).then(res => res.json()));
         }
-        setSavedContacts([...newContacts, ...savedContacts]);
+        
+        const results = await Promise.all(promises);
+        setSavedContacts(prev => [...results, ...prev]);
         setSuccessMsg("Kontak berhasil ditambahkan!");
       }
 
       setWaNumber("");
       setEmail("");
       setEditingContact(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setIsSubmitting(false);
-      
       setTimeout(() => setSuccessMsg(""), 3000);
-    }, 800);
+    }
   };
 
-  const executeConfirmAction = () => {
+  const executeConfirmAction = async () => {
     if (confirmAction.type === 'delete') {
       setIsDeleting(confirmAction.contact.id);
-      setTimeout(() => {
+      try {
+        await fetch(`/api/contacts/${confirmAction.contact.id}`, { method: 'DELETE' });
         setSavedContacts(savedContacts.filter((c) => c.id !== confirmAction.contact.id));
+      } catch (error) {
+        console.error(error);
+      } finally {
         setIsDeleting(null);
-      }, 600);
+      }
     } else if (confirmAction.type === 'edit') {
       const contact = confirmAction.contact;
       setEditingContact(contact);
-      if (contact.type === 'WhatsApp') {
+      if (contact.platform === 'WhatsApp') {
         setWaNumber(contact.value);
         setEmail("");
       } else {
@@ -215,7 +248,13 @@ export default function AdminContactPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {savedContacts.length === 0 ? (
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={3} className="px-4 py-8 text-center text-slate-400 font-medium">
+                          Memuat kontak...
+                        </td>
+                      </tr>
+                    ) : savedContacts.length === 0 ? (
                       <tr>
                         <td colSpan={3} className="px-4 py-8 text-center text-slate-400 font-medium">
                           Belum ada kontak yang terdaftar.
@@ -226,12 +265,12 @@ export default function AdminContactPage() {
                         <tr key={contact.id} className="transition-colors hover:bg-white/[0.01]">
                           <td className="px-4 py-4">
                             <span className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider shadow-sm ${
-                              contact.type === "WhatsApp"
+                              contact.platform === "WhatsApp"
                                 ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-400 shadow-emerald-400/5"
                                 : "border-blue-400/20 bg-blue-400/10 text-blue-400 shadow-blue-400/5"
                             }`}>
-                              {contact.type === "WhatsApp" ? <WhatsappIcon className="h-3 w-3" /> : <EmailIcon className="h-3 w-3" />}
-                              {contact.type}
+                              {contact.platform === "WhatsApp" ? <WhatsappIcon className="h-3 w-3" /> : <EmailIcon className="h-3 w-3" />}
+                              {contact.platform}
                             </span>
                           </td>
                           <td className="px-4 py-4 font-medium text-white">

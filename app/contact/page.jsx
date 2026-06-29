@@ -1,4 +1,5 @@
 import ContactPage from "@/features/contact/ContactPage";
+import { prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Contact",
@@ -15,6 +16,23 @@ export const metadata = {
   },
 };
 
-export default function ContactRoute() {
-  return <ContactPage />;
+export const revalidate = 0; // Disable cache so it reflects DB changes immediately
+
+export default async function ContactRoute() {
+  let contacts = [];
+  let maps = [];
+  try {
+    contacts = await prisma.contactSetting.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    maps = await prisma.mapSetting.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch (error) {
+    console.error("Failed to fetch settings:", error);
+  }
+
+  return <ContactPage contacts={contacts} maps={maps} />;
 }

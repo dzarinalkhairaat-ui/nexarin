@@ -5,6 +5,9 @@ export default function PortfolioBiodata() {
     <section className="relative px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto w-full max-w-5xl">
         <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-10 lg:p-12">
+          {/* Shimmer Light Animation */}
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent animate-shimmer" />
+
           {/* Subtle glow effects */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl transition duration-700 group-hover:bg-cyan-400/20" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl transition duration-700 group-hover:bg-emerald-400/20" />

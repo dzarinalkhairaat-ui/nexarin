@@ -1,4 +1,5 @@
 import SupportPage from "@/features/support/SupportPage";
+import { prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Support Kami",
@@ -28,6 +29,18 @@ export const metadata = {
   },
 };
 
-export default function SupportRoute() {
-  return <SupportPage />;
+export const dynamic = 'force-dynamic';
+
+export default async function SupportRoute() {
+  let paymentMethods = [];
+  try {
+    paymentMethods = await prisma.paymentSetting.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch (error) {
+    console.error("Gagal mengambil metode pembayaran:", error);
+  }
+
+  return <SupportPage paymentMethods={paymentMethods} />;
 }

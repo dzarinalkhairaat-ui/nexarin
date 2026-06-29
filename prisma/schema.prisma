@@ -211,3 +211,41 @@ model PortfolioProject {
   @@index([createdAt])
   @@map("portfolio_projects")
 }
+
+model ContactSetting {
+  id        String   @id @default(cuid())
+  platform  String   // e.g., "WhatsApp", "Email"
+  value     String
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_settings")
+}
+
+model MapSetting {
+  id          String   @id @default(cuid())
+  addressText String
+  mapsLink    String
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("map_settings")
+}
+
+model PaymentSetting {
+  id            String   @id @default(cuid())
+  methodId      String
+  accountNumber String?
+  accountName   String?
+  qrisImage     String?
+  isActive      Boolean  @default(true)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("payment_settings")
+}

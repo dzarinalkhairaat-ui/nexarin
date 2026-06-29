@@ -391,7 +391,10 @@ export const ModelName = {
   AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog',
-  PortfolioProject: 'PortfolioProject'
+  PortfolioProject: 'PortfolioProject',
+  ContactSetting: 'ContactSetting',
+  MapSetting: 'MapSetting',
+  PaymentSetting: 'PaymentSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "portfolioProject"
+    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "portfolioProject" | "contactSetting" | "mapSetting" | "paymentSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1006,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContactSetting: {
+      payload: Prisma.$ContactSettingPayload<ExtArgs>
+      fields: Prisma.ContactSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContactSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContactSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.ContactSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContactSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        findMany: {
+          args: Prisma.ContactSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
+        }
+        create: {
+          args: Prisma.ContactSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        createMany: {
+          args: Prisma.ContactSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContactSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.ContactSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        update: {
+          args: Prisma.ContactSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContactSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContactSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContactSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContactSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.ContactSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContactSetting>
+        }
+        groupBy: {
+          args: Prisma.ContactSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContactSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactSettingCountAggregateOutputType> | number
+        }
+      }
+    }
+    MapSetting: {
+      payload: Prisma.$MapSettingPayload<ExtArgs>
+      fields: Prisma.MapSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MapSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MapSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.MapSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MapSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        findMany: {
+          args: Prisma.MapSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>[]
+        }
+        create: {
+          args: Prisma.MapSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        createMany: {
+          args: Prisma.MapSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MapSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.MapSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        update: {
+          args: Prisma.MapSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.MapSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MapSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MapSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.MapSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MapSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.MapSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMapSetting>
+        }
+        groupBy: {
+          args: Prisma.MapSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MapSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MapSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MapSettingCountAggregateOutputType> | number
+        }
+      }
+    }
+    PaymentSetting: {
+      payload: Prisma.$PaymentSettingPayload<ExtArgs>
+      fields: Prisma.PaymentSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PaymentSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PaymentSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.PaymentSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PaymentSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        findMany: {
+          args: Prisma.PaymentSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>[]
+        }
+        create: {
+          args: Prisma.PaymentSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        createMany: {
+          args: Prisma.PaymentSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PaymentSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.PaymentSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        update: {
+          args: Prisma.PaymentSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.PaymentSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PaymentSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PaymentSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.PaymentSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PaymentSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.PaymentSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePaymentSetting>
+        }
+        groupBy: {
+          args: Prisma.PaymentSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PaymentSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PaymentSettingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1187,6 +1412,44 @@ export const PortfolioProjectScalarFieldEnum = {
 } as const
 
 export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
+
+
+export const ContactSettingScalarFieldEnum = {
+  id: 'id',
+  platform: 'platform',
+  value: 'value',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactSettingScalarFieldEnum = (typeof ContactSettingScalarFieldEnum)[keyof typeof ContactSettingScalarFieldEnum]
+
+
+export const MapSettingScalarFieldEnum = {
+  id: 'id',
+  addressText: 'addressText',
+  mapsLink: 'mapsLink',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MapSettingScalarFieldEnum = (typeof MapSettingScalarFieldEnum)[keyof typeof MapSettingScalarFieldEnum]
+
+
+export const PaymentSettingScalarFieldEnum = {
+  id: 'id',
+  methodId: 'methodId',
+  accountNumber: 'accountNumber',
+  accountName: 'accountName',
+  qrisImage: 'qrisImage',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentSettingScalarFieldEnum = (typeof PaymentSettingScalarFieldEnum)[keyof typeof PaymentSettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1455,6 +1718,9 @@ export type GlobalOmitConfig = {
   scrapedNewsArticle?: Prisma.ScrapedNewsArticleOmit
   scraperLog?: Prisma.ScraperLogOmit
   portfolioProject?: Prisma.PortfolioProjectOmit
+  contactSetting?: Prisma.ContactSettingOmit
+  mapSetting?: Prisma.MapSettingOmit
+  paymentSetting?: Prisma.PaymentSettingOmit
 }
 
 /* Types for Logging */

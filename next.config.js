@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// force restart 2
 const nextConfig = {
   images: {
     unoptimized: true,

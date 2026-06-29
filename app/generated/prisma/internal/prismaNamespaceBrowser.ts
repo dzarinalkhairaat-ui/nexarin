@@ -58,7 +58,10 @@ export const ModelName = {
   AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog',
-  PortfolioProject: 'PortfolioProject'
+  PortfolioProject: 'PortfolioProject',
+  ContactSetting: 'ContactSetting',
+  MapSetting: 'MapSetting',
+  PaymentSetting: 'PaymentSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -222,6 +225,44 @@ export const PortfolioProjectScalarFieldEnum = {
 } as const
 
 export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
+
+
+export const ContactSettingScalarFieldEnum = {
+  id: 'id',
+  platform: 'platform',
+  value: 'value',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactSettingScalarFieldEnum = (typeof ContactSettingScalarFieldEnum)[keyof typeof ContactSettingScalarFieldEnum]
+
+
+export const MapSettingScalarFieldEnum = {
+  id: 'id',
+  addressText: 'addressText',
+  mapsLink: 'mapsLink',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MapSettingScalarFieldEnum = (typeof MapSettingScalarFieldEnum)[keyof typeof MapSettingScalarFieldEnum]
+
+
+export const PaymentSettingScalarFieldEnum = {
+  id: 'id',
+  methodId: 'methodId',
+  accountNumber: 'accountNumber',
+  accountName: 'accountName',
+  qrisImage: 'qrisImage',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentSettingScalarFieldEnum = (typeof PaymentSettingScalarFieldEnum)[keyof typeof PaymentSettingScalarFieldEnum]
 
 
 export const SortOrder = {

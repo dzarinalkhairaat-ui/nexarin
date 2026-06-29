@@ -1,0 +1,1 @@
+sekarang anda cek kembali semua halaman dan bagian yang belum terhubung backend DB, kemudian anda update file db-active.md nya agar ada bagian yang sudah selesai dan belum selesai terhubung backend DB

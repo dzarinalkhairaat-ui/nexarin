@@ -72,7 +72,7 @@ export const portfolioProjects = [
       "Fondasi portal berita berhasil dibuat dengan halaman publik, kategori, artikel, search, media, SEO dasar, dan admin dashboard.",
     year: "2026",
     role: "Frontend, UI polish, struktur project, dan integrasi Supabase",
-    image: "/images/portfolio/nexarin-news.jpg",
+    image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop",
     tags: ["HTML", "CSS", "JavaScript", "Supabase", "Cloudflare"],
     features: [
       "Homepage berita responsif",
@@ -101,7 +101,7 @@ export const portfolioProjects = [
       "Halaman products, semua produk, kategori, detail produk, dan checkout manual sudah tersedia sebagai fondasi awal.",
     year: "2026",
     role: "Frontend foundation, UI polish, routing produk, dan checkout manual",
-    image: "/images/logo/nexarin-logo.png",
+    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070&auto=format&fit=crop",
     tags: ["Next.js", "Tailwind", "Static-first"],
     features: [
       "Products main page",
@@ -130,7 +130,7 @@ export const portfolioProjects = [
       "Coming Soon berhasil online sebagai landing awal Nexarin sebelum diganti menjadi homepage utama.",
     year: "2026",
     role: "UI design, frontend, mobile polish, dan deploy preparation",
-    image: "/images/logo/nexarin-logo.png",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
     tags: ["Next.js", "Mobile-first", "Cloudflare"],
     features: [
       "Coming Soon page",
