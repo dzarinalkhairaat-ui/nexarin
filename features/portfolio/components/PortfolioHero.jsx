@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { portfolioHeroData } from "@/features/portfolio/portfolio.data";
 import AnimatedCounter from "./AnimatedCounter";
+import { SparkleIcon } from "@/components/shared/MenuIcons";
+
 
 export default function PortfolioHero() {
   const data = portfolioHeroData || {};
@@ -61,6 +63,14 @@ export default function PortfolioHero() {
             className="group relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] px-8 py-4 text-sm font-black text-white shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
           >
             <span className="relative z-10">{secondaryCta.label || "Hubungi Nexarin"}</span>
+          </Link>
+
+          <Link
+            href="/premium"
+            className="group relative inline-flex min-h-14 items-center justify-center gap-2 overflow-hidden rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-500/10 to-amber-400/5 px-8 py-4 text-sm font-black text-amber-300 shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:border-amber-400/50 hover:bg-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+          >
+            <SparkleIcon className="h-5 w-5 drop-shadow-md" />
+            <span className="relative z-10">Akses Premium</span>
           </Link>
         </div>
 

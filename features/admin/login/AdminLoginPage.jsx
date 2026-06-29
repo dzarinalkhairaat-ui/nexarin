@@ -195,10 +195,12 @@ export default function AdminLoginPage() {
 
                 <input
                   type="email"
+                  id="email"
+                  name="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="admin@nexarin.my.id"
-                  autoComplete="email"
+                  autoComplete="username email"
                   className="min-h-12 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/50"
                 />
               </label>
@@ -210,6 +212,8 @@ export default function AdminLoginPage() {
 
                 <input
                   type="password"
+                  id="password"
+                  name="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
@@ -217,6 +221,18 @@ export default function AdminLoginPage() {
                   className="min-h-12 rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-sm font-bold text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/50"
                 />
               </label>
+
+              <div className="flex items-center gap-3 py-1">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  name="remember"
+                  className="h-4 w-4 rounded border-white/20 bg-slate-950 text-emerald-400 focus:ring-emerald-400/50"
+                />
+                <label htmlFor="remember" className="text-xs font-medium text-slate-400 cursor-pointer select-none">
+                  Simpan login saya
+                </label>
+              </div>
 
               {message ? (
                 <div

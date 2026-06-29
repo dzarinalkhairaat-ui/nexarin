@@ -1,0 +1,1 @@
+sekarang saya ingin perbaiki tampilan dropdown nya, kemudian di halaman /premium/checkout, tidak perlu menggunakan footer

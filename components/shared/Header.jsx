@@ -127,7 +127,7 @@ function MenuPanel({ navigation, onClose }) {
           <div className="relative z-10 grid gap-2">
             {safeNavigation.length > 0 ? (
               safeNavigation.map((item) => {
-                const isLocked = ["About", "Contact", "Portfolio"].includes(item?.label);
+                const isLocked = ["About"].includes(item?.label);
 
                 return isLocked ? (
                   <div
