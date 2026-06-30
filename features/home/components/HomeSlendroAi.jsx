@@ -2,9 +2,12 @@ import Link from "next/link";
 
 export default function HomeSlendroAi() {
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 sm:pt-12 sm:pb-24 border-t border-white/10">
+    <section className="relative pt-8 pb-16 sm:pt-12 sm:pb-24">
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/[0.03] blur-[100px]" />
+      
       <div className="relative z-10 mx-auto w-full max-w-5xl px-5 sm:px-6 lg:px-8">
-        <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
+        <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] shadow-xl backdrop-blur-md transition hover:bg-white/[0.04]">
           <div className="relative z-10 flex flex-col items-center gap-8 p-8 sm:flex-row sm:gap-12 sm:p-12">
             {/* Image — 1:1 ratio */}
             <div className="relative w-full max-w-[220px] shrink-0 sm:max-w-[260px]">

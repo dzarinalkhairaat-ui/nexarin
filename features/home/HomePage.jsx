@@ -74,9 +74,7 @@ export default async function HomePage() {
   const newsArticles = await getHomeNewsArticles();
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:40px_40px]" />
-      
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
       <Header />
 
       <ScrollReveal delay={0}>
@@ -98,6 +96,8 @@ export default async function HomePage() {
       <ScrollReveal delay={100}>
         <HomeFooter />
       </ScrollReveal>
+
+      <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.02] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:40px_40px]" />
     </main>
   );
 }

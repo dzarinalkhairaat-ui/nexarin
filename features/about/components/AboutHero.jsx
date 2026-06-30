@@ -22,7 +22,7 @@ function AboutIdentityCard() {
       <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-emerald-400/15 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-14 -left-14 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="relative z-10 rounded-[28px] border border-white/10 bg-slate-950/65 p-4">
+      <div className="relative z-10 rounded-[28px] border border-white/10 bg-slate-950/65 p-4 sm:p-5">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-emerald-400/25 bg-slate-950 p-2 shadow-xl shadow-emerald-400/10">
             <img
@@ -57,7 +57,7 @@ function AboutIdentityCard() {
           {aboutHighlights.map((item) => (
             <div
               key={item.label}
-              className="rounded-[22px] border border-white/10 bg-white/[0.045] p-3 text-center"
+              className="rounded-[22px] border border-white/10 bg-white/[0.045] p-3 text-center transition-colors hover:border-emerald-400/20 hover:bg-emerald-400/5"
             >
               <p className="text-sm font-black text-emerald-300">
                 {item.value}
@@ -90,7 +90,7 @@ export default function AboutHero() {
   const secondaryCta = data.secondaryCta || {};
 
   return (
-    <section className="relative overflow-hidden px-5 pb-8 pt-7 text-white sm:px-6 sm:pb-10 sm:pt-10 lg:px-8 lg:pb-14 lg:pt-14">
+    <section className="relative overflow-hidden px-5 pb-16 pt-10 text-white sm:px-6 sm:pt-16 lg:px-8">
       <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
@@ -104,33 +104,33 @@ export default function AboutHero() {
         decoding="async"
       />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-7 lg:grid-cols-[minmax(0,1.04fr)_minmax(320px,0.72fr)] lg:items-center">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1.04fr)_minmax(320px,0.72fr)] lg:items-center">
         <div className="text-center lg:text-left">
           <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-emerald-300 shadow-lg shadow-emerald-400/5">
             {data.eyebrow || "About"}
           </p>
 
-          <h1 className="mx-auto mt-5 max-w-3xl text-[2.35rem] font-black leading-[0.96] tracking-[-0.065em] text-white sm:text-6xl lg:mx-0">
+          <h1 className="mx-auto mt-6 max-w-3xl text-[2.1rem] font-black leading-[1.05] tracking-[-0.06em] text-white sm:text-5xl lg:mx-0 lg:text-6xl">
             {data.title ||
               "Dibangun sebagai rumah digital utama untuk brand by-rins."}
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
+          <p className="mx-auto mt-6 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8 lg:mx-0">
             {data.description ||
               "Nexarin dirancang sebagai pusat ekosistem digital by-rins yang rapi, stabil, dan mudah dikembangkan."}
           </p>
 
-          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:max-w-xl">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
             <Link
               href={primaryCta.href || "#about-values"}
-              className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition hover:bg-emerald-300"
+              className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-emerald-400 px-7 py-3 text-sm font-black text-slate-950 shadow-xl shadow-emerald-400/20 transition-all hover:scale-[1.02] hover:bg-emerald-300 hover:shadow-emerald-400/30"
             >
               {primaryCta.label || "Lihat Ekosistem"}
             </Link>
 
             <Link
               href={secondaryCta.href || "/contact"}
-              className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/10 transition hover:border-emerald-400/25 hover:bg-emerald-400/10"
+              className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] px-7 py-3 text-sm font-black text-white shadow-xl shadow-black/10 transition-all hover:border-emerald-400/25 hover:bg-emerald-400/10"
             >
               {secondaryCta.label || "Hubungi Nexarin"}
             </Link>

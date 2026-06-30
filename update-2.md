@@ -1,1 +1,1 @@
-sekarang saya ingin perbaiki tampilan dropdown nya, kemudian di halaman /premium/checkout, tidak perlu menggunakan footer
+sekaarng perbaiki jarak antara header dan hero di halaman about

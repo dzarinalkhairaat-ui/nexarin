@@ -52,34 +52,34 @@ function ProductModal({ product, onClose, onOrder }) {
       />
 
       {/* Modal Container */}
-      <div className="relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-[28px] sm:rounded-[32px] border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/50 ring-1 ring-white/5 transition-transform">
+      <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] sm:rounded-[32px] border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/50 ring-1 ring-white/5 transition-transform md:flex-row md:max-h-[85vh]">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-colors hover:bg-white/20"
+          className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-colors hover:bg-white/20"
         >
           <CloseIcon className="h-5 w-5" />
         </button>
 
-        <div className="overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {/* Image */}
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-950 sm:aspect-[2/1]">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-          </div>
+        {/* Left: Image */}
+        <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-slate-950 md:aspect-auto md:w-[45%] lg:w-1/2">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-slate-900/95" />
+        </div>
 
-          {/* Body */}
-          <div className="p-6 sm:p-8">
+        {/* Right: Body */}
+        <div className="flex flex-1 flex-col overflow-y-auto bg-slate-900/95 p-6 sm:p-8 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-track]:bg-transparent">
+          <div className="flex-1">
             <div className="mb-4 inline-flex items-center rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-300">
               {product.category}
             </div>
 
-            <h2 className="mb-4 text-2xl sm:text-3xl font-black leading-tight tracking-tight text-white">
+            <h2 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-white">
               {product.title}
             </h2>
 
@@ -87,15 +87,15 @@ function ProductModal({ product, onClose, onOrder }) {
               {product.description}
             </p>
 
-            <div className="mb-8">
+            <div className="mb-8 rounded-2xl border border-white/5 bg-white/[0.02] p-5">
               <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-slate-500">
                 Fitur Utama
               </h3>
               <div className="grid gap-3 sm:grid-cols-2">
                 {product.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-3">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-400 shrink-0">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+                  <div key={idx} className="flex items-center gap-3">
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-400 shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-2.5 w-2.5">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
@@ -104,20 +104,23 @@ function ProductModal({ product, onClose, onOrder }) {
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* Bottom Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/5 bg-black/20 p-4 sm:p-5">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Mulai Dari</p>
-                <p className="text-2xl font-black tracking-tight text-emerald-400">{product.price}</p>
-              </div>
-              <button
-                onClick={() => onOrder(product.linkToBuy)}
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-emerald-400 px-8 text-sm font-black text-slate-950 shadow-lg shadow-emerald-400/20 transition-colors hover:bg-emerald-300"
-              >
-                Pesan Via WhatsApp
-              </button>
+          {/* Bottom Bar */}
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-4 sm:p-5">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Harga Spesial</p>
+              <p className="text-2xl font-black tracking-tight text-emerald-400">{product.price}</p>
             </div>
+            <button
+              onClick={() => onOrder(product.linkToBuy)}
+              className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 sm:px-8 text-sm font-black text-slate-950 shadow-lg shadow-emerald-400/20 transition-all hover:scale-105 hover:bg-emerald-300"
+            >
+              <span>Pesan via WhatsApp</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>

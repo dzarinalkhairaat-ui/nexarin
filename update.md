@@ -1,7 +1,7 @@
-sekarang saya ingin update halaman /portfolio, yaitu :
+sekarang saya ingin update halaman /about, yaitu :
 
-1. saya ingin di bagian hero ada 3 tombol  yaitu : Lihat Project, Hubungi Nexarin, Akses Premium
-
-2. buat tombol yang premium dan memiliki icon premium, jangan menggunakan icon sembarangan! jangan menggunakan emoticon
+1. perbaiki tampilan halaman about agar lebih rapih, premium dan profesional.
+2. saya ingin halaman about ini tampilan nya responsif untuk tampilan mobile dan juga dekstop.
+3. di halaman about tidak menggunakan footer.
 
 KERJAKAN DENGAN SEMPURNA DAN PERLAHAN!

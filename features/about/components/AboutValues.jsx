@@ -4,17 +4,17 @@ function ValueCard({ value }) {
   const safeValue = value || {};
 
   return (
-    <article className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/20 hover:bg-white/[0.06]">
-      <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl opacity-0 transition group-hover:opacity-100" />
+    <article className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] p-5 sm:p-6 shadow-xl shadow-black/20 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/20 hover:bg-white/[0.06] hover:shadow-emerald-500/5">
+      <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-emerald-400/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
 
       <div className="relative z-10">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/5 transition-all duration-300 group-hover:bg-emerald-400/20 group-hover:shadow-emerald-400/15">
             {safeValue.number || "00"}
           </div>
 
           <div className="min-w-0">
-            <h3 className="text-xl font-black leading-tight tracking-[-0.04em] text-white">
+            <h3 className="text-lg font-black leading-tight tracking-[-0.04em] text-white sm:text-xl">
               {safeValue.title || "Prinsip Nexarin"}
             </h3>
 
@@ -31,7 +31,7 @@ function ValueCard({ value }) {
 
 function ValuesIntroCard() {
   return (
-    <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/25">
+    <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/25 sm:p-8 lg:p-10">
       <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-400/12 blur-3xl" />
       <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -40,11 +40,11 @@ function ValuesIntroCard() {
           Core Principles
         </p>
 
-        <h2 className="mt-4 text-3xl font-black leading-[1] tracking-[-0.06em] text-white sm:text-5xl">
+        <h2 className="mt-5 text-2xl font-black leading-[1.05] tracking-[-0.05em] text-white sm:text-4xl lg:text-5xl">
           Prinsip kerja Nexarin dibuat agar project tetap stabil.
         </h2>
 
-        <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
+        <p className="mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-300 sm:text-base sm:leading-8">
           Setiap halaman Nexarin dipoles bertahap dengan fokus utama pada
           kestabilan, tampilan mobile, struktur yang bersih, dan pengalaman
           pengguna yang nyaman.
@@ -60,7 +60,7 @@ export default function AboutValues() {
   return (
     <section
       id="about-values"
-      className="relative overflow-hidden px-5 py-8 text-white sm:px-6 sm:py-10 lg:px-8"
+      className="relative overflow-hidden px-5 py-10 text-white sm:px-6 sm:py-14 lg:px-8 lg:py-16"
     >
       <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -69,8 +69,8 @@ export default function AboutValues() {
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <ValuesIntroCard />
 
-        <div className="mt-8">
-          <div className="mb-5 flex items-center gap-3">
+        <div className="mt-10 sm:mt-12">
+          <div className="mb-6 flex items-center gap-3">
             <span className="h-7 w-1 rounded-full bg-emerald-400" />
 
             <div>
@@ -84,7 +84,7 @@ export default function AboutValues() {
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {values.length > 0 ? (
               values.map((value, index) => (
                 <ValueCard
@@ -93,7 +93,7 @@ export default function AboutValues() {
                 />
               ))
             ) : (
-              <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400 md:col-span-2">
+              <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400 sm:col-span-2">
                 Prinsip belum tersedia.
               </div>
             )}

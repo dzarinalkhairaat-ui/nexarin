@@ -48,7 +48,7 @@ function MiniProjectCard({ project, index }) {
 
   return (
     <Link href="/portfolio" className="block group">
-      <article className="relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-slate-800/60 h-full flex flex-col">
+      <article className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04] h-full flex flex-col">
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-xl shadow-lg shadow-cyan-400/10 transition group-hover:scale-110">
@@ -97,7 +97,10 @@ export default function HomePortfolioPreview() {
   const cta = data.cta || {};
 
   return (
-    <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/5 blur-[120px]" />
+      
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">

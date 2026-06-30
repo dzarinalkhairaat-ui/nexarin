@@ -186,7 +186,7 @@ export default async function NewsPage() {
   const articles = await getPublishedNewsArticles();
 
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
       <Header showSearch={true} />
 
       <NewsCategoryChips />

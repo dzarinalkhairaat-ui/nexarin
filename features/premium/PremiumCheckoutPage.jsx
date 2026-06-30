@@ -219,7 +219,7 @@ export default function PremiumCheckoutPage({ paymentMethods }) {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500/30">
+      <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
         <section className="relative min-h-screen pt-28 pb-16 px-5 sm:px-6 lg:px-8">
           {/* Ambient Background Grid */}
           <div className="pointer-events-none absolute inset-0 opacity-[0.02] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />

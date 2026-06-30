@@ -16,7 +16,7 @@ export default async function PortfolioPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
       <Header />
 
       <ScrollReveal>

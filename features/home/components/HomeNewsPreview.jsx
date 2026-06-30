@@ -42,7 +42,7 @@ function NewsImagePlaceholder({ src, alt }) {
     );
   }
   return (
-    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-5">
+    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-5">
       <div className="relative z-10 flex min-h-32 items-end">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-lime-300">
@@ -70,7 +70,7 @@ function CompactNewsCard({ item, index }) {
 
   return (
     <Link href={href} className="block group">
-      <article className="relative overflow-hidden rounded-[26px] border border-white/10 bg-slate-900/40 p-4 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-slate-800/60">
+      <article className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.02] p-4 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04]">
         <div className="relative z-10 flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-lime-400/20 bg-lime-400/10 text-xs font-black text-lime-300 shadow-lg shadow-lime-400/10">
             {number}
@@ -112,7 +112,10 @@ export default function HomeNewsPreview({ articles = [] }) {
   const featuredHref = dbFeatured?.slug ? `/news/artikel/${dbFeatured.slug}` : "/news";
 
   return (
-    <section className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-6 lg:px-8">
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute right-0 bottom-0 h-[600px] w-[600px] translate-x-1/3 translate-y-1/3 rounded-full bg-lime-400/5 blur-[120px]" />
+      
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
@@ -143,7 +146,7 @@ export default function HomeNewsPreview({ articles = [] }) {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_0.8fr]">
           <Link href={featuredHref} className="block group">
-            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:bg-slate-800/60">
+            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:bg-white/[0.04]">
               <div className="relative z-10">
                 <NewsImagePlaceholder src={featured.image} alt={featured.title} />
 
@@ -179,7 +182,7 @@ export default function HomeNewsPreview({ articles = [] }) {
           </Link>
 
           <div className="flex flex-col gap-5">
-            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-slate-900/40 p-5 shadow-xl backdrop-blur-md">
+            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.02] p-5 shadow-xl backdrop-blur-md">
               <div className="relative z-10">
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-lime-300">
                   Latest News

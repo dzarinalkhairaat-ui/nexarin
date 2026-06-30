@@ -99,7 +99,7 @@ export default function ContactForm({ contacts = [], maps = [] }) {
   }
 
   return (
-    <section className="relative px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8">
+    <section className="relative px-5 pb-16 pt-10 text-white sm:px-6 sm:pt-16 lg:px-8">
       <div className="pointer-events-none absolute -left-24 top-20 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />

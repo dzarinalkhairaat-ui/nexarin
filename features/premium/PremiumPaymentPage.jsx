@@ -9,7 +9,7 @@ export default function PremiumPaymentPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500/30">
+      <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
         <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-24 sm:px-6 lg:px-8">
           {/* Background Effects */}
           <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[120px]" />

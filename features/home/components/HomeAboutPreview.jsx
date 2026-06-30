@@ -48,7 +48,7 @@ function ValueCard({ value, index }) {
   const icon = valueIcons[index] || "✦";
 
   return (
-    <article className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-slate-800/60">
+    <article className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04]">
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-2xl shadow-lg shadow-emerald-400/10 transition group-hover:scale-110">
@@ -80,7 +80,11 @@ export default function HomeAboutPreview() {
   const secondary = cta.secondary || {};
 
   return (
-    <section className="relative overflow-hidden px-5 py-16 sm:px-6 lg:px-8">
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-emerald-400/5 blur-3xl" />
+      <div className="pointer-events-none absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-cyan-400/5 blur-3xl" />
+      
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="relative">
@@ -99,7 +103,7 @@ export default function HomeAboutPreview() {
                   "Nexarin adalah ekosistem digital yang sedang dikembangkan."}
               </p>
 
-              <div className="mt-8 relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/40 p-6 shadow-xl backdrop-blur-md">
+              <div className="mt-8 relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md">
                 <div className="relative z-10">
                   <p className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-cyan-300">
                     <PinIcon className="h-4 w-4" />
@@ -133,7 +137,7 @@ export default function HomeAboutPreview() {
         </div>
 
         <div className="mt-16">
-          <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/40 p-6 sm:p-10 shadow-xl backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] p-6 sm:p-10 shadow-xl backdrop-blur-md">
             <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
                 <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-200">

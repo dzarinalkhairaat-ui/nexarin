@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { homeData } from "@/features/home/home.data";
+import { DagangIcon, NewsIcon, PortfolioIcon } from "@/components/shared/MenuIcons";
 
 const CheckIcon = ({ className = "h-3 w-3" }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -14,8 +15,19 @@ export default function HomeHero() {
   const data = homeData || {};
 
   return (
-    <section className="relative overflow-hidden px-5 py-20 text-center sm:px-6 lg:px-8 lg:py-32">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-400/10 blur-[120px]" />
+    <section className="relative px-5 pb-16 pt-10 text-center sm:px-6 sm:pt-16 lg:px-8">
+      {/* Background Image with Low Opacity */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000" 
+          alt="" 
+          className="h-full w-full object-cover opacity-[0.06]"
+        />
+        {/* Gradient fade to blend into the background smoothly */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/60 to-slate-950" />
+      </div>
+
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-400/[0.08] blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-5xl">
         <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-emerald-300 shadow-lg shadow-emerald-400/10 backdrop-blur-sm">
@@ -35,19 +47,26 @@ export default function HomeHero() {
           {HERO_DESCRIPTION}
         </p>
 
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Link
-            href="/coming-soon"
-            className="group relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-2xl bg-emerald-400 px-8 py-4 text-sm font-black text-slate-950 shadow-2xl shadow-emerald-400/25 transition hover:-translate-y-1 hover:bg-emerald-300"
-          >
-            <span className="relative z-10">Coming Soon</span>
+        <div className="mt-10 flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-5">
+          <Link href="/dagang" className="group inline-flex h-11 sm:h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 sm:px-8 text-sm sm:text-base font-bold text-white transition-all active:scale-95 hover:scale-105 hover:bg-emerald-400 hover:text-slate-950 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)]">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <DagangIcon className="h-4 w-4 sm:h-5 sm:w-5 opacity-70 transition-colors group-hover:opacity-100" />
+              Belanja
+            </span>
+          </Link>
+          
+          <Link href="/news" className="group inline-flex h-11 sm:h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 sm:px-8 text-sm sm:text-base font-bold text-white transition-all active:scale-95 hover:scale-105 hover:bg-emerald-400 hover:text-slate-950 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)]">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <NewsIcon className="h-4 w-4 sm:h-5 sm:w-5 opacity-70 transition-colors group-hover:opacity-100" />
+              News
+            </span>
           </Link>
 
-          <Link
-            href="/news"
-            className="group relative inline-flex min-h-14 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] px-8 py-4 text-sm font-black text-white shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/10"
-          >
-            <span className="relative z-10">Baca Berita</span>
+          <Link href="/portfolio" className="group inline-flex h-11 sm:h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 sm:px-8 text-sm sm:text-base font-bold text-white transition-all active:scale-95 hover:scale-105 hover:bg-emerald-400 hover:text-slate-950 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)]">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <PortfolioIcon className="h-4 w-4 sm:h-5 sm:w-5 opacity-70 transition-colors group-hover:opacity-100" />
+              Portofolio
+            </span>
           </Link>
         </div>
 
