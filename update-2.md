@@ -1,1 +1,1 @@
-sekarang saya ingin website ini benar-benar dibuat pengamanan yang sangat ketat, agar tidak ada yang bisa mengakses halaman admin atau halaman penting lainnya tanpa login yang valid, kemudian tidak ada yang bisa asal scraping, dan juga tidak ada bot yang bisa masuk ke website ini. kerjakan dengan sempurna!
+sekarang saya ingin untuk halaman /news bisa di scraping oleh bot, tapi hanya halaman ini saja, untuk halaman yang lain tidak boleh
