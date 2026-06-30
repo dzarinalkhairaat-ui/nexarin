@@ -6,8 +6,9 @@ import { Suspense } from "react";
 export const metadata = {
   metadataBase: new URL("https://nexarin.my.id"),
   applicationName: "Nexarin",
+  category: "technology",
   title: {
-    default: "Nexarin | Ekosistem Digital by-rins",
+    default: "Nexarin | Ekosistem Digital & Layanan Custom by-rins",
     template: "%s | Nexarin by-rins",
   },
   description:
@@ -21,29 +22,40 @@ export const metadata = {
     "Nexarin Produk",
     "Nexarin Porto",
     "layanan custom",
+    "jasa pembuatan website",
+    "pengembangan aplikasi",
+    "startup digital indonesia",
+    "teknologi masa depan",
     "by-rins",
   ],
   authors: [
-    {
-      name: "Nexarin by-rins",
-    },
+    { name: "Muhammad Abi Dzarin", url: "https://nexarin.my.id" },
+    { name: "Nexarin by-rins" }
   ],
   creator: "Nexarin by-rins",
   publisher: "Nexarin by-rins",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   alternates: {
     canonical: "/",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
-      "max-video-preview": -1,
     },
   },
+  // verification dihapus karena sudah menggunakan file HTML di folder public
   openGraph: {
     type: "website",
     locale: "id_ID",
@@ -77,9 +89,9 @@ export default function RootLayout({ children }) {
     logo: "https://nexarin.my.id/images/logo/nexarin-logo.png",
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+62-812-3456-7890",
+      telephone: "+6285173057576",
       contactType: "customer service",
-      email: "hello@nexarin.com",
+      email: "nexarinbyrins@gmail.com",
       areaServed: "ID",
       availableLanguage: "Indonesian",
     },

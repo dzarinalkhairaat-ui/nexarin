@@ -162,6 +162,8 @@ export default async function sitemap() {
     createUrl("/about", 0.75, "monthly"),
     createUrl("/contact", 0.75, "monthly"),
     createUrl("/support", 0.75, "monthly"),
+    createUrl("/faq", 0.75, "monthly"),
+    createUrl("/terms", 0.7, "yearly"),
     createUrl("/dagang", 0.9, "weekly"),
   ];
 
