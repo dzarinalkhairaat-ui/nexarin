@@ -1,1 +1,1 @@
-sekaarng perbaiki jarak antara header dan hero di halaman about
+sudah bagus dan petahankan, namun saya ingin preview maps nya menjadi 1 dalam bagian LOCATION

@@ -127,28 +127,73 @@ export default function ContactForm({ contacts = [], maps = [] }) {
               </h2>
 
               <div className="mt-6 grid gap-4">
-                {contactDetails.map((detail) => (
-                  <button
-                    key={detail.label}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedContact(detail);
-                    }}
-                    className="group w-full text-left flex items-center gap-4 rounded-[24px] border border-white/5 bg-slate-950/40 p-4 transition hover:bg-white/[0.04] hover:border-emerald-400/20"
-                  >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-emerald-400/20 bg-emerald-400/10 text-xl shadow-lg shadow-emerald-400/10 transition group-hover:scale-110">
-                      {detail.icon}
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
-                        {detail.label}
-                      </p>
-                      <p className="mt-1 text-sm font-bold text-emerald-300">
-                        {detail.value}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+                {contactDetails.map((detail) => {
+                  if (detail.type === "location") {
+                    return (
+                      <div key={detail.label} className="group w-full flex flex-col gap-4 rounded-[24px] border border-white/5 bg-slate-950/40 p-4 transition hover:border-emerald-400/20 hover:bg-white/[0.04]">
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-emerald-400/20 bg-emerald-400/10 text-xl shadow-lg shadow-emerald-400/10 transition group-hover:scale-110">
+                              {detail.icon}
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                                {detail.label}
+                              </p>
+                              <p className="mt-1 text-sm font-bold text-emerald-300">
+                                {detail.value}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setSelectedContact(detail);
+                            }}
+                            className="shrink-0 rounded-xl bg-white/5 p-2.5 text-slate-400 transition hover:bg-emerald-400/10 hover:text-emerald-300"
+                            title="Buka Google Maps"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                          </button>
+                        </div>
+                        <div className="w-full overflow-hidden rounded-[16px] border border-white/5 bg-slate-950/50 p-1.5 shadow-inner">
+                          <iframe
+                            title="Map Preview"
+                            width="100%"
+                            height="180"
+                            style={{ border: 0, borderRadius: '12px' }}
+                            loading="lazy"
+                            allowFullScreen
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent(detail.value)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                          ></iframe>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <button
+                      key={detail.label}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedContact(detail);
+                      }}
+                      className="group w-full text-left flex items-center gap-4 rounded-[24px] border border-white/5 bg-slate-950/40 p-4 transition hover:bg-white/[0.04] hover:border-emerald-400/20"
+                    >
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-emerald-400/20 bg-emerald-400/10 text-xl shadow-lg shadow-emerald-400/10 transition group-hover:scale-110">
+                        {detail.icon}
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                          {detail.label}
+                        </p>
+                        <p className="mt-1 text-sm font-bold text-emerald-300">
+                          {detail.value}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

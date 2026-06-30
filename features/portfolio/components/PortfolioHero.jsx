@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { portfolioHeroData } from "@/features/portfolio/portfolio.data";
 import AnimatedCounter from "./AnimatedCounter";
-import { SparkleIcon } from "@/components/shared/MenuIcons";
+import { SparkleIcon, LockIcon } from "@/components/shared/MenuIcons";
 
 
 export default function PortfolioHero() {
@@ -20,7 +20,7 @@ export default function PortfolioHero() {
   }
 
   return (
-    <section className="relative overflow-hidden px-5 py-20 text-center sm:px-6 lg:px-8 lg:py-32 text-white">
+    <section className="relative overflow-hidden px-5 pb-16 pt-10 text-center sm:px-6 sm:pt-16 lg:px-8 text-white">
       {/* Background Glow Effects (Synced with HomeHero) */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-400/10 blur-[120px]" />
       
@@ -65,13 +65,13 @@ export default function PortfolioHero() {
             <span className="relative z-10">{secondaryCta.label || "Hubungi Nexarin"}</span>
           </Link>
 
-          <Link
-            href="/premium"
-            className="group relative inline-flex min-h-14 items-center justify-center gap-2 overflow-hidden rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-500/10 to-amber-400/5 px-8 py-4 text-sm font-black text-amber-300 shadow-2xl backdrop-blur-xl transition hover:-translate-y-1 hover:border-amber-400/50 hover:bg-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+          <div
+            title="Akses Premium belum tersedia saat ini"
+            className="group relative inline-flex min-h-14 cursor-not-allowed select-none items-center justify-center gap-2 overflow-hidden rounded-2xl border border-white/5 bg-slate-950/30 px-8 py-4 text-sm font-black text-slate-500 shadow-lg shadow-black/10"
           >
-            <SparkleIcon className="h-5 w-5 drop-shadow-md" />
+            <LockIcon className="h-4 w-4" />
             <span className="relative z-10">Akses Premium</span>
-          </Link>
+          </div>
         </div>
 
         {/* Highlight Stats (Glassmorphism Bento Style with Animation) */}
