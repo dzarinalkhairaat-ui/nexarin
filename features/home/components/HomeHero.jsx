@@ -15,7 +15,7 @@ export default function HomeHero() {
   const data = homeData || {};
 
   return (
-    <section className="relative px-5 pb-16 pt-10 text-center sm:px-6 sm:pt-16 lg:px-8">
+    <section className="relative px-5 pb-8 pt-10 text-center sm:px-6 sm:pt-16 sm:pb-10 lg:px-8">
       {/* Background Image with Low Opacity */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <img 

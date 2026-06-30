@@ -12,7 +12,7 @@ export default function HomeProgressChart() {
   if (!isMounted) return null;
 
   return (
-    <section className="relative px-5 py-12 sm:py-16 sm:px-6 lg:px-8">
+    <section className="relative px-5 pt-4 pb-12 sm:pt-4 sm:pb-16 sm:px-6 lg:px-8">
       {/* Background glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/5 blur-[120px]" />
       
