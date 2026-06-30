@@ -1,2 +1,1 @@
-sekarang saya ingin di halaman /home, saya ingin di bawah bagian HomeHero tambahkan bagian baru yaitu :
-- animasi diagram progres yang bergerak terus naik dan animasi nya terus terulang (looping). dan saya ingin tampilan nya premium dan profesional, responsif pada tampilan dekstop dan mobile
+sekarang saya ingin website ini benar-benar dibuat pengamanan yang sangat ketat, agar tidak ada yang bisa mengakses halaman admin atau halaman penting lainnya tanpa login yang valid, kemudian tidak ada yang bisa asal scraping, dan juga tidak ada bot yang bisa masuk ke website ini. kerjakan dengan sempurna!
