@@ -21,6 +21,18 @@ function formatArticleStatus(status) {
   return adminArticleStatusLabels?.[status] || "Draft";
 }
 
+function getPlatformBadgeColor(platform) {
+  switch(platform) {
+    case "FACEBOOK": return "bg-blue-600/20 text-blue-400 border-blue-600/30";
+    case "INSTAGRAM": return "bg-pink-600/20 text-pink-400 border-pink-600/30";
+    case "TWITTER": return "bg-sky-500/20 text-sky-400 border-sky-500/30";
+    case "TIKTOK": return "bg-slate-800/80 text-slate-300 border-slate-700";
+    case "LINKEDIN": return "bg-blue-800/30 text-blue-300 border-blue-800/50";
+    case "YOUTUBE": return "bg-red-600/20 text-red-400 border-red-600/30";
+    default: return "bg-emerald-400/10 text-emerald-300 border-emerald-400/20";
+  }
+}
+
 export default function AdminArticlesTableClient({ articles, errorMessage, isSearchActive, categories }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -44,6 +56,290 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
 
   const safeArticles = Array.isArray(articles) ? articles : [];
   const hasArticles = safeArticles.length > 0;
+
+  const [isPublishedOpen, setIsPublishedOpen] = useState(true);
+  const [isDraftOpen, setIsDraftOpen] = useState(true);
+
+  const publishedArticles = safeArticles.filter(a => {
+    const s = a.rawStatus || a.status;
+    return s === "PUBLISHED" || s === "Published";
+  });
+  
+  const draftArticles = safeArticles.filter(a => {
+    const s = a.rawStatus || a.status;
+    return !(s === "PUBLISHED" || s === "Published");
+  });
+
+  const renderTableGroup = (title, items, isOpen, toggleOpen, badgeColor) => {
+    if (items.length === 0) return null;
+
+    const hasSelectedInThisTable = items.some(a => selectedIds.includes(a.id));
+    const allSelectedInThisTable = items.length > 0 && items.every(i => selectedIds.includes(i.id));
+
+    const handleSelectAllGroup = (e) => {
+      if (e.target.checked) {
+        const newIds = new Set([...selectedIds, ...items.map(i => i.id)]);
+        setSelectedIds(Array.from(newIds));
+      } else {
+        setSelectedIds(selectedIds.filter(id => !items.find(i => i.id === id)));
+      }
+    };
+
+    return (
+      <div className="mb-8 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] shadow-2xl shadow-black/20 backdrop-blur-xl">
+        <div 
+          onClick={toggleOpen}
+          className="flex cursor-pointer items-center justify-between border-b border-white/10 bg-slate-950/40 px-6 py-4 transition hover:bg-slate-950/60"
+        >
+          <div className="flex items-center gap-3">
+            <span className={`h-6 w-1.5 rounded-full ${badgeColor}`} />
+            <h3 className="text-lg font-black text-white">{title} <span className="ml-2 text-sm font-bold text-slate-500">({items.length})</span></h3>
+          </div>
+          <button className="text-slate-400 hover:text-white transition-transform duration-300">
+            <svg className={`h-6 w-6 transform transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+
+        <div className={`transition-all duration-500 ease-in-out ${isOpen ? "max-h-[5000px] opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[980px] text-left">
+              <thead className="border-b border-white/10 bg-slate-950/55">
+                <tr>
+                  <th className="px-4 py-3 w-12 text-center">
+                    <input 
+                      type="checkbox" 
+                      className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
+                      onChange={handleSelectAllGroup}
+                      checked={allSelectedInThisTable}
+                    />
+                  </th>
+                  {["Judul", "Kategori", "Status", "Headline", "Featured", "Tanggal"].map((head) => (
+                    <th key={head} className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                      {head}
+                    </th>
+                  ))}
+                  <th className="px-4 py-3 text-right text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                    <div className="flex items-center justify-end gap-2">
+                      <span>AKSI</span>
+                      <button 
+                        onClick={() => {
+                          if (selectedIds.length === 0) return showAlert("Silakan centang minimal 1 artikel terlebih dahulu di sebelah kiri untuk menggunakan Edit Cepat.", true);
+                          if (isBulkEditing || editingId) return cancelEdit();
+                          
+                          if (selectedIds.length === 1) {
+                            startEdit(safeArticles.find(a => a.id === selectedIds[0]));
+                          } else {
+                            setIsBulkEditing(true);
+                            setBulkEditForm({ categoryId: "", status: "", isHeadline: "", isFeatured: "" });
+                          }
+                        }}
+                        className="inline-flex items-center rounded border border-blue-400/20 bg-blue-400/10 px-2 py-1 text-[9px] font-black tracking-wider text-blue-300 transition hover:bg-blue-400/20"
+                      >
+                        {editingId || isBulkEditing ? "BATAL" : "EDIT CEPAT"}
+                      </button>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isBulkEditing && hasSelectedInThisTable && (
+                  <tr className="border-b border-blue-400/20 bg-blue-400/[0.08]">
+                    <td className="px-4 py-4 text-center"></td>
+                    <td className="px-4 py-4">
+                      <p className="text-sm font-black text-blue-300">Edit {selectedIds.length} Artikel</p>
+                      <p className="text-[10px] font-bold text-blue-300/60 mt-1 uppercase">Opsi Massal</p>
+                    </td>
+                    <td className="px-4 py-4">
+                      <select 
+                        value={bulkEditForm.categoryId} 
+                        onChange={(e) => setBulkEditForm({...bulkEditForm, categoryId: e.target.value})}
+                        className="w-full min-w-[120px] bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
+                      >
+                        <option value="">(Tidak Diubah)</option>
+                        <option value="null">Tanpa Kategori</option>
+                        {categories.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-4 py-4">
+                      <select 
+                        value={bulkEditForm.status} 
+                        onChange={(e) => setBulkEditForm({...bulkEditForm, status: e.target.value})}
+                        className="w-full bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
+                      >
+                        <option value="">(Tidak Diubah)</option>
+                        <option value="PUBLISHED">Published</option>
+                        <option value="DRAFT">Draft</option>
+                        <option value="ARCHIVED">Archived</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-4">
+                      <select 
+                        value={bulkEditForm.isHeadline} 
+                        onChange={(e) => setBulkEditForm({...bulkEditForm, isHeadline: e.target.value})}
+                        className="bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
+                      >
+                        <option value="">(Tidak Diubah)</option>
+                        <option value="true">Ya</option>
+                        <option value="false">Tidak</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-4">
+                      <select 
+                        value={bulkEditForm.isFeatured} 
+                        onChange={(e) => setBulkEditForm({...bulkEditForm, isFeatured: e.target.value})}
+                        className="bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
+                      >
+                        <option value="">(Tidak Diubah)</option>
+                        <option value="true">Ya</option>
+                        <option value="false">Tidak</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-4"></td>
+                    <td className="px-4 py-4 whitespace-nowrap text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={cancelEdit} className="rounded-xl border border-white/10 bg-slate-800 px-3 py-2 text-xs font-black text-white hover:bg-slate-700">
+                          Batal
+                        </button>
+                        <button onClick={handleBulkSave} disabled={loadingId === "bulk"} className="flex items-center justify-center rounded-xl bg-blue-400 px-3 py-2 text-xs font-black text-slate-950 hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                          {loadingId === "bulk" ? <><LoadingSpinner className="h-3 w-3 mr-1.5" /> Loading...</> : "Simpan Massal"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {items.map((article) => {
+                  const isEditing = editingId === article.id;
+
+                  return (
+                    <tr key={article.id} className={`border-b border-white/10 last:border-b-0 ${loadingId === article.id ? "opacity-50" : ""} hover:bg-white/[0.02]`}>
+                      <td className="px-4 py-4 text-center">
+                        <input 
+                          type="checkbox" 
+                          className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
+                          checked={selectedIds.includes(article.id)}
+                          onChange={() => handleToggleSelect(article.id)}
+                        />
+                      </td>
+
+                      <td className="max-w-[320px] px-4 py-4">
+                        <p className="line-clamp-2 text-sm font-black leading-5 text-white">{article.title}</p>
+                        <p className="mt-1 truncate text-xs font-semibold text-slate-500">/{article.slug}</p>
+                        {article.socialCaptions?.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {article.socialCaptions.map(platform => (
+                              <span key={platform} className={`inline-flex rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${getPlatformBadgeColor(platform)}`}>
+                                {platform}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        {isEditing ? (
+                          <select 
+                            value={editForm.categoryId} 
+                            onChange={(e) => setEditForm({...editForm, categoryId: e.target.value})}
+                            className="w-full min-w-[120px] bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
+                          >
+                            <option value="">Tanpa Kategori</option>
+                            {categories.map(c => (
+                              <option key={c.id} value={c.id}>{c.name}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-300">
+                            {article.category}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        {isEditing ? (
+                          <select 
+                            value={editForm.status} 
+                            onChange={(e) => setEditForm({...editForm, status: e.target.value})}
+                            className="w-full bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
+                          >
+                            <option value="PUBLISHED">Published</option>
+                            <option value="DRAFT">Draft</option>
+                            <option value="ARCHIVED">Archived</option>
+                          </select>
+                        ) : (
+                          <span className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-slate-300">
+                            {article.status}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="px-4 py-4 text-sm font-black text-slate-300">
+                        {isEditing ? (
+                          <select 
+                            value={editForm.isHeadline} 
+                            onChange={(e) => setEditForm({...editForm, isHeadline: e.target.value})}
+                            className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
+                          >
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                          </select>
+                        ) : formatBoolean(article.headline)}
+                      </td>
+
+                      <td className="px-4 py-4 text-sm font-black text-slate-300">
+                        {isEditing ? (
+                          <select 
+                            value={editForm.isFeatured} 
+                            onChange={(e) => setEditForm({...editForm, isFeatured: e.target.value})}
+                            className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
+                          >
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                          </select>
+                        ) : formatBoolean(article.featured)}
+                      </td>
+
+                      <td className="px-4 py-4 text-sm font-semibold text-slate-400">
+                        {article.date || "-"}
+                        <div className="mt-1 text-[10px] text-emerald-300/60 font-black">{article.views} views</div>
+                      </td>
+
+                      <td className="px-4 py-4 whitespace-nowrap text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {isEditing ? (
+                            <>
+                              <button onClick={cancelEdit} className="rounded-xl border border-white/10 bg-slate-800 px-3 py-2 text-xs font-black text-white hover:bg-slate-700">
+                                Batal
+                              </button>
+                              <button onClick={() => handleSaveEdit(article.id)} disabled={loadingId === article.id} className="flex items-center justify-center min-w-[70px] rounded-xl bg-emerald-400 px-3 py-2 text-xs font-black text-slate-950 hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {loadingId === article.id ? <LoadingSpinner className="h-3.5 w-3.5" /> : "Simpan"}
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <Link href={`/admin/news/edit-artikel/${article.slug}`} className="rounded-xl border border-white/10 bg-white/[0.055] px-3 py-2 text-xs font-black text-slate-300 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-200">
+                                Edit
+                              </Link>
+                              <button onClick={() => handleDeleteSingle(article.id)} disabled={loadingId === article.id} className="flex items-center justify-center min-w-[65px] rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-xs font-black text-red-300 transition hover:bg-red-400/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {loadingId === article.id ? <LoadingSpinner className="h-3.5 w-3.5 text-red-400" /> : "Hapus"}
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Handler for Quick Edit
   const startEdit = (article) => {
@@ -224,235 +520,9 @@ export default function AdminArticlesTableClient({ articles, errorMessage, isSea
           )}
         </div>
 
-        {/* TABLE VIEW (Responsive Scroll) */}
-        <div className="overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.045] shadow-2xl shadow-black/20 backdrop-blur-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] text-left">
-              <thead className="border-b border-white/10 bg-slate-950/55">
-                <tr>
-                  <th className="px-4 py-3 w-12 text-center">
-                    <input 
-                      type="checkbox" 
-                      className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
-                      onChange={handleSelectAll}
-                      checked={safeArticles.length > 0 && selectedIds.length === safeArticles.length}
-                    />
-                  </th>
-                  {["Judul", "Kategori", "Status", "Headline", "Featured", "Tanggal"].map((head) => (
-                    <th key={head} className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                      {head}
-                    </th>
-                  ))}
-                  <th className="px-4 py-3 text-right text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                    <div className="flex items-center justify-end gap-2">
-                      <span>AKSI</span>
-                      <button 
-                        onClick={() => {
-                          if (selectedIds.length === 0) return showAlert("Silakan centang minimal 1 artikel terlebih dahulu di sebelah kiri untuk menggunakan Edit Cepat.", true);
-                          if (isBulkEditing || editingId) return cancelEdit();
-                          
-                          if (selectedIds.length === 1) {
-                            startEdit(safeArticles.find(a => a.id === selectedIds[0]));
-                          } else {
-                            // Masuk mode bulk edit
-                            setIsBulkEditing(true);
-                            setBulkEditForm({ categoryId: "", status: "", isHeadline: "", isFeatured: "" });
-                          }
-                        }}
-                        className="inline-flex items-center rounded border border-blue-400/20 bg-blue-400/10 px-2 py-1 text-[9px] font-black tracking-wider text-blue-300 transition hover:bg-blue-400/20"
-                      >
-                        {editingId || isBulkEditing ? "BATAL" : "EDIT CEPAT"}
-                      </button>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {isBulkEditing && (
-                  <tr className="border-b border-blue-400/20 bg-blue-400/[0.08]">
-                    <td className="px-4 py-4 text-center">
-                    </td>
-                    <td className="px-4 py-4">
-                      <p className="text-sm font-black text-blue-300">Edit {selectedIds.length} Artikel</p>
-                      <p className="text-[10px] font-bold text-blue-300/60 mt-1 uppercase">Opsi Massal</p>
-                    </td>
-                    <td className="px-4 py-4">
-                      <select 
-                        value={bulkEditForm.categoryId} 
-                        onChange={(e) => setBulkEditForm({...bulkEditForm, categoryId: e.target.value})}
-                        className="w-full min-w-[120px] bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
-                      >
-                        <option value="">(Tidak Diubah)</option>
-                        <option value="null">Tanpa Kategori</option>
-                        {categories.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="px-4 py-4">
-                      <select 
-                        value={bulkEditForm.status} 
-                        onChange={(e) => setBulkEditForm({...bulkEditForm, status: e.target.value})}
-                        className="w-full bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
-                      >
-                        <option value="">(Tidak Diubah)</option>
-                        <option value="PUBLISHED">Published</option>
-                        <option value="DRAFT">Draft</option>
-                        <option value="ARCHIVED">Archived</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-4">
-                      <select 
-                        value={bulkEditForm.isHeadline} 
-                        onChange={(e) => setBulkEditForm({...bulkEditForm, isHeadline: e.target.value})}
-                        className="bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
-                      >
-                        <option value="">(Tidak Diubah)</option>
-                        <option value="true">Ya</option>
-                        <option value="false">Tidak</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-4">
-                      <select 
-                        value={bulkEditForm.isFeatured} 
-                        onChange={(e) => setBulkEditForm({...bulkEditForm, isFeatured: e.target.value})}
-                        className="bg-slate-900 border border-blue-400/30 rounded-lg px-2 py-1 text-xs text-white"
-                      >
-                        <option value="">(Tidak Diubah)</option>
-                        <option value="true">Ya</option>
-                        <option value="false">Tidak</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-4"></td>
-                    <td className="px-4 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={cancelEdit} className="rounded-xl border border-white/10 bg-slate-800 px-3 py-2 text-xs font-black text-white hover:bg-slate-700">
-                          Batal
-                        </button>
-                        <button onClick={handleBulkSave} disabled={loadingId === "bulk"} className="flex items-center justify-center rounded-xl bg-blue-400 px-3 py-2 text-xs font-black text-slate-950 hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                          {loadingId === "bulk" ? <><LoadingSpinner className="h-3 w-3 mr-1.5" /> Loading...</> : "Simpan Massal"}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-                {safeArticles.map((article) => {
-                  const isEditing = editingId === article.id;
-
-                  return (
-                    <tr key={article.id} className={`border-b border-white/10 last:border-b-0 ${loadingId === article.id ? "opacity-50" : ""} hover:bg-white/[0.02]`}>
-                      <td className="px-4 py-4 text-center">
-                        <input 
-                          type="checkbox" 
-                          className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
-                          checked={selectedIds.includes(article.id)}
-                          onChange={() => handleToggleSelect(article.id)}
-                        />
-                      </td>
-
-                      <td className="max-w-[320px] px-4 py-4">
-                        <p className="line-clamp-2 text-sm font-black leading-5 text-white">{article.title}</p>
-                        <p className="mt-1 truncate text-xs font-semibold text-slate-500">/{article.slug}</p>
-                      </td>
-
-                      <td className="px-4 py-4">
-                        {isEditing ? (
-                          <select 
-                            value={editForm.categoryId} 
-                            onChange={(e) => setEditForm({...editForm, categoryId: e.target.value})}
-                            className="w-full min-w-[120px] bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
-                          >
-                            <option value="">Tanpa Kategori</option>
-                            {categories.map(c => (
-                              <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-300">
-                            {article.category}
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="px-4 py-4">
-                        {isEditing ? (
-                          <select 
-                            value={editForm.status} 
-                            onChange={(e) => setEditForm({...editForm, status: e.target.value})}
-                            className="w-full bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
-                          >
-                            <option value="PUBLISHED">Published</option>
-                            <option value="DRAFT">Draft</option>
-                            <option value="ARCHIVED">Archived</option>
-                          </select>
-                        ) : (
-                          <span className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-slate-300">
-                            {article.status}
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="px-4 py-4 text-sm font-black text-slate-300">
-                        {isEditing ? (
-                          <select 
-                            value={editForm.isHeadline} 
-                            onChange={(e) => setEditForm({...editForm, isHeadline: e.target.value})}
-                            className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
-                          >
-                            <option value="true">Ya</option>
-                            <option value="false">Tidak</option>
-                          </select>
-                        ) : formatBoolean(article.headline)}
-                      </td>
-
-                      <td className="px-4 py-4 text-sm font-black text-slate-300">
-                        {isEditing ? (
-                          <select 
-                            value={editForm.isFeatured} 
-                            onChange={(e) => setEditForm({...editForm, isFeatured: e.target.value})}
-                            className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs text-white"
-                          >
-                            <option value="true">Ya</option>
-                            <option value="false">Tidak</option>
-                          </select>
-                        ) : formatBoolean(article.featured)}
-                      </td>
-
-                      <td className="px-4 py-4 text-sm font-semibold text-slate-400">
-                        {article.date || "-"}
-                        <div className="mt-1 text-[10px] text-emerald-300/60 font-black">{article.views} views</div>
-                      </td>
-
-                      <td className="px-4 py-4 whitespace-nowrap text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {isEditing ? (
-                            <>
-                              <button onClick={cancelEdit} className="rounded-xl border border-white/10 bg-slate-800 px-3 py-2 text-xs font-black text-white hover:bg-slate-700">
-                                Batal
-                              </button>
-                              <button onClick={() => handleSaveEdit(article.id)} disabled={loadingId === article.id} className="flex items-center justify-center min-w-[70px] rounded-xl bg-emerald-400 px-3 py-2 text-xs font-black text-slate-950 hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {loadingId === article.id ? <LoadingSpinner className="h-3.5 w-3.5" /> : "Simpan"}
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <Link href={`/admin/news/edit-artikel/${article.slug}`} className="rounded-xl border border-white/10 bg-white/[0.055] px-3 py-2 text-xs font-black text-slate-300 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-200">
-                                Edit
-                              </Link>
-                              <button onClick={() => handleDeleteSingle(article.id)} disabled={loadingId === article.id} className="flex items-center justify-center min-w-[65px] rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-xs font-black text-red-300 transition hover:bg-red-400/20 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {loadingId === article.id ? <LoadingSpinner className="h-3.5 w-3.5 text-red-400" /> : "Hapus"}
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {/* TABLE VIEWS (Published & Draft) */}
+        {renderTableGroup("Artikel Published", publishedArticles, isPublishedOpen, () => setIsPublishedOpen(!isPublishedOpen), "bg-emerald-400")}
+        {renderTableGroup("Artikel Draft / Archived", draftArticles, isDraftOpen, () => setIsDraftOpen(!isDraftOpen), "bg-amber-400")}
       </div>
     </section>
 

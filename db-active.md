@@ -19,23 +19,28 @@ Berikut adalah modul-modul yang 100% menggunakan data dari Database (baik Publik
   - *Database Model*: `NewsCategory`, `NewsArticle`
   - *Status*: Sempurna. Operasi CRUD untuk artikel berita dan pengelompokan kategorinya.
 
-### 3. Modul Bot Scraping Otomatis
+### 3. Modul Sosial Media Caption AI (Auto-Generate)
+- **`/admin/news/social-media`** (Dasbor Admin)
+  - *Database Model*: `NewsSocialCaption`
+  - *Status*: Sempurna. Menyimpan draft/hasil *generate* caption AI (dari Groq/Gemini) untuk berbagai platform sosial media, terintegrasi relasi dengan artikel utama (`NewsArticle`).
+
+### 4. Modul Bot Scraping Otomatis
 - **`/admin/scraping-news`**
   - *Database Model*: `ScrapedNewsArticle`, `ScraperLog`
   - *Status*: Sempurna. Pengambilan berita dari web eksternal serta mencatat log (riwayat keberhasilan/kegagalan).
 
-### 4. Modul Pengaturan Kunci API (AI)
+### 5. Modul Pengaturan Kunci API (AI)
 - **`/admin/settings/api-key`**
   - *Database Model*: `AiApiAccount`, `AiApiKey`
   - *Status*: Sempurna. Penyimpanan token/kunci AI (Gemini, Groq) secara terenkripsi.
 
-### 5. Modul Sistem Pembayaran & Dukungan (Donasi)
+### 6. Modul Sistem Pembayaran & Dukungan (Donasi)
 - **`/support`** (Halaman Dukungan Donasi Publik)
 - **`/admin/settings/payment`** (Halaman Manajemen Rekening & QRIS)
   - *Database Model*: `PaymentSetting`
   - *Status*: Sempurna. Pengunjung Publik bisa memilih secara interaktif metode pembayaran dan melihat informasi Rekening / QRIS yang dikelola melalui Admin.
 
-### 6. Modul Pengaturan Kontak & Peta
+### 7. Modul Pengaturan Kontak & Peta
 - **`/contact`** (Halaman Kontak Publik)
 - **`/admin/settings/contact`** (Halaman Manajemen Kontak WhatsApp & Email)
 - **`/admin/settings/maps`** (Halaman Manajemen Lokasi & Tautan Peta)

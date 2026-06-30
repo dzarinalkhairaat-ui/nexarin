@@ -7,7 +7,7 @@ import {
   ArticleIcon,
   WriteIcon,
   CategoryIcon,
-  SettingsIcon
+  SocialMediaIcon
 } from "@/components/shared/MenuIcons";
 
 const adminNewsNavItems = [
@@ -32,9 +32,9 @@ const adminNewsNavItems = [
     icon: <CategoryIcon className="h-3.5 w-3.5 mr-1.5" />
   },
   {
-    label: "Pengaturan",
-    href: "/admin/news/pengaturan",
-    icon: <SettingsIcon className="h-3.5 w-3.5 mr-1.5" />
+    label: "Social Media",
+    href: "/admin/news/social-media",
+    icon: <SocialMediaIcon className="h-3.5 w-3.5 mr-1.5" />
   },
 ];
 

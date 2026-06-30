@@ -2,7 +2,7 @@ import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import AdminNewsNav from "@/features/admin/news/components/AdminNewsNav";
 import { prisma } from "@/lib/prisma";
-import { ArticleIcon, WriteIcon, CategoryIcon, SettingsIcon } from "@/components/shared/MenuIcons";
+import { ArticleIcon, WriteIcon, CategoryIcon, SocialMediaIcon } from "@/components/shared/MenuIcons";
 
 const newsDashboardMenus = [
   {
@@ -27,11 +27,11 @@ const newsDashboardMenus = [
     icon: <CategoryIcon className="h-6 w-6" />,
   },
   {
-    title: "Pengaturan",
-    description: "Area kosong untuk update fitur News ke depannya.",
-    href: "/admin/news/pengaturan",
+    title: "Social Media",
+    description: "Integrasi posting otomatis ke Social Media.",
+    href: "/admin/news/social-media",
     badge: "Soon",
-    icon: <SettingsIcon className="h-6 w-6" />,
+    icon: <SocialMediaIcon className="h-6 w-6" />,
   },
 ];
 

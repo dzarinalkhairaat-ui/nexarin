@@ -52,6 +52,11 @@ export type NewsCategory = Prisma.NewsCategoryModel
  */
 export type NewsArticle = Prisma.NewsArticleModel
 /**
+ * Model NewsSocialCaption
+ * 
+ */
+export type NewsSocialCaption = Prisma.NewsSocialCaptionModel
+/**
  * Model AdminOtpChallenge
  * 
  */

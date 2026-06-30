@@ -369,6 +369,7 @@ export type NewsArticleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"NewsArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NewsArticle"> | Date | string
   category?: Prisma.XOR<Prisma.NewsCategoryScalarRelationFilter, Prisma.NewsCategoryWhereInput>
+  socialCaptions?: Prisma.NewsSocialCaptionListRelationFilter
 }
 
 export type NewsArticleOrderByWithRelationInput = {
@@ -397,6 +398,7 @@ export type NewsArticleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   category?: Prisma.NewsCategoryOrderByWithRelationInput
+  socialCaptions?: Prisma.NewsSocialCaptionOrderByRelationAggregateInput
 }
 
 export type NewsArticleWhereUniqueInput = Prisma.AtLeast<{
@@ -428,6 +430,7 @@ export type NewsArticleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"NewsArticle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NewsArticle"> | Date | string
   category?: Prisma.XOR<Prisma.NewsCategoryScalarRelationFilter, Prisma.NewsCategoryWhereInput>
+  socialCaptions?: Prisma.NewsSocialCaptionListRelationFilter
 }, "id" | "slug">
 
 export type NewsArticleOrderByWithAggregationInput = {
@@ -517,6 +520,7 @@ export type NewsArticleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.NewsCategoryCreateNestedOneWithoutArticlesInput
+  socialCaptions?: Prisma.NewsSocialCaptionCreateNestedManyWithoutArticleInput
 }
 
 export type NewsArticleUncheckedCreateInput = {
@@ -544,6 +548,7 @@ export type NewsArticleUncheckedCreateInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionUncheckedCreateNestedManyWithoutArticleInput
 }
 
 export type NewsArticleUpdateInput = {
@@ -571,6 +576,7 @@ export type NewsArticleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.NewsCategoryUpdateOneRequiredWithoutArticlesNestedInput
+  socialCaptions?: Prisma.NewsSocialCaptionUpdateManyWithoutArticleNestedInput
 }
 
 export type NewsArticleUncheckedUpdateInput = {
@@ -598,6 +604,7 @@ export type NewsArticleUncheckedUpdateInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionUncheckedUpdateManyWithoutArticleNestedInput
 }
 
 export type NewsArticleCreateManyInput = {
@@ -779,6 +786,11 @@ export type NewsArticleSumOrderByAggregateInput = {
   views?: Prisma.SortOrder
 }
 
+export type NewsArticleScalarRelationFilter = {
+  is?: Prisma.NewsArticleWhereInput
+  isNot?: Prisma.NewsArticleWhereInput
+}
+
 export type NewsArticleCreateNestedManyWithoutCategoryInput = {
   create?: Prisma.XOR<Prisma.NewsArticleCreateWithoutCategoryInput, Prisma.NewsArticleUncheckedCreateWithoutCategoryInput> | Prisma.NewsArticleCreateWithoutCategoryInput[] | Prisma.NewsArticleUncheckedCreateWithoutCategoryInput[]
   connectOrCreate?: Prisma.NewsArticleCreateOrConnectWithoutCategoryInput | Prisma.NewsArticleCreateOrConnectWithoutCategoryInput[]
@@ -845,6 +857,20 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type NewsArticleCreateNestedOneWithoutSocialCaptionsInput = {
+  create?: Prisma.XOR<Prisma.NewsArticleCreateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedCreateWithoutSocialCaptionsInput>
+  connectOrCreate?: Prisma.NewsArticleCreateOrConnectWithoutSocialCaptionsInput
+  connect?: Prisma.NewsArticleWhereUniqueInput
+}
+
+export type NewsArticleUpdateOneRequiredWithoutSocialCaptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.NewsArticleCreateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedCreateWithoutSocialCaptionsInput>
+  connectOrCreate?: Prisma.NewsArticleCreateOrConnectWithoutSocialCaptionsInput
+  upsert?: Prisma.NewsArticleUpsertWithoutSocialCaptionsInput
+  connect?: Prisma.NewsArticleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NewsArticleUpdateToOneWithWhereWithoutSocialCaptionsInput, Prisma.NewsArticleUpdateWithoutSocialCaptionsInput>, Prisma.NewsArticleUncheckedUpdateWithoutSocialCaptionsInput>
+}
+
 export type NewsArticleCreateWithoutCategoryInput = {
   id?: string
   title: string
@@ -869,6 +895,7 @@ export type NewsArticleCreateWithoutCategoryInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionCreateNestedManyWithoutArticleInput
 }
 
 export type NewsArticleUncheckedCreateWithoutCategoryInput = {
@@ -895,6 +922,7 @@ export type NewsArticleUncheckedCreateWithoutCategoryInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionUncheckedCreateNestedManyWithoutArticleInput
 }
 
 export type NewsArticleCreateOrConnectWithoutCategoryInput = {
@@ -953,6 +981,130 @@ export type NewsArticleScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"NewsArticle"> | Date | string
 }
 
+export type NewsArticleCreateWithoutSocialCaptionsInput = {
+  id?: string
+  title: string
+  slug: string
+  summary: string
+  content: string
+  youtubeUrl?: string | null
+  status?: $Enums.NewsArticleStatus
+  isHeadline?: boolean
+  isFeatured?: boolean
+  views?: number
+  coverImageUrl?: string | null
+  coverImagePath?: string | null
+  coverImageProvider?: $Enums.NewsImageProvider | null
+  coverImageAlt?: string | null
+  sourceType?: $Enums.NewsSourceType | null
+  sourceName?: string | null
+  sourceUrl?: string | null
+  sourceNote?: string | null
+  videoSourceName?: string | null
+  videoSourceUrl?: string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.NewsCategoryCreateNestedOneWithoutArticlesInput
+}
+
+export type NewsArticleUncheckedCreateWithoutSocialCaptionsInput = {
+  id?: string
+  title: string
+  slug: string
+  summary: string
+  content: string
+  youtubeUrl?: string | null
+  status?: $Enums.NewsArticleStatus
+  isHeadline?: boolean
+  isFeatured?: boolean
+  views?: number
+  coverImageUrl?: string | null
+  coverImagePath?: string | null
+  coverImageProvider?: $Enums.NewsImageProvider | null
+  coverImageAlt?: string | null
+  sourceType?: $Enums.NewsSourceType | null
+  sourceName?: string | null
+  sourceUrl?: string | null
+  sourceNote?: string | null
+  videoSourceName?: string | null
+  videoSourceUrl?: string | null
+  categoryId: string
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NewsArticleCreateOrConnectWithoutSocialCaptionsInput = {
+  where: Prisma.NewsArticleWhereUniqueInput
+  create: Prisma.XOR<Prisma.NewsArticleCreateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedCreateWithoutSocialCaptionsInput>
+}
+
+export type NewsArticleUpsertWithoutSocialCaptionsInput = {
+  update: Prisma.XOR<Prisma.NewsArticleUpdateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedUpdateWithoutSocialCaptionsInput>
+  create: Prisma.XOR<Prisma.NewsArticleCreateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedCreateWithoutSocialCaptionsInput>
+  where?: Prisma.NewsArticleWhereInput
+}
+
+export type NewsArticleUpdateToOneWithWhereWithoutSocialCaptionsInput = {
+  where?: Prisma.NewsArticleWhereInput
+  data: Prisma.XOR<Prisma.NewsArticleUpdateWithoutSocialCaptionsInput, Prisma.NewsArticleUncheckedUpdateWithoutSocialCaptionsInput>
+}
+
+export type NewsArticleUpdateWithoutSocialCaptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumNewsArticleStatusFieldUpdateOperationsInput | $Enums.NewsArticleStatus
+  isHeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImageProvider?: Prisma.NullableEnumNewsImageProviderFieldUpdateOperationsInput | $Enums.NewsImageProvider | null
+  coverImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableEnumNewsSourceTypeFieldUpdateOperationsInput | $Enums.NewsSourceType | null
+  sourceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoSourceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoSourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.NewsCategoryUpdateOneRequiredWithoutArticlesNestedInput
+}
+
+export type NewsArticleUncheckedUpdateWithoutSocialCaptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  youtubeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumNewsArticleStatusFieldUpdateOperationsInput | $Enums.NewsArticleStatus
+  isHeadline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImagePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImageProvider?: Prisma.NullableEnumNewsImageProviderFieldUpdateOperationsInput | $Enums.NewsImageProvider | null
+  coverImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableEnumNewsSourceTypeFieldUpdateOperationsInput | $Enums.NewsSourceType | null
+  sourceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoSourceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoSourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type NewsArticleCreateManyCategoryInput = {
   id?: string
   title: string
@@ -1003,6 +1155,7 @@ export type NewsArticleUpdateWithoutCategoryInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionUpdateManyWithoutArticleNestedInput
 }
 
 export type NewsArticleUncheckedUpdateWithoutCategoryInput = {
@@ -1029,6 +1182,7 @@ export type NewsArticleUncheckedUpdateWithoutCategoryInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  socialCaptions?: Prisma.NewsSocialCaptionUncheckedUpdateManyWithoutArticleNestedInput
 }
 
 export type NewsArticleUncheckedUpdateManyWithoutCategoryInput = {
@@ -1058,6 +1212,35 @@ export type NewsArticleUncheckedUpdateManyWithoutCategoryInput = {
 }
 
 
+/**
+ * Count Type NewsArticleCountOutputType
+ */
+
+export type NewsArticleCountOutputType = {
+  socialCaptions: number
+}
+
+export type NewsArticleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  socialCaptions?: boolean | NewsArticleCountOutputTypeCountSocialCaptionsArgs
+}
+
+/**
+ * NewsArticleCountOutputType without action
+ */
+export type NewsArticleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NewsArticleCountOutputType
+   */
+  select?: Prisma.NewsArticleCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * NewsArticleCountOutputType without action
+ */
+export type NewsArticleCountOutputTypeCountSocialCaptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NewsSocialCaptionWhereInput
+}
+
 
 export type NewsArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1085,6 +1268,8 @@ export type NewsArticleSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   updatedAt?: boolean
   category?: boolean | Prisma.NewsCategoryDefaultArgs<ExtArgs>
+  socialCaptions?: boolean | Prisma.NewsArticle$socialCaptionsArgs<ExtArgs>
+  _count?: boolean | Prisma.NewsArticleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["newsArticle"]>
 
 export type NewsArticleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1173,6 +1358,8 @@ export type NewsArticleSelectScalar = {
 export type NewsArticleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "summary" | "content" | "youtubeUrl" | "status" | "isHeadline" | "isFeatured" | "views" | "coverImageUrl" | "coverImagePath" | "coverImageProvider" | "coverImageAlt" | "sourceType" | "sourceName" | "sourceUrl" | "sourceNote" | "videoSourceName" | "videoSourceUrl" | "categoryId" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["newsArticle"]>
 export type NewsArticleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.NewsCategoryDefaultArgs<ExtArgs>
+  socialCaptions?: boolean | Prisma.NewsArticle$socialCaptionsArgs<ExtArgs>
+  _count?: boolean | Prisma.NewsArticleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type NewsArticleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.NewsCategoryDefaultArgs<ExtArgs>
@@ -1185,6 +1372,7 @@ export type $NewsArticlePayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "NewsArticle"
   objects: {
     category: Prisma.$NewsCategoryPayload<ExtArgs>
+    socialCaptions: Prisma.$NewsSocialCaptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1606,6 +1794,7 @@ readonly fields: NewsArticleFieldRefs;
 export interface Prisma__NewsArticleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   category<T extends Prisma.NewsCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NewsCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__NewsCategoryClient<runtime.Types.Result.GetResult<Prisma.$NewsCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  socialCaptions<T extends Prisma.NewsArticle$socialCaptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NewsArticle$socialCaptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NewsSocialCaptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2057,6 +2246,30 @@ export type NewsArticleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many NewsArticles to delete.
    */
   limit?: number
+}
+
+/**
+ * NewsArticle.socialCaptions
+ */
+export type NewsArticle$socialCaptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NewsSocialCaption
+   */
+  select?: Prisma.NewsSocialCaptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NewsSocialCaption
+   */
+  omit?: Prisma.NewsSocialCaptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NewsSocialCaptionInclude<ExtArgs> | null
+  where?: Prisma.NewsSocialCaptionWhereInput
+  orderBy?: Prisma.NewsSocialCaptionOrderByWithRelationInput | Prisma.NewsSocialCaptionOrderByWithRelationInput[]
+  cursor?: Prisma.NewsSocialCaptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NewsSocialCaptionScalarFieldEnum | Prisma.NewsSocialCaptionScalarFieldEnum[]
 }
 
 /**

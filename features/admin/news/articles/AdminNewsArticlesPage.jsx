@@ -1,7 +1,7 @@
 import Link from "next/link";
 import AdminTopbar from "@/features/admin/components/AdminTopbar";
 import AdminNewsNav from "@/features/admin/news/components/AdminNewsNav";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"; 
 import AdminArticlesToolbarClient from "@/features/admin/news/articles/AdminArticlesToolbarClient";
 import AdminArticlesTableClient from "@/features/admin/news/articles/AdminArticlesTableClient";
 
@@ -48,6 +48,7 @@ function mapNewsArticleToAdminTable(article) {
     featured: Boolean(article?.isFeatured),
     views: article?.views ?? 0,
     date: formatArticleDate(displayDate),
+    socialCaptions: article?.socialCaptions?.map(c => c.platform) || [],
   };
 }
 
@@ -76,6 +77,9 @@ async function getAdminNewsArticles(q, status, categoryId) {
             slug: true,
           },
         },
+        socialCaptions: {
+          select: { platform: true }
+        }
       },
       orderBy: {
         createdAt: "desc",

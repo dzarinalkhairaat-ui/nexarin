@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
+  NewsSocialCaption: 'NewsSocialCaption',
   AdminOtpChallenge: 'AdminOtpChallenge',
   AiApiAccount: 'AiApiAccount',
   AiApiKey: 'AiApiKey',
@@ -121,6 +122,17 @@ export const NewsArticleScalarFieldEnum = {
 } as const
 
 export type NewsArticleScalarFieldEnum = (typeof NewsArticleScalarFieldEnum)[keyof typeof NewsArticleScalarFieldEnum]
+
+
+export const NewsSocialCaptionScalarFieldEnum = {
+  id: 'id',
+  articleId: 'articleId',
+  platform: 'platform',
+  caption: 'caption',
+  createdAt: 'createdAt'
+} as const
+
+export type NewsSocialCaptionScalarFieldEnum = (typeof NewsSocialCaptionScalarFieldEnum)[keyof typeof NewsSocialCaptionScalarFieldEnum]
 
 
 export const AdminOtpChallengeScalarFieldEnum = {

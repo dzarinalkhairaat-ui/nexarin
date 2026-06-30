@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   NewsCategory: 'NewsCategory',
   NewsArticle: 'NewsArticle',
+  NewsSocialCaption: 'NewsSocialCaption',
   AdminOtpChallenge: 'AdminOtpChallenge',
   AiApiAccount: 'AiApiAccount',
   AiApiKey: 'AiApiKey',
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "portfolioProject" | "contactSetting" | "mapSetting" | "paymentSetting"
+    modelProps: "newsCategory" | "newsArticle" | "newsSocialCaption" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "portfolioProject" | "contactSetting" | "mapSetting" | "paymentSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -559,6 +560,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.NewsArticleCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.NewsArticleCountAggregateOutputType> | number
+        }
+      }
+    }
+    NewsSocialCaption: {
+      payload: Prisma.$NewsSocialCaptionPayload<ExtArgs>
+      fields: Prisma.NewsSocialCaptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsSocialCaptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsSocialCaptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsSocialCaptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsSocialCaptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        findMany: {
+          args: Prisma.NewsSocialCaptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>[]
+        }
+        create: {
+          args: Prisma.NewsSocialCaptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        createMany: {
+          args: Prisma.NewsSocialCaptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsSocialCaptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsSocialCaptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        update: {
+          args: Prisma.NewsSocialCaptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsSocialCaptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsSocialCaptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsSocialCaptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsSocialCaptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsSocialCaptionPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsSocialCaptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsSocialCaption>
+        }
+        groupBy: {
+          args: Prisma.NewsSocialCaptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsSocialCaptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsSocialCaptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsSocialCaptionCountAggregateOutputType> | number
         }
       }
     }
@@ -1310,6 +1385,17 @@ export const NewsArticleScalarFieldEnum = {
 export type NewsArticleScalarFieldEnum = (typeof NewsArticleScalarFieldEnum)[keyof typeof NewsArticleScalarFieldEnum]
 
 
+export const NewsSocialCaptionScalarFieldEnum = {
+  id: 'id',
+  articleId: 'articleId',
+  platform: 'platform',
+  caption: 'caption',
+  createdAt: 'createdAt'
+} as const
+
+export type NewsSocialCaptionScalarFieldEnum = (typeof NewsSocialCaptionScalarFieldEnum)[keyof typeof NewsSocialCaptionScalarFieldEnum]
+
+
 export const AdminOtpChallengeScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -1712,6 +1798,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   newsCategory?: Prisma.NewsCategoryOmit
   newsArticle?: Prisma.NewsArticleOmit
+  newsSocialCaption?: Prisma.NewsSocialCaptionOmit
   adminOtpChallenge?: Prisma.AdminOtpChallengeOmit
   aiApiAccount?: Prisma.AiApiAccountOmit
   aiApiKey?: Prisma.AiApiKeyOmit

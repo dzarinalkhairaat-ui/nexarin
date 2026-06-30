@@ -1,1 +1,3 @@
-sekarang saya ingin untuk halaman /news bisa di scraping oleh bot, tapi hanya halaman ini saja, untuk halaman yang lain tidak boleh
+sekarang anda cek backend DB di seluruh bagian WEBSITE ini dan pastikan semua benar-benar sempurna dan tidak ada error sedikitpun!
+
+dan kemudian anda update file db-active.md nya

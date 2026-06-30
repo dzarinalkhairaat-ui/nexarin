@@ -10,6 +10,7 @@
  */
 export type * from './models/NewsCategory'
 export type * from './models/NewsArticle'
+export type * from './models/NewsSocialCaption'
 export type * from './models/AdminOtpChallenge'
 export type * from './models/AiApiAccount'
 export type * from './models/AiApiKey'
