@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { requestAdminLoginOtpAction } from "@/features/admin/login/adminLoginOtp.actions";
@@ -64,8 +64,21 @@ export default function AdminLoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedEmail = localStorage.getItem("nexarin_admin_saved_email");
+      const savedPassword = localStorage.getItem("nexarin_admin_saved_password");
+      if (savedEmail && savedPassword) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setRemember(true);
+      }
+    }
+  }, []);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -137,6 +150,14 @@ export default function AdminLoginPage() {
         otpResult.message ||
         "Kode OTP sudah dikirim. Mengalihkan ke verifikasi...",
     });
+
+    if (remember) {
+      localStorage.setItem("nexarin_admin_saved_email", cleanEmail);
+      localStorage.setItem("nexarin_admin_saved_password", cleanPassword);
+    } else {
+      localStorage.removeItem("nexarin_admin_saved_email");
+      localStorage.removeItem("nexarin_admin_saved_password");
+    }
 
     setTimeout(() => {
       router.replace(
@@ -227,6 +248,8 @@ export default function AdminLoginPage() {
                   type="checkbox"
                   id="remember"
                   name="remember"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
                   className="h-4 w-4 rounded border-white/20 bg-slate-950 text-emerald-400 focus:ring-emerald-400/50"
                 />
                 <label htmlFor="remember" className="text-xs font-medium text-slate-400 cursor-pointer select-none">

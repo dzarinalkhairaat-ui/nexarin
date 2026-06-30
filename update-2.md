@@ -1,1 +1,2 @@
-sudah bagus dan petahankan, namun saya ingin preview maps nya menjadi 1 dalam bagian LOCATION
+sekarang saya ingin di halaman /home, saya ingin di bawah bagian HomeHero tambahkan bagian baru yaitu :
+- animasi diagram progres yang bergerak terus naik dan animasi nya terus terulang (looping). dan saya ingin tampilan nya premium dan profesional, responsif pada tampilan dekstop dan mobile

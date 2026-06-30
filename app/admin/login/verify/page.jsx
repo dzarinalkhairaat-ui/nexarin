@@ -153,27 +153,35 @@ function AdminLoginVerifyContent() {
             <div className="my-6 h-px bg-white/[0.08]" />
 
             {/* Fields */}
-            <div className="grid gap-4">
-              <label className="grid gap-2">
-                <span className="text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
-                  Kode OTP 8 Digit
-                </span>
+            <div className="grid gap-6">
+              <label className="grid gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
+                    Kode Keamanan OTP
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-500 tracking-wider bg-slate-900 px-2 py-0.5 rounded-full border border-white/5">
+                    8 DIGIT
+                  </span>
+                </div>
 
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={otp}
-                  onChange={(event) => setOtp(normalizeOtp(event.target.value))}
-                  placeholder="••••••••"
-                  autoComplete="one-time-code"
-                  className="min-h-12 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 text-center text-lg font-black tracking-[0.2em] text-white outline-none transition placeholder:text-sm placeholder:tracking-[0.12em] placeholder:text-slate-600 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50"
-                />
+                <div className="relative group">
+                  <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-500 opacity-0 blur transition duration-500 group-focus-within:opacity-25" />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={otp}
+                    onChange={(event) => setOtp(normalizeOtp(event.target.value))}
+                    placeholder="••••••••"
+                    autoComplete="one-time-code"
+                    className="relative min-h-16 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 text-center text-3xl font-black tracking-[0.3em] text-white shadow-inner outline-none transition-all placeholder:text-2xl placeholder:tracking-[0.2em] placeholder:text-slate-700 focus:border-cyan-400/50 focus:bg-slate-900/90 focus:ring-2 focus:ring-cyan-400/20"
+                  />
+                </div>
               </label>
 
               {message ? (
                 <div
                   className={[
-                    "rounded-2xl border p-4",
+                    "rounded-2xl border p-4 backdrop-blur-sm",
                     message.type === "success"
                       ? "border-emerald-400/20 bg-emerald-400/[0.08]"
                       : "border-amber-400/20 bg-amber-400/[0.08]",
@@ -181,40 +189,85 @@ function AdminLoginVerifyContent() {
                 >
                   <p
                     className={[
-                      "text-sm font-bold leading-6",
+                      "text-sm font-bold leading-6 flex items-start gap-2",
                       message.type === "success"
                         ? "text-emerald-200"
                         : "text-amber-200",
                     ].join(" ")}
                   >
+                    {message.type === "success" ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5 text-emerald-400"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5 text-amber-400"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    )}
                     {message.text}
                   </p>
                 </div>
               ) : null}
 
-              <div className="mt-1 grid gap-3">
+              <div className="grid gap-3">
                 <button
                   type="submit"
                   disabled={isVerifying}
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-cyan-400/20 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="group relative flex min-h-14 w-full items-center justify-center overflow-hidden rounded-2xl border border-cyan-400/30 bg-gradient-to-r from-cyan-500 to-cyan-400 px-6 py-4 text-sm font-black text-slate-950 shadow-xl shadow-cyan-500/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 active:scale-95 disabled:pointer-events-none disabled:opacity-60"
                 >
-                  {isVerifying ? "Memverifikasi..." : "Masuk ke Dashboard"}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {isVerifying ? (
+                      <>
+                        <svg className="h-5 w-5 animate-spin text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <circle cx="12" cy="12" r="10" strokeWidth="4" strokeDasharray="32" strokeDashoffset="16" className="opacity-25"/>
+                          <path d="M4 12a8 8 0 018-8v8H4z" fill="currentColor"/>
+                        </svg>
+                        Memverifikasi...
+                      </>
+                    ) : (
+                      <>
+                        Masuk ke Dashboard
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </>
+                    )}
+                  </span>
+                  <div className="absolute inset-0 z-0 bg-white/20 translate-y-full transition-transform duration-300 group-hover:translate-y-0" />
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  disabled={isResending || isVerifying}
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045] px-5 py-3 text-sm font-black text-white transition hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isResending ? "Mengirim ulang..." : "Kirim Ulang OTP"}
-                </button>
+                <div className="grid grid-cols-2 gap-3">
+                  {email.toLowerCase().endsWith("@gmail.com") && (
+                    <a
+                      href={`https://mail.google.com/mail/u/?authuser=${encodeURIComponent(email)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex min-h-12 items-center justify-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-[13px] font-black text-rose-400 transition hover:bg-rose-500/20 hover:text-rose-300 shadow-inner"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover:scale-110">
+                        <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                      </svg>
+                      Inbox Gmail
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={isResending || isVerifying}
+                    className={`group flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-4 py-2 text-[13px] font-black text-slate-300 transition hover:bg-white/[0.08] hover:text-white shadow-inner disabled:pointer-events-none disabled:opacity-60 ${!email.toLowerCase().endsWith("@gmail.com") ? "col-span-2" : ""}`}
+                  >
+                    {isResending ? (
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10" strokeWidth="4" strokeDasharray="32" strokeDashoffset="16" className="opacity-25"/>
+                        <path d="M4 12a8 8 0 018-8v8H4z" fill="currentColor"/>
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    )}
+                    {isResending ? "Mengirim..." : "Kirim Ulang"}
+                  </button>
+                </div>
                 
                 <button
                   type="button"
                   onClick={handleBackToLogin}
                   disabled={isVerifying || isResending}
-                  className="text-xs font-bold text-slate-500 hover:text-slate-300 transition py-2"
+                  className="mt-2 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 transition py-2 disabled:pointer-events-none disabled:opacity-50"
                 >
                   Batal & Kembali ke Login
                 </button>

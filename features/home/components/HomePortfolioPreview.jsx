@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { homePortfolioPreview } from "@/features/home/home.data";
+import { getPortfolioProjects } from "@/features/portfolio/portfolio.data";
 
 const BriefcaseIcon = ({ className = "h-5 w-5" }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -44,10 +45,13 @@ function StackBadges({ stacks }) {
 
 function MiniProjectCard({ project, index }) {
   const safeProject = project || {};
-  const icon = projectIcons[index] || <LayoutIcon className="h-6 w-6" />;
+  const icon = projectIcons[index % projectIcons.length] || <LayoutIcon className="h-6 w-6" />;
+  const type = safeProject.type || safeProject.category || "Project";
+  const stacks = safeProject.stacks || safeProject.tags || [];
+  const detailHref = safeProject.slug ? `/portfolio/${safeProject.slug}` : "/portfolio";
 
   return (
-    <Link href="/portfolio" className="block group">
+    <Link href={detailHref} className="block group h-full">
       <article className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04] h-full flex flex-col">
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-4">
@@ -57,7 +61,7 @@ function MiniProjectCard({ project, index }) {
 
             <div className="min-w-0">
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
-                {safeProject.type || "Project"}
+                {type}
               </p>
 
               <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
@@ -75,10 +79,6 @@ function MiniProjectCard({ project, index }) {
               "Deskripsi project akan ditambahkan saat data sudah siap."}
           </p>
 
-          <div className="mt-6">
-            <StackBadges stacks={safeProject.stacks} />
-          </div>
-
           <div className="mt-6 border-t border-white/10 pt-4">
             <span className="inline-flex w-full items-center justify-between text-sm font-black text-cyan-400 transition group-hover:text-cyan-300">
               <span>Lihat Portfolio</span>
@@ -93,7 +93,7 @@ function MiniProjectCard({ project, index }) {
 
 export default function HomePortfolioPreview() {
   const data = homePortfolioPreview || {};
-  const projects = Array.isArray(data.items) ? data.items : [];
+  const projects = getPortfolioProjects();
   const cta = data.cta || {};
 
   return (
@@ -129,7 +129,7 @@ export default function HomePortfolioPreview() {
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
           {projects.length > 0 ? (
             projects.map((project, index) => (
               <MiniProjectCard

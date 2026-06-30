@@ -13,7 +13,8 @@ import {
   NewsIcon,
   AboutIcon,
   ContactIcon,
-  LockIcon
+  QuestionIcon,
+  FileIcon
 } from "@/components/shared/MenuIcons";
 
 function getMenuIcon(label) {
@@ -170,18 +171,29 @@ function MenuPanel({ navigation, onClose }) {
               </div>
             )}
             
-            <Link
-              href="/admin/login"
-              onClick={onClose}
-              className="group flex mt-2 min-h-12 items-center justify-between rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-black text-emerald-300 shadow-lg shadow-emerald-400/5 transition hover:bg-emerald-400/20"
-            >
-              <span className="flex min-w-0 items-center gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-400/20 text-xs text-emerald-400">
-                  <LockIcon className="h-4 w-4" />
-                </span>
-                <span className="truncate">Admin Login</span>
-              </span>
-            </Link>
+            <div className="mt-2 grid grid-cols-3 gap-2">
+              <Link
+                href="/support"
+                onClick={onClose}
+                className="flex min-h-10 items-center justify-center rounded-xl border border-white/10 bg-slate-950/55 px-2 text-[11px] font-black uppercase tracking-wider text-slate-400 shadow-lg shadow-black/10 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-300"
+              >
+                Support
+              </Link>
+              <Link
+                href="/faq"
+                onClick={onClose}
+                className="flex min-h-10 items-center justify-center rounded-xl border border-white/10 bg-slate-950/55 px-2 text-[11px] font-black uppercase tracking-wider text-slate-400 shadow-lg shadow-black/10 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-300"
+              >
+                FAQ
+              </Link>
+              <Link
+                href="/terms"
+                onClick={onClose}
+                className="flex min-h-10 items-center justify-center rounded-xl border border-white/10 bg-slate-950/55 px-2 text-[11px] font-black uppercase tracking-wider text-slate-400 shadow-lg shadow-black/10 transition hover:border-emerald-400/25 hover:bg-emerald-400/10 hover:text-emerald-300"
+              >
+                S&K
+              </Link>
+            </div>
           </div>
         </nav>
       </div>

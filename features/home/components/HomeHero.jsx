@@ -2,9 +2,9 @@ import Link from "next/link";
 import { homeData } from "@/features/home/home.data";
 import { DagangIcon, NewsIcon, PortfolioIcon } from "@/components/shared/MenuIcons";
 
-const CheckIcon = ({ className = "h-3 w-3" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+const CheckIcon = ({ className = "h-3.5 w-3.5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.88 15.36L5.28 12.5l1.41-1.41 3.43 3.43 7.82-7.83 1.41 1.42-9.23 9.25z"/>
   </svg>
 );
 
@@ -25,6 +25,7 @@ export default function HomeHero() {
         />
         {/* Gradient fade to blend into the background smoothly */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/60 to-slate-950" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 to-transparent" />
       </div>
 
       <div className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-400/[0.08] blur-[120px]" />
@@ -71,15 +72,15 @@ export default function HomeHero() {
         </div>
 
         {/* Feature Tags */}
-        <div className="mt-6 flex items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 overflow-hidden">
+        <div className="mt-6 flex items-center justify-center gap-4 sm:gap-6 text-[10.5px] sm:text-[11.5px] font-black uppercase tracking-wider text-slate-300 overflow-hidden">
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <CheckIcon className="text-emerald-400" /> Coming Soon
+            <CheckIcon className="text-blue-500 h-4 w-4 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" /> Terpercaya
           </span>
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <CheckIcon className="text-emerald-400" /> Portal Info
+            <CheckIcon className="text-blue-500 h-4 w-4 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" /> Akurat
           </span>
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <CheckIcon className="text-emerald-400" /> Portfolio
+            <CheckIcon className="text-blue-500 h-4 w-4 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" /> SatSet
           </span>
         </div>
       </div>
