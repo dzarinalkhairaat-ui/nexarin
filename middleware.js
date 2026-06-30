@@ -17,23 +17,24 @@ export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const isNewsRoute = pathname === "/news" || pathname.startsWith("/news/");
 
-  // Hanya terapkan blokir anti-bot/scraper jika BUKAN halaman /news
-  if (!isNewsRoute) {
-    const userAgent = (request.headers.get("user-agent") || "").toLowerCase();
-    
-    // 1. ANTI-SCRAPING: Blokir jika tidak ada User-Agent (biasanya script otomatis)
-    if (!userAgent || userAgent.trim() === "") {
-      return new NextResponse("Access Denied: Missing User-Agent", { status: 403 });
-    }
+  // JALUR BEBAS HAMBATAN KHUSUS /news
+  // Langsung kembalikan response normal agar bot/scraper/AI sama sekali tidak terblokir oleh Header atau Pengecekan apapun
+  if (isNewsRoute) {
+    return NextResponse.next();
+  }
 
-    // 2. ANTI-BOT: Deteksi bot berbahaya berdasarkan User-Agent
-    const isMaliciousBot = BLOCKED_USER_AGENTS.some(bot => userAgent.includes(bot));
-    const isAllowedBot = ALLOWED_BOTS.some(bot => userAgent.includes(bot));
+  // 1. ANTI-SCRAPING & ANTI-BOT: Diterapkan HANYA jika BUKAN halaman /news
+  const userAgent = (request.headers.get("user-agent") || "").toLowerCase();
+  
+  if (!userAgent || userAgent.trim() === "") {
+    return new NextResponse("Access Denied: Missing User-Agent", { status: 403 });
+  }
 
-    // Jika terdeteksi sebagai bot dan bukan bot mesin pencari yang diizinkan
-    if (isMaliciousBot && !isAllowedBot) {
-      return new NextResponse("Access Denied: Bots and Scrapers are strictly prohibited", { status: 403 });
-    }
+  const isMaliciousBot = BLOCKED_USER_AGENTS.some(bot => userAgent.includes(bot));
+  const isAllowedBot = ALLOWED_BOTS.some(bot => userAgent.includes(bot));
+
+  if (isMaliciousBot && !isAllowedBot) {
+    return new NextResponse("Access Denied: Bots and Scrapers are strictly prohibited", { status: 403 });
   }
 
   // 3. AUTHENTICATION & AUTHORIZATION: Cek akses /admin via Supabase
