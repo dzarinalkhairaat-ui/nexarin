@@ -9,7 +9,8 @@ import {
   getGeneratedSocialMediaCaptions,
   deleteSocialMediaCaption,
   generateTemporarySocialMediaCaption,
-  updateSocialMediaCaption
+  updateSocialMediaCaption,
+  toggleSocialMediaCaptionPostedAction
 } from "./adminSocialMedia.actions";
 
 const PLATFORMS = [
@@ -159,6 +160,28 @@ export default function AdminNewsSocialMediaClient() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const [statusEdits, setStatusEdits] = useState({});
+
+  const handleStatusChange = (id, val) => {
+    setStatusEdits(prev => ({ ...prev, [id]: val }));
+  };
+
+  const handleSaveStatus = async (id) => {
+    const newStatus = statusEdits[id];
+    if (newStatus === undefined) return;
+
+    setIsProcessingTable(true);
+    const result = await toggleSocialMediaCaptionPostedAction(id, newStatus === 'true');
+    if (result.ok) {
+      setCaptions(prev => prev.map(c => c.id === id ? { ...c, isPosted: newStatus === 'true' } : c));
+      setAlertModal({ isOpen: true, message: result.message, isError: false });
+      setStatusEdits(prev => { const next = { ...prev }; delete next[id]; return next; });
+    } else {
+      setAlertModal({ isOpen: true, message: result.message, isError: true });
+    }
+    setIsProcessingTable(false);
   };
 
   const handleDelete = (id) => {
@@ -543,6 +566,7 @@ export default function AdminNewsSocialMediaClient() {
                   <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">Artikel</th>
                   <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">Preview Caption</th>
                   <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-500 whitespace-nowrap">Tanggal</th>
+                  <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-500 text-center">Status</th>
                   <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.15em] text-slate-500 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -575,6 +599,30 @@ export default function AdminNewsSocialMediaClient() {
                     </td>
                     <td className="py-4 px-4 text-xs font-semibold text-slate-500 whitespace-nowrap">
                       {new Date(c.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </td>
+                    <td className="py-4 px-4 text-center align-middle">
+                      <div className="flex flex-col gap-2 items-center justify-center">
+                        <select
+                          value={statusEdits[c.id] !== undefined ? statusEdits[c.id] : (c.isPosted ? 'true' : 'false')}
+                          onChange={(e) => handleStatusChange(c.id, e.target.value)}
+                          disabled={isProcessingTable}
+                          className="w-24 bg-slate-900 border border-white/10 text-slate-300 text-[11px] font-medium rounded-lg px-2 py-1.5 outline-none focus:border-violet-500 transition-colors disabled:opacity-50"
+                        >
+                          <option value="false">Draft</option>
+                          <option value="true">Di-Post</option>
+                        </select>
+                        
+                        {statusEdits[c.id] !== undefined && statusEdits[c.id] !== (c.isPosted ? 'true' : 'false') && (
+                          <button
+                            onClick={() => handleSaveStatus(c.id)}
+                            disabled={isProcessingTable}
+                            className="w-24 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[10px] text-emerald-400 font-bold py-1.5 px-2 hover:bg-emerald-500/20 transition disabled:opacity-50 shadow-sm flex items-center justify-center gap-1"
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                            Simpan
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td className="py-4 px-4 align-middle">
                       <div className="flex flex-col items-end justify-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">

@@ -21,8 +21,8 @@ Berikut adalah modul-modul yang 100% menggunakan data dari Database (baik Publik
 
 ### 3. Modul Sosial Media Caption AI (Auto-Generate)
 - **`/admin/news/social-media`** (Dasbor Admin)
-  - *Database Model*: `NewsSocialCaption`
-  - *Status*: Sempurna. Menyimpan draft/hasil *generate* caption AI (dari Groq/Gemini) untuk berbagai platform sosial media, terintegrasi relasi dengan artikel utama (`NewsArticle`).
+  - *Database Model*: `NewsSocialCaption` (termasuk status `isPosted`)
+  - *Status*: Sempurna. Menyimpan draft/hasil *generate* caption AI (dari Groq/Gemini) untuk berbagai platform sosial media, terintegrasi relasi dengan artikel utama (`NewsArticle`), dan melacak status publikasi ke sosial media (`isPosted`).
 
 ### 4. Modul Bot Scraping Otomatis
 - **`/admin/scraping-news`**

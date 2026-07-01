@@ -1390,6 +1390,7 @@ export const NewsSocialCaptionScalarFieldEnum = {
   articleId: 'articleId',
   platform: 'platform',
   caption: 'caption',
+  isPosted: 'isPosted',
   createdAt: 'createdAt'
 } as const
 

@@ -94,6 +94,7 @@ model NewsSocialCaption {
   article   NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
   platform  String      // "FACEBOOK", "INSTAGRAM", "TWITTER", "TIKTOK", "LINKEDIN", "YOUTUBE"
   caption   String      @db.Text
+  isPosted  Boolean     @default(false)
   createdAt DateTime    @default(now())
 
   @@unique([articleId, platform])

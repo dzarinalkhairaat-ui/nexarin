@@ -120,12 +120,12 @@ function getClearCookieOptions() {
 }
 
 function clearAdminSessionCookie(cookieStore) {
-  cookieStore.set(ADMIN_SESSION_COOKIE, "", getClearCookieOptions());
+  cookieStore.delete(ADMIN_SESSION_COOKIE);
 }
 
 function clearPendingOtpCookies(cookieStore) {
-  cookieStore.set(ADMIN_OTP_TOKEN_COOKIE, "", getClearCookieOptions());
-  cookieStore.set(ADMIN_OTP_EMAIL_COOKIE, "", getClearCookieOptions());
+  cookieStore.delete(ADMIN_OTP_TOKEN_COOKIE);
+  cookieStore.delete(ADMIN_OTP_EMAIL_COOKIE);
 }
 
 function clearPendingAdminCookies(cookieStore) {
@@ -395,8 +395,6 @@ export async function verifyAdminLoginOtpAction(payload) {
     const adminUserResult = await getVerifiedSupabaseAdminUser(cookieStore);
 
     if (!adminUserResult.ok) {
-      clearPendingOtpCookies(cookieStore);
-
       return {
         ok: false,
         message: adminUserResult.message,
@@ -468,8 +466,6 @@ export async function resendAdminLoginOtpAction() {
     const adminUserResult = await getVerifiedSupabaseAdminUser(cookieStore);
 
     if (!adminUserResult.ok) {
-      clearPendingOtpCookies(cookieStore);
-
       return {
         ok: false,
         message: adminUserResult.message,

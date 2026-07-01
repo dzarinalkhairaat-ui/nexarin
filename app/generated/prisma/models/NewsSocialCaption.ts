@@ -29,6 +29,7 @@ export type NewsSocialCaptionMinAggregateOutputType = {
   articleId: string | null
   platform: string | null
   caption: string | null
+  isPosted: boolean | null
   createdAt: Date | null
 }
 
@@ -37,6 +38,7 @@ export type NewsSocialCaptionMaxAggregateOutputType = {
   articleId: string | null
   platform: string | null
   caption: string | null
+  isPosted: boolean | null
   createdAt: Date | null
 }
 
@@ -45,6 +47,7 @@ export type NewsSocialCaptionCountAggregateOutputType = {
   articleId: number
   platform: number
   caption: number
+  isPosted: number
   createdAt: number
   _all: number
 }
@@ -55,6 +58,7 @@ export type NewsSocialCaptionMinAggregateInputType = {
   articleId?: true
   platform?: true
   caption?: true
+  isPosted?: true
   createdAt?: true
 }
 
@@ -63,6 +67,7 @@ export type NewsSocialCaptionMaxAggregateInputType = {
   articleId?: true
   platform?: true
   caption?: true
+  isPosted?: true
   createdAt?: true
 }
 
@@ -71,6 +76,7 @@ export type NewsSocialCaptionCountAggregateInputType = {
   articleId?: true
   platform?: true
   caption?: true
+  isPosted?: true
   createdAt?: true
   _all?: true
 }
@@ -152,6 +158,7 @@ export type NewsSocialCaptionGroupByOutputType = {
   articleId: string
   platform: string
   caption: string
+  isPosted: boolean
   createdAt: Date
   _count: NewsSocialCaptionCountAggregateOutputType | null
   _min: NewsSocialCaptionMinAggregateOutputType | null
@@ -181,6 +188,7 @@ export type NewsSocialCaptionWhereInput = {
   articleId?: Prisma.StringFilter<"NewsSocialCaption"> | string
   platform?: Prisma.StringFilter<"NewsSocialCaption"> | string
   caption?: Prisma.StringFilter<"NewsSocialCaption"> | string
+  isPosted?: Prisma.BoolFilter<"NewsSocialCaption"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NewsSocialCaption"> | Date | string
   article?: Prisma.XOR<Prisma.NewsArticleScalarRelationFilter, Prisma.NewsArticleWhereInput>
 }
@@ -190,6 +198,7 @@ export type NewsSocialCaptionOrderByWithRelationInput = {
   articleId?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  isPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   article?: Prisma.NewsArticleOrderByWithRelationInput
 }
@@ -203,6 +212,7 @@ export type NewsSocialCaptionWhereUniqueInput = Prisma.AtLeast<{
   articleId?: Prisma.StringFilter<"NewsSocialCaption"> | string
   platform?: Prisma.StringFilter<"NewsSocialCaption"> | string
   caption?: Prisma.StringFilter<"NewsSocialCaption"> | string
+  isPosted?: Prisma.BoolFilter<"NewsSocialCaption"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NewsSocialCaption"> | Date | string
   article?: Prisma.XOR<Prisma.NewsArticleScalarRelationFilter, Prisma.NewsArticleWhereInput>
 }, "id" | "articleId_platform">
@@ -212,6 +222,7 @@ export type NewsSocialCaptionOrderByWithAggregationInput = {
   articleId?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  isPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.NewsSocialCaptionCountOrderByAggregateInput
   _max?: Prisma.NewsSocialCaptionMaxOrderByAggregateInput
@@ -226,6 +237,7 @@ export type NewsSocialCaptionScalarWhereWithAggregatesInput = {
   articleId?: Prisma.StringWithAggregatesFilter<"NewsSocialCaption"> | string
   platform?: Prisma.StringWithAggregatesFilter<"NewsSocialCaption"> | string
   caption?: Prisma.StringWithAggregatesFilter<"NewsSocialCaption"> | string
+  isPosted?: Prisma.BoolWithAggregatesFilter<"NewsSocialCaption"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NewsSocialCaption"> | Date | string
 }
 
@@ -233,6 +245,7 @@ export type NewsSocialCaptionCreateInput = {
   id?: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
   article: Prisma.NewsArticleCreateNestedOneWithoutSocialCaptionsInput
 }
@@ -242,6 +255,7 @@ export type NewsSocialCaptionUncheckedCreateInput = {
   articleId: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
 }
 
@@ -249,6 +263,7 @@ export type NewsSocialCaptionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   article?: Prisma.NewsArticleUpdateOneRequiredWithoutSocialCaptionsNestedInput
 }
@@ -258,6 +273,7 @@ export type NewsSocialCaptionUncheckedUpdateInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -266,6 +282,7 @@ export type NewsSocialCaptionCreateManyInput = {
   articleId: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
 }
 
@@ -273,6 +290,7 @@ export type NewsSocialCaptionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -281,6 +299,7 @@ export type NewsSocialCaptionUncheckedUpdateManyInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -304,6 +323,7 @@ export type NewsSocialCaptionCountOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  isPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -312,6 +332,7 @@ export type NewsSocialCaptionMaxOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  isPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -320,6 +341,7 @@ export type NewsSocialCaptionMinOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   platform?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  isPosted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -369,6 +391,7 @@ export type NewsSocialCaptionCreateWithoutArticleInput = {
   id?: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
 }
 
@@ -376,6 +399,7 @@ export type NewsSocialCaptionUncheckedCreateWithoutArticleInput = {
   id?: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
 }
 
@@ -413,6 +437,7 @@ export type NewsSocialCaptionScalarWhereInput = {
   articleId?: Prisma.StringFilter<"NewsSocialCaption"> | string
   platform?: Prisma.StringFilter<"NewsSocialCaption"> | string
   caption?: Prisma.StringFilter<"NewsSocialCaption"> | string
+  isPosted?: Prisma.BoolFilter<"NewsSocialCaption"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NewsSocialCaption"> | Date | string
 }
 
@@ -420,6 +445,7 @@ export type NewsSocialCaptionCreateManyArticleInput = {
   id?: string
   platform: string
   caption: string
+  isPosted?: boolean
   createdAt?: Date | string
 }
 
@@ -427,6 +453,7 @@ export type NewsSocialCaptionUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -434,6 +461,7 @@ export type NewsSocialCaptionUncheckedUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -441,6 +469,7 @@ export type NewsSocialCaptionUncheckedUpdateManyWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   platform?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.StringFieldUpdateOperationsInput | string
+  isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -451,6 +480,7 @@ export type NewsSocialCaptionSelect<ExtArgs extends runtime.Types.Extensions.Int
   articleId?: boolean
   platform?: boolean
   caption?: boolean
+  isPosted?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.NewsArticleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["newsSocialCaption"]>
@@ -460,6 +490,7 @@ export type NewsSocialCaptionSelectCreateManyAndReturn<ExtArgs extends runtime.T
   articleId?: boolean
   platform?: boolean
   caption?: boolean
+  isPosted?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.NewsArticleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["newsSocialCaption"]>
@@ -469,6 +500,7 @@ export type NewsSocialCaptionSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   articleId?: boolean
   platform?: boolean
   caption?: boolean
+  isPosted?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.NewsArticleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["newsSocialCaption"]>
@@ -478,10 +510,11 @@ export type NewsSocialCaptionSelectScalar = {
   articleId?: boolean
   platform?: boolean
   caption?: boolean
+  isPosted?: boolean
   createdAt?: boolean
 }
 
-export type NewsSocialCaptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "platform" | "caption" | "createdAt", ExtArgs["result"]["newsSocialCaption"]>
+export type NewsSocialCaptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "platform" | "caption" | "isPosted" | "createdAt", ExtArgs["result"]["newsSocialCaption"]>
 export type NewsSocialCaptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.NewsArticleDefaultArgs<ExtArgs>
 }
@@ -502,6 +535,7 @@ export type $NewsSocialCaptionPayload<ExtArgs extends runtime.Types.Extensions.I
     articleId: string
     platform: string
     caption: string
+    isPosted: boolean
     createdAt: Date
   }, ExtArgs["result"]["newsSocialCaption"]>
   composites: {}
@@ -931,6 +965,7 @@ export interface NewsSocialCaptionFieldRefs {
   readonly articleId: Prisma.FieldRef<"NewsSocialCaption", 'String'>
   readonly platform: Prisma.FieldRef<"NewsSocialCaption", 'String'>
   readonly caption: Prisma.FieldRef<"NewsSocialCaption", 'String'>
+  readonly isPosted: Prisma.FieldRef<"NewsSocialCaption", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"NewsSocialCaption", 'DateTime'>
 }
     

@@ -211,3 +211,19 @@ export async function deleteSocialMediaCaption(id) {
   }
 }
 
+export async function toggleSocialMediaCaptionPostedAction(id, isPosted) {
+  const adminSession = await requireAdminSession();
+  if (!adminSession.ok) return { ok: false, message: "Akses ditolak." };
+
+  try {
+    await prisma.newsSocialCaption.update({
+      where: { id },
+      data: { isPosted }
+    });
+    revalidatePath("/admin/news/social-media");
+    return { ok: true, message: isPosted ? "Status diubah ke Di-Post" : "Status diubah ke Draft" };
+  } catch (error) {
+    console.error("Gagal mengubah status caption:", error);
+    return { ok: false, message: "Terjadi kesalahan saat mengubah status caption." };
+  }
+}
