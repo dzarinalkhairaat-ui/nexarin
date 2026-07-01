@@ -69,11 +69,23 @@ function DashboardCard({ item }) {
 }
 
 export default async function AdminNewsPage() {
-  const [articleCount, categoryCount, publishedCount] = await Promise.all([
-    prisma.newsArticle.count(),
-    prisma.newsCategory.count({ where: { isActive: true } }),
-    prisma.newsArticle.count({ where: { status: "PUBLISHED" } }),
-  ]);
+  let articleCount = 0;
+  let categoryCount = 0;
+  let publishedCount = 0;
+
+  try {
+    const counts = await Promise.all([
+      prisma.newsArticle.count(),
+      prisma.newsCategory.count({ where: { isActive: true } }),
+      prisma.newsArticle.count({ where: { status: "PUBLISHED" } }),
+    ]);
+    articleCount = counts[0];
+    categoryCount = counts[1];
+    publishedCount = counts[2];
+  } catch (error) {
+    console.error("Database connection error (ETIMEDOUT) in AdminNewsPage:", error);
+    // Gracefully handle the error by falling back to 0, avoiding a complete 500 page crash
+  }
 
   return (
     <main className="min-h-screen overflow-hidden bg-slate-950 text-white">

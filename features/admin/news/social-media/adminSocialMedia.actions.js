@@ -36,21 +36,23 @@ async function executeAiCaption(articleId, platform) {
   if (!article) return { ok: false, message: "Artikel tidak ditemukan." };
   if (article.status !== "PUBLISHED") return { ok: false, message: "Artikel belum di-publish." };
 
-  const articleLink = `https://nexarin.my.id/news/${article.slug}`;
+  const articleLink = `https://nexarin.my.id/news/artikel/${article.slug}`;
 
-  const prompt = `Anda adalah seorang Social Media Manager profesional. Tugas Anda adalah membuat sebuah caption/postingan khusus untuk platform ${platform} berdasarkan artikel berita berikut.
-Instruksi:
-1. Caption HARUS singkat, padat, jelas, dan memikat (sekitar 2 paragraf saja).
-2. Sesuaikan gaya bahasa dan tone dengan platform ${platform}.
-3. HARUS ada Call-To-Action (CTA) yang mengajak pembaca untuk membaca selengkapnya di website.
-4. Sertakan link artikel ini secara persis: ${articleLink} di dalam CTA.
-5. Sertakan beberapa hashtag yang relevan di akhir caption.
+  const prompt = `Anda adalah seorang Jurnalis Senior dan Social Media Manager profesional di sebuah portal berita ternama kelas nasional (seperti Kompas, Detik, atau CNN Indonesia). Tugas Anda adalah membuat caption/postingan untuk platform ${platform} berdasarkan artikel berita berikut.
+Instruksi SANGAT PENTING:
+1. Gaya bahasa HARUS profesional, kredibel, tajam, dan memikat layaknya jurnalis atau admin portal berita ternama. BUKAN bahasa robot AI, BUKAN bahasa gaul kekanak-kanakan, dan BUKAN bahasa puitis/bertele-tele.
+2. DILARANG KERAS menggunakan frasa klise AI seperti: "Tentu, berikut adalah...", "Mari kita bahas...", "Di era digital ini...", "Apakah Anda tahu...", atau "Selamat datang di...". Langsung masuk ke fakta utama berita dengan gaya 'hook' jurnalistik yang kuat (seperti lead berita).
+3. Jangan gunakan emoji berlebihan. Cukup 1-2 emoji resmi/profesional (contoh: 🚨, 📰, 📌) jika memang sangat diperlukan, atau tidak sama sekali.
+4. Tulis dalam 2 paragraf singkat saja. Paragraf pertama berisi intisari berita yang padat dan jelas (memuat fakta terpenting). Paragraf kedua untuk Call-To-Action (CTA).
+5. KARENA INI ADALAH KONTEN BERITA, DILARANG MENGGUNAKAN KATA "Cerita" atau kata-kata kasual berlebihan. Gunakan kata "Berita", "Informasi", atau "Kabar" (misal: "Baca berita selengkapnya di tautan berikut 👇" atau "Simak detail selengkapnya di website kami.").
+6. Sertakan link artikel ini secara persis: ${articleLink} tepat di bawah kalimat CTA.
+7. Sertakan minimal 5 dan maksimal 10 hashtag yang sangat relevan dengan topik berita dan sedang tren di ${platform} pada akhir caption.
 
 Judul Artikel: ${article.title}
 Ringkasan Artikel: ${article.summary}
 Isi Artikel: ${article.content.substring(0, 1500)}...
 
-Berikan output murni teks caption (tidak perlu format JSON, cukup string teks mentah siap copy-paste).`;
+Berikan output murni teks caption saja (tanpa basa-basi, tanpa tanda kutip di awal/akhir, dan tanpa format JSON).`;
 
   const executorFn = async (plainKey, aiProvider) => {
     if (aiProvider === "GEMINI") {
@@ -180,7 +182,7 @@ export async function getGeneratedSocialMediaCaptions() {
     const captions = await prisma.newsSocialCaption.findMany({
       include: {
         article: {
-          select: { title: true, slug: true }
+          select: { title: true, slug: true, sourceUrl: true, sourceName: true }
         }
       },
       orderBy: { createdAt: "desc" }

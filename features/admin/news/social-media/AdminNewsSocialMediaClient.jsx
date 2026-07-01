@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SocialMediaIcon, SuccessIcon, ErrorIcon } from "@/components/shared/MenuIcons";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { 
@@ -56,7 +56,20 @@ export default function AdminNewsSocialMediaClient() {
   const [regenerateMode, setRegenerateMode] = useState({ active: false, captionId: null, articleId: null, platform: null });
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", onConfirm: null });
   const [alertModal, setAlertModal] = useState({ isOpen: false, message: "", isError: false });
-  const [previewModal, setPreviewModal] = useState({ isOpen: false, captionText: "", platform: "", articleTitle: "" });
+  const [previewModal, setPreviewModal] = useState({ isOpen: false, captionText: "", platform: "", articleTitle: "", articleSlug: "", sourceUrl: "", sourceName: "" });
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const fetchData = async () => {
     setIsLoadingInitial(true);
@@ -90,9 +103,9 @@ export default function AdminNewsSocialMediaClient() {
   // Set default article selection when platform changes or articles change
   useEffect(() => {
     if (filteredArticles.length > 0) {
-      // Hanya set jika selectedArticleId tidak ada di filteredArticles
-      if (!filteredArticles.find(a => a.id === selectedArticleId)) {
-        setSelectedArticleId(filteredArticles[0].id);
+      // Hanya reset jika selectedArticleId tidak ada di filteredArticles
+      if (selectedArticleId && !filteredArticles.find(a => a.id === selectedArticleId)) {
+        setSelectedArticleId("");
       }
     } else {
       setSelectedArticleId("");
@@ -275,7 +288,7 @@ export default function AdminNewsSocialMediaClient() {
 
       <div className="grid gap-8 lg:grid-cols-2 mb-10">
         {/* Kolom Kiri: Form */}
-        <div className={`rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl transition-opacity duration-300 ${regenerateMode.active ? 'opacity-40 pointer-events-none grayscale' : ''}`}>
+        <div className={`relative z-20 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl transition-opacity duration-300 ${regenerateMode.active ? 'opacity-40 pointer-events-none grayscale' : ''}`}>
           <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
             <span className="h-6 w-1 rounded-full bg-emerald-400"></span>
             Pengaturan Generate Baru
@@ -297,11 +310,14 @@ export default function AdminNewsSocialMediaClient() {
                     <button
                       key={p.id}
                       onClick={() => setSelectedPlatform(p.id)}
-                      title={`Pilih ${p.id}`}
-                      className={`flex h-12 w-12 items-center justify-center rounded-2xl border p-2.5 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 ${
-                        selectedPlatform === p.id 
-                          ? 'border-emerald-400 bg-emerald-400/20 shadow-emerald-400/10' 
-                          : 'border-cyan-300/15 bg-slate-950/60 hover:border-cyan-300/35 hover:bg-cyan-400/10'
+                      disabled={p.id !== "FACEBOOK"}
+                      title={p.id !== "FACEBOOK" ? `${p.id} (Segera Hadir)` : `Pilih ${p.id}`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl border p-2.5 shadow-lg shadow-black/20 transition ${
+                        p.id !== "FACEBOOK" 
+                          ? 'opacity-40 cursor-not-allowed border-slate-700 bg-slate-900 grayscale'
+                          : selectedPlatform === p.id 
+                            ? 'border-emerald-400 bg-emerald-400/20 shadow-emerald-400/10 hover:-translate-y-0.5' 
+                            : 'border-cyan-300/15 bg-slate-950/60 hover:border-cyan-300/35 hover:bg-cyan-400/10 hover:-translate-y-0.5'
                       }`}
                     >
                       <img src={p.icon} alt={p.id} className="h-full w-full object-contain" />
@@ -319,20 +335,40 @@ export default function AdminNewsSocialMediaClient() {
                     Semua artikel sudah dibuatkan caption untuk platform {selectedPlatform}, atau tidak ada artikel.
                   </div>
                 ) : (
-                  <div className="relative group">
-                    <select 
-                      value={selectedArticleId}
-                      onChange={(e) => setSelectedArticleId(e.target.value)}
-                      className="w-full appearance-none rounded-2xl border border-white/10 bg-slate-950/80 px-5 py-4 text-sm font-semibold text-white shadow-xl shadow-black/20 backdrop-blur-xl focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 hover:border-white/20 hover:bg-slate-900 transition-all cursor-pointer"
+                  <div className="relative group" ref={dropdownRef}>
+                    <div 
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className={`w-full rounded-2xl border ${isDropdownOpen ? 'border-emerald-400 bg-slate-900 ring-2 ring-emerald-400/30' : 'border-white/10 bg-slate-950/80 hover:border-white/20 hover:bg-slate-900'} px-5 py-4 text-sm font-semibold text-white shadow-xl shadow-black/20 backdrop-blur-xl transition-all cursor-pointer flex items-center justify-between`}
                     >
-                      {filteredArticles.map(a => (
-                        <option key={a.id} value={a.id} className="bg-slate-900 text-white">
-                          {a.title}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5 text-emerald-400 transition-transform group-hover:translate-y-0.5">
-                      <svg className="h-5 w-5 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                      <span className={!selectedArticleId ? "text-slate-500" : "text-white line-clamp-1 pr-4"}>
+                        {selectedArticleId ? selectedArticle?.title : "Pilih Artikel Untuk Membuat Caption"}
+                      </span>
+                      <div className={`flex items-center text-emerald-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : 'group-hover:translate-y-0.5'}`}>
+                        <svg className="h-5 w-5 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                      </div>
+                    </div>
+                    
+                    {/* Dropdown Menu */}
+                    <div className={`absolute left-0 right-0 top-full mt-2 z-50 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl backdrop-blur-xl transition-all duration-300 origin-top ${isDropdownOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-95 pointer-events-none'}`}>
+                      <div className="max-h-[250px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent p-2 space-y-1">
+                        {filteredArticles.length === 0 ? (
+                           <div className="px-4 py-3 text-sm font-medium text-slate-500 text-center">Tidak ada artikel tersedia.</div>
+                        ) : (
+                          filteredArticles.map(a => (
+                            <div 
+                              key={a.id}
+                              onClick={() => {
+                                setSelectedArticleId(a.id);
+                                setIsDropdownOpen(false);
+                              }}
+                              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all cursor-pointer ${selectedArticleId === a.id ? 'bg-emerald-400/10 text-emerald-400 font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white hover:pl-5'}`}
+                            >
+                              <div className={`h-2 w-2 rounded-full shrink-0 transition-all ${selectedArticleId === a.id ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] scale-100' : 'bg-transparent scale-0'}`}></div>
+                              <span className="line-clamp-2">{a.title}</span>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -407,7 +443,7 @@ export default function AdminNewsSocialMediaClient() {
         </div>
 
         {/* Kolom Kanan: Hasil Generate / Regenerate */}
-        <div className={`rounded-3xl border ${regenerateMode.active ? 'border-amber-400/30 bg-amber-400/[0.03] shadow-amber-400/10' : 'border-white/10 bg-white/[0.03]'} p-6 shadow-xl backdrop-blur-xl flex flex-col transition-colors duration-300`}>
+        <div className={`relative z-10 rounded-3xl border ${regenerateMode.active ? 'border-amber-400/30 bg-amber-400/[0.03] shadow-amber-400/10' : 'border-white/10 bg-white/[0.03]'} p-6 shadow-xl backdrop-blur-xl flex flex-col transition-colors duration-300`}>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <span className={`h-6 w-1 rounded-full ${regenerateMode.active ? 'bg-amber-400' : 'bg-cyan-400'}`}></span>
@@ -524,7 +560,7 @@ export default function AdminNewsSocialMediaClient() {
                     </td>
                     <td className="py-4 px-4">
                       <div 
-                        onClick={() => setPreviewModal({ isOpen: true, captionText: c.caption, platform: c.platform, articleTitle: c.article.title })}
+                        onClick={() => setPreviewModal({ isOpen: true, captionText: c.caption, platform: c.platform, articleTitle: c.article.title, articleSlug: c.article.slug, sourceUrl: c.article.sourceUrl, sourceName: c.article.sourceName })}
                         className="group/preview cursor-pointer rounded-xl border border-transparent p-2 transition-all hover:border-white/10 hover:bg-white/5"
                         title="Klik untuk melihat teks lengkap"
                       >
@@ -617,12 +653,54 @@ export default function AdminNewsSocialMediaClient() {
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent space-y-4">
               <textarea 
                 readOnly
                 value={previewModal.captionText}
-                className="w-full min-h-[300px] resize-none bg-transparent text-sm leading-relaxed text-slate-300 focus:outline-none"
+                className="w-full min-h-[250px] resize-none bg-transparent text-sm leading-relaxed text-slate-300 focus:outline-none"
               />
+              <div className="pt-4 border-t border-white/10 space-y-3">
+                <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/[0.04] p-4 shadow-lg backdrop-blur-xl">
+                  <p className="text-[10px] font-black uppercase tracking-[0.15em] text-cyan-300 mb-2">Link Artikel Nexarin</p>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      readOnly 
+                      value={`https://nexarin.my.id/news/artikel/${previewModal.articleSlug}`}
+                      className="flex-1 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-xs text-slate-400 focus:outline-none"
+                    />
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(`https://nexarin.my.id/news/artikel/${previewModal.articleSlug}`);
+                        setAlertModal({ isOpen: true, message: "Link artikel berhasil disalin!", isError: false });
+                      }}
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-white hover:bg-white/10 transition"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                {previewModal.sourceUrl && (
+                  <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/[0.04] p-4 shadow-lg backdrop-blur-xl">
+                    <p className="text-[10px] font-black uppercase tracking-[0.15em] text-cyan-300 mb-2">Link Sumber Asli ({previewModal.sourceName})</p>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        readOnly 
+                        value={previewModal.sourceUrl}
+                        className="flex-1 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-xs text-slate-400 focus:outline-none"
+                      />
+                      <button 
+                        onClick={() => {
+                          navigator.clipboard.writeText(previewModal.sourceUrl);
+                          setAlertModal({ isOpen: true, message: "Link sumber berhasil disalin!", isError: false });
+                        }}
+                        className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-white hover:bg-white/10 transition"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="border-t border-white/10 px-6 py-4 bg-white/[0.02] flex justify-end gap-3 rounded-b-3xl">
               <button
@@ -636,7 +714,7 @@ export default function AdminNewsSocialMediaClient() {
                 Copy Caption
               </button>
               <button
-                onClick={() => setPreviewModal({ isOpen: false, captionText: "", platform: "", articleTitle: "" })}
+                onClick={() => setPreviewModal({ isOpen: false, captionText: "", platform: "", articleTitle: "", articleSlug: "", sourceUrl: "", sourceName: "" })}
                 className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-white/10"
               >
                 Tutup
@@ -648,7 +726,7 @@ export default function AdminNewsSocialMediaClient() {
 
       {/* Alert Modal */}
       {alertModal.isOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 text-center transform transition-all">
             <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${alertModal.isError ? 'bg-red-400/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} mb-4`}>
               {alertModal.isError ? <ErrorIcon className="h-6 w-6" /> : <SuccessIcon className="h-6 w-6" />}

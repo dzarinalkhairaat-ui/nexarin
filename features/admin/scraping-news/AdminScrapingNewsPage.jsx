@@ -24,7 +24,21 @@ const GLOBAL_CATEGORIES = [
   "Gaya Hidup", 
   "Tekno", 
   "Otomotif", 
-  "Internasional"
+  "Internasional",
+  "Seputar Sulteng",
+  "Kota Palu",
+  "Kabupaten Donggala",
+  "Parigi Moutong",
+  "Sigi",
+  "Tolitoli",
+  "Buol",
+  "Poso",
+  "Tojo Una-Una",
+  "Morowali",
+  "Morowali Utara",
+  "Banggai",
+  "Banggai Kepulauan",
+  "Banggai Laut"
 ];
 
 const RSS_SOURCES = {
@@ -47,6 +61,28 @@ const RSS_SOURCES = {
     "Politik": "https://www.antaranews.com/rss/politik.xml",
     "Hukum": "https://www.antaranews.com/rss/hukum.xml",
     "Internasional": "https://www.antaranews.com/rss/dunia.xml"
+  },
+  "Antara News (Sulteng)": {
+    "Terkini / Nasional": "https://sulteng.antaranews.com/rss/terkini.xml",
+    "Politik": "https://sulteng.antaranews.com/rss/polhukam-politik.xml",
+    "Hukum": "https://sulteng.antaranews.com/rss/polhukam-hukum-keamanan.xml",
+    "Ekonomi": "https://sulteng.antaranews.com/rss/ekonomi-keuangan.xml",
+    "Olahraga": "https://sulteng.antaranews.com/rss/humaniora-olahraga.xml",
+    "Hiburan": "https://sulteng.antaranews.com/rss/humaniora-seni-budaya.xml",
+    "Seputar Sulteng": "https://sulteng.antaranews.com/rss/seputar-sulteng.xml",
+    "Kota Palu": "https://sulteng.antaranews.com/rss/seputar-sulteng-kota-palu.xml",
+    "Kabupaten Donggala": "https://sulteng.antaranews.com/rss/seputar-sulteng-kabupaten-donggala.xml",
+    "Parigi Moutong": "https://sulteng.antaranews.com/rss/seputar-sulteng-parigi-moutong.xml",
+    "Sigi": "https://sulteng.antaranews.com/rss/seputar-sulteng-sigi.xml",
+    "Tolitoli": "https://sulteng.antaranews.com/rss/seputar-sulteng-tolitoli.xml",
+    "Buol": "https://sulteng.antaranews.com/rss/seputar-sulteng-buol.xml",
+    "Poso": "https://sulteng.antaranews.com/rss/seputar-sulteng-poso.xml",
+    "Tojo Una-Una": "https://sulteng.antaranews.com/rss/seputar-sulteng-tojo-una-una.xml",
+    "Morowali": "https://sulteng.antaranews.com/rss/seputar-sulteng-morowali.xml",
+    "Morowali Utara": "https://sulteng.antaranews.com/rss/seputar-sulteng-morowali-utara.xml",
+    "Banggai": "https://sulteng.antaranews.com/rss/seputar-sulteng-banggai.xml",
+    "Banggai Kepulauan": "https://sulteng.antaranews.com/rss/seputar-sulteng-banggai-kepulauan.xml",
+    "Banggai Laut": "https://sulteng.antaranews.com/rss/seputar-sulteng-banggai-laut.xml"
   },
   "Tribunnews": {
     "Terkini / Nasional": "https://www.tribunnews.com/rss",
@@ -97,6 +133,12 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
   
   // Bulk Selection State
   const [selectedIds, setSelectedIds] = useState([]);
+
+  const [isUnpolishedTableOpen, setIsUnpolishedTableOpen] = useState(true);
+  const [isPolishedTableOpen, setIsPolishedTableOpen] = useState(true);
+
+  const unpolishedNews = initialData.filter(n => !n.aiProcessedAt);
+  const polishedNews = initialData.filter(n => n.aiProcessedAt);
 
   const handleRunScraper = async () => {
     if (!targetUrl) return showAlert("URL Sumber RSS tidak tersedia untuk kategori ini.");
@@ -212,7 +254,7 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedIds(initialData.map(news => news.id));
+      setSelectedIds(unpolishedNews.map(news => news.id));
     } else {
       setSelectedIds([]);
     }
@@ -281,7 +323,14 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                       <label className="block text-xs text-slate-500 mb-2 font-medium">Website Penyedia Berita</label>
                       <select
                         value={selectedProvider}
-                        onChange={(e) => setSelectedProvider(e.target.value)}
+                        onChange={(e) => {
+                          const newProvider = e.target.value;
+                          setSelectedProvider(newProvider);
+                          const availableCats = Object.keys(RSS_SOURCES[newProvider] || {});
+                          if (availableCats.length > 0 && !availableCats.includes(selectedCategory)) {
+                            setSelectedCategory(availableCats[0]);
+                          }
+                        }}
                         className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400 transition-colors cursor-pointer appearance-none"
                       >
                         {Object.keys(RSS_SOURCES).map((provider) => (
@@ -296,7 +345,7 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400 transition-colors cursor-pointer appearance-none"
                       >
-                        {GLOBAL_CATEGORIES.map((category) => (
+                        {Object.keys(RSS_SOURCES[selectedProvider] || {}).map((category) => (
                           <option key={category} value={category}>{category}</option>
                         ))}
                       </select>
@@ -329,7 +378,7 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
               {/* Card Kandidat Tersedia (Kanan) */}
               <div className="relative overflow-hidden rounded-[24px] border border-emerald-400/20 bg-emerald-400/5 p-6 shadow-xl backdrop-blur-md flex flex-col justify-center items-center text-center">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-400 mb-3">Kandidat Berita Siap Review</p>
-                <div className="text-6xl font-black text-emerald-300 drop-shadow-md">{initialData.length}</div>
+                <div className="text-6xl font-black text-emerald-300 drop-shadow-md">{unpolishedNews.length}</div>
                 <p className="text-xs text-slate-400 mt-3 font-medium">Batas maksimum pengambilan per eksekusi adalah 10 berita.</p>
               </div>
 
@@ -338,8 +387,14 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
             {/* Table Section */}
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] shadow-2xl backdrop-blur-md">
               <div className="p-5 border-b border-white/10 sm:px-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-lg font-black tracking-[-0.04em] text-white">Daftar Kandidat Berita</h2>
+                <div 
+                  className="flex items-center gap-3 cursor-pointer group"
+                  onClick={() => setIsUnpolishedTableOpen(!isUnpolishedTableOpen)}
+                >
+                  <h2 className="text-lg font-black tracking-[-0.04em] text-white flex items-center gap-2">
+                    Daftar Kandidat Berita
+                    <svg className={`w-5 h-5 text-slate-400 transition-transform ${isUnpolishedTableOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </h2>
                   {isPending && <span className="text-xs text-emerald-400 animate-pulse">Memperbarui data...</span>}
                 </div>
                 
@@ -364,7 +419,8 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                 )}
               </div>
               
-              <div className="overflow-x-auto">
+              {isUnpolishedTableOpen && (
+              <div className="overflow-x-auto transition-all">
                 <table className="w-full text-left text-sm">
                   <thead className="bg-slate-950/50 text-slate-400 border-b border-white/10">
                     <tr>
@@ -373,7 +429,7 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                           type="checkbox" 
                           className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
                           onChange={handleSelectAll}
-                          checked={initialData.length > 0 && selectedIds.length === initialData.length}
+                          checked={unpolishedNews.length > 0 && unpolishedNews.every(n => selectedIds.includes(n.id))}
                         />
                       </th>
                       <th className="p-5 font-bold uppercase tracking-wider text-[10px]">Gambar</th>
@@ -383,14 +439,14 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {initialData.length === 0 ? (
+                    {unpolishedNews.length === 0 ? (
                       <tr>
                         <td colSpan="5" className="p-10 text-center text-slate-500 font-medium">
                           Belum ada kandidat berita hasil scraping yang siap di-review.
                         </td>
                       </tr>
                     ) : (
-                      initialData.map((news) => (
+                      unpolishedNews.map((news) => (
                         <tr key={news.id} className={`transition-colors hover:bg-white/[0.02] ${loadingId === news.id || loadingId === `ai-${news.id}` ? "opacity-50 pointer-events-none" : ""}`}>
                           <td className="p-5 text-center">
                             <input 
@@ -496,6 +552,178 @@ export default function AdminScrapingNewsPage({ initialData = [], logs = [] }) {
                   </tbody>
                 </table>
               </div>
+              )}
+            </div>
+
+          {/* Polished Table Section */}
+            <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] shadow-2xl backdrop-blur-md">
+              <div className="p-5 border-b border-white/10 sm:px-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div 
+                  className="flex items-center gap-3 cursor-pointer group"
+                  onClick={() => setIsPolishedTableOpen(!isPolishedTableOpen)}
+                >
+                  <h2 className="text-lg font-black tracking-[-0.04em] text-white flex items-center gap-2">
+                    Artikel Hasil Poles AI
+                    <svg className={`w-5 h-5 text-slate-400 transition-transform ${isPolishedTableOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </h2>
+                  {isPending && <span className="text-xs text-emerald-400 animate-pulse">Memperbarui data...</span>}
+                </div>
+                
+                {selectedIds.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-400 mr-2">{selectedIds.length} Terpilih</span>
+                    <button
+                      onClick={handleBulkDelete}
+                      disabled={loadingId === "bulk"}
+                      className="inline-flex items-center px-4 py-2 border border-red-400/20 bg-red-400/10 text-red-400 hover:bg-red-400/20 rounded-xl text-xs font-black uppercase tracking-wider transition-colors disabled:opacity-50"
+                    >
+                      Hapus
+                    </button>
+                    <button
+                      onClick={handleBulkPick}
+                      disabled={loadingId === "bulk"}
+                      className="inline-flex items-center px-4 py-2 border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20 rounded-xl text-xs font-black uppercase tracking-wider transition-colors shadow-lg shadow-emerald-400/5 disabled:opacity-50"
+                    >
+                      Pilih Berita
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              {isPolishedTableOpen && (
+              <div className="overflow-x-auto transition-all">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-slate-950/50 text-slate-400 border-b border-white/10">
+                    <tr>
+                      <th className="p-5 w-12">
+                        <input 
+                          type="checkbox" 
+                          className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
+                          onChange={(e) => { if (e.target.checked) setSelectedIds(prev => [...new Set([...prev, ...polishedNews.map(n=>n.id)])]); else setSelectedIds(prev => prev.filter(id => !polishedNews.some(n=>n.id === id))); }}
+                          checked={polishedNews.length > 0 && polishedNews.every(n => selectedIds.includes(n.id))}
+                        />
+                      </th>
+                      <th className="p-5 font-bold uppercase tracking-wider text-[10px]">Gambar</th>
+                      <th className="p-5 font-bold uppercase tracking-wider text-[10px]">Waktu & Sumber</th>
+                      <th className="p-5 font-bold uppercase tracking-wider text-[10px]">Judul & Konten</th>
+                      <th className="p-5 font-bold uppercase tracking-wider text-[10px] text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {polishedNews.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="p-10 text-center text-slate-500 font-medium">
+                          Belum ada artikel yang dipoles AI.
+                        </td>
+                      </tr>
+                    ) : (
+                      polishedNews.map((news) => (
+                        <tr key={news.id} className={`transition-colors hover:bg-white/[0.02] ${loadingId === news.id || loadingId === `ai-${news.id}` ? "opacity-50 pointer-events-none" : ""}`}>
+                          <td className="p-5 text-center">
+                            <input 
+                              type="checkbox" 
+                              className="rounded border-white/10 bg-white/5 text-emerald-400 focus:ring-emerald-400 focus:ring-offset-slate-950 cursor-pointer"
+                              checked={selectedIds.includes(news.id)}
+                              onChange={() => handleToggleSelect(news.id)}
+                            />
+                          </td>
+                          <td className="p-5 align-top w-32">
+                            {news.imageUrl ? (
+                              <div className="flex flex-col gap-2">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={news.imageUrl} alt={news.title} className="w-24 h-16 object-cover rounded-lg border border-white/10 bg-black" />
+                                <a 
+                                  href={news.imageUrl} 
+                                  download 
+                                  target="_blank" 
+                                  rel="noreferrer"
+                                  className="text-[10px] text-emerald-400 hover:underline"
+                                >
+                                  Buka/Download
+                                </a>
+                              </div>
+                            ) : (
+                              <div className="w-24 h-16 rounded-lg border border-white/5 bg-white/5 flex items-center justify-center text-[10px] text-slate-500">
+                                No Image
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-5 whitespace-nowrap text-slate-400 font-medium align-top">
+                            {new Date(news.scrapedAt).toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' })}<br/>
+                            <span className="text-xs text-slate-500">{new Date(news.scrapedAt).toLocaleDateString("id-ID")}</span>
+                            <div className="mt-3">
+                              <span className="inline-flex items-center px-2 py-1 rounded border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-wider text-slate-300">
+                                {news.sourceName}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-5 min-w-[300px] align-top">
+                            {news.aiProcessedAt ? (
+                              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+                                ✨ Dipoles AI ({news.aiProvider})
+                              </div>
+                            ) : news.aiError ? (
+                              <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-red-400/20 bg-red-400/10 px-2.5 py-1 text-[10px] font-bold text-red-400">
+                                ⚠️ Gagal AI: {news.aiError.slice(0, 30)}...
+                              </div>
+                            ) : null}
+                            
+                            <p className="font-bold text-white text-base mb-1">{news.aiTitle || news.title}</p>
+                            <p className="text-slate-400 text-xs leading-relaxed mb-3">{news.aiSummary || news.excerpt}</p>
+                            
+                            {(news.aiContent || news.content) && (
+                              <details className="text-xs text-slate-400 mb-3 bg-black/30 p-3 rounded-lg border border-white/5">
+                                <summary className="cursor-pointer text-emerald-400 font-bold mb-2">Lihat Isi Artikel Draf</summary>
+                                <div className="prose prose-invert prose-sm max-w-none line-clamp-6 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: news.aiContent || news.content }} />
+                              </details>
+                            )}
+                            
+                            <a 
+                              href={news.sourceUrl} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="inline-flex items-center text-[11px] font-black uppercase tracking-wider text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                              Lihat Sumber Asli ↗
+                            </a>
+                          </td>
+                          <td className="p-5 whitespace-nowrap text-right align-top">
+                            <div className="flex flex-col items-end gap-2">
+                              {!news.aiProcessedAt && (
+                                <button
+                                  onClick={() => handleAiPolish(news.id)}
+                                  disabled={loadingId === `ai-${news.id}` || loadingId === "bulk"}
+                                  className="inline-flex items-center px-4 py-2 border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/20 rounded-xl text-xs font-black tracking-wider transition-colors w-full justify-center disabled:opacity-50"
+                                >
+                                  ✨ Poles AI
+                                </button>
+                              )}
+                              
+                              <div className="flex gap-2 w-full justify-end">
+                                <button
+                                  onClick={() => handleDelete(news.id)}
+                                  disabled={loadingId === news.id || loadingId === "bulk"}
+                                  className="inline-flex flex-1 items-center justify-center px-3 py-2 border border-red-400/20 bg-red-400/10 text-red-400 hover:bg-red-400/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors disabled:opacity-50"
+                                >
+                                  Hapus
+                                </button>
+                                <button
+                                  onClick={() => handlePick(news.id)}
+                                  disabled={loadingId === news.id || loadingId === "bulk"}
+                                  className="inline-flex flex-1 items-center justify-center px-3 py-2 border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20 rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors disabled:opacity-50"
+                                >
+                                  Pilih
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              )}
             </div>
 
           </div>
