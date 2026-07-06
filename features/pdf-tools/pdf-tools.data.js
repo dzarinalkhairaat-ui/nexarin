@@ -10,7 +10,7 @@ export const pdfTools = [
   {
     id: "merge",
     title: "Merge PDF",
-    description: "Combine PDFs in the order you want with the easiest PDF merger available.",
+    description: "Gabungkan beberapa PDF sesuai urutan yang Anda inginkan dengan mudah dan cepat.",
     icon: FilePlus2,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
@@ -19,7 +19,7 @@ export const pdfTools = [
   {
     id: "split",
     title: "Split PDF",
-    description: "Separate one page or a whole set for easy conversion into independent PDF files.",
+    description: "Pisahkan satu halaman atau seluruh dokumen untuk konversi mudah menjadi file PDF terpisah.",
     icon: SplitSquareHorizontal,
     color: "text-orange-400",
     bgColor: "bg-orange-500/10",
@@ -28,7 +28,7 @@ export const pdfTools = [
   {
     id: "compress",
     title: "Compress PDF",
-    description: "Reduce file size while optimizing for maximal PDF quality.",
+    description: "Kurangi ukuran file dokumen Anda tanpa mengurangi kualitas PDF secara maksimal.",
     icon: Zap,
     color: "text-green-400",
     bgColor: "bg-green-500/10",
@@ -37,7 +37,7 @@ export const pdfTools = [
   {
     id: "pdf-to-word",
     title: "PDF to Word",
-    description: "Easily convert your PDF files into easy to edit DOC and DOCX documents.",
+    description: "Ubah file PDF Anda menjadi dokumen Word (DOC/DOCX) yang mudah diedit.",
     icon: FileText,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -46,7 +46,7 @@ export const pdfTools = [
   {
     id: "pdf-to-powerpoint",
     title: "PDF to PowerPoint",
-    description: "Turn your PDF files into easy to edit PPT and PPTX slideshows.",
+    description: "Ubah file PDF Anda menjadi presentasi PPT dan PPTX yang siap disunting.",
     icon: Presentation,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
@@ -55,7 +55,7 @@ export const pdfTools = [
   {
     id: "pdf-to-excel",
     title: "PDF to Excel",
-    description: "Pull data straight from PDFs into Excel spreadsheets in a few short seconds.",
+    description: "Tarik data langsung dari dokumen PDF ke dalam spreadsheet Excel hanya dalam hitungan detik.",
     icon: Table,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
@@ -64,7 +64,7 @@ export const pdfTools = [
   {
     id: "word-to-pdf",
     title: "Word to PDF",
-    description: "Make DOC and DOCX files easy to read by converting them to PDF.",
+    description: "Jadikan file dokumen DOC dan DOCX lebih mudah dibaca dengan mengubahnya menjadi PDF.",
     icon: FileText,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -73,7 +73,7 @@ export const pdfTools = [
   {
     id: "powerpoint-to-pdf",
     title: "PowerPoint to PDF",
-    description: "Make PPT and PPTX slideshows easy to view by converting them to PDF.",
+    description: "Buat tayangan slide presentasi Anda lebih mudah dilihat dengan mengubahnya menjadi PDF.",
     icon: Presentation,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
@@ -82,7 +82,7 @@ export const pdfTools = [
   {
     id: "excel-to-pdf",
     title: "Excel to PDF",
-    description: "Make EXCEL spreadsheets easy to read by converting them to PDF.",
+    description: "Buat tabel EXCEL Anda lebih mudah dibaca dan dibagikan dengan mengubahnya menjadi PDF.",
     icon: Table,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
@@ -91,7 +91,7 @@ export const pdfTools = [
   {
     id: "edit",
     title: "Edit PDF",
-    description: "Add text, images, shapes or freehand annotations to a PDF document.",
+    description: "Tambahkan teks, gambar, bentuk, atau coretan anotasi bebas ke dokumen PDF Anda.",
     icon: Edit3,
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
@@ -100,7 +100,7 @@ export const pdfTools = [
   {
     id: "pdf-to-png",
     title: "PDF to PNG",
-    description: "Convert each PDF page into a PNG or extract all images contained in a PDF.",
+    description: "Ubah setiap halaman dokumen PDF menjadi gambar PNG atau ekstrak seluruh gambarnya.",
     icon: ImageIcon,
     color: "text-yellow-400",
     bgColor: "bg-yellow-500/10",
@@ -109,7 +109,7 @@ export const pdfTools = [
   {
     id: "jpg-to-pdf",
     title: "JPG to PDF",
-    description: "Convert JPG images to PDF in seconds. Easily adjust orientation and margins.",
+    description: "Ubah gambar JPG menjadi PDF dalam hitungan detik. Atur orientasi dan margin dengan mudah.",
     icon: ImageIcon,
     color: "text-yellow-400",
     bgColor: "bg-yellow-500/10",
@@ -118,7 +118,7 @@ export const pdfTools = [
   {
     id: "sign",
     title: "Sign PDF",
-    description: "Sign yourself or request electronic signatures from others.",
+    description: "Tanda tangani sendiri dokumen Anda atau minta tanda tangan elektronik dari orang lain.",
     icon: PenTool,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -126,7 +126,7 @@ export const pdfTools = [
   {
     id: "watermark",
     title: "Watermark",
-    description: "Stamp an image or text over your PDF in seconds. Choose the typography, transparency and position.",
+    description: "Cap gambar atau teks di atas PDF Anda secara instan. Atur tipografi, transparansi, dan posisi.",
     icon: Stamp,
     color: "text-pink-400",
     bgColor: "bg-pink-500/10",
@@ -134,7 +134,7 @@ export const pdfTools = [
   {
     id: "rotate",
     title: "Rotate PDF",
-    description: "Rotate your PDFs the way you need them. You can even rotate multiple PDFs at once!",
+    description: "Putar halaman PDF sesuai keinginan Anda. Anda bahkan bisa memutar banyak PDF sekaligus!",
     icon: RotateCw,
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
@@ -142,7 +142,7 @@ export const pdfTools = [
   {
     id: "html-to-pdf",
     title: "HTML to PDF",
-    description: "Convert webpages in HTML to PDF. Copy and paste the URL of the page you want and convert it.",
+    description: "Ubah halaman web HTML menjadi PDF. Cukup salin dan tempel URL halaman yang ingin dikonversi.",
     icon: Globe,
     color: "text-cyan-400",
     bgColor: "bg-cyan-500/10",
@@ -150,7 +150,7 @@ export const pdfTools = [
   {
     id: "unlock",
     title: "Unlock PDF",
-    description: "Remove PDF password security, giving you the freedom to use your PDFs as you want.",
+    description: "Hapus kata sandi keamanan PDF, memberi Anda kebebasan penuh untuk menggunakan dokumen Anda.",
     icon: Unlock,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -158,7 +158,7 @@ export const pdfTools = [
   {
     id: "protect",
     title: "Protect PDF",
-    description: "Protect PDF files with a password. Encrypt PDF documents to prevent unauthorized access.",
+    description: "Lindungi dokumen PDF dengan kata sandi. Enkripsi PDF untuk mencegah akses tidak sah.",
     icon: ShieldCheck,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -166,7 +166,7 @@ export const pdfTools = [
   {
     id: "organize",
     title: "Organize PDF",
-    description: "Sort pages of your PDF file however you like. Delete PDF pages or add PDF pages to your document.",
+    description: "Susun halaman file PDF sesuka Anda. Hapus halaman atau tambahkan halaman baru ke dokumen.",
     icon: Layers,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
@@ -174,7 +174,7 @@ export const pdfTools = [
   {
     id: "pdf-to-pdfa",
     title: "PDF to PDF/A",
-    description: "Transform your PDF to PDF/A, the ISO-standardized version of PDF for long-term archiving.",
+    description: "Ubah PDF Anda ke PDF/A, versi standar ISO dari PDF untuk pengarsipan jangka panjang.",
     icon: Archive,
     color: "text-slate-400",
     bgColor: "bg-slate-500/10",
@@ -182,7 +182,7 @@ export const pdfTools = [
   {
     id: "repair",
     title: "Repair PDF",
-    description: "Repair a damaged PDF and recover data from corrupt PDF. Fix PDF files with our Repair tool.",
+    description: "Perbaiki PDF yang rusak dan pulihkan data dari file yang korup dengan alat Perbaikan kami.",
     icon: Wrench,
     color: "text-green-400",
     bgColor: "bg-green-500/10",
@@ -190,7 +190,7 @@ export const pdfTools = [
   {
     id: "page-numbers",
     title: "Page numbers",
-    description: "Add page numbers into PDFs with ease. Choose your positions, dimensions, typography.",
+    description: "Tambahkan nomor halaman ke PDF dengan mudah. Pilih posisi, dimensi, dan tipografinya.",
     icon: Hash,
     color: "text-pink-400",
     bgColor: "bg-pink-500/10",
@@ -198,7 +198,7 @@ export const pdfTools = [
   {
     id: "scan",
     title: "Scan to PDF",
-    description: "Capture document scans from your mobile device and send them instantly to your browser.",
+    description: "Tangkap pindaian dokumen dari perangkat seluler Anda dan kirim langsung ke browser Anda.",
     icon: Scan,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
@@ -206,7 +206,7 @@ export const pdfTools = [
   {
     id: "ocr",
     title: "OCR PDF",
-    description: "Easily convert scanned PDF into searchable and selectable documents.",
+    description: "Ubah file PDF hasil pindaian (scan) menjadi dokumen teks yang dapat dicari dan dipilih dengan mudah.",
     icon: FileSearch,
     color: "text-green-400",
     bgColor: "bg-green-500/10",
@@ -214,7 +214,7 @@ export const pdfTools = [
   {
     id: "compare",
     title: "Compare PDF",
-    description: "Show a side-by-side document comparison and easily spot changes between different file versions.",
+    description: "Tampilkan perbandingan dokumen berdampingan dan temukan perubahan dengan mudah.",
     icon: Split,
     color: "text-indigo-400",
     bgColor: "bg-indigo-500/10",
@@ -222,7 +222,7 @@ export const pdfTools = [
   {
     id: "redact",
     title: "Redact PDF",
-    description: "Redact text and graphics to permanently remove sensitive information from a PDF.",
+    description: "Sensor teks dan grafis untuk menghapus informasi sensitif dari dokumen PDF secara permanen.",
     icon: Scissors,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
@@ -230,7 +230,7 @@ export const pdfTools = [
   {
     id: "crop",
     title: "Crop PDF",
-    description: "Crop margins of PDF documents or select specific areas, then apply the changes to one page or the whole document.",
+    description: "Potong margin dokumen PDF atau pilih area tertentu, lalu terapkan perubahan tersebut.",
     icon: Scissors,
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
@@ -238,7 +238,7 @@ export const pdfTools = [
   {
     id: "forms",
     title: "PDF Forms",
-    description: "Detect form fields automatically, create interactive fillable PDFs, or fill PDF forms yourself.",
+    description: "Deteksi kolom formulir secara otomatis, buat PDF interaktif, atau isi formulir PDF sendiri.",
     icon: FormInput,
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
@@ -247,7 +247,7 @@ export const pdfTools = [
   {
     id: "ai-summarizer",
     title: "AI Summarizer",
-    description: "Quickly generate concise summaries from articles, paragraphs, and essays, providing clear and precise key points in seconds.",
+    description: "Hasilkan ringkasan singkat dari artikel secara cepat, memberikan poin utama yang tepat dan jelas.",
     icon: Sparkles,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
@@ -256,7 +256,7 @@ export const pdfTools = [
   {
     id: "translate",
     title: "Translate PDF",
-    description: "Easily translate PDF files powered by AI. Keep fonts, layout, and formatting perfectly intact.",
+    description: "Terjemahkan file PDF dengan mudah didukung oleh AI. Pertahankan font, tata letak, dan format asli.",
     icon: Languages,
     color: "text-indigo-400",
     bgColor: "bg-indigo-500/10",
@@ -265,7 +265,7 @@ export const pdfTools = [
   {
     id: "markdown",
     title: "PDF to Markdown",
-    description: "Easily turn PDFs into Markdown files. Perfect for notes, docs, and LLMs. Headings, tables, lists, and links preserved automatically.",
+    description: "Ubah PDF menjadi file Markdown dengan mudah. Tajuk, tabel, daftar, dan tautan dipertahankan.",
     icon: Code,
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
