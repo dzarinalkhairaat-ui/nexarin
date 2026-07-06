@@ -9,6 +9,10 @@ import {
   processPdfToExcel, processWordToPdf, processPdfToPng, 
   processEditPdf, processMergePdf, processSplitPdf,
   processPdfToPowerpoint, processPowerpointToPdf, processExcelToPdf,
+  processSignPdf, processWatermarkPdf, processRotatePdf, processHtmlToPdf,
+  processUnlockPdf, processProtectPdf, processOrganizePdf, processPdfToPdfa,
+  processRepairPdf, processPageNumbersPdf, processScanPdf, processOcrPdf, processComparePdf, processRedactPdf,
+  processCropPdf, processFormsPdf, processTranslatePdf, processMarkdownPdf,
   mockProcessPdf 
 } from "@/features/pdf-tools/core/pdf-processing";
 import { saveAs } from "file-saver";
@@ -22,7 +26,7 @@ export default function ToolWorkspace({ slug }) {
   const [processedResult, setProcessedResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const isMulti = slug === 'merge';
+  const isMulti = slug === 'merge' || slug === 'compare';
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -50,7 +54,7 @@ export default function ToolWorkspace({ slug }) {
     const firstFile = files[0];
     
     // Validate file type if needed
-    if (slug === 'jpg-to-pdf' && !firstFile.type.startsWith('image/')) {
+    if ((slug === 'jpg-to-pdf' || slug === 'scan') && !firstFile.type.startsWith('image/')) {
       alert("Harap unggah file gambar (JPG/PNG).");
       return;
     }
@@ -67,6 +71,10 @@ export default function ToolWorkspace({ slug }) {
          alert("Harap unggah file PowerPoint.");
          return;
       }
+    }
+    if (slug === 'html-to-pdf' && !firstFile.name.toLowerCase().endsWith('.html') && !firstFile.name.toLowerCase().endsWith('.htm')) {
+      alert("Harap unggah file HTML.");
+      return;
     }
     
     if (isMulti) {
@@ -86,7 +94,7 @@ export default function ToolWorkspace({ slug }) {
     if (selectedFiles.length === 0) return;
     
     if (isMulti && selectedFiles.length < 2) {
-      setErrorMsg("Harap unggah minimal 2 file PDF untuk digabungkan.");
+      setErrorMsg(slug === 'compare' ? "Harap unggah tepat 2 file PDF untuk dibandingkan." : "Harap unggah minimal 2 file PDF untuk digabungkan.");
       setProcessingState('error');
       return;
     }
@@ -130,6 +138,42 @@ export default function ToolWorkspace({ slug }) {
         result = await processPowerpointToPdf(singleFile);
       } else if (slug === 'excel-to-pdf') {
         result = await processExcelToPdf(singleFile);
+      } else if (slug === 'sign') {
+        result = await processSignPdf(singleFile);
+      } else if (slug === 'watermark') {
+        result = await processWatermarkPdf(singleFile);
+      } else if (slug === 'rotate') {
+        result = await processRotatePdf(singleFile);
+      } else if (slug === 'html-to-pdf') {
+        result = await processHtmlToPdf(singleFile);
+      } else if (slug === 'unlock') {
+        result = await processUnlockPdf(singleFile);
+      } else if (slug === 'protect') {
+        result = await processProtectPdf(singleFile);
+      } else if (slug === 'organize') {
+        result = await processOrganizePdf(singleFile);
+      } else if (slug === 'pdf-to-pdfa') {
+        result = await processPdfToPdfa(singleFile);
+      } else if (slug === 'repair') {
+        result = await processRepairPdf(singleFile);
+      } else if (slug === 'page-numbers') {
+        result = await processPageNumbersPdf(singleFile);
+      } else if (slug === 'scan') {
+        result = await processScanPdf(singleFile);
+      } else if (slug === 'ocr') {
+        result = await processOcrPdf(singleFile);
+      } else if (slug === 'compare') {
+        result = await processComparePdf(selectedFiles);
+      } else if (slug === 'redact') {
+        result = await processRedactPdf(singleFile);
+      } else if (slug === 'crop') {
+        result = await processCropPdf(singleFile);
+      } else if (slug === 'forms') {
+        result = await processFormsPdf(singleFile);
+      } else if (slug === 'translate') {
+        result = await processTranslatePdf(singleFile);
+      } else if (slug === 'markdown') {
+        result = await processMarkdownPdf(singleFile);
       } else {
         result = await mockProcessPdf(singleFile, slug);
       }
@@ -279,10 +323,11 @@ export default function ToolWorkspace({ slug }) {
               <label className="cursor-pointer bg-white text-slate-950 hover:bg-slate-200 px-12 py-4 rounded-2xl font-black transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] inline-flex items-center gap-3 text-lg pointer-events-auto hover:-translate-y-1">
                 Jelajahi File
                 <input type="file" multiple={isMulti} className="hidden" accept={
-                  slug === 'jpg-to-pdf' ? "image/png, image/jpeg" : 
+                  slug === 'jpg-to-pdf' || slug === 'scan' ? "image/png, image/jpeg" : 
                   slug === 'word-to-pdf' ? ".doc, .docx" : 
                   (slug === 'powerpoint-to-pdf') ? ".ppt, .pptx" :
                   slug === 'excel-to-pdf' ? ".xls, .xlsx, .csv" :
+                  slug === 'html-to-pdf' ? ".html, .htm" :
                   ".pdf"
                 } onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {

@@ -122,6 +122,7 @@ export const pdfTools = [
     icon: PenTool,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
+    isActive: true,
   },
   {
     id: "watermark",
@@ -130,6 +131,7 @@ export const pdfTools = [
     icon: Stamp,
     color: "text-pink-400",
     bgColor: "bg-pink-500/10",
+    isActive: true,
   },
   {
     id: "rotate",
@@ -138,6 +140,7 @@ export const pdfTools = [
     icon: RotateCw,
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
+    isActive: true,
   },
   {
     id: "html-to-pdf",
@@ -146,6 +149,7 @@ export const pdfTools = [
     icon: Globe,
     color: "text-cyan-400",
     bgColor: "bg-cyan-500/10",
+    isActive: true,
   },
   {
     id: "unlock",
@@ -154,6 +158,7 @@ export const pdfTools = [
     icon: Unlock,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
+    isActive: true,
   },
   {
     id: "protect",
@@ -162,6 +167,7 @@ export const pdfTools = [
     icon: ShieldCheck,
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
+    isActive: true,
   },
   {
     id: "organize",
@@ -170,6 +176,7 @@ export const pdfTools = [
     icon: Layers,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
+    isActive: true,
   },
   {
     id: "pdf-to-pdfa",
@@ -178,6 +185,7 @@ export const pdfTools = [
     icon: Archive,
     color: "text-slate-400",
     bgColor: "bg-slate-500/10",
+    isActive: true,
   },
   {
     id: "repair",
@@ -186,6 +194,7 @@ export const pdfTools = [
     icon: Wrench,
     color: "text-green-400",
     bgColor: "bg-green-500/10",
+    isActive: true,
   },
   {
     id: "page-numbers",
@@ -194,6 +203,7 @@ export const pdfTools = [
     icon: Hash,
     color: "text-pink-400",
     bgColor: "bg-pink-500/10",
+    isActive: true,
   },
   {
     id: "scan",
@@ -202,6 +212,7 @@ export const pdfTools = [
     icon: Scan,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
+    isActive: true,
   },
   {
     id: "ocr",
@@ -210,6 +221,7 @@ export const pdfTools = [
     icon: FileSearch,
     color: "text-green-400",
     bgColor: "bg-green-500/10",
+    isActive: true,
   },
   {
     id: "compare",
@@ -218,6 +230,7 @@ export const pdfTools = [
     icon: Split,
     color: "text-indigo-400",
     bgColor: "bg-indigo-500/10",
+    isActive: true,
   },
   {
     id: "redact",
@@ -226,6 +239,7 @@ export const pdfTools = [
     icon: Scissors,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
+    isActive: true,
   },
   {
     id: "crop",
@@ -234,6 +248,7 @@ export const pdfTools = [
     icon: Scissors,
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
+    isActive: true,
   },
   {
     id: "forms",
@@ -243,6 +258,7 @@ export const pdfTools = [
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
     isNew: true,
+    isActive: true,
   },
   {
     id: "ai-summarizer",
@@ -261,6 +277,7 @@ export const pdfTools = [
     color: "text-indigo-400",
     bgColor: "bg-indigo-500/10",
     isNew: true,
+    isActive: true,
   },
   {
     id: "markdown",
@@ -270,5 +287,6 @@ export const pdfTools = [
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
     isNew: true,
+    isActive: true,
   },
 ];

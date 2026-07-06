@@ -277,6 +277,404 @@ export async function processExcelToPdf(file) {
   }
 }
 
+export async function processSignPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/sign-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal menandatangani PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_signed.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Sign PDF:", error);
+    throw error;
+  }
+}
+
+export async function processWatermarkPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/watermark-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal memberi watermark PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_watermarked.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Watermark PDF:", error);
+    throw error;
+  }
+}
+
+export async function processRotatePdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/rotate-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal memutar PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_rotated.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Rotate PDF:", error);
+    throw error;
+  }
+}
+
+export async function processHtmlToPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/html-to-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal mengonversi HTML ke PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error HTML to PDF:", error);
+    throw error;
+  }
+}
+
+export async function processUnlockPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/unlock-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal membuka kunci PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_unlocked.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Unlock PDF:", error);
+    throw error;
+  }
+}
+
+export async function processProtectPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/protect-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal melindungi PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_protected.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Protect PDF:", error);
+    throw error;
+  }
+}
+
+export async function processOrganizePdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/organize-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal menyusun PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_organized.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Organize PDF:", error);
+    throw error;
+  }
+}
+
+export async function processPdfToPdfa(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/pdf-to-pdfa`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal mengonversi PDF ke PDF/A.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_pdfa.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error PDF to PDF/A:", error);
+    throw error;
+  }
+}
+
+export async function processRepairPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/repair-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal memperbaiki PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_repaired.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Repair PDF:", error);
+    throw error;
+  }
+}
+
+export async function processPageNumbersPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/page-numbers`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal menambahkan nomor halaman.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_numbered.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Page Numbers:", error);
+    throw error;
+  }
+}
+
+export async function processScanPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/scan-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal melakukan proses Scan to PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_scanned.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Scan to PDF:", error);
+    throw error;
+  }
+}
+
+export async function processOcrPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/ocr-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal memproses OCR PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_searchable.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error OCR PDF:", error);
+    throw error;
+  }
+}
+
+export async function processComparePdf(files) {
+  try {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/compare-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal membandingkan PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = "comparison_report.txt";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Compare PDF:", error);
+    throw error;
+  }
+}
+
+export async function processRedactPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/redact-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal menahan/redact PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_redacted.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Redact PDF:", error);
+    throw error;
+  }
+}
+
+export async function processCropPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/crop-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal memotong PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_cropped.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Crop PDF:", error);
+    throw error;
+  }
+}
+
+export async function processFormsPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/forms-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal membuat formulir interaktif PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_interactive.pdf";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Forms PDF:", error);
+    throw error;
+  }
+}
+
+export async function processTranslatePdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/translate-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal menerjemahkan PDF.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_translated.txt";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Translate PDF:", error);
+    throw error;
+  }
+}
+
+export async function processMarkdownPdf(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/markdown-pdf`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) throw new Error("Gagal mengonversi PDF ke Markdown.");
+    
+    const blob = await response.blob();
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + ".md";
+    return { blob, outputFilename };
+  } catch (error) {
+    console.error("Error Markdown PDF:", error);
+    throw error;
+  }
+}
+
 // Basic mock function for tools that are not fully implemented yet
 export async function mockProcessPdf(file, toolId) {
   return new Promise((resolve) => {

@@ -5,6 +5,11 @@ RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     libreoffice \
+    ghostscript \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    tesseract-ocr-ind \
+    qpdf \
     && rm -rf /var/lib/apt/lists/*
 
 # Hugging Face Spaces require running as a non-root user
