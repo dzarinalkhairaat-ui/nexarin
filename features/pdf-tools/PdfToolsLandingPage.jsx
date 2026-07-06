@@ -28,10 +28,10 @@ export default function PdfToolsLandingPage() {
             </p>
           </div>
 
-          <h1 className="mt-8 text-5xl font-black leading-[1.05] tracking-[-0.04em] text-white sm:text-6xl lg:text-[4.5rem] mb-8">
+          <h1 className="mt-8 text-4xl font-black leading-[1.1] tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl mb-8">
             <span className="animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-150 ease-out fill-mode-both inline-block">
-              Semua yang Anda butuhkan untuk <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">memproses PDF</span> di browser
+              Semua yang Anda butuhkan untuk <br className="hidden lg:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Convert Dokument</span>
             </span>
           </h1>
           

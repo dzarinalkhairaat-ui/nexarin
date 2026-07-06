@@ -631,10 +631,11 @@ export async function processFormsPdf(file) {
   }
 }
 
-export async function processTranslatePdf(file) {
+export async function processTranslatePdf(file, targetLang = 'id') {
   try {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('target_lang', targetLang);
     
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
     const response = await fetch(`${apiUrl}/convert/translate-pdf`, {
@@ -644,9 +645,10 @@ export async function processTranslatePdf(file) {
     
     if (!response.ok) throw new Error("Gagal menerjemahkan PDF.");
     
+    const detectedLang = response.headers.get("X-Detected-Lang") || "Otomatis";
     const blob = await response.blob();
-    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_translated.txt";
-    return { blob, outputFilename };
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_translated.pdf";
+    return { blob, outputFilename, detectedLang };
   } catch (error) {
     console.error("Error Translate PDF:", error);
     throw error;

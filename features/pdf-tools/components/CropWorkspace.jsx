@@ -17,7 +17,8 @@ import {
 } from "@/features/pdf-tools/core/pdf-processing";
 import { saveAs } from "file-saver";
 
-export default function ToolWorkspace({ slug }) {
+export default function CropWorkspace() {
+  const slug = "crop";
   const tool = pdfTools.find(t => t.id === slug) || {};
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);

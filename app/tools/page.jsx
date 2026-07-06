@@ -87,7 +87,7 @@ export default function NexarinToolsPage() {
             Supercharge <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 drop-shadow-lg">Produktivitas</span> Anda.
           </h1>
           <p className="text-xl sm:text-2xl text-slate-400 leading-relaxed max-w-3xl mx-auto font-medium">
-            Koleksi alat cerdas berbasis Kecerdasan Buatan (AI) kelas enterprise yang dirancang khusus untuk memangkas waktu kerja Anda dari hitungan jam menjadi hitungan detik.
+            Koleksi alat cerdas karya eksklusif Founder Nexarin by-rins kelas enterprise yang dirancang khusus untuk memangkas waktu kerja Anda dari hitungan jam menjadi hitungan detik.
           </p>
         </div>
 
