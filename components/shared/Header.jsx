@@ -14,7 +14,8 @@ import {
   AboutIcon,
   ContactIcon,
   QuestionIcon,
-  FileIcon
+  FileIcon,
+  SparkleIcon
 } from "@/components/shared/MenuIcons";
 
 function getMenuIcon(label) {
@@ -25,6 +26,7 @@ function getMenuIcon(label) {
     case "News": return <NewsIcon className="h-4 w-4" />;
     case "About": return <AboutIcon className="h-4 w-4" />;
     case "Contact": return <ContactIcon className="h-4 w-4" />;
+    case "Nexarin Tools": return <SparkleIcon className="h-4 w-4" />;
     default: return <span className="text-xs font-bold">&rarr;</span>;
   }
 }

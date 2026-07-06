@@ -7,7 +7,8 @@ import {
   ArticleIcon,
   WriteIcon,
   CategoryIcon,
-  SocialMediaIcon
+  SocialMediaIcon,
+  SettingsIcon
 } from "@/components/shared/MenuIcons";
 
 const adminNewsNavItems = [

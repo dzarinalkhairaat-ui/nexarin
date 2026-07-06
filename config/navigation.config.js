@@ -5,4 +5,5 @@ export const publicNavigation = [
   { label: "News", href: "/news" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Nexarin Tools", href: "/tools" },
 ];
