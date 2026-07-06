@@ -14,7 +14,7 @@ export const pdfTools = [
     icon: FilePlus2,
     color: "text-red-400",
     bgColor: "bg-red-500/10",
-    isActive: false,
+    isActive: true,
   },
   {
     id: "split",
@@ -23,7 +23,7 @@ export const pdfTools = [
     icon: SplitSquareHorizontal,
     color: "text-orange-400",
     bgColor: "bg-orange-500/10",
-    isActive: false,
+    isActive: true,
   },
   {
     id: "compress",
@@ -50,7 +50,7 @@ export const pdfTools = [
     icon: Presentation,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
-    isActive: false,
+    isActive: true,
   },
   {
     id: "pdf-to-excel",
@@ -77,7 +77,7 @@ export const pdfTools = [
     icon: Presentation,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
-    isActive: false,
+    isActive: true,
   },
   {
     id: "excel-to-pdf",
@@ -86,7 +86,7 @@ export const pdfTools = [
     icon: Table,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
-    isActive: false,
+    isActive: true,
   },
   {
     id: "edit",

@@ -1,20 +1,28 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download } from "lucide-react";
+import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
-import { processJpgToPdf, processPdfToWord, processCompressPdf, processPdfToExcel, processWordToPdf, processPdfToPng, processEditPdf, mockProcessPdf } from "@/features/pdf-tools/core/pdf-processing";
+import { 
+  processJpgToPdf, processPdfToWord, processCompressPdf, 
+  processPdfToExcel, processWordToPdf, processPdfToPng, 
+  processEditPdf, processMergePdf, processSplitPdf,
+  processPdfToPowerpoint, processPowerpointToPdf, processExcelToPdf,
+  mockProcessPdf 
+} from "@/features/pdf-tools/core/pdf-processing";
 import { saveAs } from "file-saver";
 
 export default function ToolWorkspace({ slug }) {
   const tool = pdfTools.find(t => t.id === slug) || {};
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [processingState, setProcessingState] = useState('idle'); // idle, processing, success, error
   const [progress, setProgress] = useState(0);
   const [processedResult, setProcessedResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const isMulti = slug === 'merge';
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -30,21 +38,44 @@ export default function ToolWorkspace({ slug }) {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileSelection(e.dataTransfer.files[0]);
+      if (isMulti) {
+        handleFileSelection(Array.from(e.dataTransfer.files));
+      } else {
+        handleFileSelection([e.dataTransfer.files[0]]);
+      }
     }
   };
 
-  const handleFileSelection = (file) => {
+  const handleFileSelection = (files) => {
+    const firstFile = files[0];
+    
     // Validate file type if needed
-    if (slug === 'jpg-to-pdf' && !file.type.startsWith('image/')) {
+    if (slug === 'jpg-to-pdf' && !firstFile.type.startsWith('image/')) {
       alert("Harap unggah file gambar (JPG/PNG).");
       return;
     }
-    if (slug === 'word-to-pdf' && !file.name.toLowerCase().endsWith('.docx') && !file.name.toLowerCase().endsWith('.doc')) {
+    if (slug === 'word-to-pdf' && !firstFile.name.toLowerCase().endsWith('.docx') && !firstFile.name.toLowerCase().endsWith('.doc')) {
       alert("Harap unggah file Word (.docx atau .doc).");
       return;
     }
-    setSelectedFile(file);
+    if (slug === 'excel-to-pdf' && !firstFile.name.toLowerCase().endsWith('.xlsx') && !firstFile.name.toLowerCase().endsWith('.xls') && !firstFile.name.toLowerCase().endsWith('.csv')) {
+      alert("Harap unggah file Excel.");
+      return;
+    }
+    if ((slug === 'powerpoint-to-pdf' || slug === 'pdf-to-powerpoint') && !firstFile.name.toLowerCase().endsWith('.pptx') && !firstFile.name.toLowerCase().endsWith('.ppt')) {
+      if (slug === 'powerpoint-to-pdf') {
+         alert("Harap unggah file PowerPoint.");
+         return;
+      }
+    }
+    
+    if (isMulti) {
+      // Append files for merge
+      setSelectedFiles(prev => [...prev, ...files]);
+    } else {
+      setSelectedFiles([firstFile]);
+    }
+    
     setProcessingState('idle');
     setProgress(0);
     setProcessedResult(null);
@@ -52,7 +83,14 @@ export default function ToolWorkspace({ slug }) {
   };
 
   const processFile = async () => {
-    if (!selectedFile) return;
+    if (selectedFiles.length === 0) return;
+    
+    if (isMulti && selectedFiles.length < 2) {
+      setErrorMsg("Harap unggah minimal 2 file PDF untuk digabungkan.");
+      setProcessingState('error');
+      return;
+    }
+    
     setProcessingState('processing');
     setProgress(0);
     
@@ -66,22 +104,34 @@ export default function ToolWorkspace({ slug }) {
     
     try {
       let result;
+      const singleFile = selectedFiles[0];
+      
       if (slug === 'jpg-to-pdf') {
-        result = await processJpgToPdf(selectedFile);
+        result = await processJpgToPdf(singleFile);
       } else if (slug === 'pdf-to-word') {
-        result = await processPdfToWord(selectedFile);
+        result = await processPdfToWord(singleFile);
       } else if (slug === 'compress') {
-        result = await processCompressPdf(selectedFile);
+        result = await processCompressPdf(singleFile);
       } else if (slug === 'pdf-to-excel') {
-        result = await processPdfToExcel(selectedFile);
+        result = await processPdfToExcel(singleFile);
       } else if (slug === 'word-to-pdf') {
-        result = await processWordToPdf(selectedFile);
+        result = await processWordToPdf(singleFile);
       } else if (slug === 'pdf-to-png') {
-        result = await processPdfToPng(selectedFile);
+        result = await processPdfToPng(singleFile);
       } else if (slug === 'edit') {
-        result = await processEditPdf(selectedFile);
+        result = await processEditPdf(singleFile);
+      } else if (slug === 'merge') {
+        result = await processMergePdf(selectedFiles);
+      } else if (slug === 'split') {
+        result = await processSplitPdf(singleFile);
+      } else if (slug === 'pdf-to-powerpoint') {
+        result = await processPdfToPowerpoint(singleFile);
+      } else if (slug === 'powerpoint-to-pdf') {
+        result = await processPowerpointToPdf(singleFile);
+      } else if (slug === 'excel-to-pdf') {
+        result = await processExcelToPdf(singleFile);
       } else {
-        result = await mockProcessPdf(selectedFile, slug);
+        result = await mockProcessPdf(singleFile, slug);
       }
       
       clearInterval(progressInterval);
@@ -137,18 +187,35 @@ export default function ToolWorkspace({ slug }) {
         >
           {/* Subtle Inner Glow for Dropzone */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
-          {selectedFile ? (
+          {selectedFiles.length > 0 ? (
             <div className="text-center animate-in zoom-in-95 duration-300 w-full max-w-lg mx-auto">
-              <div className="relative w-20 h-24 mx-auto bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-6 shadow-xl shadow-black/20 group-hover:scale-105 transition-transform">
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/30">
-                  <CheckCircle2 className="w-5 h-5" />
-                </div>
-                <FileType className="w-10 h-10 text-emerald-400 opacity-80" strokeWidth={1.5} />
+              
+              <div className="flex flex-wrap justify-center gap-3 mb-6">
+                {selectedFiles.map((file, idx) => (
+                  <div key={idx} className="relative w-16 h-20 bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center shadow-xl shadow-black/20 group-hover:scale-105 transition-transform">
+                    {idx === 0 && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/30">
+                        <CheckCircle2 className="w-4 h-4" />
+                      </div>
+                    )}
+                    <FileType className="w-6 h-6 text-emerald-400 opacity-80 mb-1" strokeWidth={1.5} />
+                    <span className="text-[10px] truncate w-14 px-1 text-slate-300">{file.name}</span>
+                  </div>
+                ))}
+                {isMulti && processingState === 'idle' && (
+                  <label className="cursor-pointer relative w-16 h-20 bg-white/[0.02] hover:bg-white/[0.05] border border-dashed border-white/20 rounded-xl flex items-center justify-center transition-colors">
+                    <FilePlus className="w-6 h-6 text-slate-400" />
+                    <input type="file" multiple className="hidden" accept=".pdf" onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) handleFileSelection(Array.from(e.target.files));
+                    }} />
+                  </label>
+                )}
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 truncate max-w-full px-4" title={selectedFile.name}>
-                {selectedFile.name}
+
+              <h3 className="text-xl font-bold text-white mb-2 truncate max-w-full px-4">
+                {isMulti ? `${selectedFiles.length} File Terpilih` : selectedFiles[0].name}
               </h3>
-              <p className="text-slate-400 mb-10 text-lg">Siap diproses ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</p>
+              <p className="text-slate-400 mb-10 text-lg">Siap diproses</p>
               
               {processingState === 'error' && (
                 <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
@@ -159,8 +226,8 @@ export default function ToolWorkspace({ slug }) {
               <div className="flex justify-center gap-4">
                 {processingState === 'idle' || processingState === 'error' ? (
                   <>
-                    <button onClick={() => setSelectedFile(null)} className="px-6 py-3 rounded-xl font-bold transition-all bg-white/5 hover:bg-white/10 text-white border border-white/10">
-                      Ganti File
+                    <button onClick={() => setSelectedFiles([])} className="px-6 py-3 rounded-xl font-bold transition-all bg-white/5 hover:bg-white/10 text-white border border-white/10">
+                      Reset
                     </button>
                     <button onClick={processFile} className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-10 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/25">
                       Proses File
@@ -193,7 +260,7 @@ export default function ToolWorkspace({ slug }) {
                       Unduh Hasil
                     </button>
                     
-                    <button onClick={() => setSelectedFile(null)} className="text-slate-400 hover:text-white transition-colors text-sm font-bold underline underline-offset-4">
+                    <button onClick={() => setSelectedFiles([])} className="text-slate-400 hover:text-white transition-colors text-sm font-bold underline underline-offset-4">
                       Proses File Lain
                     </button>
                   </div>
@@ -211,12 +278,20 @@ export default function ToolWorkspace({ slug }) {
               </p>
               <label className="cursor-pointer bg-white text-slate-950 hover:bg-slate-200 px-12 py-4 rounded-2xl font-black transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] inline-flex items-center gap-3 text-lg pointer-events-auto hover:-translate-y-1">
                 Jelajahi File
-                <input type="file" className="hidden" accept={
+                <input type="file" multiple={isMulti} className="hidden" accept={
                   slug === 'jpg-to-pdf' ? "image/png, image/jpeg" : 
                   slug === 'word-to-pdf' ? ".doc, .docx" : 
+                  (slug === 'powerpoint-to-pdf') ? ".ppt, .pptx" :
+                  slug === 'excel-to-pdf' ? ".xls, .xlsx, .csv" :
                   ".pdf"
                 } onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) handleFileSelection(e.target.files[0]);
+                  if (e.target.files && e.target.files.length > 0) {
+                    if (isMulti) {
+                      handleFileSelection(Array.from(e.target.files));
+                    } else {
+                      handleFileSelection([e.target.files[0]]);
+                    }
+                  }
                 }} />
               </label>
             </div>

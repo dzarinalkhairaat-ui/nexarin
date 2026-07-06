@@ -36,7 +36,7 @@ export default function PdfToolsLandingPage() {
           </h1>
           
           <p className="mx-auto max-w-2xl text-lg font-medium leading-relaxed text-slate-300 sm:text-xl animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 ease-out fill-mode-both">
-            100% Client-side. Aman, Pribadi, dan Sangat Cepat. Tanpa perlu mengunggah dokumen penting Anda ke server.
+            100% Aman, Sangat Cepat, dan Gratis. Untuk Dokumen Apapun yang akan di Converts Hanya akan masuk ke Server Nexarin Dan kemudian otomatis terhapus setelah proses selesai.
           </p>
 
           <div className="mt-10 flex justify-center animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 ease-out fill-mode-both">

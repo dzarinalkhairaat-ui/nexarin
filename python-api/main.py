@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from typing import List
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pdf2docx import Converter
 from PIL import Image
 import fitz  # PyMuPDF
@@ -13,6 +14,8 @@ import subprocess
 import zipfile
 import pdfplumber  # type: ignore
 import pandas as pd  # type: ignore
+from pptx import Presentation  # type: ignore
+from pptx.util import Inches  # type: ignore
 
 app = FastAPI(title="Nexarin PDF API", description="Microservice for PDF to Word Conversion")
 
@@ -353,3 +356,183 @@ async def edit_pdf(file: UploadFile = File(...)):
         if os.path.exists(input_pdf):
             try: os.remove(input_pdf)
             except: pass
+
+# ---------------------------------------------------------
+# NEW FEATURES: Merge, Split, PDF to PPTX, PPTX to PDF, Excel to PDF
+# ---------------------------------------------------------
+
+@app.post("/convert/merge-pdf")
+async def merge_pdf(files: List[UploadFile] = File(...)):
+    if len(files) < 2:
+        raise HTTPException(status_code=400, detail="Pilih minimal 2 file PDF untuk digabungkan.")
+        
+    try:
+        merged_doc = fitz.open()
+        
+        for file in files:
+            if not file.filename.lower().endswith('.pdf'):
+                raise HTTPException(status_code=400, detail="Semua file harus berformat PDF.")
+            doc_bytes = await file.read()
+            doc = fitz.open(stream=doc_bytes, filetype="pdf")
+            merged_doc.insert_pdf(doc)
+            doc.close()
+            
+        output_bytes = merged_doc.write()
+        merged_doc.close()
+        
+        return StreamingResponse(
+            io.BytesIO(output_bytes), 
+            media_type="application/pdf", 
+            headers={"Content-Disposition": 'attachment; filename="merged_document.pdf"'}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat menggabungkan PDF: {str(e)}")
+
+@app.post("/convert/split-pdf")
+async def split_pdf(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Hanya menerima file PDF.")
+        
+    try:
+        doc_bytes = await file.read()
+        doc = fitz.open(stream=doc_bytes, filetype="pdf")
+        
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            for i in range(len(doc)):
+                new_doc = fitz.open()
+                new_doc.insert_pdf(doc, from_page=i, to_page=i)
+                page_bytes = new_doc.write()
+                new_doc.close()
+                
+                zip_file.writestr(f"page_{i+1}.pdf", page_bytes)
+                
+        doc.close()
+        zip_buffer.seek(0)
+        
+        base_name = os.path.splitext(file.filename)[0]
+        return StreamingResponse(
+            zip_buffer, 
+            media_type="application/zip", 
+            headers={"Content-Disposition": f'attachment; filename="{base_name}_split.zip"'}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat memecah PDF: {str(e)}")
+
+@app.post("/convert/pdf-to-pptx")
+async def pdf_to_pptx(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Hanya menerima file PDF.")
+        
+    try:
+        doc_bytes = await file.read()
+        doc = fitz.open(stream=doc_bytes, filetype="pdf")
+        
+        prs = Presentation()
+        blank_slide_layout = prs.slide_layouts[6]
+        
+        if len(doc) > 0:
+            first_page = doc[0]
+            width = first_page.rect.width
+            height = first_page.rect.height
+            prs.slide_width = Inches(width / 72)
+            prs.slide_height = Inches(height / 72)
+        
+        with tempfile.TemporaryDirectory() as temp_dir:
+            for i in range(len(doc)):
+                page = doc[i]
+                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
+                img_path = os.path.join(temp_dir, f"page_{i}.png")
+                pix.save(img_path)
+                
+                slide = prs.slides.add_slide(blank_slide_layout)
+                slide.shapes.add_picture(img_path, 0, 0, width=prs.slide_width, height=prs.slide_height)
+                
+            pptx_buffer = io.BytesIO()
+            prs.save(pptx_buffer)
+            
+        doc.close()
+        pptx_buffer.seek(0)
+        
+        base_name = os.path.splitext(file.filename)[0]
+        return StreamingResponse(
+            pptx_buffer, 
+            media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation", 
+            headers={"Content-Disposition": f'attachment; filename="{base_name}.pptx"'}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat mengonversi PDF ke PPTX: {str(e)}")
+
+@app.post("/convert/pptx-to-pdf")
+async def pptx_to_pdf(file: UploadFile = File(...)):
+    if not (file.filename.lower().endswith('.pptx') or file.filename.lower().endswith('.ppt')):
+        raise HTTPException(status_code=400, detail="Hanya menerima file PPT atau PPTX.")
+        
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            input_path = os.path.join(temp_dir, file.filename)
+            with open(input_path, "wb") as f:
+                content = await file.read()
+                f.write(content)
+                
+            subprocess.run([
+                "libreoffice", "--headless", "--invisible",
+                "--convert-to", "pdf",
+                "--outdir", temp_dir,
+                input_path
+            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            base_name = os.path.splitext(file.filename)[0]
+            pdf_filename = f"{base_name}.pdf"
+            pdf_path = os.path.join(temp_dir, pdf_filename)
+            
+            if not os.path.exists(pdf_path):
+                raise Exception("File PDF gagal dibuat oleh LibreOffice.")
+                
+            with open(pdf_path, "rb") as f:
+                pdf_bytes = f.read()
+                
+            return StreamingResponse(
+                io.BytesIO(pdf_bytes),
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{pdf_filename}"'}
+            )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat mengonversi PPTX ke PDF: {str(e)}")
+
+@app.post("/convert/excel-to-pdf")
+async def excel_to_pdf(file: UploadFile = File(...)):
+    if not (file.filename.lower().endswith('.xlsx') or file.filename.lower().endswith('.xls') or file.filename.lower().endswith('.csv')):
+        raise HTTPException(status_code=400, detail="Hanya menerima file Excel (XLS/XLSX/CSV).")
+        
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            input_path = os.path.join(temp_dir, file.filename)
+            with open(input_path, "wb") as f:
+                content = await file.read()
+                f.write(content)
+                
+            subprocess.run([
+                "libreoffice", "--headless", "--invisible",
+                "--convert-to", "pdf",
+                "--outdir", temp_dir,
+                input_path
+            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            base_name = os.path.splitext(file.filename)[0]
+            pdf_filename = f"{base_name}.pdf"
+            pdf_path = os.path.join(temp_dir, pdf_filename)
+            
+            if not os.path.exists(pdf_path):
+                raise Exception("File PDF gagal dibuat oleh LibreOffice.")
+                
+            with open(pdf_path, "rb") as f:
+                pdf_bytes = f.read()
+                
+            return StreamingResponse(
+                io.BytesIO(pdf_bytes),
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{pdf_filename}"'}
+            )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat mengonversi Excel ke PDF: {str(e)}")
