@@ -25,3 +25,12 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+# local deployment scripts
+deploy-backend.py
+
+# Internal / Private Docs (Sesuai peraturan-ai.md)
+/README.md
+/peraturan-ai.md
+/repository.md
+/db-active.md
+/update*.md

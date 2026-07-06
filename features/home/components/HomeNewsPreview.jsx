@@ -9,17 +9,19 @@ const GlobeNewsIcon = ({ className = "h-6 w-6" }) => (
 
 function TopicChips({ topics }) {
   const safeTopics = Array.isArray(topics) ? topics : [];
-
-  if (safeTopics.length === 0) {
-    return null;
-  }
+  if (safeTopics.length === 0) return null;
 
   return (
     <div className="mt-6 flex flex-wrap gap-2">
       {safeTopics.map((topic) => (
         <span
           key={topic}
-          className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-lime-200 shadow-lg shadow-lime-400/5"
+          className="rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] shadow-lg"
+          style={{
+            backgroundColor: 'rgba(13,242,163,0.08)',
+            border: '1px solid rgba(13,242,163,0.2)',
+            color: '#0DF2A3',
+          }}
         >
           {topic}
         </span>
@@ -29,82 +31,58 @@ function TopicChips({ topics }) {
 }
 
 function NewsImagePlaceholder({ src, alt }) {
-  if (src && src !== "") {
+  let safeSrc = src;
+  if (safeSrc && typeof safeSrc === 'string') {
+    // Normalisasi backslash menjadi forward slash (kasus Windows paths)
+    safeSrc = safeSrc.replace(/\\/g, '/');
+    // Jika URL menggunakan localhost, ubah menjadi relative path agar bisa diakses dari perangkat lain (HP) di jaringan lokal
+    safeSrc = safeSrc.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/, '');
+  }
+
+  if (safeSrc && safeSrc !== "") {
     return (
-      <div className="relative mb-5 min-h-44 h-56 w-full overflow-hidden rounded-[28px] border border-white/10 bg-slate-900 group">
+      <div className="relative mb-5 min-h-44 h-56 w-full overflow-hidden rounded-[28px] group" style={{ border: '1px solid #1A2B47', backgroundColor: '#0A1121' }}>
          <img
-            src={src}
+            src={safeSrc}
             alt={alt || "Headline News"}
             className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105"
          />
-         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+         <div className="absolute inset-0 bg-gradient-to-t from-[#030711]/80 to-transparent"></div>
       </div>
     );
   }
   return (
-    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-5">
+    <div className="relative mb-5 min-h-44 overflow-hidden rounded-[28px] p-5" style={{ backgroundColor: '#0A1121', border: '1px solid #1A2B47' }}>
       <div className="relative z-10 flex min-h-32 items-end">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-lime-300">
+          <p
+            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.16em]"
+            style={{
+              backgroundColor: 'rgba(13,242,163,0.08)',
+              border: '1px solid rgba(13,242,163,0.2)',
+              color: '#0DF2A3',
+            }}
+          >
             <GlobeNewsIcon className="h-4 w-4" />
             <span>Headline Preview</span>
           </p>
-
-          <p className="mt-4 text-sm font-black leading-7 text-white">
-            Nexarin News
-          </p>
-
-          <p className="mt-1 text-xs font-semibold text-slate-500">
-            Digital news by-rins
-          </p>
+          <p className="mt-4 text-sm font-black leading-7 text-white">Nexarin News</p>
+          <p className="mt-1 text-xs font-semibold" style={{ color: '#708090' }}>Digital news by-rins</p>
         </div>
       </div>
     </div>
   );
 }
 
-function CompactNewsCard({ item, index }) {
-  const safeItem = item || {};
-  const number = String(index + 1).padStart(2, "0");
-  const href = safeItem.slug ? `/news/artikel/${safeItem.slug}` : "/news";
 
-  return (
-    <Link href={href} className="block group">
-      <article className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.02] p-4 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04]">
-        <div className="relative z-10 flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-lime-400/20 bg-lime-400/10 text-xs font-black text-lime-300 shadow-lg shadow-lime-400/10">
-            {number}
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-white/10 bg-slate-950/45 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-300">
-                {safeItem.category || "News"}
-              </span>
-
-              <span className="text-[11px] font-bold text-slate-500">
-                {safeItem.date || "Preview"}
-              </span>
-            </div>
-
-            <h3 className="mt-3 text-base font-black leading-6 tracking-[-0.035em] text-white line-clamp-2">
-              {safeItem.title || "Judul berita belum tersedia"}
-            </h3>
-          </div>
-        </div>
-      </article>
-    </Link>
-  );
-}
 
 export default function HomeNewsPreview({ articles = [] }) {
   const data = homeNewsPreview || {};
-  
-  // Gunakan data DB jika tersedia, jika kosong gunakan data statis
+
   const hasDbData = articles && articles.length > 0;
   const dbFeatured = hasDbData ? articles[0] : null;
   const dbItems = hasDbData ? articles.slice(1, 4) : [];
-  
+
   const featured = dbFeatured || data.featured || {};
   const newsItems = hasDbData ? dbItems : (Array.isArray(data.items) ? data.items : []);
   const cta = data.cta || {};
@@ -112,15 +90,63 @@ export default function HomeNewsPreview({ articles = [] }) {
   const featuredHref = dbFeatured?.slug ? `/news/artikel/${dbFeatured.slug}` : "/news";
 
   return (
-    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
-      {/* Background Glows */}
-      <div className="pointer-events-none absolute right-0 bottom-0 h-[600px] w-[600px] translate-x-1/3 translate-y-1/3 rounded-full bg-lime-400/5 blur-[120px]" />
-      
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8" style={{ backgroundColor: '#030711' }}>
+      <style>{`
+        .nx-news-featured {
+          background-color: #0A1121;
+          border: 1px solid #1A2B47;
+          transition: all 0.3s ease;
+        }
+        .nx-news-featured:hover {
+          background-color: rgba(13,242,163,0.02);
+          border-color: rgba(13,242,163,0.2);
+        }
+        .nx-news-compact {
+          border-bottom: 1px solid #1A2B47;
+          transition: all 0.3s ease;
+        }
+        .nx-news-compact:hover {
+          background-color: rgba(13,242,163,0.03);
+          border-color: rgba(13,242,163,0.2);
+        }
+        .nx-news-cta {
+          background-color: #0A1121;
+          border: 1px solid #1A2B47;
+          transition: all 0.3s ease;
+        }
+        .nx-news-cta:hover {
+          border-color: rgba(13,242,163,0.3);
+          background-color: rgba(13,242,163,0.08);
+        }
+      `}</style>
+
+      {/* Grid Pattern Background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-100"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+
+      <div
+        className="pointer-events-none absolute right-0 bottom-0 h-[600px] w-[600px] translate-x-1/3 translate-y-1/3 rounded-full blur-[120px]"
+        style={{ backgroundColor: 'rgba(13,242,163,0.04)' }}
+      />
+
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
             <div className="relative z-10">
-              <p className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-lime-300 shadow-lg shadow-lime-400/10">
+              <p
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.22em] shadow-lg"
+                style={{
+                  backgroundColor: 'rgba(13,242,163,0.08)',
+                  border: '1px solid rgba(13,242,163,0.2)',
+                  color: '#0DF2A3',
+                }}
+              >
                 <GlobeNewsIcon className="h-4 w-4" />
                 <span>{data.eyebrow || "News"}</span>
               </p>
@@ -129,87 +155,57 @@ export default function HomeNewsPreview({ articles = [] }) {
                 {data.title || "News Nexarin sedang disiapkan."}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base font-semibold leading-8 text-slate-300">
-                {data.description ||
-                  "Section News ini disiapkan sebagai preview awal."}
+              <p className="mt-5 max-w-2xl text-base font-semibold leading-8" style={{ color: '#708090' }}>
+                {data.description || "Section News ini disiapkan sebagai preview awal."}
               </p>
             </div>
           </div>
 
           <Link
             href={cta.href || "/news"}
-            className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:border-lime-400/25 hover:bg-lime-400/10 md:shrink-0"
+            className="nx-news-cta inline-flex min-h-12 items-center justify-center rounded-2xl px-5 py-3 text-sm font-black text-white shadow-xl hover:-translate-y-0.5 md:shrink-0"
           >
             {cta.label || "Buka News"} →
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_0.8fr]">
+        <div className="mt-12 mx-auto max-w-4xl">
           <Link href={featuredHref} className="block group">
-            <article className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:bg-white/[0.04]">
+            <article className="nx-news-featured relative h-full overflow-hidden rounded-[32px] p-6 shadow-xl backdrop-blur-md">
               <div className="relative z-10">
                 <NewsImagePlaceholder src={featured.image} alt={featured.title} />
 
                 <div className="flex flex-wrap items-center gap-2 mt-4">
-                  <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-lime-300">
+                  <span
+                    className="rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em]"
+                    style={{ backgroundColor: '#0A1121', border: '1px solid rgba(13,242,163,0.2)', color: '#0DF2A3' }}
+                  >
                     {featured.category || "Update"}
                   </span>
-
-                  <span className="text-xs font-bold text-slate-500">
+                  <span className="text-xs font-bold" style={{ color: '#708090' }}>
                     {featured.date || "Coming Soon"}
                   </span>
                 </div>
 
-                <h3 className="mt-4 text-3xl font-black leading-tight tracking-[-0.055em] text-white sm:text-4xl group-hover:text-lime-300 transition-colors">
+                <h3 className="mt-4 text-3xl font-black leading-tight tracking-[-0.055em] text-white sm:text-4xl transition-colors duration-300 group-hover:text-[#0DF2A3]">
                   {featured.title || "Headline News belum tersedia"}
                 </h3>
 
-                <p className="mt-4 text-sm font-medium leading-relaxed text-slate-300 sm:text-base line-clamp-3">
-                  {featured.excerpt ||
-                    "Ringkasan headline akan ditampilkan di bagian ini."}
+                <p className="mt-4 text-sm font-medium leading-relaxed sm:text-base line-clamp-3" style={{ color: '#708090' }}>
+                  {featured.excerpt || "Ringkasan headline akan ditampilkan di bagian ini."}
                 </p>
 
                 <TopicChips topics={data.topics} />
 
-                <div className="mt-8 border-t border-white/10 pt-5">
-                  <span className="inline-flex w-full items-center justify-between text-sm font-black text-lime-400 transition group-hover:text-lime-300">
+                <div className="mt-8 pt-5" style={{ borderTop: '1px solid #1A2B47' }}>
+                  <span className="inline-flex w-full items-center justify-between text-sm font-black transition" style={{ color: '#0DF2A3' }}>
                     <span>Baca Selengkapnya</span>
-                    <span aria-hidden="true" className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                    <span aria-hidden="true" className="text-xl transition-transform duration-300 group-hover:translate-x-2">→</span>
                   </span>
                 </div>
               </div>
             </article>
           </Link>
-
-          <div className="flex flex-col gap-5">
-            <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.02] p-5 shadow-xl backdrop-blur-md">
-              <div className="relative z-10">
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-lime-300">
-                  Latest News
-                </p>
-
-                <h3 className="mt-2 text-xl font-black tracking-[-0.04em] text-white">
-                  Update terbaru
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid gap-4 flex-1">
-              {newsItems.length > 0 ? (
-                newsItems.map((item, index) => (
-                  <CompactNewsCard
-                    key={item?.id || item?.title || index}
-                    item={item}
-                    index={index}
-                  />
-                ))
-              ) : (
-                <div className="flex h-full min-h-32 items-center justify-center rounded-[28px] border border-white/10 bg-slate-900/40 p-6 text-center text-sm font-medium text-slate-400">
-                  Berita belum tersedia.
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
     </section>

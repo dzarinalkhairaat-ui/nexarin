@@ -12,29 +12,62 @@ export default function HomeProgressChart() {
   if (!isMounted) return null;
 
   return (
-    <section className="relative px-5 pt-4 pb-12 sm:pt-4 sm:pb-16 sm:px-6 lg:px-8">
+    <section className="relative px-5 pt-4 pb-12 sm:pt-4 sm:pb-16 sm:px-6 lg:px-8" style={{ backgroundColor: '#030711' }}>
+      {/* Grid Pattern Background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-100"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+
       {/* Background glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/5 blur-[120px]" />
-      
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+        style={{ backgroundColor: 'rgba(13,242,163,0.05)' }}
+      />
+
       <div className="relative mx-auto max-w-5xl">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/60 p-6 sm:p-10 shadow-2xl backdrop-blur-2xl group">
-          {/* Hover glow effect */}
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/0 via-emerald-500/0 to-cyan-500/0 opacity-0 blur-xl transition-all duration-700 group-hover:from-emerald-500/10 group-hover:via-emerald-500/5 group-hover:to-cyan-500/10 group-hover:opacity-100" />
-          
+        <div
+          className="group relative overflow-hidden rounded-[24px] p-6 sm:p-10 shadow-2xl backdrop-blur-2xl"
+          style={{
+            backgroundColor: 'rgba(10,17,33,0.4)',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: '#1A2B47',
+            transition: 'box-shadow 0.7s ease, border-color 0.7s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 40px rgba(13,242,163,0.1), 0 0 80px rgba(13,242,163,0.05)';
+            e.currentTarget.style.borderColor = 'rgba(13,242,163,0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '';
+            e.currentTarget.style.borderColor = '#1A2B47';
+          }}
+        >
           {/* Decorative Top Highlight */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent" />
+          <div
+            className="absolute inset-x-0 top-0 h-px"
+            style={{ background: 'linear-gradient(to right, transparent, rgba(13,242,163,0.3), transparent)' }}
+          />
 
           <div className="mb-10 text-center relative z-10">
             <h2 className="text-2xl sm:text-4xl font-black text-white tracking-[-0.04em] drop-shadow-md">
-              Nexarin <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Terus Berkembang</span>
+              Nexarin{" "}
+              <span style={{ color: '#0DF2A3', textShadow: '0 0 20px rgba(13,242,163,0.3)' }}>
+                Terus Berkembang
+              </span>
             </h2>
           </div>
-          
+
           {/* Chart Container */}
           <div className="relative h-64 sm:h-80 w-full mt-4 flex items-end">
-            
-            {/* Y-axis labels - placed absolutely to the left of the chart area but inside the card */}
-            <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-12 flex flex-col justify-between text-[10px] sm:text-xs font-black text-slate-500 z-20 pb-6 pt-1">
+
+            {/* Y-axis labels */}
+            <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-12 flex flex-col justify-between text-[10px] sm:text-xs font-black z-20 pb-6 pt-1" style={{ color: '#708090' }}>
               <span>100%</span>
               <span>75%</span>
               <span>50%</span>
@@ -43,128 +76,75 @@ export default function HomeProgressChart() {
             </div>
 
             {/* Main Graph Area */}
-            <div className="relative ml-10 sm:ml-12 h-full w-full border-b border-l border-white/20 pb-6">
-              
-              <style>
-                {`
-                  .animated-line {
-                    stroke-dasharray: 200;
-                    stroke-dashoffset: 200;
-                    animation: drawLine 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                  }
-                  .animated-area {
-                    opacity: 0;
-                    animation: fadeArea 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                  }
-                  .animated-dot-container {
-                    opacity: 0;
-                    animation: showDot 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                  }
-                  .animated-bar-1 { animation: growBar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.1s; }
-                  .animated-bar-2 { animation: growBar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.3s; }
-                  .animated-bar-3 { animation: growBar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.5s; }
-                  .animated-bar-4 { animation: growBar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.7s; }
-                  .animated-bar-5 { animation: growBar 5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.9s; }
-                  
-                  @keyframes growBar {
-                    0% { transform: scaleY(0); opacity: 0; }
-                    30% { transform: scaleY(1); opacity: 1; }
-                    80% { transform: scaleY(1); opacity: 1; }
-                    100% { transform: scaleY(0); opacity: 0; }
-                  }
-                  
-                  @keyframes drawLine {
-                    0% { stroke-dashoffset: 200; }
-                    50% { stroke-dashoffset: 0; }
-                    80% { stroke-dashoffset: 0; opacity: 1; }
-                    100% { stroke-dashoffset: 0; opacity: 0; }
-                  }
-                  
-                  @keyframes fadeArea {
-                    0% { opacity: 0; }
-                    30% { opacity: 0; }
-                    50% { opacity: 1; }
-                    80% { opacity: 1; }
-                    100% { opacity: 0; }
-                  }
-                  
-                  @keyframes showDot {
-                    0% { opacity: 0; transform: translateY(10px) scale(0.5); }
-                    45% { opacity: 0; transform: translateY(5px) scale(0.8); }
-                    50% { opacity: 1; transform: translateY(0) scale(1); }
-                    80% { opacity: 1; transform: translateY(0) scale(1); }
-                    100% { opacity: 0; transform: translateY(0) scale(1); }
-                  }
-                  
-                  @keyframes pulseDot {
-                    0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.8); }
-                    50% { transform: scale(1.6); box-shadow: 0 0 0 12px rgba(34, 211, 238, 0); }
-                    100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
-                  }
-                `}
-              </style>
+            <div className="relative ml-10 sm:ml-12 h-full w-full pb-6" style={{ borderBottom: '1px solid rgba(26,43,71,0.8)', borderLeft: '1px solid rgba(26,43,71,0.8)' }}>
 
-              {/* 0. Grid lines (Behind all) */}
+              <style>{`
+                @keyframes barLoop {
+                  0%, 100% { transform: scaleY(0.3); }
+                  50% { transform: scaleY(1); }
+                }
+                .bar-loop-1 { animation: barLoop 3s ease-in-out infinite; animation-delay: 0s; }
+                .bar-loop-2 { animation: barLoop 3s ease-in-out infinite; animation-delay: 0.2s; }
+                .bar-loop-3 { animation: barLoop 3s ease-in-out infinite; animation-delay: 0.5s; }
+                .bar-loop-4 { animation: barLoop 3s ease-in-out infinite; animation-delay: 0.8s; }
+                .bar-loop-5 { animation: barLoop 3s ease-in-out infinite; animation-delay: 1s; }
+
+                @keyframes laserSweep {
+                  0% { transform: translateX(-100%) rotate(-15deg); opacity: 0; }
+                  30% { opacity: 0.6; }
+                  70% { opacity: 0.6; }
+                  100% { transform: translateX(200%) rotate(-15deg); opacity: 0; }
+                }
+              `}</style>
+
+              {/* Grid lines (Behind all) */}
               <div className="absolute inset-0 z-0">
-                <div className="absolute top-[0%] w-full border-t border-white/5 border-dashed" />
-                <div className="absolute top-[25%] w-full border-t border-white/5 border-dashed" />
-                <div className="absolute top-[50%] w-full border-t border-white/5 border-dashed" />
-                <div className="absolute top-[75%] w-full border-t border-white/5 border-dashed" />
-                
-                <div className="absolute left-[30%] h-full border-l border-white/5 border-dashed" />
-                <div className="absolute left-[50%] h-full border-l border-white/5 border-dashed" />
-                <div className="absolute left-[70%] h-full border-l border-white/5 border-dashed" />
+                <div className="absolute top-[0%] w-full" style={{ borderTop: '1px dashed rgba(26,43,71,0.5)' }} />
+                <div className="absolute top-[25%] w-full" style={{ borderTop: '1px dashed rgba(26,43,71,0.5)' }} />
+                <div className="absolute top-[50%] w-full" style={{ borderTop: '1px dashed rgba(26,43,71,0.5)' }} />
+                <div className="absolute top-[75%] w-full" style={{ borderTop: '1px dashed rgba(26,43,71,0.5)' }} />
+
+                <div className="absolute left-[30%] h-full" style={{ borderLeft: '1px dashed rgba(26,43,71,0.3)' }} />
+                <div className="absolute left-[50%] h-full" style={{ borderLeft: '1px dashed rgba(26,43,71,0.3)' }} />
+                <div className="absolute left-[70%] h-full" style={{ borderLeft: '1px dashed rgba(26,43,71,0.3)' }} />
               </div>
 
-              {/* 1. Area Fill SVG (Behind Bars) */}
-              <svg className="absolute inset-0 h-full w-full overflow-visible z-[5]" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.4" />
-                    <stop offset="50%" stopColor="#34d399" stopOpacity="0.1" />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path className="animated-area" d="M 10,80 Q 20,72.5 30,65 T 50,45 T 70,25 T 90,5 L 90,100 L 10,100 Z" fill="url(#area-gradient)" />
-              </svg>
-
-              {/* 2. HTML Bars (In middle) */}
+              {/* Bars with animate-bar-loop */}
               <div className="absolute inset-0 z-10">
-                <div className="absolute bottom-0 w-[8%] left-[6%] h-[20%] bg-gradient-to-t from-emerald-500/10 to-emerald-400/30 rounded-t-lg animated-bar-1 origin-bottom border-t border-emerald-400/40 backdrop-blur-sm" />
-                <div className="absolute bottom-0 w-[8%] left-[26%] h-[35%] bg-gradient-to-t from-emerald-500/10 to-emerald-400/30 rounded-t-lg animated-bar-2 origin-bottom border-t border-emerald-400/40 backdrop-blur-sm" />
-                <div className="absolute bottom-0 w-[8%] left-[46%] h-[55%] bg-gradient-to-t from-emerald-500/10 to-cyan-400/30 rounded-t-lg animated-bar-3 origin-bottom border-t border-cyan-400/40 backdrop-blur-sm" />
-                <div className="absolute bottom-0 w-[8%] left-[66%] h-[75%] bg-gradient-to-t from-emerald-500/10 to-cyan-400/30 rounded-t-lg animated-bar-4 origin-bottom border-t border-cyan-400/40 backdrop-blur-sm" />
-                <div className="absolute bottom-0 w-[8%] left-[86%] h-[95%] bg-gradient-to-t from-emerald-500/10 to-cyan-400/30 rounded-t-lg animated-bar-5 origin-bottom border-t border-cyan-400/40 backdrop-blur-sm" />
+                {[
+                  { left: '6%', height: '85%', delay: 'bar-loop-1' },
+                  { left: '26%', height: '90%', delay: 'bar-loop-2' },
+                  { left: '46%', height: '95%', delay: 'bar-loop-3' },
+                  { left: '66%', height: '88%', delay: 'bar-loop-4' },
+                  { left: '86%', height: '92%', delay: 'bar-loop-5' },
+                ].map((bar, i) => (
+                  <div
+                    key={i}
+                    className={`absolute bottom-0 w-[8%] rounded-t-lg origin-bottom ${bar.delay}`}
+                    style={{
+                      left: bar.left,
+                      height: bar.height,
+                      background: `linear-gradient(to top, rgba(13,242,163,0.1) 0%, rgba(13,242,163,0.4) 40%, rgba(13,242,163,0.85) 100%)`,
+                      borderTop: '2px solid rgba(13,242,163,0.9)',
+                      borderLeft: '1px solid rgba(13,242,163,0.3)',
+                      borderRight: '1px solid rgba(13,242,163,0.3)',
+                      filter: 'blur(0px)',
+                      boxShadow: '0 0 20px rgba(13,242,163,0.25), inset 0 0 10px rgba(13,242,163,0.2)',
+                    }}
+                  />
+                ))}
               </div>
 
-              {/* 3. Line Chart SVG (In front) */}
-              <svg className="absolute inset-0 h-full w-full overflow-visible z-20" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#34d399" />
-                    <stop offset="50%" stopColor="#34d399" />
-                    <stop offset="100%" stopColor="#22d3ee" />
-                  </linearGradient>
-                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2.5" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                </defs>
-                <path className="animated-line" d="M 10,80 Q 20,72.5 30,65 T 50,45 T 70,25 T 90,5" fill="none" stroke="url(#line-gradient)" strokeWidth="3" vectorEffect="non-scaling-stroke" filter="url(#glow)" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-
-              {/* 4. Dots (Top layer) */}
-              {/* Start dot */}
-              <div className="absolute left-[10%] top-[80%] -translate-x-1/2 -translate-y-1/2 z-30">
-                <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,1)] border border-emerald-200" />
-              </div>
-              
-              {/* End dot */}
-              <div className="absolute left-[90%] top-[5%] -translate-x-1/2 -translate-y-1/2 z-30 animated-dot-container">
-                <div className="relative flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center">
-                  <div className="absolute inline-flex h-full w-full rounded-full bg-cyan-400" style={{ animation: 'pulseDot 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
-                  <div className="relative inline-flex h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-white shadow-lg" />
-                </div>
+              {/* Laser accent line */}
+              <div className="absolute inset-0 z-20 overflow-hidden pointer-events-none">
+                <div
+                  className="absolute top-[20%] left-0 w-[60%] h-[1px]"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(13,242,163,0.8), transparent)',
+                    animation: 'laserSweep 4s linear infinite',
+                    boxShadow: '0 0 8px rgba(13,242,163,0.5)',
+                  }}
+                />
               </div>
 
             </div>

@@ -75,7 +75,7 @@ export default async function HomePage() {
   const newsArticles = await getHomeNewsArticles();
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
+    <main className="relative min-h-screen overflow-hidden text-white selection:bg-emerald-400/30" style={{ backgroundColor: '#030711' }}>
       <Header />
 
       <ScrollReveal delay={0}>
@@ -102,7 +102,7 @@ export default async function HomePage() {
         <HomeFooter />
       </ScrollReveal>
 
-      <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.02] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:40px_40px]" />
+      <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(rgba(26,43,71,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.5) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
     </main>
   );
 }

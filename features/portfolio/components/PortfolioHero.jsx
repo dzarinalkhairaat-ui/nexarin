@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { portfolioHeroData } from "@/features/portfolio/portfolio.data";
 import AnimatedCounter from "./AnimatedCounter";
-import { SparkleIcon, LockIcon } from "@/components/shared/MenuIcons";
+import { SparkleIcon } from "@/components/shared/MenuIcons";
+import { FileText } from "lucide-react";
 
 
 export default function PortfolioHero() {
@@ -64,14 +67,6 @@ export default function PortfolioHero() {
           >
             <span className="relative z-10">{secondaryCta.label || "Hubungi Nexarin"}</span>
           </Link>
-
-          <div
-            title="Akses Premium belum tersedia saat ini"
-            className="group relative inline-flex min-h-14 cursor-not-allowed select-none items-center justify-center gap-2 overflow-hidden rounded-2xl border border-white/5 bg-slate-950/30 px-8 py-4 text-sm font-black text-slate-500 shadow-lg shadow-black/10"
-          >
-            <LockIcon className="h-4 w-4" />
-            <span className="relative z-10">Akses Premium</span>
-          </div>
         </div>
 
         {/* Highlight Stats (Glassmorphism Bento Style with Animation) */}

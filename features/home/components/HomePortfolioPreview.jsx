@@ -24,17 +24,19 @@ const projectIcons = [<CodeIcon key="1" />, <LayoutIcon key="2" />];
 
 function StackBadges({ stacks }) {
   const safeStacks = Array.isArray(stacks) ? stacks : [];
-
-  if (safeStacks.length === 0) {
-    return null;
-  }
+  if (safeStacks.length === 0) return null;
 
   return (
     <div className="mt-5 flex flex-wrap gap-2">
       {safeStacks.map((stack) => (
         <span
           key={stack}
-          className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-cyan-200 shadow-lg shadow-cyan-400/5"
+          className="rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] shadow-lg"
+          style={{
+            backgroundColor: 'rgba(13,242,163,0.08)',
+            border: '1px solid rgba(13,242,163,0.2)',
+            color: '#0DF2A3',
+          }}
         >
           {stack}
         </span>
@@ -52,37 +54,32 @@ function MiniProjectCard({ project, index }) {
 
   return (
     <Link href={detailHref} className="block group h-full">
-      <article className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/[0.04] h-full flex flex-col">
+      <article className="nx-portfolio-card relative overflow-hidden rounded-[28px] p-6 shadow-xl backdrop-blur-md h-full flex flex-col">
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-xl shadow-lg shadow-cyan-400/10 transition group-hover:scale-110">
+            <div className="nx-portfolio-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl shadow-lg transition group-hover:scale-110">
               {icon}
             </div>
-
             <div className="min-w-0">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
-                {type}
-              </p>
-
-              <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
-                Showcase
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: '#0DF2A3' }}>{type}</p>
+              <p className="mt-1 text-xs font-black uppercase tracking-[0.14em]" style={{ color: '#708090' }}>Showcase</p>
             </div>
           </div>
 
-          <h3 className="mt-6 text-2xl font-black leading-tight tracking-[-0.05em] text-white group-hover:text-cyan-300 transition-colors">
+          <h3 className="mt-6 text-2xl font-black leading-tight tracking-[-0.05em] text-white transition-colors duration-300 group-hover:text-[#0DF2A3]">
             {safeProject.title || "Project belum tersedia"}
           </h3>
 
-          <p className="mt-4 text-sm font-medium leading-7 text-slate-400 flex-1">
-            {safeProject.description ||
-              "Deskripsi project akan ditambahkan saat data sudah siap."}
+          <p className="mt-4 text-sm font-medium leading-7 flex-1" style={{ color: '#708090' }}>
+            {safeProject.description || "Deskripsi project akan ditambahkan saat data sudah siap."}
           </p>
 
-          <div className="mt-6 border-t border-white/10 pt-4">
-            <span className="inline-flex w-full items-center justify-between text-sm font-black text-cyan-400 transition group-hover:text-cyan-300">
+          <StackBadges stacks={stacks} />
+
+          <div className="mt-6 pt-4" style={{ borderTop: '1px solid #1A2B47' }}>
+            <span className="inline-flex w-full items-center justify-between text-sm font-black transition" style={{ color: '#0DF2A3' }}>
               <span>Lihat Portfolio</span>
-              <span aria-hidden="true" className="text-xl transition-transform group-hover:translate-x-1">→</span>
+              <span aria-hidden="true" className="text-xl transition-transform duration-300 group-hover:translate-x-2">→</span>
             </span>
           </div>
         </div>
@@ -97,15 +94,62 @@ export default function HomePortfolioPreview() {
   const cta = data.cta || {};
 
   return (
-    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
-      {/* Background Glows */}
-      <div className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/5 blur-[120px]" />
-      
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8" style={{ backgroundColor: '#030711' }}>
+      <style>{`
+        .nx-portfolio-card {
+          background-color: #0A1121;
+          border: 1px solid #1A2B47;
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nx-portfolio-card:hover {
+          transform: translateY(-5px);
+          border-color: #0DF2A3;
+          box-shadow: 0 0 30px rgba(13,242,163,0.1), 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .nx-portfolio-icon {
+          background-color: rgba(13,242,163,0.08);
+          border: 1px solid rgba(13,242,163,0.2);
+          color: #0DF2A3;
+          box-shadow: 0 0 15px rgba(13,242,163,0.1);
+        }
+        .nx-portfolio-cta {
+          background-color: #0A1121;
+          border: 1px solid #1A2B47;
+          transition: all 0.3s ease;
+        }
+        .nx-portfolio-cta:hover {
+          border-color: rgba(13,242,163,0.3);
+          background-color: rgba(13,242,163,0.08);
+        }
+      `}</style>
+
+      {/* Grid Pattern Background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-100"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+
+      <div
+        className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+        style={{ backgroundColor: 'rgba(13,242,163,0.04)' }}
+      />
+
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="relative max-w-3xl">
             <div className="relative z-10">
-              <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-300 shadow-lg shadow-cyan-400/10">
+              <p
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.22em] shadow-lg"
+                style={{
+                  backgroundColor: 'rgba(13,242,163,0.08)',
+                  border: '1px solid rgba(13,242,163,0.2)',
+                  color: '#0DF2A3',
+                }}
+              >
                 <BriefcaseIcon className="h-4 w-4" />
                 <span>{data.eyebrow || "Portfolio"}</span>
               </p>
@@ -114,16 +158,15 @@ export default function HomePortfolioPreview() {
                 {data.title || "Portfolio Nexarin sedang disiapkan."}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base font-medium leading-8 text-slate-300">
-                {data.description ||
-                  "Section portfolio ini disiapkan sebagai preview awal."}
+              <p className="mt-5 max-w-2xl text-base font-medium leading-8" style={{ color: '#708090' }}>
+                {data.description || "Section portfolio ini disiapkan sebagai preview awal."}
               </p>
             </div>
           </div>
 
           <Link
             href={cta.href || "/portfolio"}
-            className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045] px-5 py-3 text-sm font-black text-white shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-cyan-400/10 md:shrink-0"
+            className="nx-portfolio-cta inline-flex min-h-12 items-center justify-center rounded-2xl px-5 py-3 text-sm font-black text-white shadow-xl hover:-translate-y-0.5 md:shrink-0"
           >
             {cta.label || "Buka Portfolio"} →
           </Link>
@@ -132,14 +175,13 @@ export default function HomePortfolioPreview() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
           {projects.length > 0 ? (
             projects.map((project, index) => (
-              <MiniProjectCard
-                key={project?.title || index}
-                project={project}
-                index={index}
-              />
+              <MiniProjectCard key={project?.title || index} project={project} index={index} />
             ))
           ) : (
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-6 text-center text-sm font-medium text-slate-400 sm:col-span-2">
+            <div
+              className="rounded-[28px] p-6 text-center text-sm font-medium sm:col-span-2"
+              style={{ backgroundColor: '#0A1121', border: '1px solid #1A2B47', color: '#708090' }}
+            >
               Project belum tersedia.
             </div>
           )}
