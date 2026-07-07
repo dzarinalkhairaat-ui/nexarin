@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { homeData } from "@/features/home/home.data";
-import { DagangIcon, NewsIcon, PortfolioIcon } from "@/components/shared/MenuIcons";
+import { DagangIcon, NewsIcon } from "@/components/shared/MenuIcons";
 import { FileText } from "lucide-react";
 
 const CheckIcon = ({ className = "h-3.5 w-3.5", style }) => (
@@ -118,16 +118,6 @@ export default function HomeHero() {
             <span className="flex items-center gap-1.5 sm:gap-2 transition-transform duration-300 group-hover:-translate-y-[2px]">
               <NewsIcon className="h-4 w-4 sm:h-5 sm:w-5 opacity-70 transition-colors group-hover:opacity-100" />
               News
-            </span>
-          </Link>
-
-          <Link
-            href="/portfolio"
-            className="nx-hero-btn group inline-flex h-11 sm:h-12 items-center justify-center rounded-xl px-4 sm:px-8 text-sm sm:text-base font-bold text-white active:scale-95 hover:scale-105"
-          >
-            <span className="flex items-center gap-1.5 sm:gap-2 transition-transform duration-300 group-hover:-translate-y-[2px]">
-              <PortfolioIcon className="h-4 w-4 sm:h-5 sm:w-5 opacity-70 transition-colors group-hover:opacity-100" />
-              Portfolio
             </span>
           </Link>
 

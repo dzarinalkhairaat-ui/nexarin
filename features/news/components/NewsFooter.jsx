@@ -23,7 +23,7 @@ const socialLinks = [
 function SocialIcon({ label, icon }) {
   return (
     <a
-      href="/contact"
+      href="#"
       aria-label={label}
       className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.07] p-3 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-cyan-400/25 hover:bg-cyan-400/10"
     >

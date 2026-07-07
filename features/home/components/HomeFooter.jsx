@@ -22,7 +22,7 @@ const socialSlots = [
 function SocialIcon({ label, icon }) {
   return (
     <a
-      href="/contact"
+      href="#"
       aria-label={label}
       className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.07] p-3 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/25 hover:bg-emerald-400/10"
     >
@@ -110,7 +110,7 @@ export default function HomeFooter() {
         </h2>
 
         <p className="mt-3 max-w-md text-sm font-medium leading-7 text-slate-400 sm:text-base">
-          Follow updates, portfolio project, news, tools, and
+          Follow updates, news, tools, and
           creative ecosystem by-rins.
         </p>
 
