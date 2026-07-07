@@ -11,7 +11,7 @@ export async function POST(req) {
     const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000';
     
     // Proxy request to python backend
-    const response = await fetch(`${pythonApiUrl}/api/tts`, {
+    const response = await fetch(`${pythonApiUrl}/api/tts/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

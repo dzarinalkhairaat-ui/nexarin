@@ -79,7 +79,7 @@ export default function VoiceStudioPage() {
         <div className="text-center max-w-3xl mx-auto mb-12 animate-in slide-in-from-bottom-5 duration-1000 fade-in">
           <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-bold text-violet-300 shadow-[0_0_20px_rgba(139,92,246,0.15)] mb-6 backdrop-blur-md">
             <SparkleIcon className="h-4 w-4 animate-pulse" />
-            <span className="tracking-wide uppercase">Neural Engine Aktif</span>
+            <span className="tracking-wide uppercase">Nexarin Engine Aktif</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-white mb-6 leading-tight">
             Nexarin <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400 drop-shadow-lg">Voice Studio</span>

@@ -22,7 +22,7 @@ async def generate_audio_stream(text: str, voice: str):
         # but it's a fallback for streaming errors.
         pass
 
-@router.post("/")
+@router.post("")
 async def text_to_speech(req: TTSRequest):
     if not req.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty")
