@@ -370,26 +370,32 @@ export default function JpgToPdfWorkspace() {
                             </div>
                           </div>
 
-                          {/* ORIENTATION (only show if not fit) */}
-                          {pageSize !== 'fit' && (
-                            <div className="animate-in slide-in-from-top-2 fade-in duration-300">
-                              <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Orientation</label>
-                              <div className="flex bg-slate-800 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
-                                <button 
-                                  onClick={() => setOrientation('portrait')}
-                                  className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'portrait' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
-                                >
-                                  Potret (Tegak)
-                                </button>
-                                <button 
-                                  onClick={() => setOrientation('landscape')}
-                                  className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'landscape' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
-                                >
-                                  Lansekap (Menyamping)
-                                </button>
-                              </div>
+                          {/* ORIENTATION (Always show and clickable) */}
+                          <div className="animate-in slide-in-from-top-2 fade-in duration-300">
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="block text-sm font-bold text-slate-300 uppercase tracking-wider">Orientation</label>
                             </div>
-                          )}
+                            <div className="flex bg-slate-800 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
+                              <button 
+                                onClick={() => {
+                                  setOrientation('portrait');
+                                  if (pageSize === 'fit') setPageSize('a4');
+                                }}
+                                className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'portrait' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
+                              >
+                                Potret (Tegak)
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  setOrientation('landscape');
+                                  if (pageSize === 'fit') setPageSize('a4');
+                                }}
+                                className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'landscape' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
+                              >
+                                Lansekap (Menyamping)
+                              </button>
+                            </div>
+                          </div>
 
                           {/* MARGIN */}
                           <div>
@@ -441,22 +447,22 @@ export default function JpgToPdfWorkspace() {
                           {/* DYNAMIC LAYOUT PREVIEW */}
                           <div className="mt-8 border-t border-slate-800 pt-6">
                             <label className="block text-sm font-bold text-slate-300 mb-4 uppercase tracking-wider text-center">Live Preview</label>
-                            <div className="flex bg-slate-950/50 rounded-2xl border border-slate-800 h-64 overflow-hidden relative">
+                            <div className="flex bg-slate-900/40 rounded-2xl border border-slate-800/80 overflow-hidden relative shadow-inner">
                               
                               {/* Fading edges for scroll hint */}
                               {selectedFiles.length > 1 && (
                                 <>
-                                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-950/80 to-transparent z-10 pointer-events-none"></div>
-                                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-950/80 to-transparent z-10 pointer-events-none"></div>
+                                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-900/80 to-transparent z-10 pointer-events-none"></div>
+                                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-900/80 to-transparent z-10 pointer-events-none"></div>
                                 </>
                               )}
 
-                              <div className={`flex items-center overflow-x-auto w-full h-full py-4 px-8 snap-x hide-scrollbar gap-8 ${selectedFiles.length === 1 ? 'justify-center' : 'justify-start'}`}>
+                              <div className={`flex items-center overflow-x-auto w-full py-8 px-8 snap-x hide-scrollbar gap-8 ${selectedFiles.length === 1 ? 'justify-center' : 'justify-start'}`}>
                                 {selectedFiles.map((file, idx) => (
-                                  <div key={idx} className={`shrink-0 snap-center transition-all duration-700 ease-in-out bg-white rounded shadow-2xl relative flex items-center justify-center overflow-hidden ring-4 ring-slate-800/50 ${pageSize === 'fit' ? 'w-44 h-44 rounded-xl' : orientation === 'portrait' ? 'w-36 h-48' : 'w-48 h-36'}`}>
+                                  <div key={idx} className={`shrink-0 snap-center transition-all duration-700 ease-in-out bg-white rounded-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative flex items-center justify-center overflow-hidden ring-4 ring-slate-800/60 ${pageSize === 'fit' ? 'w-48 h-48 rounded-xl' : orientation === 'portrait' ? 'w-40 h-56' : 'w-56 h-40'}`}>
                                     
                                     {/* Inner Content Area representing margins */}
-                                    <div className={`w-full h-full flex items-center justify-center transition-all duration-500 ease-in-out bg-white ${pageSize === 'fit' ? (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-3' : 'p-6') : (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-2' : 'p-4')}`}>
+                                    <div className={`w-full h-full flex items-center justify-center transition-all duration-500 ease-in-out bg-white ${pageSize === 'fit' ? (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-3' : 'p-6') : (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-3' : 'p-5')}`}>
                                       
                                       {/* The Image */}
                                       <div className="w-full h-full flex items-center justify-center relative overflow-hidden transition-all duration-300">
@@ -467,7 +473,7 @@ export default function JpgToPdfWorkspace() {
                                         />
                                         
                                         {/* Page Number indicator */}
-                                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[9px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
+                                        <div className="absolute top-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm border border-white/10">
                                           {idx + 1}
                                         </div>
 
