@@ -3,7 +3,6 @@ export const publicNavigation = [
   { label: "Nexarin Dagang", href: "/dagang" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "News", href: "/news" },
-  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Nexarin Tools", href: "/tools" },
 ];

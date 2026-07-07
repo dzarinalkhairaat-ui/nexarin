@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus } from "lucide-react";
+import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus , Shield, Zap, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
@@ -106,8 +106,9 @@ export default function AiSummarizerWorkspace() {
     // Simulate progress bar
     const progressInterval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 90) return prev;
-        return prev + Math.floor(Math.random() * 15) + 5;
+        if (prev >= 90) return 90;
+        const next = prev + Math.floor(Math.random() * 15) + 5;
+        return next > 90 ? 90 : next;
       });
     }, 250);
     
@@ -219,19 +220,24 @@ export default function AiSummarizerWorkspace() {
           </p>
         </div>
 
-        {/* Dropzone */}
-        <div 
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`relative overflow-hidden rounded-[2.5rem] border-2 border-dashed transition-all duration-500 flex flex-col items-center justify-center min-h-[420px] p-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 shadow-2xl ${
-            isDragging 
-              ? "border-emerald-400 bg-emerald-400/10 scale-[1.02] shadow-emerald-500/20" 
-              : "border-white/10 bg-[#0f172a80] hover:bg-[#1e293b80] hover:border-white/20 shadow-black/50 backdrop-blur-xl"
-          }`}
-        >
-          {/* Subtle Inner Glow for Dropzone */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+        
+        {/* Back Button (Moved from bottom) */}
+        <div className="mb-6 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+          <Link
+            href="/pdf-tools"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all shadow-sm backdrop-blur-sm"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Kembali ke Menu
+          </Link>
+        </div>
+
+        {/* Workspace Container */}
+        <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+          {/* Subtle Background Glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-emerald-500/10 blur-[100px] pointer-events-none rounded-full" />
+          
+          <div className="relative z-10">
           {selectedFiles.length > 0 ? (
             <div className="text-center animate-in zoom-in-95 duration-300 w-full max-w-lg mx-auto">
               
@@ -271,10 +277,10 @@ export default function AiSummarizerWorkspace() {
               <div className="flex justify-center gap-4">
                 {processingState === 'idle' || processingState === 'error' ? (
                   <>
-                    <button onClick={() => setSelectedFiles([])} className="px-6 py-3 rounded-xl font-bold transition-all bg-white/5 hover:bg-white/10 text-white border border-white/10">
+                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2">
                       Reset
                     </button>
-                    <button onClick={processFile} className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-10 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/25">
+                    <button onClick={processFile} className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-emerald-400/20">
                       Proses File
                     </button>
                   </>
@@ -299,7 +305,7 @@ export default function AiSummarizerWorkspace() {
                     
                     <button 
                       onClick={handleDownload} 
-                      className="w-full max-w-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-10 py-4 rounded-xl font-black transition-all shadow-lg shadow-emerald-500/25 inline-flex justify-center items-center gap-3 text-lg hover:-translate-y-1"
+                      className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-lg border border-emerald-400/20"
                     >
                       <Download className="w-6 h-6" strokeWidth={2.5} />
                       Unduh Hasil
@@ -313,36 +319,50 @@ export default function AiSummarizerWorkspace() {
               </div>
             </div>
           ) : (
-            <div className="text-center pointer-events-none relative z-10">
-              <div className="w-28 h-28 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-8 text-slate-300 shadow-inner border border-white/5 group-hover:scale-110 transition-transform duration-500">
-                <UploadCloud className="w-12 h-12" strokeWidth={1.5} />
+            <div 
+              className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
+                isDragging 
+                  ? 'border-emerald-400 bg-emerald-500/10 scale-[1.02]' 
+                  : 'border-slate-700/50 hover:border-slate-500/80 bg-slate-800/20 hover:bg-slate-800/40'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <input 
+                type="file" 
+                id="file-upload" 
+                className="hidden" 
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) handleFileSelection(Array.from(e.target.files));
+                }}
+                accept=".pdf,application/pdf"
+                multiple={false}
+              />
+              
+              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-emerald-400 group-hover:scale-110 transition-transform">
+                <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
               </div>
-              <h3 className="text-3xl font-black text-white mb-4 tracking-tight">Pilih File PDF</h3>
-              <p className="text-slate-400 mb-10 max-w-md mx-auto text-lg leading-relaxed">
-                Tarik dan lepaskan file Anda di area ini, atau klik tombol di bawah. File tidak akan pernah diunggah ke server.
+              
+              <h3 className="text-white font-bold text-xl mb-3 text-center px-4">
+                Tarik & lepas file atau pilih dari perangkat
+              </h3>
+              
+              <p className="text-slate-400 text-center text-sm mb-8 max-w-sm px-4 leading-relaxed">
+                Anda bisa memilih file dokumen PDF yang ingin diproses secara otomatis.
               </p>
-              <label className="cursor-pointer bg-white text-slate-950 hover:bg-slate-200 px-12 py-4 rounded-2xl font-black transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] inline-flex items-center gap-3 text-lg pointer-events-auto hover:-translate-y-1">
-                Jelajahi File
-                <input type="file" multiple={isMulti} className="hidden" accept={
-                  slug === 'jpg-to-pdf' || slug === 'scan' ? "image/png, image/jpeg" : 
-                  slug === 'word-to-pdf' ? ".doc, .docx" : 
-                  (slug === 'powerpoint-to-pdf') ? ".ppt, .pptx" :
-                  slug === 'excel-to-pdf' ? ".xls, .xlsx, .csv" :
-                  slug === 'html-to-pdf' ? ".html, .htm" :
-                  ".pdf"
-                } onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    if (isMulti) {
-                      handleFileSelection(Array.from(e.target.files));
-                    } else {
-                      handleFileSelection([e.target.files[0]]);
-                    }
-                  }
-                }} />
-              </label>
+              
+              <button 
+                onClick={() => document.getElementById('file-upload')?.click()}
+                className="px-8 py-4 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-all active:scale-95 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/50 flex items-center gap-2"
+              >
+                <UploadCloud className="w-5 h-5" />
+                Pilih File PDF
+              </button>
             </div>
           )}
         </div>
+      </div>
 
         <div className="mt-12 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
           <Link 

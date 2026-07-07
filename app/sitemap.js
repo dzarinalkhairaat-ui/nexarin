@@ -159,12 +159,14 @@ export default async function sitemap() {
     createUrl("/portfolio", 0.85, "weekly"),
     createUrl("/news", 0.9, "weekly"),
     createUrl("/news/search", 0.65, "weekly"),
-    createUrl("/about", 0.75, "monthly"),
     createUrl("/contact", 0.75, "monthly"),
     createUrl("/support", 0.75, "monthly"),
     createUrl("/faq", 0.75, "monthly"),
     createUrl("/terms", 0.7, "yearly"),
     createUrl("/dagang", 0.9, "weekly"),
+    createUrl("/tools", 0.9, "weekly"),
+    createUrl("/voice-studio", 0.8, "weekly"),
+    createUrl("/pdf-tools", 0.8, "weekly"),
   ];
 
   const portfolioRoutes = getPortfolioProjects()

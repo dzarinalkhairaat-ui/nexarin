@@ -16,10 +16,6 @@ export const newsNavigation = [
     href: "/news",
   },
   {
-    label: "About",
-    href: "/about",
-  },
-  {
     label: "Contact",
     href: "/contact",
   },

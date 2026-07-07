@@ -20,16 +20,16 @@ export default function NexarinToolsPage() {
       bgImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
     },
     {
-      id: "image-tool",
-      title: "Vision AI Studio",
-      description: "Hapus latar belakang dengan presisi rambut, tingkatkan resolusi hingga 4K, dan hasilkan aset visual menakjubkan hanya dari teks promp.",
+      id: "voice-tool",
+      title: "Nexarin Voice Studio",
+      description: "Layanan Text-to-Speech (TTS) berbasis Neural AI untuk konversi teks ke audio dengan kualitas suara yang natural dan responsif.",
       icon: <SparkleIcon className="h-5 w-5" />,
-      href: "#",
-      isLocked: true,
-      color: "from-slate-700 to-slate-900",
-      shadow: "shadow-black/40",
-      glow: "",
-      bgImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop"
+      href: "/voice-studio",
+      isLocked: false,
+      color: "from-violet-400 via-purple-500 to-violet-600",
+      shadow: "shadow-violet-500/30",
+      glow: "group-hover:shadow-[0_0_40px_rgba(139,92,246,0.4)]",
+      bgImage: "https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=600&auto=format&fit=crop"
     },
     {
       id: "audio-tool",

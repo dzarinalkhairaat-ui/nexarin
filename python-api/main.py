@@ -11,6 +11,8 @@ from routers import (
     compare_pdf, redact_pdf, crop_pdf, forms_pdf,
     translate_pdf, markdown_pdf
 )
+from tts_engine import voice_tts
+
 
 app = FastAPI(title="Nexarin PDF API", description="Microservice for PDF to Word Conversion")
 
@@ -58,3 +60,4 @@ app.include_router(crop_pdf.router)
 app.include_router(forms_pdf.router)
 app.include_router(translate_pdf.router)
 app.include_router(markdown_pdf.router)
+app.include_router(voice_tts.router)

@@ -16,10 +16,6 @@ export const contactNavigation = [
     href: "/news",
   },
   {
-    label: "About",
-    href: "/about",
-  },
-  {
     label: "Contact",
     href: "/contact",
   },

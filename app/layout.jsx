@@ -27,6 +27,11 @@ export const metadata = {
     "startup digital indonesia",
     "teknologi masa depan",
     "by-rins",
+    "Nexarin Tools",
+    "Nexarin Tool",
+    "Nexarin Studio",
+    "Nexarin PDF Studio",
+    "Nexarin Voice Studio",
   ],
   authors: [
     { name: "Muhammad Abi Dzarin", url: "https://nexarin.my.id" },

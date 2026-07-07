@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus, ChevronLeft, ChevronRight, X, Layers } from "lucide-react";
+import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus, ChevronLeft, ChevronRight, X, Layers, Zap, Shield, Infinity as InfinityIcon } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
@@ -88,8 +88,9 @@ export default function MergeWorkspace() {
     
     const progressInterval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 90) return prev;
-        return prev + Math.floor(Math.random() * 15) + 5;
+        if (prev >= 90) return 90;
+        const next = prev + Math.floor(Math.random() * 15) + 5;
+        return next > 90 ? 90 : next;
       });
     }, 250);
     
@@ -145,7 +146,7 @@ export default function MergeWorkspace() {
             <Layers className="w-10 h-10" />
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
-            Penggabungan <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500">Super Cepat</span>
+            Gabungkan PDF dalam Hitungan Detik
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             Visualisasikan, atur urutan, dan satukan beberapa dokumen PDF menjadi satu kesatuan hanya dalam hitungan detik.{' '}
@@ -158,6 +159,17 @@ export default function MergeWorkspace() {
           </p>
         </div>
 
+        {/* Back Button (Moved from bottom) */}
+        <div className="mb-6 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+          <Link
+            href="/pdf-tools"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all shadow-sm backdrop-blur-sm"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Kembali ke Menu
+          </Link>
+        </div>
+
         {/* Workspace Container */}
         <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Background Glow */}
@@ -168,10 +180,10 @@ export default function MergeWorkspace() {
               <>
                 {/* Upload Zone */}
                 <div 
-                  className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-3xl p-12 transition-all duration-300 ${
+                  className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
                     isDragging 
                       ? 'border-red-400 bg-red-500/10 scale-[1.02]' 
-                      : 'border-slate-700 hover:border-slate-500 bg-slate-800/30'
+                      : 'border-slate-700/50 hover:border-slate-500/80 bg-slate-800/20 hover:bg-slate-800/40'
                   }`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
@@ -189,17 +201,21 @@ export default function MergeWorkspace() {
                     ref={fileInputRef}
                   />
                   
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-800 border border-slate-700 shadow-xl mb-6 text-red-400 group-hover:scale-110 transition-transform">
-                    <FilePlus className="w-10 h-10" />
+                  <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-red-400 group-hover:scale-110 transition-transform">
+                    <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
                   </div>
                   
-                  <p className="text-slate-400 text-center mb-8 max-w-md">
+                  <h3 className="text-white font-bold text-xl mb-3 text-center px-4">
+                    Tarik & lepas file atau pilih dari perangkat
+                  </h3>
+                  
+                  <p className="text-slate-400 text-center text-sm mb-8 max-w-sm px-4 leading-relaxed">
                     Anda bisa memilih banyak file sekaligus. Anda akan dapat mengatur urutannya pada langkah selanjutnya.
                   </p>
                   
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-8 py-4 bg-white text-slate-950 font-bold rounded-2xl hover:bg-slate-200 transition-all active:scale-95 shadow-lg shadow-white/10 hover:shadow-white/20 flex items-center gap-2"
+                    className="px-8 py-4 bg-red-500 text-white font-bold rounded-2xl hover:bg-red-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] flex items-center gap-2"
                   >
                     <UploadCloud className="w-5 h-5" />
                     Pilih File PDF
@@ -323,7 +339,20 @@ export default function MergeWorkspace() {
                     <Loader2 className="w-10 h-10 text-red-400 animate-spin" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">Menyatukan Dokumen...</h3>
+                <h3 className="text-2xl font-bold text-white mb-4">Menyatukan {selectedFiles.length} Dokumen...</h3>
+                
+                <div className="w-full max-w-md bg-slate-800/50 border border-slate-700 rounded-2xl p-4 mb-6 text-left shadow-lg">
+                   {selectedFiles.slice(0, 3).map((f, i) => (
+                      <div key={i} className="flex justify-between items-center text-sm text-slate-300 py-1 border-b border-slate-700/50 last:border-0">
+                        <span className="truncate pr-4 font-medium">{f.name}</span>
+                        <span className="text-slate-500 shrink-0 text-xs">{formatFileSize(f.size)}</span>
+                      </div>
+                   ))}
+                   {selectedFiles.length > 3 && (
+                     <div className="text-xs text-slate-500 mt-2 text-center font-medium bg-slate-900/50 py-1.5 rounded-lg border border-slate-700/50">+ {selectedFiles.length - 3} file lainnya</div>
+                   )}
+                </div>
+
                 <div className="w-full max-w-md h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700 mb-4 relative">
                   <div 
                     className="h-full bg-gradient-to-r from-red-500 to-rose-500 transition-all duration-300 ease-out"
@@ -331,7 +360,7 @@ export default function MergeWorkspace() {
                   />
                   <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
                 </div>
-                <p className="text-slate-400 font-medium">Memproses {selectedFiles.length} file - {progress}%</p>
+                <p className="text-slate-400 font-medium">{progress}% Selesai</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-16 text-center animate-in zoom-in-95 duration-500">
@@ -356,90 +385,119 @@ export default function MergeWorkspace() {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
                   <button 
                     onClick={handleDownload}
-                    className="w-full sm:w-auto px-10 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all shadow-lg hover:shadow-emerald-500/25 active:scale-95 flex items-center justify-center gap-2 text-lg"
+                    className="w-full sm:w-auto px-12 py-5 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-black rounded-2xl transition-all shadow-[0_0_30px_rgba(225,29,72,0.4)] hover:shadow-[0_0_40px_rgba(225,29,72,0.6)] active:scale-95 flex items-center justify-center gap-3 text-lg border border-red-400/20"
                   >
-                    <Download className="w-5 h-5" />
-                    Unduh PDF
+                    <Download className="w-6 h-6" strokeWidth={2.5} />
+                    Unduh PDF Sekarang
                   </button>
                   <button 
                     onClick={resetWorkspace}
-                    className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition-all border border-slate-700 active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition-all border border-slate-700 active:scale-95 flex items-center justify-center gap-2"
                   >
                     Mulai Baru
                   </button>
+                </div>
+                
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-400 bg-slate-900/50 py-3 px-6 rounded-full border border-slate-800 shadow-sm">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>File diproses secara lokal & otomatis dihapus demi keamanan Anda.</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Back Button */}
-        <div className="mt-8 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-          <Link
-            href="/pdf-tools"
-            className="inline-flex items-center justify-center rounded-xl bg-white/5 border border-white/10 px-8 py-3 text-sm font-bold text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-lg shadow-black/20"
-          >
-            ← Kembali ke Menu PDF Tools
-          </Link>
+        {/* Footer Trust Section */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-red-500/10 text-red-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                <Zap className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">Super Cepat</h4>
+             <p className="text-slate-400 text-sm">Gabungkan puluhan file PDF dalam hitungan detik tanpa hambatan.</p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                <Shield className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">100% Aman</h4>
+             <p className="text-slate-400 text-sm">Diproses secara lokal di browser Anda. Tidak ada file yang diunggah ke server.</p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                <InfinityIcon className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">Tanpa Batas</h4>
+             <p className="text-slate-400 text-sm">Gabungkan file sebanyak yang Anda mau tanpa batasan ukuran atau jumlah.</p>
+          </div>
+          </div>
         </div>
-      </div>
 
       {/* Info Modal */}
       {showInfoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" 
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity" 
             onClick={() => setShowInfoModal(false)}
           />
-          <div className="relative bg-slate-900 border border-slate-700 rounded-[2rem] w-full max-w-lg p-6 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+          <div className="relative bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-[2.5rem] w-full max-w-lg p-8 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setShowInfoModal(false)}
-              className="absolute top-5 right-5 sm:top-6 sm:right-6 h-10 w-10 bg-slate-800 hover:bg-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors z-10"
+              className="absolute top-6 right-6 sm:top-8 sm:right-8 h-10 w-10 bg-slate-800/50 hover:bg-slate-700 border border-slate-700/50 hover:border-slate-500 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-all z-10 group"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 stroke-[1.5] group-hover:rotate-90 transition-transform duration-300" />
             </button>
             
-            <div className="flex items-center gap-4 mb-6 pr-12">
-              <div className="p-3 bg-red-500/10 rounded-2xl text-red-400 shrink-0">
-                <Layers className="w-6 h-6 sm:w-8 sm:h-8" />
+            <div className="flex items-center gap-5 mb-8 pr-12">
+              <div className="relative">
+                <div className="absolute inset-0 bg-red-500/30 blur-xl rounded-full animate-pulse" />
+                <div className="relative p-4 bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-2xl text-red-400 shrink-0 shadow-lg shadow-red-500/20">
+                  <Layers className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={1.5} />
+                </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">Fungsi Fitur Gabung PDF</h2>
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                Fungsi Fitur<br/><span className="text-red-400">Gabung PDF</span>
+              </h2>
             </div>
             
-            <div className="space-y-4 text-slate-300 leading-relaxed text-sm sm:text-base">
-              <p>
-                Alat <strong>Gabung PDF (Merge)</strong> memungkinkan Anda untuk menyatukan puluhan file PDF secara instan dalam satu dokumen berurutan.
+            <div className="space-y-5 text-slate-300 leading-relaxed text-sm sm:text-base">
+              <p className="text-slate-300/90 text-base sm:text-lg mb-2">
+                Alat <strong className="text-white">Gabung PDF (Merge)</strong> memungkinkan Anda untuk menyatukan puluhan file PDF secara instan dalam satu dokumen berurutan.
               </p>
               
-              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
-                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" /> Atur Urutan Bebas
+              <div className="bg-slate-800/40 rounded-3xl p-5 sm:p-6 border border-slate-700/50 shadow-inner">
+                <h4 className="text-white font-bold mb-3 flex items-center gap-3 text-base">
+                  <div className="w-2 h-2 rounded-full bg-red-400 shrink-0 shadow-[0_0_8px_rgba(248,113,113,0.8)]" /> Atur Urutan Bebas
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm text-slate-400 leading-relaxed ml-5">
                   Anda dapat dengan mudah memindahkan posisi urutan dokumen dengan menggunakan tombol panah kiri/kanan pada setiap file yang diunggah. Dokumen pertama akan berada di halaman paling awal.
                 </p>
               </div>
 
-              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
-                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" /> Pemrosesan Sangat Cepat
+              <div className="bg-slate-800/40 rounded-3xl p-5 sm:p-6 border border-slate-700/50 shadow-inner">
+                <h4 className="text-white font-bold mb-3 flex items-center gap-3 text-base">
+                  <div className="w-2 h-2 rounded-full bg-red-400 shrink-0 shadow-[0_0_8px_rgba(248,113,113,0.8)]" /> Pemrosesan Sangat Cepat
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm text-slate-400 leading-relaxed ml-5">
                   Teknologi backend kami menggabungkan file tanpa mengompresi ulang isi dokumen, sehingga kualitas dokumen asli Anda (termasuk ketajaman gambar) tetap terjaga 100%.
                 </p>
               </div>
             </div>
             
-            <div className="mt-8 pt-6 border-t border-slate-800 flex justify-end">
+            <div className="mt-10 flex flex-col items-center">
               <button 
                 onClick={() => setShowInfoModal(false)}
-                className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors w-full"
+                className="w-full px-8 py-4 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(225,29,72,0.5)] hover:shadow-[0_10px_30px_-10px_rgba(225,29,72,0.7)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-lg border border-red-400/20"
               >
                 Saya Mengerti
               </button>
+              <div className="mt-5 flex items-center gap-2 text-xs font-medium text-slate-500">
+                <Shield className="w-4 h-4 text-emerald-500/70" strokeWidth={2.5} />
+                <span>Proses dilakukan secara lokal & terenkripsi.</span>
+              </div>
             </div>
           </div>
         </div>
