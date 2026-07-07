@@ -9,10 +9,8 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import {
   HomeIcon,
   DagangIcon,
-  PortfolioIcon,
   NewsIcon,
   AboutIcon,
-  ContactIcon,
   QuestionIcon,
   FileIcon,
   SparkleIcon
@@ -22,10 +20,9 @@ function getMenuIcon(label) {
   switch (label) {
     case "Home": return <HomeIcon className="h-4 w-4" />;
     case "Nexarin Dagang": return <DagangIcon className="h-4 w-4" />;
-    case "Portfolio": return <PortfolioIcon className="h-4 w-4" />;
     case "News": return <NewsIcon className="h-4 w-4" />;
     case "About": return <AboutIcon className="h-4 w-4" />;
-    case "Contact": return <ContactIcon className="h-4 w-4" />;
+
     case "Nexarin Tools": return <SparkleIcon className="h-4 w-4" />;
     default: return <span className="text-xs font-bold">&rarr;</span>;
   }

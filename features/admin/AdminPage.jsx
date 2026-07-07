@@ -5,6 +5,7 @@ import {
   HomeIcon,
   NewsIcon,
   ScrapingIcon,
+  QuestionIcon,
   ContactIcon,
   SettingsIcon,
   DashboardIcon,
