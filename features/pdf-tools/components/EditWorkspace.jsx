@@ -1,8 +1,8 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus , Shield, Zap, Sparkles } from "lucide-react";
+import { UploadCloud, X, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus , Shield, Zap, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
 import { 
   processJpgToPdf, processPdfToWord, processCompressPdf, 
@@ -26,6 +26,16 @@ export default function EditWorkspace() {
   const [progress, setProgress] = useState(0);
   const [processedResult, setProcessedResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  useEffect(() => {
+    if (showInfoModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [showInfoModal]);
 
   const isMulti = slug === 'merge' || slug === 'compare';
 
@@ -202,21 +212,26 @@ export default function EditWorkspace() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white selection:bg-emerald-400/30 pt-16">
-      {/* Glow Effects */}
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-emerald-400/5 blur-[100px]" />
+    <main className="min-h-screen bg-slate-950 pt-10 sm:pt-16 text-slate-300 selection:bg-purple-400/30 relative">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-purple-400/5 blur-[100px]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.02] [background-image:linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-      <main className="container mx-auto px-4 py-10 lg:py-16 relative z-10 max-w-5xl">
-        <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className={`mx-auto w-24 h-24 rounded-[2rem] mb-8 flex items-center justify-center ${tool.bgColor || "bg-emerald-500/10"} ${tool.color || "text-emerald-400"} shadow-xl shadow-black/20 border border-white/5`}>
-            {tool.icon ? <tool.icon className="w-12 h-12" strokeWidth={1.5} /> : <FileType className="w-12 h-12" />}
+      <div className="max-w-5xl mx-auto px-6 pb-20 relative z-10">
+        <div className="mb-10 text-center animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="inline-flex items-center justify-center p-4 rounded-3xl bg-purple-500/10 text-purple-400 mb-6 shadow-[0_0_30px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/20">
+            {tool.icon ? <tool.icon className="w-10 h-10" /> : <FileType className="w-10 h-10" />}
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
             {tool.title || "PDF Tool"}
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            {tool.description || "Unggah dokumen PDF untuk diproses langsung di dalam browser Anda tanpa server."}
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+            {tool.description || "Unggah dokumen PDF untuk diproses langsung di dalam browser Anda tanpa server."}{' '}
+            <button 
+              onClick={() => setShowInfoModal(true)}
+              className="text-purple-400 hover:text-purple-300 font-semibold underline decoration-purple-500/30 hover:decoration-purple-400 underline-offset-4 transition-colors"
+            >
+              Klik disini untuk penjelasan fitur.
+            </button>
           </p>
         </div>
 
@@ -235,7 +250,7 @@ export default function EditWorkspace() {
         {/* Workspace Container */}
         <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Background Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-emerald-500/10 blur-[100px] pointer-events-none rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-purple-500/10 blur-[100px] pointer-events-none rounded-full" />
           
           <div className="relative z-10">
           {selectedFiles.length > 0 ? (
@@ -245,11 +260,11 @@ export default function EditWorkspace() {
                 {selectedFiles.map((file, idx) => (
                   <div key={idx} className="relative w-16 h-20 bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center shadow-xl shadow-black/20 group-hover:scale-105 transition-transform">
                     {idx === 0 && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/30">
+                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-slate-950 shadow-lg shadow-purple-500/30">
                         <CheckCircle2 className="w-4 h-4" />
                       </div>
                     )}
-                    <FileType className="w-6 h-6 text-emerald-400 opacity-80 mb-1" strokeWidth={1.5} />
+                    <FileType className="w-6 h-6 text-purple-400 opacity-80 mb-1" strokeWidth={1.5} />
                     <span className="text-[10px] truncate w-14 px-1 text-slate-300">{file.name}</span>
                   </div>
                 ))}
@@ -274,13 +289,13 @@ export default function EditWorkspace() {
                 </div>
               )}
 
-              <div className="flex justify-center gap-4">
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto mt-2">
                 {processingState === 'idle' || processingState === 'error' ? (
                   <>
-                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2">
+                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold rounded-2xl transition-all border border-slate-700 hover:border-slate-500 active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
                       Reset
                     </button>
-                    <button onClick={processFile} className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-emerald-400/20">
+                    <button onClick={processFile} className="w-full sm:flex-1 px-10 py-4 bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:from-purple-600 hover:via-purple-700 hover:to-purple-800 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_30px_-10px_rgba(168,85,247,0.4)] hover:shadow-[0_10px_40px_-10px_rgba(168,85,247,0.6)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 text-lg border border-purple-400/30">
                       Proses File
                     </button>
                   </>
@@ -292,7 +307,7 @@ export default function EditWorkspace() {
                     </div>
                     <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden shadow-inner border border-white/5">
                       <div 
-                        className="h-full bg-emerald-500 rounded-full transition-all duration-300 relative"
+                        className="h-full bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 animate-pulse rounded-full transition-all duration-300 relative"
                         style={{ width: `${progress}%` }}
                       >
                         <div className="absolute inset-0 bg-white/20 animate-pulse" />
@@ -301,11 +316,11 @@ export default function EditWorkspace() {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-6 items-center w-full mt-4">
-                    <p className="text-emerald-400 font-bold text-xl">File berhasil diproses!</p>
+                    <p className="text-purple-400 font-bold text-xl">File berhasil diproses!</p>
                     
                     <button 
                       onClick={handleDownload} 
-                      className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-lg border border-emerald-400/20"
+                      className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(168,85,247,0.3)] hover:shadow-[0_10px_30px_-10px_rgba(168,85,247,0.5)] hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 text-lg border border-purple-400/20"
                     >
                       <Download className="w-6 h-6" strokeWidth={2.5} />
                       Unduh Hasil
@@ -322,7 +337,7 @@ export default function EditWorkspace() {
             <div 
               className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
                 isDragging 
-                  ? 'border-emerald-400 bg-emerald-500/10 scale-[1.02]' 
+                  ? 'border-purple-400 bg-purple-500/10 scale-[1.02]' 
                   : 'border-slate-700/50 hover:border-slate-500/80 bg-slate-800/20 hover:bg-slate-800/40'
               }`}
               onDragOver={handleDragOver}
@@ -340,7 +355,7 @@ export default function EditWorkspace() {
                 multiple={false}
               />
               
-              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-emerald-400 group-hover:scale-110 transition-transform">
+              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-purple-400 group-hover:scale-110 transition-transform">
                 <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
               </div>
               
@@ -354,7 +369,7 @@ export default function EditWorkspace() {
               
               <button 
                 onClick={() => document.getElementById('file-upload')?.click()}
-                className="px-8 py-4 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-all active:scale-95 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/50 flex items-center gap-2"
+                className="px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold rounded-full hover:scale-[1.02] transition-all duration-300 active:scale-95 shadow-lg shadow-purple-500/40 hover:shadow-xl hover:shadow-purple-500/60 flex items-center gap-2"
               >
                 <UploadCloud className="w-5 h-5" />
                 Pilih File PDF
@@ -364,7 +379,33 @@ export default function EditWorkspace() {
         </div>
       </div>
 
-        <div className="mt-12 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+
+        {/* Footer Trust Section */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10 px-4">
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
+                <Zap className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">Editor Super Cepat</h4>
+             <p className="text-slate-400 text-sm">Engine pintar kami memuat PDF Anda ke dalam canvas editor tanpa delay yang berarti.</p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
+                <Shield className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">Aman & Terenkripsi</h4>
+             <p className="text-slate-400 text-sm">Dokumen sensitif Anda 100% aman dan akan dihapus otomatis dari sistem setelah selesai.</p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
+             <div className="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                <Sparkles className="w-6 h-6" />
+             </div>
+             <h4 className="text-white font-bold mb-2">Kualitas Terjaga</h4>
+             <p className="text-slate-400 text-sm">Didesain khusus untuk menjaga kualitas teks, gambar, dan layout dokumen Anda secara sempurna.</p>
+          </div>
+        </div>
+
+        <div className="mt-12 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-300 delay-300">
           <Link 
             href="/pdf-tools" 
             className="group inline-flex items-center gap-2.5 text-xs font-black text-slate-400 hover:text-white transition-all uppercase tracking-[0.15em] bg-white/[0.03] hover:bg-white/[0.08] px-6 py-4 rounded-2xl border border-white/[0.05] hover:border-white/[0.15] backdrop-blur-md shadow-lg shadow-black/20"
@@ -373,7 +414,66 @@ export default function EditWorkspace() {
             Kembali ke PDF Tools
           </Link>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Info Modal */}
+      {showInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity" 
+            onClick={() => setShowInfoModal(false)}
+          />
+          <div className="relative bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-[2.5rem] w-full max-w-lg p-8 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setShowInfoModal(false)}
+              className="absolute top-6 right-6 sm:top-8 sm:right-8 h-10 w-10 bg-slate-800/50 hover:bg-slate-700 border border-slate-700/50 hover:border-slate-500 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-all z-10 group"
+            >
+              <X className="w-4 h-4 stroke-[1.5] group-hover:rotate-90 transition-transform duration-300" />
+            </button>
+            
+            <div className="flex items-center gap-4 mb-6 pr-12">
+              <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-400 shrink-0">
+                {tool.icon ? <tool.icon className="w-6 h-6 sm:w-8 sm:h-8" /> : <FileType className="w-6 h-6 sm:w-8 sm:h-8" />}
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">Fungsi Fitur {tool.title || "Edit PDF"}</h2>
+            </div>
+            
+            <div className="space-y-4 text-slate-300 leading-relaxed text-sm sm:text-base">
+              <p>
+                Alat <strong>Edit PDF</strong> dirancang layaknya kanvas profesional untuk memodifikasi dokumen secara aman, super cepat, dan presisi di dalam browser Anda.
+              </p>
+              
+              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
+                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" /> Pengeditan Presisi Tinggi
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Anda dapat menambah teks, menggambar, memberi anotasi, dan menyorot bagian penting dokumen layaknya di aplikasi editor desktop.
+                </p>
+              </div>
+
+              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
+                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" /> Keamanan Terjamin
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Semua proses rendering dan editing terjadi secara aman. File final Anda dapat diunduh tanpa merusak kualitas aslinya.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-10 flex flex-col items-center">
+              <button 
+                onClick={() => setShowInfoModal(false)}
+                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-xl transition-colors w-full shadow-lg shadow-purple-500/20"
+              >
+                Saya Mengerti
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </main>
   );
 }

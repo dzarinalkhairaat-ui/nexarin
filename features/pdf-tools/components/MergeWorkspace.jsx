@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
 import { processMergePdf } from "@/features/pdf-tools/core/pdf-processing";
+import { generatePdfThumbnail } from "@/features/pdf-tools/core/pdf-thumbnail";
 import { saveAs } from "file-saver";
 
 export default function MergeWorkspace() {
@@ -15,6 +16,7 @@ export default function MergeWorkspace() {
   const [progress, setProgress] = useState(0);
   const [processedResult, setProcessedResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [thumbnails, setThumbnails] = useState({});
   const [downloadFilename, setDownloadFilename] = useState("");
   const [showInfoModal, setShowInfoModal] = useState(false);
   const fileInputRef = useRef(null);
@@ -55,6 +57,16 @@ export default function MergeWorkspace() {
     
     if (pdfFiles.length > 0) {
       setSelectedFiles(prev => [...prev, ...pdfFiles]);
+      
+      // Async generate thumbnails
+      pdfFiles.forEach(async (file) => {
+        const key = `${file.name}-${file.size}`;
+        const dataUrl = await generatePdfThumbnail(file);
+        if (dataUrl) {
+           setThumbnails(prev => ({ ...prev, [key]: dataUrl }));
+        }
+      });
+
       setProcessingState('idle');
       setProgress(0);
       setProcessedResult(null);
@@ -178,7 +190,23 @@ export default function MergeWorkspace() {
           <div className="relative z-10">
             {processingState === 'idle' || processingState === 'error' ? (
               <>
+                {/* Global Hidden File Input */}
+                <input 
+                  type="file" 
+                  id="global-file-upload" 
+                  className="hidden" 
+                  onChange={(e) => {
+                    if (e.target.files) handleFileSelection(Array.from(e.target.files));
+                    // Reset value so the same file can be selected again if needed
+                    e.target.value = '';
+                  }}
+                  accept=".pdf,application/pdf"
+                  multiple
+                  ref={fileInputRef}
+                />
+
                 {/* Upload Zone */}
+                {selectedFiles.length === 0 && (
                 <div 
                   className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
                     isDragging 
@@ -189,17 +217,7 @@ export default function MergeWorkspace() {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                 >
-                  <input 
-                    type="file" 
-                    id="file-upload" 
-                    className="hidden" 
-                    onChange={(e) => {
-                      if (e.target.files) handleFileSelection(Array.from(e.target.files));
-                    }}
-                    accept=".pdf,application/pdf"
-                    multiple
-                    ref={fileInputRef}
-                  />
+
                   
                   <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-red-400 group-hover:scale-110 transition-transform">
                     <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
@@ -221,26 +239,27 @@ export default function MergeWorkspace() {
                     Pilih File PDF
                   </button>
                 </div>
+                )}
 
                 {/* Preview & Arrange Grid */}
                 {selectedFiles.length > 0 && (
-                  <div className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-xl font-bold text-white tracking-tight">Atur Urutan Dokumen</h3>
-                        <span className="bg-red-500/10 px-3 py-1 rounded-full text-xs font-bold text-red-400 border border-red-500/20">
+                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-6">
+                      <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-tight">Atur Urutan Dokumen</h3>
+                        <span className="bg-red-500/10 px-3 py-1 rounded-full text-xs font-bold text-red-400 border border-red-500/20 whitespace-nowrap shrink-0">
                           {selectedFiles.length} File
                         </span>
                       </div>
                       <button 
                         onClick={() => setSelectedFiles([])}
-                        className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                        className="text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap mt-1 sm:mt-0"
                       >
                         Bersihkan Semua
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-10">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5 mb-6">
                       {selectedFiles.map((file, idx) => (
                         <div 
                           key={`${file.name}-${idx}`}
@@ -257,10 +276,17 @@ export default function MergeWorkspace() {
                           {/* PDF Visual Representation */}
                           <div className="aspect-[3/4] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] border-2 border-slate-200/20 flex flex-col items-center justify-center relative overflow-hidden mb-4 group-hover:scale-[1.02] group-hover:shadow-[0_8px_30px_rgba(239,68,68,0.2)] transition-all duration-300">
                             {/* Decorative Red Document Header */}
-                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 to-rose-400" />
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-500 to-rose-400 z-10" />
                             
-                            <FileType className="w-12 h-12 text-slate-300 mb-3 drop-shadow-sm" />
-                            <span className="text-[9px] font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full tracking-widest uppercase border border-slate-100 shadow-sm">
+                            {thumbnails[`${file.name}-${file.size}`] ? (
+                              <img src={thumbnails[`${file.name}-${file.size}`]} alt="Preview PDF" className="w-full h-full object-cover animate-in fade-in duration-500" />
+                            ) : (
+                              <div className="flex flex-col items-center justify-center animate-pulse">
+                                <Loader2 className="w-8 h-8 text-slate-300 animate-spin mb-2" />
+                              </div>
+                            )}
+
+                            <span className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[9px] font-black text-slate-500 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full tracking-widest uppercase border border-slate-200 shadow-sm z-10">
                               Hal {idx + 1}
                             </span>
                           </div>
@@ -294,10 +320,24 @@ export default function MergeWorkspace() {
                           </div>
                         </div>
                       ))}
+
+                      {/* Add File Card */}
+                      <div 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="group relative border-2 border-dashed border-slate-700/60 bg-slate-800/30 hover:border-red-500/50 hover:bg-red-500/10 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[160px] md:min-h-[200px]"
+                      >
+                         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-900/50 group-hover:bg-red-500/20 flex items-center justify-center mb-4 transition-colors shadow-sm group-hover:scale-110">
+                            <FilePlus className="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 group-hover:text-red-400 transition-colors" />
+                         </div>
+                         <p className="text-sm font-bold text-slate-400 group-hover:text-red-400 transition-colors text-center">
+                            Tambah<br/>File Baru
+                         </p>
+                      </div>
+
                     </div>
 
                     {/* Action Bar */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 mt-4 border-t border-slate-800/80">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-800/80">
                       <div className="text-sm font-medium">
                         {selectedFiles.length < 2 ? (
                           <span className="text-red-400 flex items-center gap-2">
@@ -316,7 +356,7 @@ export default function MergeWorkspace() {
                       <button 
                         onClick={processFile}
                         disabled={selectedFiles.length < 2}
-                        className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(225,29,72,0.3)] hover:shadow-[0_0_30px_rgba(225,29,72,0.5)] active:scale-95 flex items-center justify-center gap-3 text-lg"
+                        className="w-full sm:flex-1 px-10 py-4 bg-gradient-to-r from-red-500 via-red-600 to-rose-600 hover:from-red-600 hover:via-rose-600 hover:to-rose-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_30px_-10px_rgba(225,29,72,0.5)] hover:shadow-[0_10px_40px_-10px_rgba(225,29,72,0.7)] hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 text-lg border border-red-400/30"
                       >
                         Gabungkan PDF
                         <Layers className="w-5 h-5" />

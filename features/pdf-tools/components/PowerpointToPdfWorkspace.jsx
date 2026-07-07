@@ -250,7 +250,7 @@ export default function PowerpointToPdfWorkspace() {
         {/* Workspace Container */}
         <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Background Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-blue-500/10 blur-[100px] pointer-events-none rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-orange-500/10 blur-[100px] pointer-events-none rounded-full" />
           
           <div className="relative z-10">
           {selectedFiles.length > 0 ? (
@@ -289,13 +289,13 @@ export default function PowerpointToPdfWorkspace() {
                 </div>
               )}
 
-              <div className="flex justify-center gap-4">
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto mt-2">
                 {processingState === 'idle' || processingState === 'error' ? (
                   <>
-                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2">
+                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold rounded-2xl transition-all border border-slate-700 hover:border-slate-500 active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
                       Reset
                     </button>
-                    <button onClick={processFile} className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-slate-400/20">
+                    <button onClick={processFile} className="w-full sm:flex-1 px-10 py-4 bg-gradient-to-r from-slate-500 via-slate-600 to-slate-600 hover:from-slate-600 hover:via-slate-600 hover:to-slate-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)] hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 text-lg border border-slate-400/30">
                       Proses File
                     </button>
                   </>
@@ -337,7 +337,7 @@ export default function PowerpointToPdfWorkspace() {
             <div 
               className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
                 isDragging 
-                  ? 'border-blue-400 bg-blue-500/10 scale-[1.02]' 
+                  ? 'border-orange-400 bg-orange-500/10 scale-[1.02]' 
                   : 'border-slate-700/50 hover:border-slate-500/80 bg-slate-800/20 hover:bg-slate-800/40'
               }`}
               onDragOver={handleDragOver}
@@ -355,7 +355,7 @@ export default function PowerpointToPdfWorkspace() {
                 multiple={false}
               />
               
-              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-blue-400 group-hover:scale-110 transition-transform">
+              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-orange-400 group-hover:scale-110 transition-transform">
                 <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
               </div>
               
@@ -369,7 +369,7 @@ export default function PowerpointToPdfWorkspace() {
               
               <button 
                 onClick={() => document.getElementById('file-upload')?.click()}
-                className="px-8 py-4 bg-blue-500 text-white font-bold rounded-2xl hover:bg-blue-600 transition-all active:scale-95 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/50 flex items-center gap-2"
+                className="px-8 py-4 bg-orange-500 text-white font-bold rounded-2xl hover:bg-orange-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] flex items-center gap-2"
               >
                 <UploadCloud className="w-5 h-5" />
                 Pilih File PowerPoint

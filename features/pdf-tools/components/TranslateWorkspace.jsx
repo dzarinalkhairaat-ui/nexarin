@@ -274,7 +274,7 @@ export default function TranslateWorkspace() {
 
                         <button 
                           onClick={processFile}
-                          className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-indigo-400/20"
+                          className="w-full sm:flex-1 px-10 py-4 bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-600 hover:from-indigo-600 hover:via-indigo-600 hover:to-indigo-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)] hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 text-lg border border-indigo-400/30"
                         >
                           Mulai Terjemahkan
                           <ArrowRight className="w-5 h-5" />
@@ -357,7 +357,7 @@ export default function TranslateWorkspace() {
                   </button>
                   <button 
                     onClick={resetWorkspace}
-                    className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold rounded-2xl transition-all border border-slate-700 hover:border-slate-500 active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm"
                   >
                     Mulai Baru
                   </button>

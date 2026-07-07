@@ -2,10 +2,20 @@ import { PDFDocument } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
 
-export async function processJpgToPdf(file) {
+export async function processJpgToPdf(files, options = {}) {
   try {
     const formData = new FormData();
-    formData.append('file', file);
+    
+    // Support both single file and array of files
+    const fileArray = Array.isArray(files) ? files : [files];
+    fileArray.forEach(file => {
+      formData.append('files', file);
+    });
+    
+    if (options.orientation) formData.append('orientation', options.orientation);
+    if (options.pageSize) formData.append('pageSize', options.pageSize);
+    if (options.margin) formData.append('margin', options.margin);
+    if (options.merge !== undefined) formData.append('merge', options.merge);
     
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
     const response = await fetch(`${apiUrl}/convert/img-to-pdf`, {
@@ -14,11 +24,23 @@ export async function processJpgToPdf(file) {
     });
     
     if (!response.ok) {
-      throw new Error("Gagal mengonversi file. Pastikan API Python berjalan.");
+      let errMsg = "Gagal mengonversi file. Pastikan API Python berjalan.";
+      try {
+        const errorData = await response.json();
+        if (errorData.detail) errMsg = `Server Error: ${errorData.detail}`;
+      } catch (e) {}
+      throw new Error(errMsg);
     }
     
     const blob = await response.blob();
-    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
+    
+    // If returning zip, format name accordingly
+    let outputFilename;
+    if (fileArray.length > 1 && options.merge === false) {
+      outputFilename = "nexarin_img_to_pdf.zip";
+    } else {
+      outputFilename = fileArray[0].name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
+    }
     
     return { blob, outputFilename };
   } catch (error) {
@@ -27,10 +49,14 @@ export async function processJpgToPdf(file) {
   }
 }
 
-export async function processPdfToWord(file) {
+export async function processPdfToWord(file, options = {}) {
   try {
     const formData = new FormData();
     formData.append('file', file);
+    
+    if (options.ocr) {
+      formData.append('ocr', 'true');
+    }
     
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
     const response = await fetch(`${apiUrl}/convert/pdf-to-word`, {
@@ -39,7 +65,12 @@ export async function processPdfToWord(file) {
     });
     
     if (!response.ok) {
-      throw new Error("Gagal mengonversi file. Pastikan API Python berjalan.");
+      let errMsg = "Gagal mengonversi file. Pastikan API Python berjalan.";
+      try {
+        const errorData = await response.json();
+        if (errorData.detail) errMsg = `Server Error: ${errorData.detail}`;
+      } catch (e) {}
+      throw new Error(errMsg);
     }
     
     const blob = await response.blob();
@@ -52,10 +83,14 @@ export async function processPdfToWord(file) {
   }
 }
 
-export async function processCompressPdf(file) {
+export async function processCompressPdf(file, options = {}) {
   try {
     const formData = new FormData();
     formData.append('file', file);
+    
+    if (options.level) {
+      formData.append('level', options.level);
+    }
     
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
     const response = await fetch(`${apiUrl}/convert/compress-pdf`, {
@@ -189,10 +224,14 @@ export async function processMergePdf(files) {
   }
 }
 
-export async function processSplitPdf(file) {
+export async function processSplitPdf(file, options = {}) {
   try {
     const formData = new FormData();
     formData.append('file', file);
+    
+    if (options.ranges && options.ranges.length > 0) {
+      formData.append('ranges', JSON.stringify(options.ranges));
+    }
     
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
     const response = await fetch(`${apiUrl}/convert/split-pdf`, {

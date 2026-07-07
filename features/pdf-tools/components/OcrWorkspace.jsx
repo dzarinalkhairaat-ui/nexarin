@@ -289,13 +289,13 @@ export default function OcrWorkspace() {
                 </div>
               )}
 
-              <div className="flex justify-center gap-4">
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto mt-2">
                 {processingState === 'idle' || processingState === 'error' ? (
                   <>
-                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2">
+                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold rounded-2xl transition-all border border-slate-700 hover:border-slate-500 active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
                       Reset
                     </button>
-                    <button onClick={processFile} className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-yellow-400/20">
+                    <button onClick={processFile} className="w-full sm:flex-1 px-10 py-4 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-600 hover:from-yellow-600 hover:via-yellow-600 hover:to-yellow-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)] hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 text-lg border border-yellow-400/30">
                       Proses File
                     </button>
                   </>

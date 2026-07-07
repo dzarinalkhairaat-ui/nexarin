@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     tesseract-ocr-eng \
     tesseract-ocr-ind \
     qpdf \
+    unpaper \
     && rm -rf /var/lib/apt/lists/*
 
 # Hugging Face Spaces require running as a non-root user

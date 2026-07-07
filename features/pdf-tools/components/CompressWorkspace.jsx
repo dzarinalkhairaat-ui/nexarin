@@ -1,10 +1,11 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, Loader2, Download, X, Zap, ArrowRight, ArrowLeft, Shield, Sparkles } from "lucide-react";
+import { UploadCloud, FileType, CheckCircle2, Loader2, Download, X, Zap, ArrowRight, ArrowLeft, Shield, Sparkles, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
 import { processCompressPdf } from "@/features/pdf-tools/core/pdf-processing";
+import { loadPdfDocument, generateThumbnailForPage } from "@/features/pdf-tools/core/pdf-thumbnail";
 import { saveAs } from "file-saver";
 
 export default function CompressWorkspace() {
@@ -24,6 +25,14 @@ export default function CompressWorkspace() {
   const [originalSize, setOriginalSize] = useState(0);
   const [compressedSize, setCompressedSize] = useState(0);
   
+  // Compression Level
+  const [compressionLevel, setCompressionLevel] = useState('recommended'); // extreme, recommended, less
+  
+  // PDF Preview Data
+  const [pdfDoc, setPdfDoc] = useState(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  
   const fileInputRef = useRef(null);
 
   const formatFileSize = (bytes) => {
@@ -38,6 +47,21 @@ export default function CompressWorkspace() {
     if (!originalSize || !compressedSize) return 0;
     const savings = ((originalSize - compressedSize) / originalSize) * 100;
     return Math.max(0, savings.toFixed(1)); // Don't show negative savings
+  };
+
+  const getEstimatedSize = () => {
+    if (!originalSize) return 0;
+    if (compressionLevel === 'extreme') return originalSize * 0.35;
+    if (compressionLevel === 'recommended') return originalSize * 0.60;
+    if (compressionLevel === 'less') return originalSize * 0.85;
+    return originalSize;
+  };
+
+  const getEstimatedSavings = () => {
+    if (compressionLevel === 'extreme') return 65;
+    if (compressionLevel === 'recommended') return 40;
+    if (compressionLevel === 'less') return 15;
+    return 0;
   };
 
   const handleDragOver = (e) => {
@@ -58,7 +82,7 @@ export default function CompressWorkspace() {
     }
   };
 
-  const handleFileSelection = (file) => {
+  const handleFileSelection = async (file) => {
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
       alert("Harap unggah file PDF.");
       return;
@@ -70,6 +94,24 @@ export default function CompressWorkspace() {
     setProgress(0);
     setProcessedResult(null);
     setErrorMsg('');
+    setThumbnailUrl(null);
+    setTotalPages(0);
+    
+    try {
+      const doc = await loadPdfDocument(file);
+      if (doc) {
+        setPdfDoc(doc);
+        setTotalPages(doc.numPages);
+        
+        // Generate thumbnail for page 1 immediately
+        const page1Url = await generateThumbnailForPage(doc, 1, 400);
+        if (page1Url) {
+          setThumbnailUrl(page1Url);
+        }
+      }
+    } catch (err) {
+      console.error("Error loading PDF document:", err);
+    }
   };
 
   const processFile = async () => {
@@ -90,7 +132,8 @@ export default function CompressWorkspace() {
     }, 300);
     
     try {
-      const result = await processCompressPdf(selectedFile);
+      // Pass the selected compression level
+      const result = await processCompressPdf(selectedFile, { level: compressionLevel });
       
       clearInterval(progressInterval);
       setProgress(100);
@@ -123,12 +166,18 @@ export default function CompressWorkspace() {
   };
 
   const resetWorkspace = () => {
+    if (pdfDoc && pdfDoc.destroy) pdfDoc.destroy();
     setSelectedFile(null);
+    setPdfDoc(null);
+    setThumbnailUrl(null);
+    setTotalPages(0);
+    
     setProcessingState('idle');
     setProcessedResult(null);
     setProgress(0);
     setOriginalSize(0);
     setCompressedSize(0);
+    setCompressionLevel('recommended');
   };
 
   useEffect(() => {
@@ -165,7 +214,7 @@ export default function CompressWorkspace() {
           </p>
         </div>
 
-        {/* Back Button (Moved from bottom) */}
+        {/* Back Button */}
         <div className="mb-6 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
           <Link
             href="/pdf-tools"
@@ -177,7 +226,7 @@ export default function CompressWorkspace() {
         </div>
 
         {/* Workspace Container */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Background Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-green-500/10 blur-[100px] pointer-events-none rounded-full" />
           
@@ -186,7 +235,7 @@ export default function CompressWorkspace() {
               <>
                 {!selectedFile ? (
                   <div 
-                    className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-3xl p-12 transition-all duration-300 ${
+                    className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
                       isDragging 
                         ? 'border-green-400 bg-green-500/10 scale-[1.02]' 
                         : 'border-slate-700 hover:border-slate-500 bg-slate-800/30'
@@ -201,6 +250,7 @@ export default function CompressWorkspace() {
                       className="hidden" 
                       onChange={(e) => {
                         if (e.target.files && e.target.files.length > 0) handleFileSelection(e.target.files[0]);
+                        e.target.value = '';
                       }}
                       accept=".pdf,application/pdf"
                       ref={fileInputRef}
@@ -220,9 +270,10 @@ export default function CompressWorkspace() {
                     
                     <button 
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-8 py-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] flex items-center gap-2"
+                      className="px-8 py-4 bg-green-500 text-white font-bold rounded-2xl hover:bg-green-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] flex items-center gap-2"
                     >
-                      Pilih Dokumen PDF
+                      <UploadCloud className="w-5 h-5" />
+                      Pilih File PDF
                     </button>
                   </div>
                 ) : (
@@ -231,12 +282,21 @@ export default function CompressWorkspace() {
                       
                       {/* Left: Preview Card */}
                       <div className="w-full md:w-1/3 flex flex-col items-center">
-                        <div className="group relative w-full aspect-[3/4] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] border-2 border-slate-200/20 flex flex-col items-center justify-center overflow-hidden mb-4 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(34,197,94,0.2)] transition-all duration-300 cursor-default">
-                          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-400 to-emerald-500" />
-                          <FileType className="w-16 h-16 text-slate-300 mb-4 drop-shadow-sm" />
+                        <div className="group relative w-full aspect-[3/4] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] border-2 border-slate-200/20 flex flex-col items-center justify-center overflow-hidden mb-4 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(34,197,94,0.2)] transition-all duration-300">
+                          {/* Decorative Emerald Document Header */}
+                          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-500 to-emerald-400 z-10" />
+                          
+                          {thumbnailUrl ? (
+                            <img src={thumbnailUrl} alt="Preview Cover" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="flex flex-col items-center justify-center animate-pulse">
+                               <Loader2 className="w-8 h-8 text-slate-300 animate-spin mb-2" />
+                            </div>
+                          )}
+                          
                           <button 
-                            onClick={() => setSelectedFile(null)}
-                            className="absolute top-3 right-3 h-8 w-8 bg-red-50 hover:bg-red-100 rounded-full flex items-center justify-center text-red-400 transition-colors opacity-0 group-hover:opacity-100 shadow-sm"
+                            onClick={resetWorkspace}
+                            className="absolute top-3 right-3 h-8 w-8 bg-slate-900 border border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-red-400 hover:border-red-400 transition-colors z-20 shadow-lg opacity-0 group-hover:opacity-100"
                             title="Hapus file"
                           >
                             <X className="w-4 h-4" />
@@ -245,34 +305,128 @@ export default function CompressWorkspace() {
                         <p className="text-sm font-semibold text-white truncate max-w-full text-center" title={selectedFile.name}>
                           {selectedFile.name}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
-                          {formatFileSize(selectedFile.size)}
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <p className="text-xs text-slate-400">
+                            {formatFileSize(selectedFile.size)}
+                          </p>
+                          <span className="w-1 h-1 bg-slate-600 rounded-full" />
+                          <p className="text-xs text-slate-400 font-medium">
+                            {totalPages > 0 ? `${totalPages} Halaman` : <Loader2 className="w-3 h-3 animate-spin inline-block" />}
+                          </p>
+                        </div>
                       </div>
 
                       {/* Right: Action Form */}
-                      <div className="w-full md:w-2/3 flex flex-col h-full justify-center pt-4 md:pt-10">
-                        <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 mb-8 text-center">
-                          <div className="inline-flex p-3 bg-green-500/10 rounded-full mb-4 text-green-400">
-                            <Zap className="w-8 h-8" />
+                      <div className="w-full md:w-2/3 flex flex-col pt-2">
+                        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                          Pilih Tingkat Kompresi
+                        </h3>
+                        
+                        <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 mb-8 flex flex-col gap-4">
+                          
+                          {/* Extreme Compression */}
+                          <label className={`relative flex items-start p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 select-none ${compressionLevel === 'extreme' ? 'border-green-500 bg-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-slate-800 bg-slate-900 hover:border-slate-700'}`}>
+                            <input 
+                              type="radio" 
+                              className="hidden" 
+                              checked={compressionLevel === 'extreme'} 
+                              onChange={() => setCompressionLevel('extreme')} 
+                            />
+                            <div className="flex flex-col flex-1 pl-2">
+                              <span className="font-bold text-white mb-1 flex items-center gap-2">
+                                Extreme Compression
+                              </span>
+                              <span className="text-sm text-slate-400 leading-relaxed">Kualitas lebih rendah, kompresi tinggi</span>
+                            </div>
+                            <div className="shrink-0 mt-1">
+                              {compressionLevel === 'extreme' ? (
+                                <CheckCircle2 className="w-6 h-6 text-green-400" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full border-2 border-slate-700" />
+                              )}
+                            </div>
+                          </label>
+
+                          {/* Recommended Compression */}
+                          <label className={`relative flex items-start p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 select-none ${compressionLevel === 'recommended' ? 'border-green-500 bg-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-slate-800 bg-slate-900 hover:border-slate-700'}`}>
+                            {compressionLevel === 'recommended' && (
+                              <div className="absolute -top-3 left-6 bg-green-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                Recommended
+                              </div>
+                            )}
+                            <input 
+                              type="radio" 
+                              className="hidden" 
+                              checked={compressionLevel === 'recommended'} 
+                              onChange={() => setCompressionLevel('recommended')} 
+                            />
+                            <div className="flex flex-col flex-1 pl-2">
+                              <span className="font-bold text-white mb-1">Recommended Compression</span>
+                              <span className="text-sm text-slate-400 leading-relaxed">Kualitas bagus, kompresi yang baik</span>
+                            </div>
+                            <div className="shrink-0 mt-1">
+                              {compressionLevel === 'recommended' ? (
+                                <CheckCircle2 className="w-6 h-6 text-green-400" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full border-2 border-slate-700" />
+                              )}
+                            </div>
+                          </label>
+
+                          {/* Less Compression */}
+                          <label className={`relative flex items-start p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 select-none ${compressionLevel === 'less' ? 'border-green-500 bg-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-slate-800 bg-slate-900 hover:border-slate-700'}`}>
+                            <input 
+                              type="radio" 
+                              className="hidden" 
+                              checked={compressionLevel === 'less'} 
+                              onChange={() => setCompressionLevel('less')} 
+                            />
+                            <div className="flex flex-col flex-1 pl-2">
+                              <span className="font-bold text-white mb-1">Less Compression</span>
+                              <span className="text-sm text-slate-400 leading-relaxed">Kualitas tinggi, kompresi lebih sedikit</span>
+                            </div>
+                            <div className="shrink-0 mt-1">
+                              {compressionLevel === 'less' ? (
+                                <CheckCircle2 className="w-6 h-6 text-green-400" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full border-2 border-slate-700" />
+                              )}
+                            </div>
+                          </label>
+                          
+                        </div>
+
+                        {/* Estimation Box */}
+                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                          <h4 className="text-sm font-bold text-slate-400 mb-3 flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-green-400" />
+                            Estimasi Penghematan
+                          </h4>
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                            <span className="text-slate-400 text-sm">Ukuran File Awal</span>
+                            <span className="font-mono text-slate-300">{formatFileSize(originalSize)}</span>
                           </div>
-                          <h3 className="text-xl font-bold text-white mb-2">
-                            Siap Dikompresi
-                          </h3>
-                          <p className="text-slate-400 text-sm">
-                            Teknologi pintar Nexarin akan menganalisis dokumen ini dan mengurangi ukuran penyimpanannya semaksimal mungkin dengan mempertahankan kualitas teks dan gambar.
-                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-300 text-sm font-medium">Estimasi Ukuran Baru</span>
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded-lg shrink-0">
+                                -{getEstimatedSavings()}%
+                              </span>
+                              <span className="font-mono text-green-400 font-bold text-lg">{formatFileSize(getEstimatedSize())}</span>
+                            </div>
+                          </div>
                         </div>
 
                         {errorMsg && (
-                          <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-in fade-in slide-in-from-top-2">
+                          <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-in fade-in slide-in-from-top-2 text-center">
                             {errorMsg}
                           </div>
                         )}
 
                         <button 
                           onClick={processFile}
-                          className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(34,197,94,0.5)] hover:shadow-[0_10px_30px_-10px_rgba(34,197,94,0.7)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-green-400/20"
+                          disabled={!pdfDoc}
+                          className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(34,197,94,0.5)] hover:shadow-[0_10px_30px_-10px_rgba(34,197,94,0.7)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-green-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Mulai Kompresi
                           <ArrowRight className="w-5 h-5" />
@@ -358,7 +512,7 @@ export default function CompressWorkspace() {
                   </button>
                   <button 
                     onClick={resetWorkspace}
-                    className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold rounded-2xl transition-all border border-slate-700 hover:border-slate-500 active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm"
                   >
                     Mulai Baru
                   </button>
@@ -428,19 +582,19 @@ export default function CompressWorkspace() {
               
               <div className="bg-slate-800/40 rounded-3xl p-5 sm:p-6 border border-slate-700/50 shadow-inner">
                 <h4 className="text-white font-bold mb-3 flex items-center gap-3 text-base">
-                  <div className="w-2 h-2 rounded-full bg-green-400 shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.8)]" /> Pembersihan Garbage Data
+                  <div className="w-2 h-2 rounded-full bg-green-400 shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.8)]" /> Tiga Level Kompresi
                 </h4>
                 <p className="text-sm text-slate-400 leading-relaxed ml-5">
-                  Engine kami secara otomatis menghapus metadata tak berguna, membuang data duplikat, serta membersihkan struktur pohon dokumen PDF Anda ke tingkat paling rapi.
+                  Anda bisa memilih 3 jenis kompresi: <b>Extreme</b> (ukuran file sangat kecil, namun sedikit menurunkan resolusi), <b>Recommended</b> (keseimbangan ukuran dan kualitas), dan <b>Less</b> (kualitas diutamakan).
                 </p>
               </div>
 
               <div className="bg-slate-800/40 rounded-3xl p-5 sm:p-6 border border-slate-700/50 shadow-inner">
                 <h4 className="text-white font-bold mb-3 flex items-center gap-3 text-base">
-                  <div className="w-2 h-2 rounded-full bg-green-400 shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.8)]" /> Teknologi Deflate
+                  <div className="w-2 h-2 rounded-full bg-green-400 shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.8)]" /> Teknologi Deflate & GC
                 </h4>
                 <p className="text-sm text-slate-400 leading-relaxed ml-5">
-                  Kami menggunakan algoritma deflate cerdas untuk mengompresi aliran teks dan data grafis. Ini sangat cocok bagi Anda yang sering gagal mengunggah berkas karena batas ukuran file!
+                  Kami menggunakan algoritma deflate cerdas dan Garbage Collection (GC) untuk membersihkan metadata usang serta melakukan kompresi pada aliran teks dan grafik vektor!
                 </p>
               </div>
             </div>

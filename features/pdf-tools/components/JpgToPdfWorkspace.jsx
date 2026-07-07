@@ -1,43 +1,34 @@
 "use client";
 
-import { UploadCloud, FileType, CheckCircle2, ArrowLeft, Loader2, Download, FilePlus, X, Image as ImageIcon , Shield, Zap, Sparkles } from "lucide-react";
+import { UploadCloud, CheckCircle2, Loader2, Download, X, Image as ImageIcon, ArrowRight, ArrowLeft, Maximize2, Check } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { pdfTools } from "@/features/pdf-tools/pdf-tools.data";
-import { 
-  processJpgToPdf, processPdfToWord, processCompressPdf, 
-  processPdfToExcel, processWordToPdf, processPdfToPng, 
-  processEditPdf, processMergePdf, processSplitPdf,
-  processPdfToPowerpoint, processPowerpointToPdf, processExcelToPdf,
-  processSignPdf, processWatermarkPdf, processRotatePdf, processHtmlToPdf,
-  processUnlockPdf, processProtectPdf, processOrganizePdf, processPdfToPdfa,
-  processRepairPdf, processPageNumbersPdf, processScanPdf, processOcrPdf, processComparePdf, processRedactPdf,
-  processCropPdf, processFormsPdf, processTranslatePdf, processMarkdownPdf,
-  mockProcessPdf 
-} from "@/features/pdf-tools/core/pdf-processing";
+import { processJpgToPdf } from "@/features/pdf-tools/core/pdf-processing";
 import { saveAs } from "file-saver";
 
 export default function JpgToPdfWorkspace() {
   const slug = "jpg-to-pdf";
   const tool = pdfTools.find(t => t.id === slug) || {};
+  
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [processingState, setProcessingState] = useState('idle'); // idle, processing, success, error
   const [progress, setProgress] = useState(0);
   const [processedResult, setProcessedResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  
   const [showInfoModal, setShowInfoModal] = useState(false);
-
-  useEffect(() => {
-    if (showInfoModal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => { document.body.style.overflow = 'auto'; };
-  }, [showInfoModal]);
-
-  const isMulti = slug === 'merge' || slug === 'compare';
+  const [downloadFilename, setDownloadFilename] = useState("");
+  
+  // Settings
+  const [pageSize, setPageSize] = useState("fit"); // fit, a4, letter
+  const [orientation, setOrientation] = useState("portrait"); // portrait, landscape
+  const [margin, setMargin] = useState("none"); // none, small, big
+  const [mergeAll, setMergeAll] = useState(true);
+  
+  const fileInputRef = useRef(null);
+  const [previewUrls, setPreviewUrls] = useState({});
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -53,59 +44,57 @@ export default function JpgToPdfWorkspace() {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      if (isMulti) {
-        handleFileSelection(Array.from(e.dataTransfer.files));
-      } else {
-        handleFileSelection([e.dataTransfer.files[0]]);
-      }
+      handleFileSelection(Array.from(e.dataTransfer.files));
     }
   };
 
   const handleFileSelection = (files) => {
-    const firstFile = files[0];
-    
-    // Validate file type if needed
-    if ((slug === 'jpg-to-pdf' || slug === 'scan') && !firstFile.type.startsWith('image/')) {
+    const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (validFiles.length === 0) {
       alert("Harap unggah file gambar (JPG/PNG).");
       return;
     }
-    if (slug === 'word-to-pdf' && !firstFile.name.toLowerCase().endsWith('.docx') && !firstFile.name.toLowerCase().endsWith('.doc')) {
-      alert("Harap unggah file Word (.docx atau .doc).");
-      return;
-    }
-    if (slug === 'excel-to-pdf' && !firstFile.name.toLowerCase().endsWith('.xlsx') && !firstFile.name.toLowerCase().endsWith('.xls') && !firstFile.name.toLowerCase().endsWith('.csv')) {
-      alert("Harap unggah file Excel.");
-      return;
-    }
-    if ((slug === 'powerpoint-to-pdf' || slug === 'pdf-to-powerpoint') && !firstFile.name.toLowerCase().endsWith('.pptx') && !firstFile.name.toLowerCase().endsWith('.ppt')) {
-      if (slug === 'powerpoint-to-pdf') {
-         alert("Harap unggah file PowerPoint.");
-         return;
-      }
-    }
-    if (slug === 'html-to-pdf' && !firstFile.name.toLowerCase().endsWith('.html') && !firstFile.name.toLowerCase().endsWith('.htm')) {
-      alert("Harap unggah file HTML.");
-      return;
-    }
     
-    if (isMulti) {
-      // Append files for merge
-      setSelectedFiles(prev => [...prev, ...files]);
-    } else {
-      setSelectedFiles([firstFile]);
-    }
+    setSelectedFiles(prev => [...prev, ...validFiles]);
     
-    setProcessingState('idle');
-    setProgress(0);
-    setProcessedResult(null);
-    setErrorMsg('');
+    // Generate object URLs
+    const newUrls = {};
+    validFiles.forEach(f => {
+      newUrls[f.name + f.size] = URL.createObjectURL(f);
+    });
+    setPreviewUrls(prev => ({ ...prev, ...newUrls }));
+    
+    if (processingState === 'success' || processingState === 'error') {
+      setProcessingState('idle');
+      setProgress(0);
+      setProcessedResult(null);
+      setErrorMsg('');
+    }
   };
 
-  const processFile = async () => {
-    if (selectedFiles.length === 0) return;
+  const removeFile = (index) => {
+    const fileToRemove = selectedFiles[index];
+    const key = fileToRemove.name + fileToRemove.size;
     
-    if (isMulti && selectedFiles.length < 2) {
-      setErrorMsg(slug === 'compare' ? "Harap unggah tepat 2 file PDF untuk dibandingkan." : "Harap unggah minimal 2 file PDF untuk digabungkan.");
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    
+    // Revoke url
+    if (previewUrls[key]) {
+      URL.revokeObjectURL(previewUrls[key]);
+      const newUrls = { ...previewUrls };
+      delete newUrls[key];
+      setPreviewUrls(newUrls);
+    }
+    
+    if (selectedFiles.length <= 1) {
+      setProcessingState('idle');
+      setProcessedResult(null);
+    }
+  };
+
+  const processFiles = async () => {
+    if (selectedFiles.length === 0) {
+      setErrorMsg("Harap unggah gambar terlebih dahulu.");
       setProcessingState('error');
       return;
     }
@@ -113,82 +102,20 @@ export default function JpgToPdfWorkspace() {
     setProcessingState('processing');
     setProgress(0);
     
-    // Simulate progress bar
     const progressInterval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 90) return 90;
-        const next = prev + Math.floor(Math.random() * 15) + 5;
-        return next > 90 ? 90 : next;
+        if (prev >= 95) return prev;
+        return prev + Math.floor(Math.random() * 8) + 2;
       });
-    }, 250);
+    }, 300);
     
     try {
-      let result;
-      const singleFile = selectedFiles[0];
-      
-      if (slug === 'jpg-to-pdf') {
-        result = await processJpgToPdf(singleFile);
-      } else if (slug === 'pdf-to-word') {
-        result = await processPdfToWord(singleFile);
-      } else if (slug === 'compress') {
-        result = await processCompressPdf(singleFile);
-      } else if (slug === 'pdf-to-excel') {
-        result = await processPdfToExcel(singleFile);
-      } else if (slug === 'word-to-pdf') {
-        result = await processWordToPdf(singleFile);
-      } else if (slug === 'pdf-to-png') {
-        result = await processPdfToPng(singleFile);
-      } else if (slug === 'edit') {
-        result = await processEditPdf(singleFile);
-      } else if (slug === 'merge') {
-        result = await processMergePdf(selectedFiles);
-      } else if (slug === 'split') {
-        result = await processSplitPdf(singleFile);
-      } else if (slug === 'pdf-to-powerpoint') {
-        result = await processPdfToPowerpoint(singleFile);
-      } else if (slug === 'powerpoint-to-pdf') {
-        result = await processPowerpointToPdf(singleFile);
-      } else if (slug === 'excel-to-pdf') {
-        result = await processExcelToPdf(singleFile);
-      } else if (slug === 'sign') {
-        result = await processSignPdf(singleFile);
-      } else if (slug === 'watermark') {
-        result = await processWatermarkPdf(singleFile);
-      } else if (slug === 'rotate') {
-        result = await processRotatePdf(singleFile);
-      } else if (slug === 'html-to-pdf') {
-        result = await processHtmlToPdf(singleFile);
-      } else if (slug === 'unlock') {
-        result = await processUnlockPdf(singleFile);
-      } else if (slug === 'protect') {
-        result = await processProtectPdf(singleFile);
-      } else if (slug === 'organize') {
-        result = await processOrganizePdf(singleFile);
-      } else if (slug === 'pdf-to-pdfa') {
-        result = await processPdfToPdfa(singleFile);
-      } else if (slug === 'repair') {
-        result = await processRepairPdf(singleFile);
-      } else if (slug === 'page-numbers') {
-        result = await processPageNumbersPdf(singleFile);
-      } else if (slug === 'scan') {
-        result = await processScanPdf(singleFile);
-      } else if (slug === 'ocr') {
-        result = await processOcrPdf(singleFile);
-      } else if (slug === 'compare') {
-        result = await processComparePdf(selectedFiles);
-      } else if (slug === 'redact') {
-        result = await processRedactPdf(singleFile);
-      } else if (slug === 'crop') {
-        result = await processCropPdf(singleFile);
-      } else if (slug === 'forms') {
-        result = await processFormsPdf(singleFile);
-      } else if (slug === 'translate') {
-        result = await processTranslatePdf(singleFile);
-      } else if (slug === 'markdown') {
-        result = await processMarkdownPdf(singleFile);
-      } else {
-        result = await mockProcessPdf(singleFile, slug);
-      }
+      const result = await processJpgToPdf(selectedFiles, { 
+        pageSize,
+        orientation: pageSize === 'fit' ? 'auto' : orientation,
+        margin,
+        merge: mergeAll
+      });
       
       clearInterval(progressInterval);
       setProgress(100);
@@ -196,7 +123,7 @@ export default function JpgToPdfWorkspace() {
       
       setTimeout(() => {
         setProcessingState('success');
-      }, 500); // Brief pause at 100% before showing success
+      }, 500);
     } catch (error) {
       clearInterval(progressInterval);
       console.error(error);
@@ -206,37 +133,72 @@ export default function JpgToPdfWorkspace() {
   };
 
   const handleDownload = () => {
-    if (processedResult?.blob && processedResult?.outputFilename) {
-      saveAs(processedResult.blob, processedResult.outputFilename);
+    if (processedResult?.blob) {
+      let finalName = downloadFilename || processedResult.outputFilename || (mergeAll || selectedFiles.length === 1 ? "nexarin_img_to_pdf.pdf" : "nexarin_img_to_pdf.zip");
+      const expectedExt = processedResult.blob.type === "application/zip" ? ".zip" : ".pdf";
+      
+      if (!finalName.toLowerCase().endsWith(expectedExt)) {
+        finalName += expectedExt;
+      }
+      saveAs(processedResult.blob, finalName);
     }
   };
 
+  const resetWorkspace = () => {
+    Object.values(previewUrls).forEach(url => URL.revokeObjectURL(url));
+    setSelectedFiles([]);
+    setPreviewUrls({});
+    setProcessingState('idle');
+    setProcessedResult(null);
+    setProgress(0);
+    setPageSize("fit");
+    setOrientation("portrait");
+    setMargin("none");
+    setMergeAll(true);
+  };
+
+  useEffect(() => {
+    if (showInfoModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [showInfoModal]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      Object.values(previewUrls).forEach(url => URL.revokeObjectURL(url));
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-slate-950 pt-10 sm:pt-16 text-slate-300 selection:bg-yellow-500/30 relative">
-      <div className="max-w-5xl mx-auto px-6 pb-20 relative z-10">
+      <div className="max-w-6xl mx-auto px-6 pb-20 relative z-10">
+        
+        {/* Header Section */}
         <div className="mb-10 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
-          <div className="inline-flex items-center justify-center p-4 rounded-3xl bg-yellow-500/10 text-yellow-400 mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] ring-1 ring-yellow-500/20">
+          <div className="inline-flex items-center justify-center p-4 rounded-3xl bg-yellow-500/10 text-yellow-400 mb-6 shadow-[0_0_30px_rgba(234,179,8,0.15)] ring-1 ring-yellow-500/20">
             <ImageIcon className="w-10 h-10" />
           </div>
           
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white">
-              Konversi <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">JPG ke PDF</span>
-            </h1>
-          </div>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Ubah berbagai gambar JPG atau PNG menjadi dokumen PDF dalam hitungan detik. Mudah diatur sesuai urutan yang Anda inginkan.{' '}
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Konversi <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">JPG ke PDF</span>
+          </h1>
+          
+          <p className="text-slate-400 text-lg max-w-xl mx-auto">
+            Ubah gambar Anda menjadi PDF, atur batas margin, dan gabungkan sesuka hati.{' '}
             <button 
               onClick={() => setShowInfoModal(true)}
               className="text-yellow-400 hover:text-yellow-300 font-semibold underline decoration-yellow-500/30 hover:decoration-yellow-400 underline-offset-4 transition-colors"
             >
-              Klik disini untuk penjelasan fitur.
+              Klik disini untuk fitur lanjutan.
             </button>
           </p>
         </div>
 
-        
-        {/* Back Button (Moved from bottom) */}
+        {/* Back Button */}
         <div className="mb-6 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
           <Link
             href="/pdf-tools"
@@ -248,165 +210,386 @@ export default function JpgToPdfWorkspace() {
         </div>
 
         {/* Workspace Container */}
-        <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Background Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-yellow-500/10 blur-[100px] pointer-events-none rounded-full" />
           
           <div className="relative z-10">
-          {selectedFiles.length > 0 ? (
-            <div className="text-center animate-in zoom-in-95 duration-300 w-full max-w-lg mx-auto">
-              
-              <div className="flex flex-wrap justify-center gap-3 mb-6">
-                {selectedFiles.map((file, idx) => (
-                  <div key={idx} className="relative w-16 h-20 bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center shadow-xl shadow-black/20 group-hover:scale-105 transition-transform">
-                    {idx === 0 && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-slate-950 shadow-lg shadow-yellow-500/30">
-                        <CheckCircle2 className="w-4 h-4" />
-                      </div>
-                    )}
-                    <FileType className="w-6 h-6 text-yellow-400 opacity-80 mb-1" strokeWidth={1.5} />
-                    <span className="text-[10px] truncate w-14 px-1 text-slate-300">{file.name}</span>
-                  </div>
-                ))}
-                {isMulti && processingState === 'idle' && (
-                  <label className="cursor-pointer relative w-16 h-20 bg-white/[0.02] hover:bg-white/[0.05] border border-dashed border-white/20 rounded-xl flex items-center justify-center transition-colors">
-                    <FilePlus className="w-6 h-6 text-slate-400" />
-                    <input type="file" multiple className="hidden" accept=".jpg,.jpeg,.png,image/jpeg,image/png" onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0) handleFileSelection(Array.from(e.target.files));
-                    }} />
-                  </label>
-                )}
-              </div>
-
-              <h3 className="text-xl font-bold text-white mb-2 truncate max-w-full px-4">
-                {isMulti ? `${selectedFiles.length} File Terpilih` : selectedFiles[0].name}
-              </h3>
-              <p className="text-slate-400 mb-10 text-lg">Siap diproses</p>
-              
-              {processingState === 'error' && (
-                <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
-                  {errorMsg}
-                </div>
-              )}
-
-              <div className="flex justify-center gap-4">
-                {processingState === 'idle' || processingState === 'error' ? (
-                  <>
-                    <button onClick={() => setSelectedFiles([])} className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-full transition-all border border-slate-700 hover:border-slate-600 active:scale-95 flex items-center justify-center gap-2">
-                      Reset
-                    </button>
-                    <button onClick={processFile} className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-yellow-400/20">
-                      Proses File
-                    </button>
-                  </>
-                ) : processingState === 'processing' ? (
-                  <div className="w-full max-w-md mx-auto">
-                    <div className="flex justify-between text-sm font-bold text-slate-300 mb-2">
-                      <span>Memproses file...</span>
-                      <span>{progress}%</span>
+            {processingState === 'idle' || processingState === 'error' ? (
+              <>
+                {selectedFiles.length === 0 ? (
+                  <div 
+                    className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 md:p-24 transition-all duration-300 ${
+                      isDragging 
+                        ? 'border-yellow-400 bg-yellow-500/10 scale-[1.02]' 
+                        : 'border-slate-700 hover:border-slate-500 bg-slate-800/30'
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                  >
+                    <input 
+                      type="file" 
+                      id="file-upload" 
+                      className="hidden" 
+                      multiple
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) handleFileSelection(e.target.files);
+                        e.target.value = '';
+                      }}
+                      accept="image/png, image/jpeg, image/jpg"
+                      ref={fileInputRef}
+                    />
+                    
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-800 border border-slate-700 shadow-xl mb-6 text-yellow-400 group-hover:scale-110 transition-transform">
+                      <UploadCloud className="w-10 h-10" />
                     </div>
-                    <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden shadow-inner border border-white/5">
-                      <div 
-                        className="h-full bg-yellow-500 rounded-full transition-all duration-300 relative"
-                        style={{ width: `${progress}%` }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-6 items-center w-full mt-4">
-                    <p className="text-yellow-400 font-bold text-xl">File berhasil diproses!</p>
+                    
+                    <h3 className="text-white font-bold text-xl md:text-3xl mb-3 text-center px-4">
+                      Tarik & lepas banyak gambar sekaligus
+                    </h3>
+                    
+                    <p className="text-slate-400 text-center text-sm md:text-base mb-8 max-w-md px-4 leading-relaxed">
+                      Mendukung format JPG dan PNG. Gabungkan semua foto Anda ke dalam satu dokumen PDF berkualitas.
+                    </p>
                     
                     <button 
-                      onClick={handleDownload} 
-                      className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold rounded-full transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(255,255,255,0.2)] hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.4)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-lg border border-yellow-400/20"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-8 py-4 bg-yellow-500 text-white font-bold rounded-2xl hover:bg-yellow-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)] flex items-center gap-2"
                     >
-                      <Download className="w-6 h-6" strokeWidth={2.5} />
-                      Unduh Hasil
-                    </button>
-                    
-                    <button onClick={() => setSelectedFiles([])} className="text-slate-400 hover:text-white transition-colors text-sm font-bold underline underline-offset-4">
-                      Proses File Lain
+                      <UploadCloud className="w-5 h-5" />
+                      Pilih Gambar
                     </button>
                   </div>
+                ) : (
+                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex flex-col lg:flex-row gap-10 items-start">
+                      
+                      {/* Left: Gallery View */}
+                      <div className="w-full lg:w-[55%] flex flex-col">
+                        <div className="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                          <h3 className="text-white font-bold text-xl flex items-center gap-3">
+                            <span className="bg-yellow-500/20 text-yellow-400 py-1 px-3 rounded-lg text-sm">{selectedFiles.length}</span>
+                            Daftar Gambar
+                          </h3>
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={resetWorkspace}
+                              className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold rounded-xl transition-all border border-red-500/20 flex items-center gap-2"
+                            >
+                              Kosongkan
+                            </button>
+                          </div>
+                          
+                          <input 
+                            type="file" 
+                            className="hidden" 
+                            multiple
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files.length > 0) handleFileSelection(e.target.files);
+                              e.target.value = '';
+                            }}
+                            accept="image/png, image/jpeg, image/jpg"
+                            ref={fileInputRef}
+                          />
+                        </div>
+                        
+                        <div className="bg-slate-950/30 border border-slate-800/80 rounded-[2rem] p-6 max-h-[600px] overflow-y-auto shadow-inner">
+                          <div className="flex flex-wrap gap-5">
+                            {selectedFiles.map((file, idx) => (
+                              <div key={idx} className="group relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700 hover:border-yellow-500/70 transition-all shadow-xl h-44 sm:h-52 flex-shrink-0">
+                                <img 
+                                  src={previewUrls[file.name + file.size]} 
+                                  className="h-full w-auto object-contain bg-slate-950/50"
+                                  alt={file.name}
+                                />
+                                
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                  <span className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-yellow-400 text-xs px-2.5 py-1.5 rounded-lg font-bold border border-yellow-500/30 shadow-lg">
+                                    #{idx + 1}
+                                  </span>
+                                  
+                                  <button 
+                                    onClick={() => removeFile(idx)}
+                                    className="absolute top-3 right-3 h-8 w-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all transform scale-75 group-hover:scale-100 shadow-xl"
+                                  >
+                                    <X className="w-4 h-4 stroke-[3]" />
+                                  </button>
+                                  
+                                  <div className="absolute bottom-3 left-0 w-full px-4 text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                    <p className="text-white text-xs font-medium truncate w-full drop-shadow-md px-2 py-1 bg-slate-900/60 rounded-md border border-white/10">{file.name}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+
+                            {/* Tambah Button */}
+                            <button 
+                              onClick={() => fileInputRef.current?.click()}
+                              className="h-44 sm:h-52 aspect-[3/4] rounded-2xl border-2 border-dashed border-slate-700 bg-slate-800/20 hover:bg-yellow-500/5 hover:border-yellow-500/50 flex flex-col items-center justify-center gap-3 text-slate-400 hover:text-yellow-400 transition-all group shadow-sm flex-shrink-0"
+                            >
+                              <div className="w-12 h-12 rounded-2xl bg-slate-800 group-hover:bg-yellow-500/20 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg group-hover:shadow-yellow-500/20">
+                                <UploadCloud className="w-6 h-6" />
+                              </div>
+                              <span className="font-bold text-sm">Tambah Gambar</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Options & Controls */}
+                      <div className="w-full lg:w-[45%] flex flex-col">
+                        <h3 className="text-white font-bold text-xl mb-4">Pengaturan PDF</h3>
+                        
+                        {processingState === 'error' && (
+                          <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-start gap-3">
+                            <X className="w-5 h-5 shrink-0 mt-0.5" />
+                            <p className="text-sm leading-relaxed">{errorMsg}</p>
+                          </div>
+                        )}
+                        
+                        {/* Options Selection */}
+                        <div className="space-y-6 mb-8 bg-slate-900/40 p-6 rounded-3xl border border-slate-800/50">
+                          
+                          {/* PAGE SIZE */}
+                          <div>
+                            <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Page Size</label>
+                            <div className="relative">
+                              <select 
+                                value={pageSize}
+                                onChange={(e) => setPageSize(e.target.value)}
+                                className="w-full appearance-none bg-slate-800 border-2 border-slate-700 text-white px-5 py-4 rounded-xl font-medium hover:border-slate-600 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 cursor-pointer transition-all"
+                              >
+                                <option value="fit">Fit (Same page size as image)</option>
+                                <option value="a4">A4 (210 x 297 mm)</option>
+                                <option value="letter">US Letter (215.9 x 279.4 mm)</option>
+                              </select>
+                              <div className="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-400">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* ORIENTATION (only show if not fit) */}
+                          {pageSize !== 'fit' && (
+                            <div className="animate-in slide-in-from-top-2 fade-in duration-300">
+                              <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Orientation</label>
+                              <div className="flex bg-slate-800 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
+                                <button 
+                                  onClick={() => setOrientation('portrait')}
+                                  className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'portrait' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
+                                >
+                                  Potret (Tegak)
+                                </button>
+                                <button 
+                                  onClick={() => setOrientation('landscape')}
+                                  className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all duration-300 ${orientation === 'landscape' ? 'bg-gradient-to-b from-yellow-400 to-yellow-500 text-slate-900 shadow-[0_4px_15px_rgba(234,179,8,0.4)] scale-[1.02]' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}
+                                >
+                                  Lansekap (Menyamping)
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* MARGIN */}
+                          <div>
+                            <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Margin</label>
+                            <div className="grid grid-cols-3 gap-3">
+                              
+                              <button 
+                                onClick={() => setMargin('none')}
+                                className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                                  margin === 'none' ? 'border-yellow-500 bg-yellow-500/10' : 'border-slate-700 bg-slate-800/50 hover:bg-slate-800'
+                                }`}
+                              >
+                                <div className={`w-8 h-10 border border-current rounded-sm flex items-center justify-center mb-2 ${margin === 'none' ? 'text-yellow-400' : 'text-slate-500'}`}>
+                                  <div className="w-full h-full bg-current opacity-20"></div>
+                                </div>
+                                <span className={`text-xs font-bold ${margin === 'none' ? 'text-yellow-400' : 'text-slate-400'}`}>No margin</span>
+                              </button>
+
+                              <button 
+                                onClick={() => setMargin('small')}
+                                className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                                  margin === 'small' ? 'border-yellow-500 bg-yellow-500/10' : 'border-slate-700 bg-slate-800/50 hover:bg-slate-800'
+                                }`}
+                              >
+                                <div className={`w-8 h-10 border border-current rounded-sm flex items-center justify-center p-1 mb-2 ${margin === 'small' ? 'text-yellow-400' : 'text-slate-500'}`}>
+                                  <div className="w-full h-full border border-dashed border-current flex items-center justify-center opacity-50">
+                                    <div className="w-3 h-3 bg-current opacity-30"></div>
+                                  </div>
+                                </div>
+                                <span className={`text-xs font-bold ${margin === 'small' ? 'text-yellow-400' : 'text-slate-400'}`}>Small</span>
+                              </button>
+
+                              <button 
+                                onClick={() => setMargin('big')}
+                                className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all ${
+                                  margin === 'big' ? 'border-yellow-500 bg-yellow-500/10 shadow-[0_0_15px_rgba(234,179,8,0.15)]' : 'border-slate-700 bg-slate-800/50 hover:bg-slate-800 hover:border-slate-600'
+                                }`}
+                              >
+                                <div className={`w-8 h-10 border-2 rounded-sm flex items-center justify-center p-2 mb-3 transition-colors ${margin === 'big' ? 'border-yellow-400 text-yellow-400' : 'border-slate-500 text-slate-500'}`}>
+                                  <div className="w-full h-full border border-dashed border-current flex items-center justify-center opacity-50">
+                                    <div className="w-2 h-2 bg-current opacity-30"></div>
+                                  </div>
+                                </div>
+                                <span className={`text-xs font-bold ${margin === 'big' ? 'text-yellow-400' : 'text-slate-400'}`}>Big</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* DYNAMIC LAYOUT PREVIEW */}
+                          <div className="mt-8 border-t border-slate-800 pt-6">
+                            <label className="block text-sm font-bold text-slate-300 mb-4 uppercase tracking-wider text-center">Live Preview</label>
+                            <div className="flex bg-slate-950/50 rounded-2xl border border-slate-800 h-64 overflow-hidden relative">
+                              
+                              {/* Fading edges for scroll hint */}
+                              {selectedFiles.length > 1 && (
+                                <>
+                                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-950/80 to-transparent z-10 pointer-events-none"></div>
+                                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-950/80 to-transparent z-10 pointer-events-none"></div>
+                                </>
+                              )}
+
+                              <div className={`flex items-center overflow-x-auto w-full h-full py-4 px-8 snap-x hide-scrollbar gap-8 ${selectedFiles.length === 1 ? 'justify-center' : 'justify-start'}`}>
+                                {selectedFiles.map((file, idx) => (
+                                  <div key={idx} className={`shrink-0 snap-center transition-all duration-700 ease-in-out bg-white rounded shadow-2xl relative flex items-center justify-center overflow-hidden ring-4 ring-slate-800/50 ${pageSize === 'fit' ? 'w-44 h-44 rounded-xl' : orientation === 'portrait' ? 'w-36 h-48' : 'w-48 h-36'}`}>
+                                    
+                                    {/* Inner Content Area representing margins */}
+                                    <div className={`w-full h-full flex items-center justify-center transition-all duration-500 ease-in-out bg-white ${pageSize === 'fit' ? (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-3' : 'p-6') : (margin === 'none' ? 'p-0' : margin === 'small' ? 'p-2' : 'p-4')}`}>
+                                      
+                                      {/* The Image */}
+                                      <div className="w-full h-full flex items-center justify-center relative overflow-hidden transition-all duration-300">
+                                        <img 
+                                          src={previewUrls[file.name + file.size]} 
+                                          alt={`Preview ${idx + 1}`}
+                                          className="w-full h-full object-contain drop-shadow-sm"
+                                        />
+                                        
+                                        {/* Page Number indicator */}
+                                        <div className="absolute top-1 left-1 bg-black/50 text-white text-[9px] font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
+                                          {idx + 1}
+                                        </div>
+
+                                        {/* Margin indicators (pink dashed lines) */}
+                                        {margin !== 'none' && (
+                                          <div className="absolute inset-0 border-[1.5px] border-dashed border-pink-500/60 pointer-events-none animate-pulse"></div>
+                                        )}
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* MERGE CHECKBOX */}
+                          {selectedFiles.length > 1 && (
+                            <div className="pt-2">
+                              <label className="flex items-center gap-4 cursor-pointer group">
+                                <div className={`w-6 h-6 rounded-md flex items-center justify-center border-2 transition-colors ${mergeAll ? 'bg-yellow-500 border-yellow-500' : 'border-slate-600 bg-slate-800 group-hover:border-slate-500'}`}>
+                                  {mergeAll && <Check className="w-4 h-4 text-slate-900 font-bold" strokeWidth={3} />}
+                                </div>
+                                <input 
+                                  type="checkbox" 
+                                  checked={mergeAll}
+                                  onChange={(e) => setMergeAll(e.target.checked)}
+                                  className="hidden"
+                                />
+                                <span className={`font-semibold transition-colors ${mergeAll ? 'text-white' : 'text-slate-400 group-hover:text-slate-300'}`}>
+                                  Merge all images in one PDF file
+                                </span>
+                              </label>
+                            </div>
+                          )}
+                          
+                        </div>
+                        
+                        <div className="mt-auto flex gap-3">
+                          <button 
+                            onClick={processFiles} 
+                            className="flex-1 py-4 bg-gradient-to-r from-yellow-500 via-yellow-600 to-orange-600 hover:from-yellow-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-yellow-500/30 flex items-center justify-center gap-2"
+                          >
+                            Konversi Sekarang <ArrowRight className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
+              </>
+            ) : processingState === 'processing' ? (
+              <div className="animate-in fade-in zoom-in duration-500 w-full max-w-md mx-auto text-center py-10">
+                <div className="relative w-24 h-24 mx-auto mb-8">
+                  <div className="absolute inset-0 border-4 border-slate-800 rounded-full" />
+                  <div className="absolute inset-0 border-4 border-yellow-500 rounded-full border-t-transparent animate-spin" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <ImageIcon className="w-8 h-8 text-yellow-400" />
+                  </div>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-white mb-2">Memproses {selectedFiles.length} Gambar</h3>
+                <p className="text-slate-400 mb-8">
+                  {mergeAll && selectedFiles.length > 1 ? "Menyusun dan menggabungkan gambar..." : "Memformat batas dan ukuran halaman..."}
+                </p>
+                
+                <div className="w-full bg-slate-800 rounded-full h-3 mb-2 overflow-hidden border border-white/5 shadow-inner">
+                  <div 
+                    className="bg-gradient-to-r from-yellow-500 to-orange-500 h-full rounded-full transition-all duration-300 relative" 
+                    style={{ width: `${progress}%` }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                  </div>
+                </div>
+                <div className="text-right text-sm font-bold text-yellow-400">{progress}%</div>
               </div>
-            </div>
-          ) : (
-            <div 
-              className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 ${
-                isDragging 
-                  ? 'border-yellow-400 bg-yellow-500/10 scale-[1.02]' 
-                  : 'border-slate-700/50 hover:border-slate-500/80 bg-slate-800/20 hover:bg-slate-800/40'
-              }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input 
-                type="file" 
-                id="file-upload" 
-                className="hidden" 
-                onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) handleFileSelection(Array.from(e.target.files));
-                }}
-                accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                multiple={false}
-              />
-              
-              <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl mb-6 text-yellow-400 group-hover:scale-110 transition-transform">
-                <FilePlus className="w-12 h-12 opacity-80" strokeWidth={1.5} />
+            ) : (
+              <div className="animate-in fade-in zoom-in duration-500 w-full max-w-md mx-auto text-center py-8">
+                <div className="w-24 h-24 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-yellow-500/20 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
+                  <CheckCircle2 className="w-12 h-12 text-yellow-400" />
+                </div>
+                
+                <h3 className="text-3xl font-black text-white mb-2">Konversi Berhasil!</h3>
+                <p className="text-slate-400 mb-10">
+                  {mergeAll || selectedFiles.length === 1 
+                    ? "Dokumen PDF gabungan Anda telah siap untuk diunduh." 
+                    : "File arsip (ZIP) berisi semua dokumen PDF Anda telah siap."}
+                </p>
+                
+                <div className="bg-slate-950 border border-slate-800 rounded-2xl p-5 mb-8 text-left">
+                  <label className="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Ubah Nama File Output</label>
+                  <input 
+                    type="text" 
+                    value={downloadFilename}
+                    onChange={(e) => setDownloadFilename(e.target.value)}
+                    placeholder={processedResult?.outputFilename || (mergeAll ? "hasil_konversi.pdf" : "hasil_konversi.zip")}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all"
+                  />
+                </div>
+                
+                <button 
+                  onClick={handleDownload} 
+                  className="w-full py-4 mb-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-full transition-all shadow-lg shadow-yellow-500/30 flex items-center justify-center gap-2 active:scale-95"
+                >
+                  <Download className="w-6 h-6" /> Unduh Hasil ({mergeAll || selectedFiles.length === 1 ? 'PDF' : 'ZIP'})
+                </button>
+                
+                <button 
+                  onClick={resetWorkspace} 
+                  className="text-slate-400 hover:text-white font-semibold underline underline-offset-4 text-sm transition-colors"
+                >
+                  Konversi Gambar lainnya
+                </button>
               </div>
-              
-              <h3 className="text-white font-bold text-xl mb-3 text-center px-4">
-                Tarik & lepas file atau pilih dari perangkat
-              </h3>
-              
-              <p className="text-slate-400 text-center text-sm mb-8 max-w-sm px-4 leading-relaxed">
-                Anda bisa memilih file gambar (JPG/PNG) yang ingin diubah menjadi PDF secara otomatis.
-              </p>
-              
-              <button 
-                onClick={() => document.getElementById('file-upload')?.click()}
-                className="px-8 py-4 bg-yellow-500 text-white font-bold rounded-2xl hover:bg-yellow-600 transition-all active:scale-95 shadow-lg shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/50 flex items-center gap-2"
-              >
-                <UploadCloud className="w-5 h-5" />
-                Pilih File Gambar
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10 px-4">
-          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
-             <div className="w-12 h-12 bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
-                <Zap className="w-6 h-6" />
-             </div>
-             <h4 className="text-white font-bold mb-2">Pemrosesan Cerdas</h4>
-             <p className="text-slate-400 text-sm">Engine pintar kami menganalisis dan memproses file dengan cepat & akurat.</p>
-          </div>
-          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
-             <div className="w-12 h-12 bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
-                <Shield className="w-6 h-6" />
-             </div>
-             <h4 className="text-white font-bold mb-2">Privasi Terjaga</h4>
-             <p className="text-slate-400 text-sm">Seluruh proses dapat dilakukan secara aman. Data dihapus otomatis.</p>
-          </div>
-          <div className="bg-slate-900/40 border border-slate-800/50 p-6 rounded-3xl text-center backdrop-blur-sm shadow-xl hover:-translate-y-1 transition-transform duration-300 group">
-             <div className="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
-                <Sparkles className="w-6 h-6" />
-             </div>
-             <h4 className="text-white font-bold mb-2">Kualitas Terjaga</h4>
-             <p className="text-slate-400 text-sm">Didesain khusus untuk menjaga kualitas teks, gambar, dan layout dokumen Anda.</p>
+            )}
           </div>
         </div>
       </div>
-
+      
       {/* Info Modal */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
           <div 
             className="absolute inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity" 
             onClick={() => setShowInfoModal(false)}
@@ -423,37 +606,46 @@ export default function JpgToPdfWorkspace() {
               <div className="p-3 bg-yellow-500/10 rounded-2xl text-yellow-400 shrink-0">
                 <ImageIcon className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">Fungsi Fitur JPG ke PDF</h2>
+              <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">Fitur Lanjutan JPG ke PDF</h2>
             </div>
             
             <div className="space-y-4 text-slate-300 leading-relaxed text-sm sm:text-base">
               <p>
-                Alat <strong>JPG to PDF</strong> berfungsi untuk menyatukan banyak file gambar (seperti JPG, PNG) menjadi satu dokumen PDF multi-halaman yang mudah dikelola dan dibagikan.
+                Kini Anda dapat memproses banyak foto sekaligus dan mengaturnya seperti fotografer profesional.
               </p>
               
-              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
-                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" /> Penyusunan Otomatis
+              <div className="bg-slate-950 rounded-xl p-4 border border-slate-800">
+                <h4 className="text-white font-bold mb-1 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" /> Page Size & Orientation
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Gambar akan tersusun rapi menjadi halaman-halaman PDF dengan ukuran yang dikompresi optimal tanpa merusak kualitas visual aslinya.
+                  Ubah kertas ke ukuran universal seperti <strong>A4</strong> atau <strong>US Letter</strong>. Atau gunakan <strong>Fit</strong> untuk menyesuaikan dengan resolusi asli gambar.
                 </p>
               </div>
 
-              <div className="bg-slate-950 rounded-xl p-4 sm:p-5 border border-slate-800">
-                <h4 className="text-white font-bold mb-2 flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" /> Sangat Berguna untuk Laporan
+              <div className="bg-slate-950 rounded-xl p-4 border border-slate-800">
+                <h4 className="text-white font-bold mb-1 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" /> Smart Margin
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Sangat cocok untuk membuat portofolio, tugas sekolah, dokumen scan tanda pengenal, maupun laporan yang terdiri dari banyak lampiran foto.
+                  Tambahkan bingkai/bingkai putih (margin) di sekitar gambar Anda agar tidak terpotong saat di-print. Pilih antara margin kecil (Small) atau lebar (Big).
+                </p>
+              </div>
+
+              <div className="bg-slate-950 rounded-xl p-4 border border-slate-800">
+                <h4 className="text-white font-bold mb-1 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" /> Batch Processing (Merge)
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Unggah 10 foto sekaligus, lalu centang <strong>Merge</strong> untuk menjadikannya 1 buku PDF. Hapus centangnya jika Anda ingin menerima 10 file PDF berbeda (dikompres dalam 1 file ZIP).
                 </p>
               </div>
             </div>
             
-            <div className="mt-10 flex flex-col items-center">
+            <div className="mt-8 flex flex-col items-center">
               <button 
                 onClick={() => setShowInfoModal(false)}
-                className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold rounded-xl transition-colors w-full"
+                className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl transition-colors w-full"
               >
                 Saya Mengerti
               </button>
