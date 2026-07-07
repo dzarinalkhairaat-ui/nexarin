@@ -59,8 +59,6 @@ export const ModelName = {
   AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog',
-  PortfolioProject: 'PortfolioProject',
-  ContactSetting: 'ContactSetting',
   MapSetting: 'MapSetting',
   PaymentSetting: 'PaymentSetting'
 } as const
@@ -215,41 +213,6 @@ export const ScraperLogScalarFieldEnum = {
 } as const
 
 export type ScraperLogScalarFieldEnum = (typeof ScraperLogScalarFieldEnum)[keyof typeof ScraperLogScalarFieldEnum]
-
-
-export const PortfolioProjectScalarFieldEnum = {
-  id: 'id',
-  slug: 'slug',
-  title: 'title',
-  category: 'category',
-  status: 'status',
-  description: 'description',
-  summary: 'summary',
-  problem: 'problem',
-  solution: 'solution',
-  result: 'result',
-  year: 'year',
-  role: 'role',
-  image: 'image',
-  tags: 'tags',
-  features: 'features',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
-
-
-export const ContactSettingScalarFieldEnum = {
-  id: 'id',
-  platform: 'platform',
-  value: 'value',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ContactSettingScalarFieldEnum = (typeof ContactSettingScalarFieldEnum)[keyof typeof ContactSettingScalarFieldEnum]
 
 
 export const MapSettingScalarFieldEnum = {

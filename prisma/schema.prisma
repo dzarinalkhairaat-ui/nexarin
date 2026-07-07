@@ -203,41 +203,9 @@ model ScraperLog {
   @@map("scraper_logs")
 }
 
-model PortfolioProject {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  category    String
-  status      String
-  description String
-  summary     String?
-  problem     String?
-  solution    String?
-  result      String?
-  year        String?
-  role        String?
-  image       String?
-  tags        String[] // Uses native array in PostgreSQL
-  features    String[] // Uses native array in PostgreSQL
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  @@index([createdAt])
-  @@map("portfolio_projects")
-}
 
-model ContactSetting {
-  id        String   @id @default(cuid())
-  platform  String   // e.g., "WhatsApp", "Email"
-  value     String
-  isActive  Boolean  @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("contact_settings")
-}
 
 model MapSetting {
   id          String   @id @default(cuid())

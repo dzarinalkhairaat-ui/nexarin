@@ -2,7 +2,6 @@ import ScrollReveal from "@/components/shared/ScrollReveal";
 import Header from "@/components/shared/Header";
 import HomeHero from "@/features/home/components/HomeHero";
 import HomeProgressChart from "@/features/home/components/HomeProgressChart";
-import HomePortfolioPreview from "@/features/home/components/HomePortfolioPreview";
 import HomeNewsPreview from "@/features/home/components/HomeNewsPreview";
 import HomeSlendroAi from "@/features/home/components/HomeSlendroAi";
 import HomeFooter from "@/features/home/components/HomeFooter";
@@ -89,9 +88,6 @@ export default async function HomePage() {
         <HomeSlendroAi />
       </ScrollReveal>
 
-      <ScrollReveal delay={100}>
-        <HomePortfolioPreview />
-      </ScrollReveal>
 
       <ScrollReveal delay={100}>
         <HomeNewsPreview articles={newsArticles} />

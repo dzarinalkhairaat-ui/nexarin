@@ -38,12 +38,6 @@ const adminMenus = [
     status: "Next",
   },
   {
-    label: "Portfolio",
-    href: "/admin/portfolio",
-    icon: "F",
-    status: "Next",
-  },
-  {
     label: "Support",
     href: "/admin/support",
     icon: "S",

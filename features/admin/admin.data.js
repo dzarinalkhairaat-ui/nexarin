@@ -21,12 +21,6 @@ export const adminStats = [
     icon: "🛍️",
   },
   {
-    label: "Portfolio",
-    value: "Static",
-    note: "Project portfolio masih dari data lokal.",
-    icon: "📁",
-  },
-  {
     label: "News",
     value: "Static",
     note: "Artikel belum memakai database.",
@@ -49,15 +43,6 @@ export const adminModules = [
     href: "/admin/dagang",
     previewHref: "/dagang",
     icon: "🛍️",
-  },
-  {
-    title: "Kelola Portfolio",
-    description:
-      "Nanti dipakai untuk CRUD project, studi kasus, tag teknologi, ringkasan, dan detail portfolio.",
-    status: "Belum backend",
-    href: "/admin/portfolio",
-    previewHref: "/portfolio",
-    icon: "📁",
   },
   {
     title: "Kelola News",

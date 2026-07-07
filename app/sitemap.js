@@ -1,4 +1,3 @@
-import { getPortfolioProjects } from "@/features/portfolio/portfolio.data";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -156,10 +155,9 @@ export default async function sitemap() {
   const staticRoutes = [
     createUrl("/", 1, "weekly"),
     createUrl("/coming-soon", 0.9, "weekly"),
-    createUrl("/portfolio", 0.85, "weekly"),
     createUrl("/news", 0.9, "weekly"),
     createUrl("/news/search", 0.65, "weekly"),
-    createUrl("/contact", 0.75, "monthly"),
+
     createUrl("/support", 0.75, "monthly"),
     createUrl("/faq", 0.75, "monthly"),
     createUrl("/terms", 0.7, "yearly"),
@@ -169,16 +167,11 @@ export default async function sitemap() {
     createUrl("/pdf-tools", 0.8, "weekly"),
   ];
 
-  const portfolioRoutes = getPortfolioProjects()
-    .filter((project) => project?.slug)
-    .map((project) => createUrl(`/portfolio/${project.slug}`, 0.75, "monthly"));
-
   const newsArticleRoutes = await getDatabaseNewsArticleRoutes();
   const newsCategoryRoutes = await getDatabaseNewsCategoryRoutes();
 
   return uniqueRoutes([
     ...staticRoutes,
-    ...portfolioRoutes,
     ...newsArticleRoutes,
     ...newsCategoryRoutes,
   ]);

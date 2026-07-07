@@ -5,7 +5,6 @@ import {
   HomeIcon,
   NewsIcon,
   ScrapingIcon,
-  PortfolioIcon,
   ContactIcon,
   SettingsIcon,
   DashboardIcon,
@@ -37,14 +36,7 @@ const adminModules = [
     icon: <ScrapingIcon className="h-6 w-6" />,
     active: true,
   },
-  {
-    title: "Portfolio",
-    description: "Kelola project, case study, tech stack, dan showcase karya.",
-    href: "/admin/portfolio",
-    badge: "Tahap Dev",
-    icon: <PortfolioIcon className="h-6 w-6" />,
-    active: false,
-  },
+
   {
     title: "Support",
     description: "Kelola pesan, request, dan kebutuhan bantuan user.",
@@ -94,13 +86,7 @@ function AdminHero({ stats }) {
       colorClasses: "bg-violet-400/10 border-violet-400/20 text-violet-400 shadow-violet-400/20",
       glowClass: "bg-violet-400/10 group-hover:bg-violet-400/20",
     },
-    {
-      label: "Proyek Portofolio",
-      value: stats.totalPortfolio,
-      note: "Total showcase karya",
-      colorClasses: "bg-amber-400/10 border-amber-400/20 text-amber-400 shadow-amber-400/20",
-      glowClass: "bg-amber-400/10 group-hover:bg-amber-400/20",
-    },
+
   ];
 
   return (
@@ -254,7 +240,6 @@ export default async function AdminPage() {
     totalNews: 0,
     totalScraped: 0,
     totalCaption: 0,
-    totalPortfolio: 0,
   };
 
   try {
@@ -262,14 +247,12 @@ export default async function AdminPage() {
       prisma.newsArticle.count(),
       prisma.scrapedNewsArticle.count(),
       prisma.newsSocialCaption.count(),
-      prisma.portfolioProject.count(),
     ]);
 
     stats = {
       totalNews: counts[0] || 0,
       totalScraped: counts[1] || 0,
       totalCaption: counts[2] || 0,
-      totalPortfolio: counts[3] || 0,
     };
   } catch (error) {
     console.error("Gagal memuat statistik database:", error);

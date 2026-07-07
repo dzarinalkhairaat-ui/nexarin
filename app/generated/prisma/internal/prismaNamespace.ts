@@ -392,8 +392,6 @@ export const ModelName = {
   AiApiKey: 'AiApiKey',
   ScrapedNewsArticle: 'ScrapedNewsArticle',
   ScraperLog: 'ScraperLog',
-  PortfolioProject: 'PortfolioProject',
-  ContactSetting: 'ContactSetting',
   MapSetting: 'MapSetting',
   PaymentSetting: 'PaymentSetting'
 } as const
@@ -411,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "newsCategory" | "newsArticle" | "newsSocialCaption" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "portfolioProject" | "contactSetting" | "mapSetting" | "paymentSetting"
+    modelProps: "newsCategory" | "newsArticle" | "newsSocialCaption" | "adminOtpChallenge" | "aiApiAccount" | "aiApiKey" | "scrapedNewsArticle" | "scraperLog" | "mapSetting" | "paymentSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,154 +1005,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    PortfolioProject: {
-      payload: Prisma.$PortfolioProjectPayload<ExtArgs>
-      fields: Prisma.PortfolioProjectFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.PortfolioProjectFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.PortfolioProjectFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        findFirst: {
-          args: Prisma.PortfolioProjectFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.PortfolioProjectFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        findMany: {
-          args: Prisma.PortfolioProjectFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
-        }
-        create: {
-          args: Prisma.PortfolioProjectCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        createMany: {
-          args: Prisma.PortfolioProjectCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.PortfolioProjectCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
-        }
-        delete: {
-          args: Prisma.PortfolioProjectDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        update: {
-          args: Prisma.PortfolioProjectUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        deleteMany: {
-          args: Prisma.PortfolioProjectDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.PortfolioProjectUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.PortfolioProjectUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
-        }
-        upsert: {
-          args: Prisma.PortfolioProjectUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
-        }
-        aggregate: {
-          args: Prisma.PortfolioProjectAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePortfolioProject>
-        }
-        groupBy: {
-          args: Prisma.PortfolioProjectGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PortfolioProjectGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.PortfolioProjectCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PortfolioProjectCountAggregateOutputType> | number
-        }
-      }
-    }
-    ContactSetting: {
-      payload: Prisma.$ContactSettingPayload<ExtArgs>
-      fields: Prisma.ContactSettingFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ContactSettingFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ContactSettingFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        findFirst: {
-          args: Prisma.ContactSettingFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ContactSettingFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        findMany: {
-          args: Prisma.ContactSettingFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
-        }
-        create: {
-          args: Prisma.ContactSettingCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        createMany: {
-          args: Prisma.ContactSettingCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ContactSettingCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
-        }
-        delete: {
-          args: Prisma.ContactSettingDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        update: {
-          args: Prisma.ContactSettingUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        deleteMany: {
-          args: Prisma.ContactSettingDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ContactSettingUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ContactSettingUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>[]
-        }
-        upsert: {
-          args: Prisma.ContactSettingUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactSettingPayload>
-        }
-        aggregate: {
-          args: Prisma.ContactSettingAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateContactSetting>
-        }
-        groupBy: {
-          args: Prisma.ContactSettingGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ContactSettingGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ContactSettingCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ContactSettingCountAggregateOutputType> | number
-        }
-      }
-    }
     MapSetting: {
       payload: Prisma.$MapSettingPayload<ExtArgs>
       fields: Prisma.MapSettingFieldRefs
@@ -1478,41 +1328,6 @@ export const ScraperLogScalarFieldEnum = {
 export type ScraperLogScalarFieldEnum = (typeof ScraperLogScalarFieldEnum)[keyof typeof ScraperLogScalarFieldEnum]
 
 
-export const PortfolioProjectScalarFieldEnum = {
-  id: 'id',
-  slug: 'slug',
-  title: 'title',
-  category: 'category',
-  status: 'status',
-  description: 'description',
-  summary: 'summary',
-  problem: 'problem',
-  solution: 'solution',
-  result: 'result',
-  year: 'year',
-  role: 'role',
-  image: 'image',
-  tags: 'tags',
-  features: 'features',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
-
-
-export const ContactSettingScalarFieldEnum = {
-  id: 'id',
-  platform: 'platform',
-  value: 'value',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ContactSettingScalarFieldEnum = (typeof ContactSettingScalarFieldEnum)[keyof typeof ContactSettingScalarFieldEnum]
-
-
 export const MapSettingScalarFieldEnum = {
   id: 'id',
   addressText: 'addressText',
@@ -1805,8 +1620,6 @@ export type GlobalOmitConfig = {
   aiApiKey?: Prisma.AiApiKeyOmit
   scrapedNewsArticle?: Prisma.ScrapedNewsArticleOmit
   scraperLog?: Prisma.ScraperLogOmit
-  portfolioProject?: Prisma.PortfolioProjectOmit
-  contactSetting?: Prisma.ContactSettingOmit
   mapSetting?: Prisma.MapSettingOmit
   paymentSetting?: Prisma.PaymentSettingOmit
 }
