@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase/client";
-import { clearFirebaseAdminSessionAction } from "@/features/admin/login/firebaseAuth.actions";
+import { clearAdminSessionAction } from "@/features/admin/login/auth.actions";
 
 import {
   DashboardIcon,
@@ -64,8 +63,7 @@ function AdminMenuPanel({ onClose }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await auth.signOut();
-      await clearFirebaseAdminSessionAction();
+      await clearAdminSessionAction();
       router.replace("/admin/login");
       router.refresh();
     } catch (error) {

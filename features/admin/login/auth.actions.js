@@ -2,10 +2,9 @@
 
 import { createHmac } from "node:crypto";
 import { cookies } from "next/headers";
-import { verifyFirebaseIdToken } from "@/lib/firebase/admin";
 
 const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
-const ADMIN_SESSION_MAX_AGE = 60 * 60 * 2; // 2 hours
+const ADMIN_SESSION_MAX_AGE = 60 * 60 * 24; // 24 hours untuk login manual
 
 function normalizeText(value) {
   return String(value || "").trim();
@@ -25,23 +24,17 @@ function signValue(value, secret) {
 
 function getAdminSessionSecret() {
   return normalizeText(
-    process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_OTP_SECRET
+    process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_OTP_SECRET || "fallback_secret_nexarin_123"
   );
 }
 
-function createSignedAdminSessionValue({ email, userId }) {
+function createSignedAdminSessionValue({ email }) {
   const secret = getAdminSessionSecret();
-
-  if (!secret) {
-    throw new Error("ADMIN_SESSION_SECRET atau ADMIN_OTP_SECRET belum diatur.");
-  }
-
   const now = Math.floor(Date.now() / 1000);
 
   const payload = {
     v: 1,
     email: normalizeEmail(email),
-    userId: normalizeText(userId),
     iat: now,
     exp: now + ADMIN_SESSION_MAX_AGE,
   };
@@ -67,15 +60,19 @@ function getAdminSessionCookieOptions() {
 }
 
 function getAllowedAdminEmails() {
-  return String(
+  const envEmails = String(
     process.env.NEXARIN_ADMIN_EMAILS ||
       process.env.NEXARIN_ADMIN_EMAIL ||
       process.env.ADMIN_EMAIL ||
       ""
-  )
-    .split(",")
-    .map((email) => normalizeEmail(email))
-    .filter(Boolean);
+  );
+  
+  if (envEmails) {
+    return envEmails.split(",").map(normalizeEmail).filter(Boolean);
+  }
+  
+  // Fallback sesuai permintaan khusus
+  return ["dzarinalkhairaat@gmail.com", "nexarinbyrins@gmail.com"];
 }
 
 function isAllowedAdminEmail(email) {
@@ -89,25 +86,25 @@ function isAllowedAdminEmail(email) {
   return allowedEmails.includes(safeEmail);
 }
 
-export async function setFirebaseAdminSessionAction(idToken) {
+export async function adminLoginAction(email, password) {
   try {
-    // Verifikasi token menggunakan Node.js crypto (tanpa firebase-admin SDK)
-    const decodedToken = await verifyFirebaseIdToken(idToken);
-
-    if (!decodedToken || !decodedToken.email) {
-      return { ok: false, message: "Token tidak valid atau tidak memiliki email." };
-    }
-
-    const email = normalizeEmail(decodedToken.email);
-
-    if (!isAllowedAdminEmail(email)) {
+    const safeEmail = normalizeEmail(email);
+    
+    // Verifikasi Email
+    if (!isAllowedAdminEmail(safeEmail)) {
       return { ok: false, message: "Email ini tidak memiliki akses admin." };
     }
 
+    // Verifikasi Password
+    const correctPassword = normalizeText(process.env.NEXARIN_ADMIN_PASSWORD || "150906");
+    if (password !== correctPassword) {
+      return { ok: false, message: "Password salah." };
+    }
+
+    // Buat sesi
     const cookieStore = await cookies();
     const signedSessionValue = createSignedAdminSessionValue({
-      email: email,
-      userId: decodedToken.uid,
+      email: safeEmail,
     });
 
     cookieStore.set(
@@ -118,15 +115,15 @@ export async function setFirebaseAdminSessionAction(idToken) {
 
     return { ok: true, message: "Login berhasil" };
   } catch (error) {
-    console.error("Error verifying Firebase ID token:", error.message);
+    console.error("Error creating admin session:", error.message);
     return {
       ok: false,
-      message: `Sesi login tidak valid: ${error.message}`,
+      message: "Terjadi kesalahan internal pada server.",
     };
   }
 }
 
-export async function clearFirebaseAdminSessionAction() {
+export async function clearAdminSessionAction() {
   const cookieStore = await cookies();
   cookieStore.delete(ADMIN_SESSION_COOKIE);
   return { ok: true, message: "Logout berhasil" };
