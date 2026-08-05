@@ -15,6 +15,7 @@ import {
   processCropPdf, processFormsPdf, processTranslatePdf, processMarkdownPdf,
   mockProcessPdf 
 } from "@/features/pdf-tools/core/pdf-processing";
+import { generatePdfThumbnail } from "@/features/pdf-tools/core/pdf-thumbnail";
 import { saveAs } from "file-saver";
 
 export default function PdfToPowerpointWorkspace() {
@@ -22,6 +23,7 @@ export default function PdfToPowerpointWorkspace() {
   const tool = pdfTools.find(t => t.id === slug) || {};
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState({});
   const [processingState, setProcessingState] = useState('idle'); // idle, processing, success, error
   const [progress, setProgress] = useState(0);
   const [processedResult, setProcessedResult] = useState(null);
@@ -61,7 +63,7 @@ export default function PdfToPowerpointWorkspace() {
     }
   };
 
-  const handleFileSelection = (files) => {
+  const handleFileSelection = async (files) => {
     const firstFile = files[0];
     
     // Validate file type if needed
@@ -77,7 +79,7 @@ export default function PdfToPowerpointWorkspace() {
       alert("Harap unggah file Excel.");
       return;
     }
-    if ((slug === 'powerpoint-to-pdf' || slug === 'pdf-to-powerpoint') && !firstFile.name.toLowerCase().endsWith('.pptx') && !firstFile.name.toLowerCase().endsWith('.ppt')) {
+    if ((slug === 'powerpoint-to-pdf' || slug === 'pdf-to-powerpoint') && !firstFile.name.toLowerCase().endsWith('.pptx') && !firstFile.name.toLowerCase().endsWith('.ppt') && !firstFile.name.toLowerCase().endsWith('.pdf')) {
       if (slug === 'powerpoint-to-pdf') {
          alert("Harap unggah file PowerPoint.");
          return;
@@ -88,12 +90,22 @@ export default function PdfToPowerpointWorkspace() {
       return;
     }
     
-    if (isMulti) {
-      // Append files for merge
-      setSelectedFiles(prev => [...prev, ...files]);
-    } else {
-      setSelectedFiles([firstFile]);
+    let newFiles = isMulti ? [...selectedFiles, ...files] : [firstFile];
+    setSelectedFiles(newFiles);
+    
+    // Generate previews for newly added PDFs
+    const newPreviews = { ...previewUrls };
+    for (const file of files) {
+      if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+        try {
+          const dataUrl = await generatePdfThumbnail(file);
+          newPreviews[file.name + file.size] = dataUrl;
+        } catch (e) {
+          console.error("Failed to generate PDF thumbnail:", e);
+        }
+      }
     }
+    setPreviewUrls(newPreviews);
     
     setProcessingState('idle');
     setProgress(0);
@@ -256,32 +268,45 @@ export default function PdfToPowerpointWorkspace() {
           {selectedFiles.length > 0 ? (
             <div className="text-center animate-in zoom-in-95 duration-300 w-full max-w-lg mx-auto">
               
-              <div className="flex flex-wrap justify-center gap-3 mb-6">
+              <div className="flex flex-wrap justify-center gap-6 mb-10 mt-4">
                 {selectedFiles.map((file, idx) => (
-                  <div key={idx} className="relative w-16 h-20 bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center shadow-xl shadow-black/20 group-hover:scale-105 transition-transform">
-                    {idx === 0 && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-slate-950 shadow-lg shadow-orange-500/30">
+                  <div key={idx} className="relative group animate-in fade-in zoom-in-95 duration-500">
+                    <div className="relative w-40 h-56 bg-white rounded-md flex flex-col items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden ring-4 ring-slate-800/60 transition-all duration-300 group-hover:scale-105 group-hover:ring-orange-500/50 group-hover:shadow-[0_15px_40px_rgba(249,115,22,0.3)]">
+                      {previewUrls[file.name + file.size] ? (
+                        <div className="w-full h-full relative">
+                          <img 
+                            src={previewUrls[file.name + file.size]} 
+                            alt={`Preview ${file.name}`} 
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Inner gradient for better contrast */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none"></div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center w-full h-full bg-slate-100 text-slate-400">
+                          <Loader2 className="w-8 h-8 animate-spin text-orange-500 mb-2" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Memuat...</span>
+                        </div>
+                      )}
+                      
+                      {/* Top Check Badge */}
+                      <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white shadow-lg shadow-green-500/40 border-2 border-slate-900 z-10 transition-transform duration-300">
                         <CheckCircle2 className="w-4 h-4" />
                       </div>
-                    )}
-                    <FileType className="w-6 h-6 text-orange-400 opacity-80 mb-1" strokeWidth={1.5} />
-                    <span className="text-[10px] truncate w-14 px-1 text-slate-300">{file.name}</span>
+                    </div>
+                    
+                    {/* File Name Pill below thumbnail */}
+                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-slate-800 text-slate-300 text-[10px] font-bold px-4 py-1.5 rounded-full border border-slate-700 shadow-xl max-w-[150px] truncate group-hover:text-white group-hover:border-slate-500 transition-colors">
+                      {file.name}
+                    </div>
                   </div>
                 ))}
-                {isMulti && processingState === 'idle' && (
-                  <label className="cursor-pointer relative w-16 h-20 bg-white/[0.02] hover:bg-white/[0.05] border border-dashed border-white/20 rounded-xl flex items-center justify-center transition-colors">
-                    <FilePlus className="w-6 h-6 text-slate-400" />
-                    <input type="file" multiple className="hidden" accept=".pdf" onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0) handleFileSelection(Array.from(e.target.files));
-                    }} />
-                  </label>
-                )}
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-2 truncate max-w-full px-4">
-                {isMulti ? `${selectedFiles.length} File Terpilih` : selectedFiles[0].name}
+              <h3 className="text-xl font-black text-white mb-2 truncate max-w-full px-4">
+                Siap dikonversi ke PowerPoint!
               </h3>
-              <p className="text-slate-400 mb-10 text-lg">Siap diproses</p>
+              <p className="text-slate-400 mb-10 text-sm">Engine Python siap memproses dokumen Anda.</p>
               
               {processingState === 'error' && (
                 <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">

@@ -12,4 +12,4 @@ ocrmypdf
 deep-translator==1.11.4
 markdownify==1.2.3
 langdetect==1.0.9
-edge-tts
+
