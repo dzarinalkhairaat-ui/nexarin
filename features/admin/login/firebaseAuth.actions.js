@@ -2,7 +2,7 @@
 
 import { createHmac } from "node:crypto";
 import { cookies } from "next/headers";
-import { adminAuth } from "@/lib/firebase/admin";
+import { getAdminAuth } from "@/lib/firebase/admin";
 
 const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
 const ADMIN_SESSION_MAX_AGE = 60 * 60 * 2; // 2 hours
@@ -91,6 +91,7 @@ function isAllowedAdminEmail(email) {
 
 export async function setFirebaseAdminSessionAction(idToken) {
   try {
+    const adminAuth = getAdminAuth();
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     
     if (!decodedToken || !decodedToken.email) {
