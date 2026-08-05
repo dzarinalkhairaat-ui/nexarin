@@ -2,7 +2,7 @@
 
 import { createHmac } from "node:crypto";
 import { cookies } from "next/headers";
-import { getAdminAuth } from "@/lib/firebase/admin";
+import { verifyFirebaseIdToken } from "@/lib/firebase/admin";
 
 const ADMIN_SESSION_COOKIE = "nexarin_admin_session";
 const ADMIN_SESSION_MAX_AGE = 60 * 60 * 2; // 2 hours
@@ -91,15 +91,15 @@ function isAllowedAdminEmail(email) {
 
 export async function setFirebaseAdminSessionAction(idToken) {
   try {
-    const adminAuth = getAdminAuth();
-    const decodedToken = await adminAuth.verifyIdToken(idToken);
-    
+    // Verifikasi token menggunakan Node.js crypto (tanpa firebase-admin SDK)
+    const decodedToken = await verifyFirebaseIdToken(idToken);
+
     if (!decodedToken || !decodedToken.email) {
       return { ok: false, message: "Token tidak valid atau tidak memiliki email." };
     }
 
     const email = normalizeEmail(decodedToken.email);
-    
+
     if (!isAllowedAdminEmail(email)) {
       return { ok: false, message: "Email ini tidak memiliki akses admin." };
     }
@@ -118,8 +118,11 @@ export async function setFirebaseAdminSessionAction(idToken) {
 
     return { ok: true, message: "Login berhasil" };
   } catch (error) {
-    console.error("Error verifying Firebase ID token:", error);
-    return { ok: false, message: "Sesi login tidak valid atau kadaluarsa. Silakan login kembali." };
+    console.error("Error verifying Firebase ID token:", error.message);
+    return {
+      ok: false,
+      message: `Sesi login tidak valid: ${error.message}`,
+    };
   }
 }
 
