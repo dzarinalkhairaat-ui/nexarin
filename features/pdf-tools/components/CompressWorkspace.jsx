@@ -425,7 +425,7 @@ export default function CompressWorkspace() {
 
                         <button 
                           onClick={processFile}
-                          disabled={!pdfDoc}
+                          disabled={!selectedFile}
                           className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_10px_20px_-10px_rgba(34,197,94,0.5)] hover:shadow-[0_10px_30px_-10px_rgba(34,197,94,0.7)] hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3 text-lg border border-green-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Mulai Kompresi
