@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 // force restart 2
 const nextConfig = {
-  serverExternalPackages: ["firebase-admin"],
+  serverExternalPackages: ["firebase-admin", "jwks-rsa", "jose"],
   images: {
     unoptimized: true,
   },

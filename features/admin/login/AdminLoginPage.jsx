@@ -16,8 +16,15 @@ function getLoginErrorMessage(error) {
   if (message.includes("too-many-requests")) {
     return "Terlalu banyak percobaan login. Coba lagi beberapa saat.";
   }
+  if (message.includes("unauthorized-domain")) {
+    return "Domain ini belum diizinkan di Firebase. Tambahkan nexarin.my.id di pengaturan Authorized Domains Firebase.";
+  }
 
-  return "Login gagal. Periksa email dan password admin.";
+  if (message.includes("popup-blocked")) {
+    return "Popup diblokir oleh browser. Izinkan popup untuk login Google.";
+  }
+
+  return "Login gagal. (" + (error?.code || "Terjadi kesalahan") + ")";
 }
 
 export default function AdminLoginPage() {
