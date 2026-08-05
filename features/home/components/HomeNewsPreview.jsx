@@ -47,7 +47,7 @@ function NewsImagePlaceholder({ src, alt }) {
             alt={alt || "Headline News"}
             className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105"
          />
-         <div className="absolute inset-0 bg-gradient-to-t from-[#030711]/80 to-transparent"></div>
+         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function HomeNewsPreview({ articles = [] }) {
   const featuredHref = dbFeatured?.slug ? `/news/artikel/${dbFeatured.slug}` : "/news";
 
   return (
-    <section className="relative px-5 py-16 sm:px-6 lg:px-8" style={{ backgroundColor: '#030711' }}>
+    <section className="relative px-5 py-16 sm:px-6 lg:px-8">
       <style>{`
         .nx-news-featured {
           background-color: #0A1121;
@@ -120,14 +120,7 @@ export default function HomeNewsPreview({ articles = [] }) {
         }
       `}</style>
 
-      {/* Grid Pattern Background */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-100"
-        style={{
-          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px',
-        }}
-      />
+      {/* Background glow */}
 
 
       <div

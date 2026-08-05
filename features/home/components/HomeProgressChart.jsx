@@ -12,15 +12,7 @@ export default function HomeProgressChart() {
   if (!isMounted) return null;
 
   return (
-    <section className="relative px-5 pt-4 pb-12 sm:pt-4 sm:pb-16 sm:px-6 lg:px-8" style={{ backgroundColor: '#030711' }}>
-      {/* Grid Pattern Background */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-100"
-        style={{
-          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <section className="relative px-5 pt-4 pb-12 sm:pt-4 sm:pb-16 sm:px-6 lg:px-8">
 
 
       {/* Background glow */}

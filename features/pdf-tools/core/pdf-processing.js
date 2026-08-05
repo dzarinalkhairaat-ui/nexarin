@@ -1,12 +1,32 @@
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, degrees } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
 
 export async function processJpgToPdf(files, options = {}) {
   try {
+    const fileArray = Array.isArray(files) ? files : [files];
+    const pdfDoc = await PDFDocument.create();
+
+    for (const file of fileArray) {
+      const imageBytes = await file.arrayBuffer();
+      let image;
+      const isPng = file.type === 'image/png' || file.name.toLowerCase().endsWith('.png');
+      if (isPng) {
+        image = await pdfDoc.embedPng(imageBytes);
+      } else {
+        image = await pdfDoc.embedJpg(imageBytes);
+      }
+      const page = pdfDoc.addPage([image.width, image.height]);
+      page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const outputFilename = fileArray[0].name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
+    return { blob, outputFilename };
+  } catch (clientError) {
+    console.warn("Client-side JPG to PDF failed, trying API fallback:", clientError);
     const formData = new FormData();
-    
-    // Support both single file and array of files
     const fileArray = Array.isArray(files) ? files : [files];
     fileArray.forEach(file => {
       formData.append('files', file);
@@ -24,7 +44,7 @@ export async function processJpgToPdf(files, options = {}) {
     });
     
     if (!response.ok) {
-      let errMsg = "Gagal mengonversi file. Pastikan API Python berjalan.";
+      let errMsg = "Gagal mengonversi file. Pastikan file gambar valid.";
       try {
         const errorData = await response.json();
         if (errorData.detail) errMsg = `Server Error: ${errorData.detail}`;
@@ -33,19 +53,8 @@ export async function processJpgToPdf(files, options = {}) {
     }
     
     const blob = await response.blob();
-    
-    // If returning zip, format name accordingly
-    let outputFilename;
-    if (fileArray.length > 1 && options.merge === false) {
-      outputFilename = "nexarin_img_to_pdf.zip";
-    } else {
-      outputFilename = fileArray[0].name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
-    }
-    
+    const outputFilename = fileArray[0].name.replace(/\.[^/.]+$/, "") + "_nexarin.pdf";
     return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error converting JPG to PDF via API:", error);
-    throw error;
   }
 }
 
@@ -202,51 +211,62 @@ export async function processEditPdf(file) {
 
 export async function processMergePdf(files) {
   try {
+    const mergedPdf = await PDFDocument.create();
+    for (const file of files) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+      copiedPages.forEach((page) => mergedPdf.addPage(page));
+    }
+    const pdfBytes = await mergedPdf.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    return { blob, outputFilename: 'merged_nexarin.pdf' };
+  } catch (clientError) {
+    console.warn("Client-side Merge PDF failed, trying API fallback:", clientError);
     const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files', file);
-    });
-    
+    files.forEach(file => formData.append('files', file));
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
-    const response = await fetch(`${apiUrl}/convert/merge-pdf`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) throw new Error("Gagal menggabungkan PDF.");
-    
+    const response = await fetch(`${apiUrl}/convert/merge-pdf`, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error("Gagal menggabungkan PDF. Pastikan file PDF valid.");
     const blob = await response.blob();
-    const outputFilename = "merged_nexarin.pdf";
-    return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error Merge PDF:", error);
-    throw error;
+    return { blob, outputFilename: 'merged_nexarin.pdf' };
   }
 }
 
 export async function processSplitPdf(file, options = {}) {
   try {
+    const arrayBuffer = await file.arrayBuffer();
+    const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    const pageCount = srcDoc.getPageCount();
+
+    const splitDoc = await PDFDocument.create();
+    let indices = Array.from({ length: pageCount }, (_, i) => i);
+    
+    if (options.ranges && Array.isArray(options.ranges) && options.ranges.length > 0) {
+      indices = options.ranges.map(r => Number(r) - 1).filter(i => !isNaN(i) && i >= 0 && i < pageCount);
+    }
+
+    if (indices.length === 0) {
+      indices = Array.from({ length: pageCount }, (_, i) => i);
+    }
+
+    const copiedPages = await splitDoc.copyPages(srcDoc, indices);
+    copiedPages.forEach(p => splitDoc.addPage(p));
+
+    const pdfBytes = await splitDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_split.pdf";
+    return { blob, outputFilename };
+  } catch (clientError) {
+    console.warn("Client-side Split PDF failed, trying API fallback:", clientError);
     const formData = new FormData();
     formData.append('file', file);
-    
-    if (options.ranges && options.ranges.length > 0) {
-      formData.append('ranges', JSON.stringify(options.ranges));
-    }
-    
+    if (options.ranges) formData.append('ranges', JSON.stringify(options.ranges));
     const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
-    const response = await fetch(`${apiUrl}/convert/split-pdf`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) throw new Error("Gagal memecah PDF.");
-    
+    const response = await fetch(`${apiUrl}/convert/split-pdf`, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error("Gagal memecah PDF. Pastikan file PDF valid.");
     const blob = await response.blob();
-    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_split.zip";
-    return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error Split PDF:", error);
-    throw error;
+    return { blob, outputFilename: file.name.replace(/\.[^/.]+$/, "") + "_split.pdf" };
   }
 }
 
@@ -360,25 +380,29 @@ export async function processWatermarkPdf(file) {
   }
 }
 
-export async function processRotatePdf(file) {
+export async function processRotatePdf(file, options = {}) {
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
-    const response = await fetch(`${apiUrl}/convert/rotate-pdf`, {
-      method: 'POST',
-      body: formData,
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    const pages = pdfDoc.getPages();
+    const rotationAngle = options.rotation || 90;
+    pages.forEach((page) => {
+      const currentRotation = page.getRotation().angle;
+      page.setRotation(degrees((currentRotation + rotationAngle) % 360));
     });
-    
-    if (!response.ok) throw new Error("Gagal memutar PDF.");
-    
-    const blob = await response.blob();
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_rotated.pdf";
     return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error Rotate PDF:", error);
-    throw error;
+  } catch (clientError) {
+    console.warn("Client-side Rotate PDF failed, trying API fallback:", clientError);
+    const formData = new FormData();
+    formData.append('file', file);
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/rotate-pdf`, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error("Gagal memutar PDF. Pastikan file PDF valid.");
+    const blob = await response.blob();
+    return { blob, outputFilename: file.name.replace(/\.[^/.]+$/, "") + "_rotated.pdf" };
   }
 }
 
@@ -406,23 +430,21 @@ export async function processHtmlToPdf(file) {
 
 export async function processUnlockPdf(file) {
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
-    const response = await fetch(`${apiUrl}/convert/unlock-pdf`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) throw new Error("Gagal membuka kunci PDF.");
-    
-    const blob = await response.blob();
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_unlocked.pdf";
     return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error Unlock PDF:", error);
-    throw error;
+  } catch (clientError) {
+    console.warn("Client-side Unlock PDF failed, trying API fallback:", clientError);
+    const formData = new FormData();
+    formData.append('file', file);
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
+    const response = await fetch(`${apiUrl}/convert/unlock-pdf`, { method: 'POST', body: formData });
+    if (!response.ok) throw new Error("Gagal membuka kunci PDF.");
+    const blob = await response.blob();
+    return { blob, outputFilename: file.name.replace(/\.[^/.]+$/, "") + "_unlocked.pdf" };
   }
 }
 

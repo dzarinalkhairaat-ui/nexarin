@@ -73,7 +73,16 @@ export default async function HomePage() {
   const newsArticles = await getHomeNewsArticles();
 
   return (
-    <main className="relative min-h-screen overflow-hidden text-white selection:bg-emerald-400/30" style={{ backgroundColor: '#030711' }}>
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white selection:bg-emerald-400/30">
+      {/* News-Style Ambient Background Glows */}
+      <div className="pointer-events-none absolute -left-24 top-20 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-40 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-[45rem] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-emerald-500/[0.07] blur-3xl" />
+      <div className="pointer-events-none absolute -left-24 top-[95rem] h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
+
+      {/* News-Style Tech Grid Pattern Overlay */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:34px_34px]" />
+
       <Header />
 
       <ScrollReveal delay={0}>
@@ -88,7 +97,6 @@ export default async function HomePage() {
         <HomeSlendroAi />
       </ScrollReveal>
 
-
       <ScrollReveal delay={100}>
         <HomeNewsPreview articles={newsArticles} />
       </ScrollReveal>
@@ -96,8 +104,6 @@ export default async function HomePage() {
       <ScrollReveal delay={100}>
         <HomeFooter />
       </ScrollReveal>
-
-      <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(rgba(26,43,71,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.5) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
     </main>
   );
 }

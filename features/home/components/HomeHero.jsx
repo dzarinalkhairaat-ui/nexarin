@@ -9,6 +9,8 @@ const CheckIcon = ({ className = "h-3.5 w-3.5", style }) => (
   </svg>
 );
 
+const NEXARIN_LOGO = "/images/logo/nexarin-logo.png";
+
 const HERO_DESCRIPTION =
   "Website All-in-One by-rins untuk portal informasi, showcase, dan portfolio.";
 
@@ -16,7 +18,17 @@ export default function HomeHero() {
   const data = homeData || {};
 
   return (
-    <section className="relative px-5 pb-8 pt-10 text-center sm:px-6 sm:pt-16 sm:pb-10 lg:px-8" style={{ backgroundColor: '#030711' }}>
+    <section className="relative px-5 pb-8 pt-10 text-center sm:px-6 sm:pt-16 sm:pb-10 lg:px-8">
+      {/* Background Watermark Logo (Matching NewsHero) */}
+      <img
+        src={NEXARIN_LOGO}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 top-10 h-72 w-72 rotate-12 object-contain opacity-[0.035] sm:top-14 sm:h-96 sm:w-96"
+        loading="lazy"
+        decoding="async"
+      />
+
       <style>{`
         .nx-hero-btn {
           background-color: #0A1121;
@@ -30,29 +42,8 @@ export default function HomeHero() {
         }
       `}</style>
 
-      {/* Grid Pattern Background */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-100"
-        style={{
-          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px',
-        }}
-      />
-
-      {/* Radial glow center behind text */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{
-          background: 'radial-gradient(ellipse 600px 500px at 50% 40%, #0A1121 0%, transparent 70%)',
-        }}
-      />
-
-
-      {/* Top neon glow accent */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-0 z-[2] h-[500px] w-[700px] -translate-x-1/2 rounded-full blur-[140px]"
-        style={{ backgroundColor: 'rgba(13,242,163,0.07)' }}
-      />
+      {/* Single Subtle Cyan Ambient Glow on Left */}
+      <div className="pointer-events-none absolute -left-24 top-10 h-80 w-80 rounded-full bg-cyan-400/[0.06] blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-5xl">
         {/* Badge — Glassmorphism pill */}
@@ -87,7 +78,7 @@ export default function HomeHero() {
               textShadow: '0 0 30px rgba(13,242,163,0.4), 0 0 60px rgba(13,242,163,0.15)',
             }}
           >
-            by-rins.
+            Nexarin.
           </span>
         </h1>
 

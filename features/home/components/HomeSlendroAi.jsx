@@ -2,15 +2,7 @@ import Link from "next/link";
 
 export default function HomeSlendroAi() {
   return (
-    <section className="relative pt-8 pb-16 sm:pt-12 sm:pb-24" style={{ backgroundColor: '#030711' }}>
-      {/* Grid Pattern Background */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-100"
-        style={{
-          backgroundImage: `linear-gradient(rgba(26,43,71,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,43,71,0.4) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <section className="relative pt-8 pb-16 sm:pt-12 sm:pb-24">
 
 
       {/* Background Glows */}

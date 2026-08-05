@@ -1,4 +1,4 @@
-import { updateSession } from "@/lib/supabase/middleware";
+import { updateSession } from "@/lib/admin/middleware";
 import { NextResponse } from "next/server";
 
 // Daftar kata kunci User-Agent yang dicurigai sebagai bot scraper/crawler berbahaya

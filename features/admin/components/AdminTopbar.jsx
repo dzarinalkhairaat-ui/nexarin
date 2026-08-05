@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { auth } from "@/lib/firebase/client";
+import { clearFirebaseAdminSessionAction } from "@/features/admin/login/firebaseAuth.actions";
 
 import {
   DashboardIcon,
@@ -59,19 +60,21 @@ function MenuButton({ isOpen, onClick }) {
 function AdminMenuPanel({ onClose }) {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createSupabaseBrowserClient();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  async function handleLogout() {
+  const handleLogout = async () => {
     setIsLoggingOut(true);
-    await supabase.auth.signOut();
-    document.cookie =
-      "nexarin_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
-    setIsLoggingOut(false);
-    onClose();
-    router.replace("/admin/login");
-    router.refresh();
-  }
+    try {
+      await auth.signOut();
+      await clearFirebaseAdminSessionAction();
+      router.replace("/admin/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Gagal logout admin:", error);
+    } finally {
+      setIsLoggingOut(false);
+      onClose();
+    }
+  };
 
   return (
     <div className="relative z-10 border-t border-white/10">
