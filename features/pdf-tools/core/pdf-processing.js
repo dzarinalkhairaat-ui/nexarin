@@ -626,27 +626,7 @@ export async function processComparePdf(files) {
   }
 }
 
-export async function processRedactPdf(file) {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'https://nexarin-nexarin-backend-python.hf.space';
-    const response = await fetch(`${apiUrl}/convert/redact-pdf`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) throw new Error("Gagal menahan/redact PDF.");
-    
-    const blob = await response.blob();
-    const outputFilename = file.name.replace(/\.[^/.]+$/, "") + "_redacted.pdf";
-    return { blob, outputFilename };
-  } catch (error) {
-    console.error("Error Redact PDF:", error);
-    throw error;
-  }
-}
+
 
 export async function processCropPdf(file) {
   try {

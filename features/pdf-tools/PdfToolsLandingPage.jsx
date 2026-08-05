@@ -94,29 +94,7 @@ export default function PdfToolsLandingPage() {
             );
           })}
           
-          {/* Create Workflow Card (Special Styling) */}
-          <div 
-            className="group relative flex flex-col bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/20 rounded-2xl p-5 transition-all duration-300 overflow-hidden sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-2 animate-in fade-in slide-in-from-bottom-4 fill-mode-both opacity-50 grayscale cursor-not-allowed"
-            style={{ animationDelay: `1600ms` }}
-          >
-            <div className="absolute inset-0 bg-slate-950/20 z-20 backdrop-blur-[1px] pointer-events-none" />
-            <div className="absolute top-4 right-4 z-30 opacity-50">
-               <Lock className="w-4 h-4 text-slate-400" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent pointer-events-none" />
-            <div className="w-12 h-12 rounded-xl mb-4 flex items-center justify-center bg-pink-500/20 text-pink-400 transition-transform duration-300">
-              <Network className="w-6 h-6" strokeWidth={2} />
-            </div>
-            <h3 className="text-base font-bold text-white mb-2 leading-tight transition-colors">
-              Create a workflow
-            </h3>
-            <p className="text-xs text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-              Create custom workflows with your favorite tools, automate tasks, and reuse them anytime.
-            </p>
-            <div className="mt-auto pt-4 flex items-center text-xs font-semibold text-pink-400 group-hover:text-pink-300">
-              Create workflow <span className="ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">→</span>
-            </div>
-          </div>
+
         </div>
       </div>
     </main>

@@ -232,15 +232,7 @@ export const pdfTools = [
     bgColor: "bg-indigo-500/10",
     isActive: true,
   },
-  {
-    id: "redact",
-    title: "Redact PDF",
-    description: "Sensor teks dan grafis untuk menghapus informasi sensitif dari dokumen PDF secara permanen.",
-    icon: Scissors,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-    isActive: true,
-  },
+
   {
     id: "crop",
     title: "Crop PDF",
@@ -260,15 +252,7 @@ export const pdfTools = [
     isNew: true,
     isActive: true,
   },
-  {
-    id: "ai-summarizer",
-    title: "AI Summarizer",
-    description: "Hasilkan ringkasan singkat dari artikel secara cepat, memberikan poin utama yang tepat dan jelas.",
-    icon: Sparkles,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
-    isNew: true,
-  },
+
   {
     id: "translate",
     title: "Translate PDF",
