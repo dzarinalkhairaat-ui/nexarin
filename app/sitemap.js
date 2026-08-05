@@ -161,9 +161,6 @@ export default async function sitemap() {
     createUrl("/support", 0.75, "monthly"),
 
     createUrl("/dagang", 0.9, "weekly"),
-    createUrl("/tools", 0.9, "weekly"),
-
-    createUrl("/pdf-tools", 0.8, "weekly"),
   ];
 
   const newsArticleRoutes = await getDatabaseNewsArticleRoutes();
