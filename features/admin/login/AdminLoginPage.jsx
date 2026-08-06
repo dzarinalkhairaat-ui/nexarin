@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { adminLoginAction } from "@/features/admin/login/auth.actions";
 import { EmailIcon, KeyIcon } from "@/components/shared/MenuIcons";
@@ -12,6 +12,44 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
+  // Mencegah akses Inspect Elements / DevTools untuk keamanan tambahan
+  useEffect(() => {
+    const handleContextMenu = (e) => e.preventDefault();
+    
+    const handleKeyDown = (e) => {
+      // Mencegah F12
+      if (e.key === "F12") e.preventDefault();
+      
+      // Mencegah Ctrl+Shift+I / Cmd+Option+I (Inspect)
+      if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+      }
+      
+      // Mencegah Ctrl+Shift+J / Cmd+Option+J (Console)
+      if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && e.key.toLowerCase() === "j") {
+        e.preventDefault();
+      }
+      
+      // Mencegah Ctrl+Shift+C / Cmd+Option+C (Element Inspector)
+      if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && e.key.toLowerCase() === "c") {
+        e.preventDefault();
+      }
+      
+      // Mencegah Ctrl+U / Cmd+U (View Source)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "u") {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   async function handleSubmit(event) {
     event.preventDefault();
