@@ -37,12 +37,7 @@ const adminMenus = [
     icon: "P",
     status: "Next",
   },
-  {
-    label: "Support",
-    href: "/admin/support",
-    icon: "S",
-    status: "Ready",
-  },
+
   {
     label: "Settings",
     href: "/admin/settings",

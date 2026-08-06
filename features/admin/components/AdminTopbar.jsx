@@ -22,7 +22,7 @@ const adminMenus = [
   { label: "Home", href: "", icon: <HomeIcon className="h-4 w-4" />, status: "Soon", disabled: true },
   { label: "News", href: "/admin/news", icon: <NewsIcon className="h-4 w-4" />, status: "Prioritas" },
   { label: "Scraping", href: "/admin/scraping-news", icon: <ScrapingIcon className="h-4 w-4" />, status: "Beta" },
-  { label: "Support", href: "/admin/support", icon: <ContactIcon className="h-4 w-4" />, status: "Ready" },
+
   { label: "Settings", href: "/admin/settings", icon: <SettingsIcon className="h-4 w-4" />, status: "Config" },
 ];
 

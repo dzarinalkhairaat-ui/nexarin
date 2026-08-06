@@ -38,14 +38,7 @@ const adminModules = [
     active: true,
   },
 
-  {
-    title: "Support",
-    description: "Kelola pesan, request, dan kebutuhan bantuan user.",
-    href: "/admin/support",
-    badge: "Aktif",
-    icon: <ContactIcon className="h-6 w-6" />,
-    active: true,
-  },
+
   {
     title: "Settings",
     description: "Kelola pengaturan dasar website dan konfigurasi admin.",

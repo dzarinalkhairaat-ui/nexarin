@@ -67,22 +67,7 @@ function NewsFooterLogo() {
   );
 }
 
-function SupportIcon() {
-  return (
-    <span
-      aria-hidden="true"
-      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.1] p-1.5 shadow-lg shadow-black/20"
-    >
-      <img
-        src="/icons/support.png"
-        alt=""
-        className="h-full w-full object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </span>
-  );
-}
+
 
 export default function NewsFooter() {
   const data = newsFooterData || {};
@@ -107,16 +92,7 @@ export default function NewsFooter() {
             "News Nexarin akan terus dikembangkan sebagai portal informasi digital by-rins."}
         </p>
 
-        <Link
-          href="/support"
-          className="group relative mt-6 inline-flex min-h-14 w-full max-w-sm items-center justify-center gap-3 overflow-hidden rounded-[30px] border border-emerald-300/25 bg-white/[0.08] py-2 pl-2 pr-7 text-sm font-black text-white shadow-xl shadow-emerald-400/10 backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-emerald-300/40 hover:bg-emerald-400/15"
-        >
-          <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-400/24 via-cyan-300/14 to-white/[0.03]" />
-          <span className="relative z-10">
-            <SupportIcon />
-          </span>
-          <span className="relative z-10">Support Kami</span>
-        </Link>
+
 
         <div className="mt-6 w-full max-w-sm rounded-[30px] border border-white/10 bg-white/[0.045] p-4 shadow-xl shadow-black/20 backdrop-blur-xl">
           <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">

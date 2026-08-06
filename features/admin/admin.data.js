@@ -7,10 +7,6 @@ export const adminHeroData = {
     label: "Lihat Modul",
     href: "#admin-modules",
   },
-  secondaryCta: {
-    label: "Cek Support",
-    href: "/support",
-  },
 };
 
 export const adminStats = [
@@ -25,12 +21,6 @@ export const adminStats = [
     value: "Static",
     note: "Artikel belum memakai database.",
     icon: "📰",
-  },
-  {
-    label: "Support",
-    value: "Manual",
-    note: "Form support sementara diarahkan ke WhatsApp.",
-    icon: "💚",
   },
 ];
 
@@ -53,15 +43,7 @@ export const adminModules = [
     previewHref: "/news",
     icon: "📰",
   },
-  {
-    title: "Kelola Support",
-    description:
-      "Nanti dipakai untuk melihat data support, donasi manual, payment, invoice, dan status transaksi.",
-    status: "Manual dulu",
-    href: "/admin/support",
-    previewHref: "/support",
-    icon: "💚",
-  },
+
   {
     title: "Settings",
     description:

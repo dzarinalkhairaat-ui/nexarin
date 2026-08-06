@@ -51,22 +51,7 @@ function NexarinMiniLogo() {
   );
 }
 
-function SupportIcon() {
-  return (
-    <span
-      aria-hidden="true"
-      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.1] p-1.5 shadow-lg shadow-black/20"
-    >
-      <img
-        src="/icons/support.png"
-        alt=""
-        className="h-full w-full object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </span>
-  );
-}
+
 
 export default function HomeFooter() {
   return (
@@ -126,13 +111,7 @@ export default function HomeFooter() {
           </div>
         </div>
 
-        <Link
-          href="/support"
-          className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-[30px] border border-emerald-400/20 bg-emerald-400/20 py-2 pl-2 pr-7 text-sm font-black text-white shadow-xl shadow-emerald-400/10 transition hover:-translate-y-0.5 hover:bg-emerald-400 hover:text-slate-950"
-        >
-          <SupportIcon />
-          <span>Support Kami</span>
-        </Link>
+
 
         <div className="mt-7 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
