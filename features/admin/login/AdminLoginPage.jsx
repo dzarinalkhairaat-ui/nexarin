@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminLoginAction } from "@/features/admin/login/auth.actions";
+import { EmailIcon, KeyIcon } from "@/components/shared/MenuIcons";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -134,27 +135,37 @@ export default function AdminLoginPage() {
 
             {/* Input Fields */}
             <form onSubmit={handleSubmit} className="grid gap-4">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="EMAIL ADMIN"
-                autoComplete="username email"
-                className="min-h-12 rounded-2xl border border-white/20 bg-slate-950/30 px-4 text-xs font-bold tracking-wider text-white outline-none backdrop-blur-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] transition-all placeholder:text-slate-500 placeholder:font-bold focus:border-emerald-400 focus:bg-slate-950/50 focus:ring-2 focus:ring-emerald-400/30"
-              />
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 transition-colors peer-focus:text-emerald-400">
+                  <EmailIcon className="h-[18px] w-[18px]" />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="EMAIL ADMIN"
+                  autoComplete="username email"
+                  className="peer w-full min-h-12 rounded-2xl border border-white/20 bg-slate-950/30 py-2 pl-[46px] pr-4 text-xs font-bold tracking-wider text-white outline-none backdrop-blur-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] transition-all placeholder:text-slate-500 placeholder:font-bold focus:border-emerald-400 focus:bg-slate-950/50 focus:ring-2 focus:ring-emerald-400/30"
+                />
+              </div>
 
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="PASSWORD"
-                autoComplete="current-password"
-                className="min-h-12 rounded-2xl border border-white/20 bg-slate-950/30 px-4 text-xs font-bold tracking-wider text-white outline-none backdrop-blur-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] transition-all placeholder:text-slate-500 placeholder:font-bold focus:border-emerald-400 focus:bg-slate-950/50 focus:ring-2 focus:ring-emerald-400/30"
-              />
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 transition-colors peer-focus:text-emerald-400">
+                  <KeyIcon className="h-[18px] w-[18px]" />
+                </div>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="PASSWORD"
+                  autoComplete="current-password"
+                  className="peer w-full min-h-12 rounded-2xl border border-white/20 bg-slate-950/30 py-2 pl-[46px] pr-4 text-xs font-bold tracking-wider text-white outline-none backdrop-blur-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] transition-all placeholder:text-slate-500 placeholder:font-bold focus:border-emerald-400 focus:bg-slate-950/50 focus:ring-2 focus:ring-emerald-400/30"
+                />
+              </div>
 
               {message ? (
                 <div
