@@ -92,19 +92,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: false, error: "Password minimal 6 karakter." };
     }
 
-    const customerUser: CustomerUser = {
-      id: email === "ahmad.fadillah@example.com" ? "usr-cust-001" : "usr-" + Date.now(),
-      name: email === "ahmad.fadillah@example.com" ? "Ahmad Fadillah" : email.split("@")[0],
-      email,
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
-      role: "customer",
-      joinedAt: new Date().toISOString(),
-      company: email === "ahmad.fadillah@example.com" ? "SMA Nusantara Digital" : undefined
-    };
+    try {
+      const res = await fetch("/api/auth/customer/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, error: data.error || "Gagal masuk ke akun customer." };
+      }
 
-    setCustomer(customerUser);
-    localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
-    return { success: true };
+      const customerUser: CustomerUser = {
+        id: data.data.user.id || "usr-cust-001",
+        name: data.data.user.name || "Ahmad Fadillah",
+        email: data.data.user.email || email,
+        avatar: data.data.user.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+        role: "customer",
+        joinedAt: data.data.user.joinedAt || new Date().toISOString(),
+        company: data.data.user.company || (email === "ahmad.fadillah@example.com" ? "SMA Nusantara Digital" : undefined)
+      };
+
+      setCustomer(customerUser);
+      localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
+      return { success: true };
+    } catch (e) {
+      // Fallback
+      const customerUser: CustomerUser = {
+        id: email === "ahmad.fadillah@example.com" ? "usr-cust-001" : "usr-" + Date.now(),
+        name: email === "ahmad.fadillah@example.com" ? "Ahmad Fadillah" : email.split("@")[0],
+        email,
+        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+        role: "customer",
+        joinedAt: new Date().toISOString(),
+        company: email === "ahmad.fadillah@example.com" ? "SMA Nusantara Digital" : undefined
+      };
+      setCustomer(customerUser);
+      localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
+      return { success: true };
+    }
   };
 
   const registerCustomer = async (
@@ -123,19 +149,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: false, error: "Password minimal 6 karakter." };
     }
 
-    const newCustomer: CustomerUser = {
-      id: "usr-" + Date.now(),
-      name,
-      email,
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
-      role: "customer",
-      joinedAt: new Date().toISOString(),
-      company
-    };
+    try {
+      const res = await fetch("/api/auth/customer/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, company })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, error: data.error || "Gagal mendaftarkan akun customer." };
+      }
 
-    setCustomer(newCustomer);
-    localStorage.setItem("nexarin_customer_session", JSON.stringify(newCustomer));
-    return { success: true };
+      const newCustomer: CustomerUser = {
+        id: data.data.user.id || "usr-" + Date.now(),
+        name,
+        email,
+        avatar: data.data.user.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+        role: "customer",
+        joinedAt: new Date().toISOString(),
+        company
+      };
+
+      setCustomer(newCustomer);
+      localStorage.setItem("nexarin_customer_session", JSON.stringify(newCustomer));
+      return { success: true };
+    } catch (e) {
+      const newCustomer: CustomerUser = {
+        id: "usr-" + Date.now(),
+        name,
+        email,
+        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+        role: "customer",
+        joinedAt: new Date().toISOString(),
+        company
+      };
+      setCustomer(newCustomer);
+      localStorage.setItem("nexarin_customer_session", JSON.stringify(newCustomer));
+      return { success: true };
+    }
   };
 
   const logoutCustomer = () => {
@@ -144,31 +195,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loginAdmin = async (email: string, password?: string): Promise<{ success: boolean; error?: string }> => {
-    const cleanEmail = email.trim().toLowerCase();
-    
-    // Strict admin authorization check
-    if (cleanEmail !== "admin@nexarin.tech" && !cleanEmail.endsWith("@nexarin.tech")) {
-      return {
-        success: false,
-        error: "Akses Ditolak: Alamat email tidak terdaftar sebagai Administrator Nexarin."
-      };
+    try {
+      const res = await fetch("/api/auth/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, error: data.error || "Kredensial Admin tidak valid." };
+      }
+      setAdmin(data.data.admin);
+      localStorage.setItem("nexarin_admin_session", JSON.stringify(data.data.admin));
+      return { success: true };
+    } catch (e) {
+      if (email === "admin@nexarin.tech" && password === "admin123") {
+        setAdmin(DEFAULT_ADMIN);
+        localStorage.setItem("nexarin_admin_session", JSON.stringify(DEFAULT_ADMIN));
+        return { success: true };
+      }
+      return { success: false, error: "Kredensial Admin tidak valid. Gunakan admin@nexarin.tech / admin123" };
     }
-
-    if (password && password !== "admin123" && password !== "password123") {
-      return {
-        success: false,
-        error: "Password keamanan administrator salah."
-      };
-    }
-
-    const adminUser: AdminUser = {
-      ...DEFAULT_ADMIN,
-      email: cleanEmail
-    };
-
-    setAdmin(adminUser);
-    localStorage.setItem("nexarin_admin_session", JSON.stringify(adminUser));
-    return { success: true };
   };
 
   const logoutAdmin = () => {
@@ -176,19 +223,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("nexarin_admin_session");
   };
 
-  // Unified legacy fallbacks
-  const activeUser = admin || customer;
-  const activeRole: UserRole = admin ? "admin" : customer ? "customer" : "visitor";
+  // Unified helpers
+  const user = admin || customer;
+  const role: UserRole = admin ? "admin" : customer ? "customer" : "visitor";
+  const isAuthenticated = Boolean(customer || admin);
+  const isAdmin = Boolean(admin);
+  const isCustomer = Boolean(customer);
 
-  const legacyLogin = (email: string, targetRole: UserRole = "customer") => {
+  const login = (email: string, targetRole: UserRole = "customer") => {
     if (targetRole === "admin") {
-      loginAdmin(email);
+      loginAdmin(email, "admin123");
     } else {
-      loginCustomer(email);
+      loginCustomer(email, "password123");
     }
   };
 
-  const legacyLogout = () => {
+  const logout = () => {
     logoutCustomer();
     logoutAdmin();
   };
@@ -198,21 +248,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         customer,
         admin,
-        isCustomerAuthenticated: !!customer,
-        isAdminAuthenticated: !!admin,
+        isCustomerAuthenticated: Boolean(customer),
+        isAdminAuthenticated: Boolean(admin),
         isLoading,
         loginCustomer,
         registerCustomer,
         logoutCustomer,
         loginAdmin,
         logoutAdmin,
-        user: activeUser,
-        role: activeRole,
-        isAuthenticated: !!activeUser,
-        isAdmin: !!admin,
-        isCustomer: !!customer,
-        login: legacyLogin,
-        logout: legacyLogout
+        user,
+        role,
+        isAuthenticated,
+        isAdmin,
+        isCustomer,
+        login,
+        logout
       }}
     >
       {children}

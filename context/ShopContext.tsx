@@ -44,7 +44,7 @@ const INITIAL_LICENSES: License[] = [
     licenseType: "lifetime",
     status: "active",
     currentVersion: "v2.1.0",
-    ownedVersion: "v2.0.0", // Notice: owned v2.0.0 while current is v2.1.0 -> will show update available!
+    ownedVersion: "v2.0.0",
     issuedAt: "2026-06-10T14:30:00Z"
   }
 ];
@@ -80,26 +80,26 @@ const INITIAL_ORDERS: Order[] = [
 
 const INITIAL_AUDIT_LOGS: AuditLog[] = [
   {
-    id: "log-1",
-    adminId: "usr-adm-001",
-    adminName: "Rins",
-    action: "publish_version",
-    entityType: "version",
-    entityId: "v-abs-210",
-    entityName: "Nexarin Sistem Absensi v2.1.0",
-    details: "Rilis versi 2.1.0 dengan pembaruan toleransi GPS dan laporan rapor K13/Merdeka.",
-    timestamp: "2026-08-20T10:00:00Z"
-  },
-  {
-    id: "log-2",
+    id: "aud-001",
     adminId: "usr-adm-001",
     adminName: "Rins",
     action: "publish_article",
     entityType: "article",
-    entityId: "art-1",
-    entityName: "Revolusi Autonomous AI Agents di 2026",
-    details: "Artikel disetujui dan dipublikasikan ke portal publik.",
-    timestamp: "2026-08-20T09:00:00Z"
+    entityId: "art-001",
+    entityName: "Claude 3.7 Sonnet & Hybrid Reasoning",
+    details: "Mempublikasikan artikel editorial.",
+    timestamp: "2026-08-25T14:20:00Z"
+  },
+  {
+    id: "aud-002",
+    adminId: "usr-adm-001",
+    adminName: "Rins",
+    action: "publish_version",
+    entityType: "version",
+    entityId: "v-001",
+    entityName: "Nexarin Sistem Absensi Sekolah Digital v2.1.0",
+    details: "Merilis versi pembaruan v2.1.0.",
+    timestamp: "2026-08-20T08:00:00Z"
   }
 ];
 
@@ -117,67 +117,46 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    const savedProd = localStorage.getItem("nexarin_products");
-    if (savedProd) {
-      try { setProducts(JSON.parse(savedProd)); } catch (e) {}
-    }
-    const savedOrders = localStorage.getItem("nexarin_orders");
-    if (savedOrders) {
-      try { setOrders(JSON.parse(savedOrders)); } catch (e) {}
-    }
-    const savedLic = localStorage.getItem("nexarin_licenses");
-    if (savedLic) {
-      try { setLicenses(JSON.parse(savedLic)); } catch (e) {}
-    }
-    const savedDown = localStorage.getItem("nexarin_downloads");
-    if (savedDown) {
-      try { setDownloads(JSON.parse(savedDown)); } catch (e) {}
-    }
-    const savedAff = localStorage.getItem("nexarin_affiliates");
-    if (savedAff) {
-      try { setAffiliates(JSON.parse(savedAff)); } catch (e) {}
-    }
-    const savedLogs = localStorage.getItem("nexarin_audit_logs");
-    if (savedLogs) {
-      try { setAuditLogs(JSON.parse(savedLogs)); } catch (e) {}
-    }
+    // Initial fetch from backend APIs
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.success && d.data) setProducts(d.data);
+      })
+      .catch(() => {});
+
+    fetch("/api/affiliates")
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.success && d.data) setAffiliates(d.data);
+      })
+      .catch(() => {});
+
+    fetch("/api/audit-logs")
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.success && d.data) setAuditLogs(d.data);
+      })
+      .catch(() => {});
   }, []);
 
-  const saveProducts = (items: Product[]) => {
-    setProducts(items);
-    localStorage.setItem("nexarin_products", JSON.stringify(items));
-  };
+  const saveProducts = (items: Product[]) => setProducts(items);
+  const saveLicenses = (items: License[]) => setLicenses(items);
+  const saveOrders = (items: Order[]) => setOrders(items);
+  const saveDownloads = (items: DownloadRecord[]) => setDownloads(items);
+  const saveAffiliates = (items: AffiliateLink[]) => setAffiliates(items);
 
-  const saveOrders = (items: Order[]) => {
-    setOrders(items);
-    localStorage.setItem("nexarin_orders", JSON.stringify(items));
-  };
-
-  const saveLicenses = (items: License[]) => {
-    setLicenses(items);
-    localStorage.setItem("nexarin_licenses", JSON.stringify(items));
-  };
-
-  const saveDownloads = (items: DownloadRecord[]) => {
-    setDownloads(items);
-    localStorage.setItem("nexarin_downloads", JSON.stringify(items));
-  };
-
-  const saveAffiliates = (items: AffiliateLink[]) => {
-    setAffiliates(items);
-    localStorage.setItem("nexarin_affiliates", JSON.stringify(items));
-  };
-
-  const saveLogs = (items: AuditLog[]) => {
-    setAuditLogs(items);
-    localStorage.setItem("nexarin_audit_logs", JSON.stringify(items));
-  };
-
-  const logAudit = (action: AuditLog["action"], entityType: AuditLog["entityType"], entityId: string, entityName: string, details: string) => {
+  const logAudit = (
+    action: AuditLog["action"],
+    entityType: AuditLog["entityType"],
+    entityId: string,
+    entityName: string,
+    details: string
+  ) => {
     const newLog: AuditLog = {
-      id: "log-" + Date.now(),
+      id: "aud-" + Date.now(),
       adminId: user?.id || "usr-adm-001",
-      adminName: user?.name || "Admin",
+      adminName: user?.name || "Rins",
       action,
       entityType,
       entityId,
@@ -185,69 +164,65 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       details,
       timestamp: new Date().toISOString()
     };
-    saveLogs([newLog, ...auditLogs]);
+    setAuditLogs((prev) => [newLog, ...prev]);
   };
 
-  const getProductBySlug = (slug: string) => {
+  const getProductBySlug = (slug: string): Product | undefined => {
     return products.find((p) => p.slug === slug);
   };
 
   const startTrial = async (productId: string): Promise<{ success: boolean; license?: License; message: string }> => {
     const product = products.find((p) => p.id === productId);
-    if (!product) return { success: false, message: "Produk tidak ditemukan." };
-
-    if (!product.trialEnabled) {
-      return { success: false, message: "Trial tidak tersedia untuk produk ini." };
+    if (!product) {
+      return { success: false, message: "Produk tidak ditemukan." };
     }
 
     const currentUserId = user?.id || "usr-cust-001";
+    const existingActiveTrial = licenses.find(
+      (l) => l.productId === productId && l.userId === currentUserId && l.licenseType === "trial" && l.status === "active"
+    );
 
-    // Check existing trial
-    const existing = licenses.find((l) => l.productId === productId && l.userId === currentUserId);
-    if (existing) {
-      if (existing.licenseType === "lifetime") {
-        return { success: true, license: existing, message: "Anda telah memiliki lisensi penuh untuk produk ini." };
-      }
-      if (existing.status === "trial_active") {
-        return { success: true, license: existing, message: "Trial aktif Anda sudah berjalan." };
-      }
+    if (existingActiveTrial) {
+      return {
+        success: false,
+        message: `Anda sudah memiliki trial aktif untuk ${product.name} hingga ${new Date(existingActiveTrial.expiresAt || "").toLocaleDateString("id-ID")}.`
+      };
     }
 
-    const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 3); // 3 days from now
+    const expiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString();
+    const trialKey = generateRandomKey("TRL");
 
-    const newLicense: License = {
-      id: "lic-trial-" + Date.now(),
-      licenseKey: generateRandomKey("TRL3"),
+    const newTrialLicense: License = {
+      id: "lic-" + Date.now(),
+      licenseKey: trialKey,
       userId: currentUserId,
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
-      orderId: "ord-trial-" + Date.now(),
+      orderId: "trial-demo-req",
       licenseType: "trial",
-      status: "trial_active",
+      status: "active",
       currentVersion: product.currentVersion,
       ownedVersion: product.currentVersion,
       issuedAt: new Date().toISOString(),
-      expiresAt: expiryDate.toISOString()
+      expiresAt
     };
 
-    saveLicenses([newLicense, ...licenses]);
-
-    logAudit("activate_trial", "license", newLicense.id, product.name, `Trial 3 Hari diaktifkan untuk ${user?.name || "Customer"}`);
+    saveLicenses([newTrialLicense, ...licenses]);
+    logAudit("activate_trial", "license", newTrialLicense.id, product.name, `Aktivasi demo trial 3 hari untuk user ${currentUserId}.`);
 
     addNotification({
       userId: currentUserId,
       type: "trial_started",
-      title: "Trial 3 Hari Diaktifkan!",
-      message: `Akses demo penuh ${product.name} telah aktif hingga ${expiryDate.toLocaleDateString("id-ID")}.`,
+      title: "Trial 3 Hari Berhasil Diaktifkan!",
+      message: `Anda dapat mengakses dan menguji coba ${product.name} secara penuh selama 3 hari.`,
       link: "/customer/products"
     });
 
     return {
       success: true,
-      license: newLicense,
-      message: "Trial 3 Hari Berhasil Diaktifkan! Selamat mencoba."
+      license: newTrialLicense,
+      message: `Akses demo trial 3 hari untuk ${product.name} berhasil diaktifkan!`
     };
   };
 
@@ -259,13 +234,13 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     if (!product) return { success: false };
 
     const currentUserId = user?.id || "usr-cust-001";
-    const orderNum = "ORD-NXRN-" + Date.now().toString().slice(-6);
+    const orderNumber = `ORD-NXRN-2026-${Math.floor(10000 + Math.random() * 90000)}`;
 
     const newOrder: Order = {
       id: "ord-" + Date.now(),
-      orderNumber: orderNum,
+      orderNumber,
       userId: currentUserId,
-      customerName: customerInfo.name || "Customer Nexarin",
+      customerName: customerInfo.name,
       customerEmail: customerInfo.email,
       items: [
         {
@@ -280,17 +255,19 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       subtotal: product.price,
       discount: 0,
       total: product.price,
-      currency: product.currency,
+      currency: "IDR",
       status: "paid",
       paymentProvider: "Mayar",
-      paymentReference: "MYR-" + Date.now(),
+      paymentReference: `MYR-${Date.now()}`,
       paidAt: new Date().toISOString(),
       createdAt: new Date().toISOString()
     };
 
+    const licenseKey = generateRandomKey("NXRN");
+
     const newLicense: License = {
       id: "lic-" + Date.now(),
-      licenseKey: generateRandomKey("NXRN"),
+      licenseKey,
       userId: currentUserId,
       productId: product.id,
       productName: product.name,
@@ -303,13 +280,11 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       issuedAt: new Date().toISOString()
     };
 
-    // Update product sales count
     const updatedProducts = products.map((p) =>
       p.id === productId ? { ...p, salesCount: p.salesCount + 1 } : p
     );
     saveProducts(updatedProducts);
 
-    // Replace any trial license with lifetime license
     const filteredLicenses = licenses.filter((l) => !(l.productId === productId && l.userId === currentUserId));
     saveLicenses([newLicense, ...filteredLicenses]);
     saveOrders([newOrder, ...orders]);
@@ -359,7 +334,6 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
     saveProducts(products.map((p) => (p.id === productId ? updatedProduct : p)));
 
-    // Update currentVersion on all existing licenses for this product
     const updatedLicenses = licenses.map((lic) => {
       if (lic.productId === productId) {
         return { ...lic, currentVersion: versionData.version };
@@ -370,7 +344,6 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
     logAudit("publish_version", "version", newVersion.id, `${product.name} ${versionData.version}`, `Versi baru dipublikasikan: ${versionData.version}.`);
 
-    // Broadcast notification to customers who own this product
     const customersWithProduct = licenses.filter((l) => l.productId === productId && l.status === "active");
     customersWithProduct.forEach((lic) => {
       addNotification({
@@ -402,14 +375,13 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       version,
       downloadToken: token,
       downloadedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour token validity
+      expiresAt: new Date(Date.now() + 3600000).toISOString(),
       fileSize: "18.4 MB",
       checksum: "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     };
 
     saveDownloads([newRecord, ...downloads]);
 
-    // Simulated browser download trigger
     showToast({
       type: "success",
       title: "Mengunduh File Aman...",
@@ -447,6 +419,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       a.id === affiliateId ? { ...a, clicksCount: a.clicksCount + 1 } : a
     );
     saveAffiliates(updated);
+    fetch(`/api/affiliates/${affiliateId}/click`, { method: "POST" }).catch(() => {});
   };
 
   const createAffiliateLink = (data: Omit<AffiliateLink, "id" | "clicksCount" | "createdAt">) => {
