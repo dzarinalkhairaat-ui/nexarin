@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGadget" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0C1B" />
+      <stop offset="100%" stop-color="#1A152E" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bgGadget)" />
+  <!-- Laptop Workstation Vector -->
+  <g transform="translate(600, 300)">
+    <!-- Screen -->
+    <rect x="-200" y="-140" width="400" height="240" rx="18" fill="#0B1120" stroke="#A855F7" stroke-width="4" />
+    <rect x="-180" y="-120" width="360" height="200" rx="10" fill="#131E32" />
+    <text x="0" y="-10" font-family="monospace" font-size="18" font-weight="700" fill="#2DD4F5" text-anchor="middle">AI PC NPU 50+ TOPS</text>
+    <text x="0" y="25" font-family="monospace" font-size="12" fill="#C084FC" text-anchor="middle">On-Device LLM Benchmark</text>
+    <!-- Base -->
+    <path d="M -240 100 L 240 100 L 210 130 L -210 130 Z" fill="#0F172A" stroke="#A855F7" stroke-width="2" />
+  </g>
+  <text x="600" y="490" font-family="system-ui, sans-serif" font-weight="900" font-size="28" fill="#F8FAFC" text-anchor="middle">HARDWARE &amp; WORKSTATION REVIEW</text>
+</svg>

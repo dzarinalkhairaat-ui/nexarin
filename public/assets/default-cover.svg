@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1120" />
+      <stop offset="50%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#131E32" />
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2DD4F5" />
+      <stop offset="100%" stop-color="#7CF2C3" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(45, 212, 245, 0.08)" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect width="1200" height="675" fill="url(#grid)" />
+  <circle cx="600" cy="337" r="280" fill="none" stroke="rgba(45, 212, 245, 0.15)" stroke-width="1.5" stroke-dasharray="8 8" />
+  <circle cx="600" cy="337" r="180" fill="none" stroke="rgba(124, 242, 195, 0.2)" stroke-width="2" />
+  <g transform="translate(600, 337)">
+    <rect x="-80" y="-80" width="160" height="160" rx="32" fill="#0B1120" stroke="url(#cyanGrad)" stroke-width="3" />
+    <text x="0" y="24" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="72" fill="url(#cyanGrad)" text-anchor="middle">N</text>
+  </g>
+  <text x="600" y="480" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="28" fill="#F8FAFC" text-anchor="middle" letter-spacing="4">NEXARIN TECH HUB</text>
+  <text x="600" y="515" font-family="monospace" font-weight="600" font-size="14" fill="#2DD4F5" text-anchor="middle">INTELLIGENCE &amp; DIGITAL SOLUTIONS</text>
+</svg>

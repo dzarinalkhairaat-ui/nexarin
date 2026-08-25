@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgSaaS" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090E1E" />
+      <stop offset="100%" stop-color="#141936" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bgSaaS)" />
+  <g transform="translate(600, 300)">
+    <rect x="-220" y="-130" width="440" height="260" rx="24" fill="#0B1120" stroke="#2DD4F5" stroke-width="4" />
+    <path d="M-100,-30 L0,-100 L100,-30 L100,50 L0,120 L-100,50 Z" fill="#131E32" stroke="#2DD4F5" stroke-width="3" />
+    <text x="0" y="20" font-family="monospace" font-weight="900" font-size="32" fill="#7CF2C3" text-anchor="middle">NEXT.JS</text>
+  </g>
+  <text x="600" y="490" font-family="system-ui, sans-serif" font-weight="900" font-size="28" fill="#F8FAFC" text-anchor="middle">NEXT.JS SAAS STARTER BOILERPLATE</text>
+</svg>

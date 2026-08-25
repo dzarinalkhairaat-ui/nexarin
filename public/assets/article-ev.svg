@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgEv" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06121E" />
+      <stop offset="100%" stop-color="#0F2438" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bgEv)" />
+  <!-- Electric Battery Core Vector -->
+  <g transform="translate(600, 310)">
+    <rect x="-160" y="-100" width="320" height="200" rx="30" fill="#0B1120" stroke="#7CF2C3" stroke-width="4" />
+    <rect x="160" y="-40" width="30" height="80" rx="10" fill="#7CF2C3" />
+    <!-- Energy Level -->
+    <rect x="-140" y="-80" width="80" height="160" rx="15" fill="#2DD4F5" opacity="0.9" />
+    <rect x="-50" y="-80" width="80" height="160" rx="15" fill="#2DD4F5" opacity="0.9" />
+    <rect x="40" y="-80" width="80" height="160" rx="15" fill="#7CF2C3" opacity="0.9" />
+    <!-- Lightning bolt -->
+    <path d="M-10,-40 L15,-40 L5,0 L25,0 L-20,50 L-10,10 L-30,10 Z" fill="#0B1120" stroke="#F8FAFC" stroke-width="2" />
+  </g>
+  <text x="600" y="480" font-family="system-ui, sans-serif" font-weight="900" font-size="28" fill="#F8FAFC" text-anchor="middle">SOLID-STATE EV BATTERY</text>
+  <text x="600" y="515" font-family="monospace" font-weight="600" font-size="14" fill="#7CF2C3" text-anchor="middle">NEXT-GEN AUTOMOTIVE ENERGY</text>
+</svg>

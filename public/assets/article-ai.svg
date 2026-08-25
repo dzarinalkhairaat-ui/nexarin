@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgAi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080E1A" />
+      <stop offset="60%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#162038" />
+    </linearGradient>
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2DD4F5" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+    <pattern id="gridAi" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(45, 212, 245, 0.09)" stroke-width="1.5" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bgAi)" />
+  <rect width="1200" height="675" fill="url(#gridAi)" />
+  <circle cx="450" cy="337" r="260" fill="none" stroke="rgba(45, 212, 245, 0.15)" stroke-width="1.5" stroke-dasharray="10 10" />
+  <circle cx="750" cy="337" r="260" fill="none" stroke="rgba(124, 242, 195, 0.15)" stroke-width="1.5" stroke-dasharray="10 10" />
+  
+  <!-- Neural Nodes -->
+  <g stroke="#2DD4F5" stroke-width="2" opacity="0.6">
+    <line x1="350" y1="237" x2="600" y2="337" />
+    <line x1="350" y1="437" x2="600" y2="337" />
+    <line x1="850" y1="237" x2="600" y2="337" />
+    <line x1="850" y1="437" x2="600" y2="337" />
+    <line x1="600" y1="180" x2="600" y2="337" />
+    <line x1="600" y1="494" x2="600" y2="337" />
+  </g>
+
+  <circle cx="350" cy="237" r="14" fill="#0B1120" stroke="#2DD4F5" stroke-width="3" />
+  <circle cx="350" cy="437" r="14" fill="#0B1120" stroke="#2DD4F5" stroke-width="3" />
+  <circle cx="850" cy="237" r="14" fill="#0B1120" stroke="#7CF2C3" stroke-width="3" />
+  <circle cx="850" cy="437" r="14" fill="#0B1120" stroke="#7CF2C3" stroke-width="3" />
+  <circle cx="600" cy="180" r="12" fill="#0B1120" stroke="#2DD4F5" stroke-width="3" />
+  <circle cx="600" cy="494" r="12" fill="#0B1120" stroke="#7CF2C3" stroke-width="3" />
+
+  <!-- Center Brain Hub -->
+  <g transform="translate(600, 337)">
+    <rect x="-90" y="-90" width="180" height="180" rx="36" fill="#0F172A" stroke="url(#neonCyan)" stroke-width="4" />
+    <!-- AI Core Icon -->
+    <path d="M-30,-20 C-30,-40 -10,-50 0,-50 C10,-50 30,-40 30,-20 C30,-5 20,10 15,25 C10,35 -10,35 -15,25 C-20,10 -30,-5 -30,-20 Z" fill="none" stroke="#2DD4F5" stroke-width="4" stroke-linecap="round" />
+    <circle cx="0" cy="5" r="8" fill="#7CF2C3" />
+  </g>
+  <rect x="475" y="475" width="250" height="42" rx="21" fill="rgba(15, 23, 42, 0.9)" stroke="#2DD4F5" stroke-width="1.5" />
+  <text x="600" y="502" font-family="monospace" font-weight="700" font-size="16" fill="#2DD4F5" text-anchor="middle" letter-spacing="2">AUTONOMOUS AI AGENT</text>
+</svg>
