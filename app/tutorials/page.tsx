@@ -125,15 +125,15 @@ export default function TutorialsHubPage() {
         {/* Background Image from External URL */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <img
-            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2000&auto=format&fit=crop"
-            alt="Nexari Tutorial Learning Background"
-            className="w-full h-full object-cover object-center opacity-25 scale-105 transform transition-transform duration-1000"
+            src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2000&auto=format&fit=crop"
+            alt="Guru dan Dosen Mengajar di Kelas Tutorial"
+            className="w-full h-full object-cover object-center opacity-45 sm:opacity-50 scale-105 transform transition-transform duration-1000"
           />
-          {/* Multi-layer Dark Gradient Overlays */}
-          <div className="absolute inset-0 bg-[#080D1A]/80 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/95 via-[#080D1A]/70 to-[#0B1120]" />
+          {/* Multi-layer Dark Gradient Overlays for Clear Visibility & Text Readability */}
+          <div className="absolute inset-0 bg-[#080D1A]/70 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/90 via-[#080D1A]/50 to-[#0B1120]" />
           {/* Smooth Bottom Gradient Transition */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/80 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/85 to-transparent" />
         </div>
 
         {/* Subtle Ambient Glow */}
