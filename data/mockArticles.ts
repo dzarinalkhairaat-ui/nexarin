@@ -2,6 +2,196 @@ import { Article } from "@/types/content";
 
 export const INITIAL_ARTICLES: Article[] = [
   {
+    id: "art-ai-002",
+    sourceId: "src-ai-002",
+    title: "Claude 3.7 Sonnet & Hybrid Reasoning: Bagaimana Dynamic Thinking Mengubah Standar Coding AI",
+    slug: "claude-37-sonnet-hybrid-reasoning-dynamic-thinking-coding-ai",
+    excerpt: "Anthropic meluncurkan model hybrid pertama yang memadukan respons instan dengan deep extended thinking budget yang dapat dikontrol secara granular oleh software engineer.",
+    content: `Peluncuran Claude 3.7 Sonnet menandai babak baru arsitektur Large Language Model. Berbeda dengan model reasoning terdahulu yang memaksakan mode berpikir panjang pada setiap pertanyaan, Claude 3.7 memperkenalkan mekanisme **Hybrid Reasoning** di mana pengguna atau agen dapat mengatur jumlah *thinking token* secara spesifik sesuai kompleksitas tugas.`,
+    contentType: "news",
+    category: {
+      id: "ai",
+      name: "AI",
+      slug: "ai",
+      description: "Perkembangan Artificial Intelligence, LLM, Machine Learning, dan Tool AI terbaru.",
+      icon: "Sparkles",
+      color: "from-cyan-500 to-blue-600"
+    },
+    tags: ["Generative AI", "Claude 3.7", "Anthropic", "Hybrid Reasoning", "LLM"],
+    featuredImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Claude 3.7 Sonnet & Hybrid Reasoning | Nexari AI News",
+    metaDescription: "Analisis rilis Claude 3.7 Sonnet dengan arsitektur hybrid reasoning dan dampaknya pada produktivitas coding.",
+    status: "published",
+    author: {
+      name: "Rins",
+      role: "Lead Tech Architect",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 4,
+    views: 4890,
+    publishedAt: "2026-08-25T14:30:00Z",
+    createdAt: "2026-08-25T14:00:00Z",
+    updatedAt: "2026-08-25T14:30:00Z",
+    featured: true,
+    breaking: false,
+    source: {
+      name: "Anthropic Research",
+      url: "https://anthropic.com"
+    }
+  },
+  {
+    id: "art-ai-003",
+    sourceId: "src-ai-003",
+    title: "Google DeepMind Umumkan Terobosan Baru Model Multimodal Gemini 2.0 Flash untuk Real-Time Video Processing",
+    slug: "google-deepmind-terobosan-multimodal-gemini-20-flash-realtime-video",
+    excerpt: "Model teranyar dari Google menawarkan latensi sub-100ms dengan efisiensi token 4x lebih tinggi untuk pemrosesan video dan audio streaming secara simultan.",
+    content: `Google DeepMind secara resmi mendemokan kemampuan pemrosesan multimodal native real-time pada lini Gemini 2.0 Flash. Arsitektur terintegrasi ini memungkinkan sistem merespons ekspresi visual kamera dan audio pengguna tanpa jeda transmisi ganda.`,
+    contentType: "news",
+    category: {
+      id: "ai",
+      name: "AI",
+      slug: "ai",
+      description: "Perkembangan Artificial Intelligence, LLM, Machine Learning, dan Tool AI terbaru.",
+      icon: "Sparkles",
+      color: "from-cyan-500 to-blue-600"
+    },
+    tags: ["Google AI", "Gemini 2.0", "Multimodal", "Computer Vision", "Real-Time AI"],
+    featuredImage: "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Google Gemini 2.0 Flash Multimodal Real-Time | Nexari",
+    metaDescription: "Ulasan mendalam kemampuan real-time video stream processing Gemini 2.0 Flash dari Google DeepMind.",
+    status: "published",
+    author: {
+      name: "Abi Dzarin",
+      role: "AI Research Engineer",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 5,
+    views: 3820,
+    publishedAt: "2026-08-25T08:15:00Z",
+    createdAt: "2026-08-25T08:00:00Z",
+    updatedAt: "2026-08-25T08:15:00Z",
+    featured: false,
+    breaking: true,
+    source: {
+      name: "Google DeepMind",
+      url: "https://deepmind.google"
+    }
+  },
+  {
+    id: "art-ai-004",
+    sourceId: "src-ai-004",
+    title: "OpenAI Operator: Menuju Ekosistem Autonomous Web Browser Action untuk Tugas Bisnis",
+    slug: "openai-operator-autonomous-web-browser-action-bisnis",
+    excerpt: "Sistem agen web otonom yang mampu mengisi formulir multi-tahap, mereservasi tiket, dan mengeksekusi workflow administrasi korporasi secara independen.",
+    content: `Pergeseran dari sekadar menghasilkan teks ke mengambil tindakan di dunia digital nyata semakin terakselerasi dengan diperkenalkannya agen Operator. Sistem ini menggabungkan computer vision untuk memetakan elemen DOM website secara presisi.`,
+    contentType: "analysis",
+    category: {
+      id: "ai",
+      name: "AI",
+      slug: "ai",
+      description: "Perkembangan Artificial Intelligence, LLM, Machine Learning, dan Tool AI terbaru.",
+      icon: "Sparkles",
+      color: "from-cyan-500 to-blue-600"
+    },
+    tags: ["AI Agents", "OpenAI", "Operator", "Browser Automation", "Enterprise AI"],
+    featuredImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "OpenAI Operator Autonomous Web Browser Action | Nexari",
+    metaDescription: "Analisis kemampuan OpenAI Operator dalam mengotomasi tugas bisnis melalui antarmuka web browser.",
+    status: "published",
+    author: {
+      name: "Rins",
+      role: "Lead Tech Architect",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 6,
+    views: 5210,
+    publishedAt: "2026-08-24T19:00:00Z",
+    createdAt: "2026-08-24T18:00:00Z",
+    updatedAt: "2026-08-24T19:00:00Z",
+    featured: false,
+    breaking: false,
+    source: {
+      name: "MIT Technology Review",
+      url: "https://technologyreview.com"
+    }
+  },
+  {
+    id: "art-ai-005",
+    sourceId: "src-ai-005",
+    title: "Prompt Engineering di Era Reasoning Models: Mengapa Chain-of-Thought Mengurangi Hallucination hingga 90%",
+    slug: "prompt-engineering-reasoning-models-chain-of-thought-hallucination",
+    excerpt: "Studi empiris membuktikan bahwa instruksi penalaran bertahap dan structured reasoning traces secara drastis meningkatkan keakuratan kalkulasi matematis dan logika kode.",
+    content: `Sebuah riset terbaru menunjukkan bahwa teknik dekomposisi masalah bertahap (*step-by-step reasoning*) menghasilkan stabilitas output yang jauh lebih konsisten dibandingkan teknik zero-shot prompting konvensional.`,
+    contentType: "opinion",
+    category: {
+      id: "ai",
+      name: "AI",
+      slug: "ai",
+      description: "Perkembangan Artificial Intelligence, LLM, Machine Learning, dan Tool AI terbaru.",
+      icon: "Sparkles",
+      color: "from-cyan-500 to-blue-600"
+    },
+    tags: ["Prompt Engineering", "Chain of Thought", "LLM", "Research", "Coding"],
+    featuredImage: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Prompt Engineering di Era Reasoning Models | Nexari",
+    metaDescription: "Opini dan analisis efektivitas Chain-of-Thought prompting dalam memangkas tingkat halusinasi model AI.",
+    status: "published",
+    author: {
+      name: "Rins",
+      role: "Lead Tech Architect",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 4,
+    views: 2980,
+    publishedAt: "2026-08-24T11:30:00Z",
+    createdAt: "2026-08-24T11:00:00Z",
+    updatedAt: "2026-08-24T11:30:00Z",
+    featured: false,
+    breaking: false,
+    source: {
+      name: "The Verge Tech",
+      url: "https://theverge.com"
+    }
+  },
+  {
+    id: "art-ai-006",
+    sourceId: "src-ai-006",
+    title: "Regulasi AI Uni Eropa (EU AI Act) Mulai Berlaku Penuh: Kepatuhan dan Standar Keamanan Algoritma Global",
+    slug: "regulasi-ai-uni-eropa-eu-ai-act-kepatuhan-keamanan-global",
+    excerpt: "Panduan kepatuhan bagi perusahaan pengembang AI terkait kewajiban transparansi data training, audit risiko sistemik, dan proteksi hak cipta.",
+    content: `Dengan mulai berlakunya fase final EU AI Act, perusahaan teknologi global kini diwajibkan menyertakan dokumentasi audit keselamatan algoritma serta transparansi kepemilikan hak cipta pada data latih model fondasi.`,
+    contentType: "news",
+    category: {
+      id: "ai",
+      name: "AI",
+      slug: "ai",
+      description: "Perkembangan Artificial Intelligence, LLM, Machine Learning, dan Tool AI terbaru.",
+      icon: "Sparkles",
+      color: "from-cyan-500 to-blue-600"
+    },
+    tags: ["AI Regulation", "EU AI Act", "Ethics", "Policy", "Compliance"],
+    featuredImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Regulasi AI Uni Eropa EU AI Act Berlaku Penuh | Nexari",
+    metaDescription: "Kupas tuntas dampak regulasi EU AI Act terhadap industri kecerdasan buatan global.",
+    status: "published",
+    author: {
+      name: "Abi Dzarin",
+      role: "Legal & Tech Consultant",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 5,
+    views: 2150,
+    publishedAt: "2026-08-23T16:00:00Z",
+    createdAt: "2026-08-23T15:30:00Z",
+    updatedAt: "2026-08-23T16:00:00Z",
+    featured: false,
+    breaking: false,
+    source: {
+      name: "Reuters Technology",
+      url: "https://reuters.com"
+    }
+  },
+  {
     id: "art-1",
     sourceId: "src-ai-001",
     title: "Revolusi Autonomous AI Agents di 2026: Mengapa Workflow Berbasis Agent Menggantikan Chatbot Konvensional",

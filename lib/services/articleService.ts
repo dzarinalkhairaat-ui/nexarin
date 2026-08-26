@@ -14,35 +14,43 @@ export const articleService = {
         }
         const { data, error } = await query;
         if (!error && data) {
-          return data.map((a: any) => ({
+          const dbArticles = data.map((a: any) => ({
             id: a.id,
             title: a.title,
             slug: a.slug,
             excerpt: a.excerpt,
             content: a.content,
-            contentType: "news",
+            contentType: (a.content_type || a.contentType || "news") as any,
             category: {
               id: a.category_id,
-              name: a.category_id === "ai" ? "Artificial Intelligence" : "Software Engineering",
+              name: a.category_id === "ai" ? "Artificial Intelligence" : a.category_id === "gadget" ? "Gadget" : a.category_id === "automotive" ? "Automotive" : "Technology",
               slug: a.category_id,
               description: "Kategori artikel teknologi"
             },
-            tags: ["AI", "Tech", "Engineering"],
+            tags: Array.isArray(a.tags) ? a.tags : ["AI", "Technology", "Automation"],
             publishedAt: a.published_at,
             createdAt: a.created_at,
             updatedAt: a.updated_at,
             author: {
-              name: a.author_name || "Redaksi Nexarin",
-              role: "Editorial Tech AI",
-              avatar: a.author_avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+              name: a.author_name || "Redaksi Nexari",
+              role: "Lead Tech Architect",
+              avatar: a.author_avatar || "/assets/avatar-default.svg"
             },
             readingTimeMinutes: a.read_time_minutes || 5,
-            views: a.views_count || 1,
-            featuredImage: a.featured_image || "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=1600&auto=format&fit=crop",
+            views: a.views_count || 1200,
+            featuredImage: a.featured_image || "/assets/article-ai.svg",
             status: a.status || "published",
+            featured: a.featured || false,
+            breaking: a.breaking || false,
+            source: a.source_name ? { name: a.source_name, url: a.source_url || "" } : undefined,
             metaTitle: a.meta_title || a.title,
             metaDescription: a.meta_description || a.excerpt
           }));
+
+          // Merge with initial articles if count is small so all subcategories & editorial pieces render
+          const existingSlugs = new Set(dbArticles.map((a: any) => a.slug));
+          const fallbackMatches = db.articles.filter((a) => !existingSlugs.has(a.slug));
+          return [...dbArticles, ...fallbackMatches];
         }
       } catch (e) {
         console.error("Supabase articles error, using store:", e);
