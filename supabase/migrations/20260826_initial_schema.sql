@@ -243,3 +243,21 @@ CREATE INDEX IF NOT EXISTS idx_licenses_key ON public.licenses(license_key);
 CREATE INDEX IF NOT EXISTS idx_licenses_customer ON public.licenses(customer_email);
 CREATE INDEX IF NOT EXISTS idx_orders_customer ON public.orders(customer_email);
 CREATE INDEX IF NOT EXISTS idx_notifications_customer ON public.notifications(recipient_email, is_read);
+
+-- 15. FREE RESOURCES & COMMUNITY ASSETS
+CREATE TABLE IF NOT EXISTS public.free_resources (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  description TEXT NOT NULL,
+  file_size TEXT NOT NULL,
+  format TEXT NOT NULL,
+  badge TEXT NOT NULL DEFAULT 'Featured Kit',
+  download_url TEXT NOT NULL,
+  downloads_count INT NOT NULL DEFAULT 0,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_free_resources_slug ON public.free_resources(slug);

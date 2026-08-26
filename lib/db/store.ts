@@ -6,6 +6,7 @@ import { Article, GeminiSparkDraft } from "@/types/content";
 import { Product, ProductVersion, Order, License, DownloadRecord } from "@/types/product";
 import { AffiliateLink } from "@/types/affiliate";
 import { Notification, AuditLog } from "@/types/user";
+import { FreeResource } from "@/types/resource";
 
 export interface DBTrial {
   id: string;
@@ -25,6 +26,47 @@ class MemoryDataStore {
   public products: Product[] = [...INITIAL_PRODUCTS];
   public drafts: GeminiSparkDraft[] = [...INITIAL_DRAFTS];
   public affiliates: AffiliateLink[] = [...INITIAL_AFFILIATES];
+  public freeResources: FreeResource[] = [
+    {
+      id: "res-1",
+      title: "Nexarin UI Components Starter Pack",
+      slug: "nexarin-ui-components-starter-pack",
+      description: "20+ Komponen UI siap pakai berbasis Tailwind CSS & React (Button, Modal, Toast, Card, Dropdown) dengan Nexarin Design System tokens.",
+      fileSize: "2.4 MB",
+      format: "ZIP / Source Code",
+      badge: "Featured Kit",
+      downloadUrl: "/downloads/nexarin-ui-starter.zip",
+      downloadsCount: 1420,
+      isActive: true,
+      createdAt: "2026-08-01T00:00:00Z"
+    },
+    {
+      id: "res-2",
+      title: "HTML5 & Tailwind Landing Page Template",
+      slug: "html5-tailwind-landing-page-template",
+      description: "Template landing page responsif super cepat dengan dark mode, integrasi SEO tags, dan skor Lighthouse 100.",
+      fileSize: "1.8 MB",
+      format: "HTML5 / CSS3",
+      badge: "Popular",
+      downloadUrl: "/downloads/html5-landing-template.zip",
+      downloadsCount: 980,
+      isActive: true,
+      createdAt: "2026-08-05T00:00:00Z"
+    },
+    {
+      id: "res-3",
+      title: "Supabase Schema & RLS Policy Starter Snippets",
+      slug: "supabase-schema-rls-policy-starter-snippets",
+      description: "Kumpulan script SQL PostgreSQL siap pakai untuk setup auth, profiles, roles, dan download token security.",
+      fileSize: "450 KB",
+      format: "SQL / Markdown",
+      badge: "Database",
+      downloadUrl: "/downloads/supabase-schema-snippets.zip",
+      downloadsCount: 630,
+      isActive: true,
+      createdAt: "2026-08-10T00:00:00Z"
+    }
+  ];
   
   public orders: Order[] = [
     {

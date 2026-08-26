@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useContent } from "@/context/ContentContext";
 import {
   LayoutDashboard,
+  DownloadCloud,
   FileEdit,
   Sparkles,
   Share2,
@@ -65,6 +66,7 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
       label: "DIGITAL SHOP",
       items: [
         { href: "/admin/shop", label: "Katalog & Versi", icon: <ShoppingBag className="w-4 h-4" /> },
+        { href: "/admin/free-resources", label: "Free Resources", icon: <DownloadCloud className="w-4 h-4 text-[#7CF2C3]" /> },
         { href: "/admin/orders", label: "Transaksi & Orders", icon: <FolderGit2 className="w-4 h-4" /> },
         { href: "/admin/customers", label: "Data Pelanggan", icon: <Users className="w-4 h-4" /> },
       ]

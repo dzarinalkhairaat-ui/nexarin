@@ -1,50 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { useNotification } from "@/context/NotificationContext";
-import { DownloadCloud, Sparkles } from "lucide-react";
+import { DownloadCloud, Sparkles, FileCode, CheckCircle2, Layers } from "lucide-react";
+import { FreeResource } from "@/types/resource";
 
 export default function FreeResourcesPage() {
+  const [resources, setResources] = useState<FreeResource[]>([]);
+  const [loading, setLoading] = useState(true);
   const { showToast } = useNotification();
 
-  const resources = [
-    {
-      id: "res-1",
-      title: "Nexarin UI Components Starter Pack",
-      description: "20+ Komponen UI siap pakai berbasis Tailwind CSS & React (Button, Modal, Toast, Card, Dropdown) dengan Nexarin Design System tokens.",
-      fileSize: "2.4 MB",
-      format: "ZIP / Source Code",
-      badge: "Featured Kit",
-      downloadsCount: 1420
-    },
-    {
-      id: "res-2",
-      title: "HTML5 & Tailwind Landing Page Template",
-      description: "Template landing page responsif super cepat dengan dark mode, integrasi SEO tags, dan skor Lighthouse 100.",
-      fileSize: "1.8 MB",
-      format: "HTML5 / CSS3",
-      badge: "Popular",
-      downloadsCount: 980
-    },
-    {
-      id: "res-3",
-      title: "Supabase Schema & RLS Policy Starter Snippets",
-      description: "Kumpulan script SQL PostgreSQL siap pakai untuk setup auth, profiles, roles, dan download token security.",
-      fileSize: "450 KB",
-      format: "SQL / Markdown",
-      badge: "Database",
-      downloadsCount: 630
-    }
-  ];
+  useEffect(() => {
+    fetch("/api/free-resources")
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.success && d.data) {
+          setResources(d.data.filter((r: FreeResource) => r.isActive !== false));
+        }
+      })
+      .catch((e) => console.error("Failed to load free resources", e))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const handleDownload = (resTitle: string) => {
+  const handleDownload = async (resItem: FreeResource) => {
+    try {
+      fetch(`/api/free-resources/${resItem.id}/download`, { method: "POST" }).catch(() => {});
+      setResources((prev) =>
+        prev.map((r) => (r.id === resItem.id ? { ...r, downloadsCount: r.downloadsCount + 1 } : r))
+      );
+    } catch (e) {}
+
     showToast({
       type: "success",
       title: "Mengunduh Free Resource",
-      message: `File ${resTitle} berhasil disiapkan untuk diunduh!`
+      message: `File ${resItem.title} (${resItem.fileSize}) berhasil disiapkan untuk diunduh!`
     });
   };
 
@@ -54,10 +46,10 @@ export default function FreeResourcesPage() {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-xs font-mono font-bold border border-[#7CF2C3]/30">
           <DownloadCloud className="w-3.5 h-3.5" />
-          <span>100% Free Resources & Assets</span>
+          <span>100% Free Resources &amp; Assets</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-          Template, Starter Kits, & Source Code Gratis
+          Template, Starter Kits, &amp; Source Code Gratis
         </h1>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl mx-auto">
           Akselerasi proses pengembangan web dan aplikasi Anda dengan aset berkualitas tinggi yang dibuat dan dikurasi langsung oleh tim Nexarin.
@@ -67,7 +59,7 @@ export default function FreeResourcesPage() {
       {/* Resource Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {resources.map((res) => (
-          <Card key={res.id} hoverable className="p-6 flex flex-col justify-between space-y-6 bg-[#131E32] border-[#1E293B]">
+          <Card key={res.id} hoverable className="p-6 flex flex-col justify-between space-y-6 bg-[#131E32] border-[#1E293B] hover:border-cyan-500/40 transition-all">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <Badge variant="cyan" size="sm">
@@ -91,7 +83,7 @@ export default function FreeResourcesPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Diunduh:</span>
-                  <span className="font-semibold text-[#7CF2C3]">{res.downloadsCount}x</span>
+                  <span className="font-semibold text-[#7CF2C3]">{res.downloadsCount.toLocaleString()}x</span>
                 </div>
               </div>
             </div>
@@ -99,8 +91,8 @@ export default function FreeResourcesPage() {
             <Button
               variant="mint"
               size="md"
-              className="w-full font-bold text-slate-950"
-              onClick={() => handleDownload(res.title)}
+              className="w-full font-extrabold text-xs text-slate-950 shadow-md shadow-emerald-500/10"
+              onClick={() => handleDownload(res)}
             >
               <DownloadCloud className="w-4 h-4 mr-2" />
               Unduh Gratis Sekarang
