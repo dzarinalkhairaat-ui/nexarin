@@ -121,18 +121,35 @@ export default function AIPortalPage() {
 
   return (
     <div className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
-      {/* 1. EDITORIAL PORTAL HEADER & SEARCH */}
-      <header className="border-b border-[#1E293B] bg-gradient-to-b from-[#080D1A] to-[#0B1120] py-8 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 text-[#2DD4F5] text-xs font-mono font-bold uppercase border border-[#2DD4F5]/30 backdrop-blur-md">
+      {/* 1. EDITORIAL PORTAL HERO HEADER WITH THEMATIC BACKGROUND IMAGE */}
+      <header className="relative border-b border-[#1E293B] overflow-hidden pt-10 pb-12 sm:pt-16 sm:pb-18">
+        {/* Thematic External 16:9 AI Background Image */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop"
+            alt="Artificial Intelligence Neural Network Matrix"
+            className="w-full h-full object-cover object-center opacity-70 sm:opacity-80 scale-105 transform transition-transform duration-1000"
+          />
+          {/* Multi-layer Dark Gradient Overlays for High Legibility */}
+          <div className="absolute inset-0 bg-[#0B1120]/60 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/80 via-[#080D1A]/50 to-[#0B1120]" />
+          {/* Smooth Bottom Gradient Transition */}
+          <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/90 to-transparent" />
+        </div>
+
+        {/* Ambient Glow */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[260px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none z-0" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2DD4F5]/15 text-[#2DD4F5] text-xs font-mono font-bold uppercase border border-[#2DD4F5]/35 backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Nexari AI Media &amp; Intelligence</span>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
               Pusat Berita &amp; Wawasan Artificial Intelligence
             </h1>
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed max-w-xl">
               Liputan mendalam mengenai perkembangan Autonomous AI Agents, LLM, prompt engineering, penelitian mutakhir, dan regulasi kecerdasan buatan global.
             </p>
           </div>
