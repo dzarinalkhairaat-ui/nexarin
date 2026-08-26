@@ -30,7 +30,7 @@ export default function ContactPage() {
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Hubungi Tim Nexarin
         </h1>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-[#6F8583] max-w-lg mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-[#64748B] max-w-lg mx-auto leading-relaxed">
           Punya pertanyaan seputar produk digital, artikel, kerjasama affiliate, atau dukungan lisensi? Kami siap membantu.
         </p>
       </div>
@@ -43,7 +43,7 @@ export default function ContactPage() {
                 <Mail className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#6F8583]">Email Utama</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Email Utama</h4>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">support@nexarin.tech</p>
               </div>
             </div>
@@ -53,7 +53,7 @@ export default function ContactPage() {
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#6F8583]">Jam Operasional</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#64748B]">Jam Operasional</h4>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">Senin - Jumat (09:00 - 18:00 WIB)</p>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default function ContactPage() {
                   required
                 />
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#A8BCBA] mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#94A3B8] mb-1.5">
                     Pesan / Pertanyaan
                   </label>
                   <textarea
@@ -95,7 +95,7 @@ export default function ContactPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Tuliskan pertanyaan atau kebutuhan Anda di sini..."
-                    className="w-full rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                    className="w-full rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
                   />
                 </div>
                 <Button type="submit" variant="primary" size="md" className="w-full font-bold">

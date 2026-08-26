@@ -50,9 +50,9 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#061214] flex flex-col items-center justify-center p-4 sm:p-6 text-[#F2FAF9]">
+    <div className="min-h-screen w-full bg-[#0B1120] flex flex-col items-center justify-center p-4 sm:p-6 text-[#F8FAFC]">
       {/* Central Admin Login Card */}
-      <div className="w-full max-w-md bg-[#061214] rounded-3xl border border-white/[0.08] p-8 sm:p-10 space-y-6">
+      <div className="w-full max-w-md bg-[#0B1120] rounded-3xl border border-white/[0.08] p-8 sm:p-10 space-y-6">
         {/* Brand & Identity Header */}
         <div className="text-center space-y-3">
           <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto text-cyan-400">
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
             Administrator Sign In
           </h1>
 
-          <p className="text-xs text-[#6F8583] max-w-xs mx-auto">
+          <p className="text-xs text-[#64748B] max-w-xs mx-auto">
             Masukkan kredensial internal untuk mengakses sistem operasional &amp; manajemen.
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function AdminLoginPage() {
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Admin Email
             </label>
             <div className="relative">
@@ -94,13 +94,13 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@nexarin.tech"
-                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0] focus:border-transparent placeholder:text-slate-600"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-600"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Security Password
             </label>
             <div className="relative flex items-center">
@@ -110,12 +110,12 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 pr-11 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0] focus:border-transparent placeholder:text-slate-600"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 pr-11 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-600"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 p-1.5 text-[#6F8583] hover:text-[#F2FAF9] transition-colors"
+                className="absolute right-3 p-1.5 text-[#64748B] hover:text-[#F8FAFC] transition-colors"
                 title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

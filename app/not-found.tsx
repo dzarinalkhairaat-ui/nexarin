@@ -15,7 +15,7 @@ export default function NotFound() {
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
             Halaman Tidak Ditemukan
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-[#6F8583] leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-[#64748B] leading-relaxed">
             Halaman yang Anda tuju mungkin telah dipindahkan, diubah tautannya, atau tidak tersedia lagi.
           </p>
         </div>

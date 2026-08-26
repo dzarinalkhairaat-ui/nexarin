@@ -76,7 +76,7 @@ export default function ArticleDetailPage() {
         <div>
           <Link
             href={`/${article.category.slug}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Kembali ke Kanal {article.category.name}</span>
@@ -96,12 +96,12 @@ export default function ArticleDetailPage() {
             {article.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-[#A8BCBA] leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#94A3B8] leading-relaxed font-normal">
             {article.excerpt}
           </p>
 
           {/* Author and Metadata Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs text-[#6F8583]">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs text-[#64748B]">
             <div className="flex items-center gap-3">
               <img
                 src={article.author.avatar || "/assets/avatar-default.svg"}
@@ -109,13 +109,13 @@ export default function ArticleDetailPage() {
                 onError={(e) => {
                   e.currentTarget.src = "/assets/avatar-default.svg";
                 }}
-                className="w-10 h-10 rounded-full object-cover border-2 border-[#18D6D0]/40"
+                className="w-10 h-10 rounded-full object-cover border-2 border-[#2DD4F5]/40"
               />
               <div>
                 <span className="font-bold text-white text-sm block">
                   {article.author.name}
                 </span>
-                <span className="text-[#6F8583] text-[11px] block">{article.author.role}</span>
+                <span className="text-[#64748B] text-[11px] block">{article.author.role}</span>
               </div>
             </div>
 
@@ -134,7 +134,7 @@ export default function ArticleDetailPage() {
         </header>
 
         {/* Featured Image */}
-        <div className="rounded-3xl overflow-hidden border border-white/[0.08] h-72 sm:h-96 lg:h-[450px] bg-[#08191B]">
+        <div className="rounded-3xl overflow-hidden border border-white/[0.08] h-72 sm:h-96 lg:h-[450px] bg-[#0F172A]">
           <img
             src={article.featuredImage || "/assets/default-cover.svg"}
             alt={article.title}
@@ -146,7 +146,7 @@ export default function ArticleDetailPage() {
         </div>
 
         {/* Article Body Content */}
-        <article className="prose prose-invert max-w-none text-[#A8BCBA] leading-relaxed space-y-6 text-sm sm:text-base">
+        <article className="prose prose-invert max-w-none text-[#94A3B8] leading-relaxed space-y-6 text-sm sm:text-base">
           {article.content.split("\n\n").map((paragraph, index) => {
             if (paragraph.startsWith("### ")) {
               return (
@@ -163,7 +163,7 @@ export default function ArticleDetailPage() {
               return (
                 <ul key={index} className="space-y-2 pl-4 list-disc">
                   {lines.map((l, li) => (
-                    <li key={li} className="text-[#A8BCBA]">
+                    <li key={li} className="text-[#94A3B8]">
                       {l.replace(/^[-*]|\d+\.\s/, "")}
                     </li>
                   ))}
@@ -181,13 +181,13 @@ export default function ArticleDetailPage() {
         {/* Tags & Action Bar */}
         <div className="pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-[#6F8583] font-mono flex items-center gap-1">
+            <span className="text-xs text-[#64748B] font-mono flex items-center gap-1">
               <Tag className="w-3.5 h-3.5" /> Tags:
             </span>
             {article.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-1 rounded-xl bg-slate-800/80 border border-white/[0.10] text-xs text-[#A8BCBA] font-mono"
+                className="px-2.5 py-1 rounded-xl bg-slate-800/80 border border-white/[0.10] text-xs text-[#94A3B8] font-mono"
               >
                 #{tag}
               </span>
@@ -195,7 +195,7 @@ export default function ArticleDetailPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleShare} className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
+            <Button variant="outline" size="sm" onClick={handleShare} className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white">
               <Share2 className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
               Bagikan Artikel
             </Button>
@@ -206,7 +206,7 @@ export default function ArticleDetailPage() {
         {affiliate && (
           <section className="pt-6">
             <div className="space-y-2 mb-4">
-              <span className="text-xs font-mono uppercase text-[#18D6D0] font-bold tracking-wider">
+              <span className="text-xs font-mono uppercase text-[#2DD4F5] font-bold tracking-wider">
                 Rekomendasi Perangkat / Hardware Relevan:
               </span>
             </div>
@@ -225,7 +225,7 @@ export default function ArticleDetailPage() {
               <h4 className="text-lg sm:text-xl font-bold text-white">
                 {relatedProduct.name}
               </h4>
-              <p className="text-xs sm:text-sm text-[#A8BCBA]">
+              <p className="text-xs sm:text-sm text-[#94A3B8]">
                 {relatedProduct.shortDescription}
               </p>
             </div>
@@ -259,12 +259,12 @@ export default function ArticleDetailPage() {
                       className="w-full h-32 rounded-xl object-cover"
                     />
                     <Link href={`/article/${rel.slug}`}>
-                      <h4 className="text-xs font-bold text-white hover:text-[#18D6D0] line-clamp-2 transition-colors">
+                      <h4 className="text-xs font-bold text-white hover:text-[#2DD4F5] line-clamp-2 transition-colors">
                         {rel.title}
                       </h4>
                     </Link>
                   </div>
-                  <span className="text-[11px] font-mono text-[#6F8583] mt-2 block">
+                  <span className="text-[11px] font-mono text-[#64748B] mt-2 block">
                     {rel.readingTimeMinutes} mnt baca
                   </span>
                 </Card>

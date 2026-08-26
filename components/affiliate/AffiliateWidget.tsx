@@ -51,7 +51,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
               {affiliate.productName}
             </h4>
             {affiliate.priceEstimate && (
-              <span className="text-xs font-mono font-semibold text-[#6F8583]">
+              <span className="text-xs font-mono font-semibold text-[#64748B]">
                 Estimasi Harga: {affiliate.priceEstimate}
               </span>
             )}
@@ -71,7 +71,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
           </Button>
         </a>
       </div>
-      <p className="text-[10px] text-[#6F8583] mt-3 text-center sm:text-left">
+      <p className="text-[10px] text-[#64748B] mt-3 text-center sm:text-left">
         * Rekomendasi terkurasi oleh editorial Nexarin. Transaksi dilakukan di marketplace resmi terkait.
       </p>
     </div>

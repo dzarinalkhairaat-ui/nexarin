@@ -10,13 +10,13 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export function Badge({ className, variant = "cyan", size = "md", children, ...props }: BadgeProps) {
   const variantStyles = {
-    cyan: "bg-[#18D6D0]/10 text-[#18D6D0] border-[#18D6D0]/25",
-    mint: "bg-[#49D7A5]/10 text-[#49D7A5] border-[#49D7A5]/25",
-    secondary: "bg-white/[0.05] text-[#A8BCBA] border-white/[0.10]",
-    outline: "bg-transparent text-[#A8BCBA] border-white/[0.12]",
-    danger: "bg-[#E06C75]/10 text-[#E06C75] border-[#E06C75]/25",
-    warning: "bg-[#E4C46A]/10 text-[#E4C46A] border-[#E4C46A]/25",
-    slate: "bg-white/[0.04] text-[#6F8583] border-white/[0.08]",
+    cyan: "bg-[#2DD4F5]/10 text-[#2DD4F5] border-[#2DD4F5]/25",
+    mint: "bg-[#7CF2C3]/10 text-[#7CF2C3] border-[#7CF2C3]/25",
+    secondary: "bg-[#0F172A]/80 text-slate-300 border-[#1E293B]",
+    outline: "bg-transparent text-slate-300 border-[#1E293B]",
+    danger: "bg-rose-500/10 text-rose-400 border-rose-500/25",
+    warning: "bg-amber-500/10 text-amber-400 border-amber-500/25",
+    slate: "bg-slate-800/80 text-slate-400 border-slate-700",
   };
 
   const sizeStyles = {

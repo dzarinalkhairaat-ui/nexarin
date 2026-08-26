@@ -32,9 +32,9 @@ export default function ShopCatalogPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
       {/* Shop Hero */}
       <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-slate-950 via-[#0F172A] to-slate-950 border border-cyan-500/30 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#18D6D0]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#2DD4F5]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] text-xs font-mono font-bold border border-[#49D7A5]/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-xs font-mono font-bold border border-[#7CF2C3]/30">
             <Zap className="w-3.5 h-3.5" />
             <span>Nexarin Digital Shop • Produksi Resmi Rins</span>
           </div>
@@ -43,12 +43,12 @@ export default function ShopCatalogPage() {
             Produk Digital & Solusi Perangkat Lunak Siap Pakai
           </h1>
 
-          <p className="text-xs sm:text-sm text-[#A8BCBA] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
             Dapatkan aplikasi siap pakai, sistem manajemen, dan boilerplate standar industri. Seluruh produk dilengkapi akses trial 3 hari gratis dan hak lisensi Lifetime.
           </p>
 
           {/* Guarantees */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/[0.08] text-xs text-[#A8BCBA] font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/[0.08] text-xs text-[#94A3B8] font-mono">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
               <span>Lisensi Lifetime</span>
@@ -74,7 +74,7 @@ export default function ShopCatalogPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari produk digital..."
-            className="w-full px-4 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+            className="w-full px-4 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
           />
         </div>
       </div>

@@ -53,33 +53,33 @@ export function TrialModal({ isOpen, onClose, product }: TrialModalProps) {
     >
       <div className="space-y-5">
         <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-start gap-3">
-          <Clock className="w-5 h-5 text-[#18D6D0] shrink-0 mt-0.5" />
+          <Clock className="w-5 h-5 text-[#2DD4F5] shrink-0 mt-0.5" />
           <div className="text-xs space-y-1">
             <h5 className="font-bold text-white">
               Durasi Uji Coba: 3 x 24 Jam (72 Jam Penuh)
             </h5>
-            <p className="text-[#6F8583] leading-relaxed">
+            <p className="text-[#64748B] leading-relaxed">
               Anda mendapatkan akses ke semua fitur aplikasi dan source code selama 3 hari ke akun <strong>{customer?.email}</strong>. Tanpa kartu kredit atau komitmen biaya tersembunyi.
             </p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <h5 className="text-xs font-bold uppercase tracking-wider text-[#A8BCBA]">
+          <h5 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">
             Fitur yang Langsung Terbuka:
           </h5>
-          <ul className="space-y-1.5 text-xs text-[#6F8583]">
+          <ul className="space-y-1.5 text-xs text-[#64748B]">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
-              <span className="text-[#A8BCBA]">Full Source Code & Database Schema ({product.currentVersion})</span>
+              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
+              <span className="text-[#94A3B8]">Full Source Code & Database Schema ({product.currentVersion})</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
-              <span className="text-[#A8BCBA]">Lisensi Trial & Akses Download di Customer Dashboard</span>
+              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
+              <span className="text-[#94A3B8]">Lisensi Trial & Akses Download di Customer Dashboard</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
-              <span className="text-[#A8BCBA]">Panduan Setup & Dokumentasi Lengkap</span>
+              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
+              <span className="text-[#94A3B8]">Panduan Setup & Dokumentasi Lengkap</span>
             </li>
           </ul>
         </div>

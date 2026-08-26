@@ -56,20 +56,20 @@ export function CustomerTopbar({ onToggleMobileSidebar }: CustomerTopbarProps) {
   };
 
   return (
-    <header className="h-16 border-b border-white/[0.08] bg-[#061214]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header className="h-16 border-b border-white/[0.08] bg-[#0B1120]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
       {/* Left: Mobile menu toggle + Breadcrumb */}
       <div className="flex items-center gap-3">
         {onToggleMobileSidebar && (
           <button
             onClick={onToggleMobileSidebar}
-            className="lg:hidden p-2 rounded-xl text-[#6F8583] hover:text-white hover:bg-slate-800 transition-colors"
+            className="lg:hidden p-2 rounded-xl text-[#64748B] hover:text-white hover:bg-slate-800 transition-colors"
             aria-label="Toggle Menu"
           >
             <Menu className="w-5 h-5" />
           </button>
         )}
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold text-[#18D6D0] uppercase px-2 py-0.5 rounded-full bg-[#18D6D0]/10 border border-[#18D6D0]/20 hidden sm:inline">
+          <span className="text-[11px] font-mono font-bold text-[#2DD4F5] uppercase px-2 py-0.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/20 hidden sm:inline">
             PORTAL
           </span>
           <span className="text-slate-600 hidden sm:inline">/</span>
@@ -96,9 +96,9 @@ export function CustomerTopbar({ onToggleMobileSidebar }: CustomerTopbarProps) {
         {/* Public Shop Shortcut */}
         <Link
           href="/shop"
-          className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/[0.08] text-xs font-medium text-[#A8BCBA] hover:text-white hover:border-white/[0.10] transition-colors"
+          className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/[0.08] text-xs font-medium text-[#94A3B8] hover:text-white hover:border-white/[0.10] transition-colors"
         >
-          <ShoppingBag className="w-3.5 h-3.5 text-[#18D6D0]" />
+          <ShoppingBag className="w-3.5 h-3.5 text-[#2DD4F5]" />
           <span>Toko Digital</span>
         </Link>
 
@@ -113,13 +113,13 @@ export function CustomerTopbar({ onToggleMobileSidebar }: CustomerTopbarProps) {
             onError={(e) => {
               e.currentTarget.src = "/assets/avatar-default.svg";
             }}
-            className="w-6 h-6 rounded-lg object-cover border border-[#18D6D0]/40"
+            className="w-6 h-6 rounded-lg object-cover border border-[#2DD4F5]/40"
           />
           <div className="hidden lg:block text-left">
             <span className="text-xs font-bold text-white block leading-none truncate max-w-[120px]">
               {customer?.name || "Customer"}
             </span>
-            <span className="text-[10px] text-[#6F8583] block mt-0.5 leading-none font-mono truncate max-w-[120px]">
+            <span className="text-[10px] text-[#64748B] block mt-0.5 leading-none font-mono truncate max-w-[120px]">
               {customer?.email || "customer@email.com"}
             </span>
           </div>

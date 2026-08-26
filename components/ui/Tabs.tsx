@@ -23,7 +23,7 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
               "flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap",
               isActive
                 ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white  border border-slate-200/50 dark:border-white/[0.10]/50"
-                : "text-slate-600 dark:text-[#6F8583] hover:text-slate-900 dark:hover:text-[#F2FAF9] hover:bg-slate-800 hover:text-[#F2FAF9]"
+                : "text-slate-600 dark:text-[#64748B] hover:text-slate-900 dark:hover:text-[#F8FAFC] hover:bg-slate-800 hover:text-[#F8FAFC]"
             )}
           >
             {tab.icon}
@@ -33,8 +33,8 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
                 className={cn(
                   "px-2 py-0.5 text-[10px] rounded-full",
                   isActive
-                    ? "bg-[#18D6D0]/20 text-[#0891b2] dark:text-[#18D6D0]"
-                    : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-[#A8BCBA]"
+                    ? "bg-[#2DD4F5]/20 text-[#0891b2] dark:text-[#2DD4F5]"
+                    : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-[#94A3B8]"
                 )}
               >
                 {tab.count}

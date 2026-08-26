@@ -29,7 +29,7 @@ export default function CustomerSupportPage() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
           Dukungan Pelanggan (Customer Support)
         </h1>
-        <p className="text-xs text-slate-500 dark:text-[#6F8583]">
+        <p className="text-xs text-slate-500 dark:text-[#64748B]">
           Kirimkan kendala teknis atau pertanyaan implementasi lisensi produk Anda
         </p>
       </div>
@@ -52,7 +52,7 @@ export default function CustomerSupportPage() {
             />
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#A8BCBA] mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#94A3B8] mb-1.5">
                 Detail Pertanyaan / Error Log
               </label>
               <textarea
@@ -61,7 +61,7 @@ export default function CustomerSupportPage() {
                 value={detail}
                 onChange={(e) => setDetail(e.target.value)}
                 placeholder="Jelaskan kendala teknis atau error yang Anda alami..."
-                className="w-full rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
 

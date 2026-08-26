@@ -59,7 +59,7 @@ export default function AdminContentPage() {
               variant="outline"
               size="sm"
               onClick={syncGeminiSpark}
-              className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
+              className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
             >
               <RefreshCw className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
               Sync Staging
@@ -91,11 +91,11 @@ export default function AdminContentPage() {
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                       {draft.category}
                     </span>
-                    <span className="text-xs font-mono text-[#6F8583]">
-                      Sumber: <strong className="text-[#F2FAF9]">{draft.sourceName}</strong>
+                    <span className="text-xs font-mono text-[#64748B]">
+                      Sumber: <strong className="text-[#F8FAFC]">{draft.sourceName}</strong>
                     </span>
                   </div>
-                  <span className="text-xs text-[#6F8583] font-mono flex items-center gap-1">
+                  <span className="text-xs text-[#64748B] font-mono flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-slate-500" />
                     Sinkron: {formatDate(draft.syncDate)}
                   </span>
@@ -105,7 +105,7 @@ export default function AdminContentPage() {
                   <h3 className="text-base font-bold text-white leading-snug">
                     {draft.title}
                   </h3>
-                  <p className="text-xs text-[#A8BCBA] leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
                     {draft.summary}
                   </p>
                 </div>
@@ -165,11 +165,11 @@ export default function AdminContentPage() {
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                     {art.category.name}
                   </span>
-                  <span className="text-xs font-mono text-[#6F8583]">
-                    Views: <strong className="text-[#18D6D0]">{art.views.toLocaleString()}</strong>
+                  <span className="text-xs font-mono text-[#64748B]">
+                    Views: <strong className="text-[#2DD4F5]">{art.views.toLocaleString()}</strong>
                   </span>
                 </div>
-                <span className="text-xs text-[#6F8583] font-mono">
+                <span className="text-xs text-[#64748B] font-mono">
                   Rilis: {formatDate(art.publishedAt)}
                 </span>
               </div>
@@ -178,7 +178,7 @@ export default function AdminContentPage() {
                 <h3 className="text-base font-bold text-white">
                   {art.title}
                 </h3>
-                <p className="text-xs text-[#A8BCBA] line-clamp-2">
+                <p className="text-xs text-[#94A3B8] line-clamp-2">
                   {art.excerpt}
                 </p>
               </div>
@@ -195,7 +195,7 @@ export default function AdminContentPage() {
                 </Button>
 
                 <Link href={`/article/${art.slug}`} target="_blank">
-                  <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
+                  <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white">
                     <Eye className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
                     Lihat di Portal Publik <ExternalLink className="w-3 h-3 ml-1" />
                   </Button>

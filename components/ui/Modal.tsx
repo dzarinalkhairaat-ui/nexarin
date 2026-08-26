@@ -49,26 +49,26 @@ export function Modal({
       {/* Quiet Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/55 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity"
       />
 
       {/* Quiet Glass Modal Card */}
       <div
         className={cn(
-          "relative w-full bg-[#08191B] rounded-2xl border border-white/[0.12] overflow-hidden z-10 my-8 backdrop-blur-xl transition-all animate-in fade-in zoom-in-95 duration-200",
+          "relative w-full bg-[#0F172A]/95 rounded-2xl border border-cyan-500/25 overflow-hidden z-10 my-8 backdrop-blur-2xl transition-all animate-in fade-in zoom-in-95 duration-200",
           maxWidthClasses[maxWidth]
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4.5 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-[#1E293B]">
           <div>
             {title && (
-              <h3 className="text-base sm:text-lg font-bold text-[#F2FAF9] tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs text-[#A8BCBA] mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 {description}
               </p>
             )}
@@ -77,7 +77,7 @@ export function Modal({
             type="button"
             onClick={onClose}
             aria-label="Tutup Dialog"
-            className="p-1.5 text-[#A8BCBA] hover:text-[#F2FAF9] rounded-lg hover:bg-white/[0.05] transition-colors"
+            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

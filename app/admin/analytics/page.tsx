@@ -42,7 +42,7 @@ export default function AdminAnalyticsPage() {
           label="Pendapatan Toko Digital"
           value={formatCurrency(totalRevenue, "IDR")}
           subtext={`${orders.length} transaksi Mayar terverifikasi`}
-          icon={<ShoppingBag className="w-4 h-4 text-[#49D7A5]" />}
+          icon={<ShoppingBag className="w-4 h-4 text-[#7CF2C3]" />}
           trend={{ value: "Lifetime", positive: true }}
         />
 
@@ -70,12 +70,12 @@ export default function AdminAnalyticsPage() {
           {articles.map((art, idx) => (
             <div key={art.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
-                <span className="w-6 h-6 rounded-lg bg-slate-900 border border-white/[0.08] text-[#6F8583] font-mono text-xs flex items-center justify-center font-bold shrink-0">
+                <span className="w-6 h-6 rounded-lg bg-slate-900 border border-white/[0.08] text-[#64748B] font-mono text-xs flex items-center justify-center font-bold shrink-0">
                   {idx + 1}
                 </span>
                 <div className="min-w-0">
                   <span className="font-bold text-white block truncate">{art.title}</span>
-                  <span className="text-[11px] text-[#6F8583] font-mono">Kategori: {art.category.name}</span>
+                  <span className="text-[11px] text-[#64748B] font-mono">Kategori: {art.category.name}</span>
                 </div>
               </div>
 
@@ -84,7 +84,7 @@ export default function AdminAnalyticsPage() {
                   {art.views.toLocaleString("id-ID")} views
                 </span>
                 <Link href={`/article/${art.slug}`} target="_blank">
-                  <Button variant="outline" size="sm" className="text-xs h-7 px-2 border-white/[0.10] text-[#A8BCBA] hover:text-white">
+                  <Button variant="outline" size="sm" className="text-xs h-7 px-2 border-white/[0.10] text-[#94A3B8] hover:text-white">
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Button>
                 </Link>

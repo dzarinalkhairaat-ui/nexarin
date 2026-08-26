@@ -55,7 +55,7 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
         {
           href: "/customer/updates",
           label: "Pembaruan Versi",
-          icon: <Sparkles className="w-4 h-4 text-[#49D7A5]" />,
+          icon: <Sparkles className="w-4 h-4 text-[#7CF2C3]" />,
           badge: updatesCount > 0 ? `${updatesCount} Baru` : undefined,
           badgeColor: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
         },
@@ -91,7 +91,7 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#061214] border-r border-white/[0.08]">
+    <div className="flex flex-col h-full bg-[#0B1120] border-r border-white/[0.08]">
       {/* Customer Portal Brand Header */}
       <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
@@ -102,9 +102,9 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
           />
           <div>
             <span className="font-extrabold text-sm text-white tracking-tight block leading-tight">
-              Customer <span className="text-[#18D6D0]">Portal</span>
+              Customer <span className="text-[#2DD4F5]">Portal</span>
             </span>
-            <span className="text-[10px] text-[#6F8583] block leading-tight font-medium">
+            <span className="text-[10px] text-[#64748B] block leading-tight font-medium">
               Nexarin Digital Services
             </span>
           </div>
@@ -113,7 +113,7 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="lg:hidden p-1.5 rounded-lg text-[#6F8583] hover:text-white hover:bg-slate-800"
+            className="lg:hidden p-1.5 rounded-lg text-[#64748B] hover:text-white hover:bg-slate-800"
           >
             <X className="w-4 h-4" />
           </button>
@@ -137,12 +137,12 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
                   className={cn(
                     "flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group",
                     isActive
-                      ? "bg-[#18D6D0]/15 text-[#18D6D0] font-bold border border-[#18D6D0]/30 sm"
-                      : "text-[#6F8583] hover:text-white hover:bg-slate-800/60"
+                      ? "bg-[#2DD4F5]/15 text-[#2DD4F5] font-bold border border-[#2DD4F5]/30 sm"
+                      : "text-[#64748B] hover:text-white hover:bg-slate-800/60"
                   )}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className={cn(isActive ? "text-[#18D6D0]" : "text-[#6F8583] group-hover:text-[#F2FAF9]")}>
+                    <span className={cn(isActive ? "text-[#2DD4F5]" : "text-[#64748B] group-hover:text-[#F8FAFC]")}>
                       {item.icon}
                     </span>
                     <span className="truncate">{item.label}</span>
@@ -179,7 +179,7 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
             <span className="text-xs font-bold text-white block truncate">
               {customer?.name || "Customer"}
             </span>
-            <span className="text-[10px] font-mono text-[#6F8583] block truncate">
+            <span className="text-[10px] font-mono text-[#64748B] block truncate">
               {customer?.email || "customer@email.com"}
             </span>
           </div>

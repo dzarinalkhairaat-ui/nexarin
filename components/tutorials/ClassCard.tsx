@@ -20,42 +20,42 @@ export function ClassCard({ course, className }: ClassCardProps) {
   const isCompleted = progress && progress.percentage >= 100;
 
   const levelColor = {
-    Beginner: "bg-[#49D7A5]/10 text-[#49D7A5] border-[#49D7A5]/25",
-    Intermediate: "bg-[#18D6D0]/10 text-[#18D6D0] border-[#18D6D0]/25",
+    Beginner: "bg-[#7CF2C3]/10 text-[#7CF2C3] border-[#7CF2C3]/25",
+    Intermediate: "bg-[#2DD4F5]/10 text-[#2DD4F5] border-[#2DD4F5]/25",
     Advanced: "bg-purple-500/10 text-purple-300 border-purple-500/25"
-  }[course.level] || "bg-white/[0.04] text-[#A8BCBA] border-white/[0.08]";
+  }[course.level] || "bg-white/[0.04] text-[#94A3B8] border-white/[0.08]";
 
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between rounded-2xl bg-white/[0.035] border border-white/[0.08] hover:border-[#18D6D0]/30 hover:bg-white/[0.055] transition-all duration-200 overflow-hidden backdrop-blur-md",
+        "group relative flex flex-col justify-between rounded-2xl bg-white/[0.035] border border-white/[0.08] hover:border-[#2DD4F5]/30 hover:bg-white/[0.055] transition-all duration-200 overflow-hidden backdrop-blur-md",
         className
       )}
     >
       {/* Top: Thumbnail & Badges */}
-      <div className="relative aspect-video w-full overflow-hidden bg-[#08191B]">
+      <div className="relative aspect-video w-full overflow-hidden bg-[#0F172A]">
         <img
           src={course.thumbnail}
           alt={course.title}
           className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#061214] via-[#061214]/40 to-transparent opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/40 to-transparent opacity-90" />
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
           <span className={cn("px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold uppercase border", levelColor)}>
             {course.level}
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-[#061214]/80 backdrop-blur-md text-[#F2FAF9] border border-white/[0.10] flex items-center gap-1">
-            <Clock className="w-3 h-3 text-[#18D6D0]" />
+          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-[#0B1120]/80 backdrop-blur-md text-[#F8FAFC] border border-white/[0.10] flex items-center gap-1">
+            <Clock className="w-3 h-3 text-[#2DD4F5]" />
             {course.duration}
           </span>
         </div>
 
         {/* Category Pill */}
         <div className="absolute bottom-2.5 left-3">
-          <span className="text-[10px] font-mono font-bold uppercase text-[#18D6D0] tracking-wider">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#2DD4F5] tracking-wider">
             {course.categoryName} • {course.subcategoryName}
           </span>
         </div>
@@ -65,26 +65,26 @@ export function ClassCard({ course, className }: ClassCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
           <Link href={`/tutorials/${course.slug}`}>
-            <h3 className="text-sm sm:text-base font-bold text-[#F2FAF9] group-hover:text-[#18D6D0] transition-colors leading-snug line-clamp-2">
+            <h3 className="text-sm sm:text-base font-bold text-[#F8FAFC] group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
               {course.title}
             </h3>
           </Link>
-          <p className="text-xs text-[#A8BCBA] leading-relaxed line-clamp-2">
+          <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
             {course.tagline || course.description}
           </p>
         </div>
 
         {/* Metadata stats */}
         <div className="pt-3 border-t border-white/[0.08] space-y-3">
-          <div className="flex items-center justify-between text-xs text-[#A8BCBA] font-mono">
+          <div className="flex items-center justify-between text-xs text-[#94A3B8] font-mono">
             <div className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-[#6F8583]" />
+              <BookOpen className="w-3.5 h-3.5 text-[#64748B]" />
               <span>{course.lessonCount} Lessons</span>
             </div>
             <div className="flex items-center gap-1 text-[#E4C46A]">
               <Star className="w-3.5 h-3.5 fill-[#E4C46A]" />
-              <span className="font-bold text-[#F2FAF9]">{course.rating.toFixed(1)}</span>
-              <span className="text-[10px] text-[#6F8583] font-normal">({course.enrolledCount})</span>
+              <span className="font-bold text-[#F8FAFC]">{course.rating.toFixed(1)}</span>
+              <span className="text-[10px] text-[#64748B] font-normal">({course.enrolledCount})</span>
             </div>
           </div>
 
@@ -92,15 +92,15 @@ export function ClassCard({ course, className }: ClassCardProps) {
           {isStarted && (
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="text-[#A8BCBA] flex items-center gap-1">
-                  {isCompleted ? <CheckCircle2 className="w-3 h-3 text-[#49D7A5]" /> : null}
+                <span className="text-[#94A3B8] flex items-center gap-1">
+                  {isCompleted ? <CheckCircle2 className="w-3 h-3 text-[#7CF2C3]" /> : null}
                   Progres: {progress.percentage}%
                 </span>
-                <span className="text-[#18D6D0]">{isCompleted ? "Selesai" : "Sedang Berjalan"}</span>
+                <span className="text-[#2DD4F5]">{isCompleted ? "Selesai" : "Sedang Berjalan"}</span>
               </div>
               <div className="w-full h-1.5 rounded-full bg-white/[0.05] overflow-hidden border border-white/[0.06]">
                 <div
-                  className="h-full bg-[#18D6D0] transition-all duration-300"
+                  className="h-full bg-[#2DD4F5] transition-all duration-300"
                   style={{ width: `${progress.percentage}%` }}
                 />
               </div>
@@ -115,7 +115,7 @@ export function ClassCard({ course, className }: ClassCardProps) {
                 alt={course.instructor.name}
                 className="w-6 h-6 rounded-full object-cover border border-white/[0.12]"
               />
-              <span className="text-xs text-[#A8BCBA] font-medium truncate max-w-[110px]">
+              <span className="text-xs text-[#94A3B8] font-medium truncate max-w-[110px]">
                 {course.instructor.name}
               </span>
             </div>

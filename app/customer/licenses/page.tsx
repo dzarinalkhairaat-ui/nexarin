@@ -46,16 +46,16 @@ export default function CustomerLicensesPage() {
                 <h3 className="text-base font-bold text-white">
                   {lic.productName}
                 </h3>
-                <span className="text-xs text-[#6F8583] font-mono">Diterbitkan: {formatDate(lic.issuedAt)}</span>
+                <span className="text-xs text-[#64748B] font-mono">Diterbitkan: {formatDate(lic.issuedAt)}</span>
               </div>
               <Badge variant={lic.licenseType === "lifetime" ? "mint" : "warning"} size="sm">
                 {lic.licenseType === "lifetime" ? "Lifetime License" : "Trial 3 Hari"}
               </Badge>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#061214] text-white border border-cyan-500/30 flex items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-[#0B1120] text-white border border-cyan-500/30 flex items-center justify-between gap-4">
               <div>
-                <span className="text-[10px] font-mono uppercase text-[#18D6D0] font-bold block mb-1">
+                <span className="text-[10px] font-mono uppercase text-[#2DD4F5] font-bold block mb-1">
                   Kunci Aktivasi Lisensi
                 </span>
                 <code className="text-sm sm:text-base font-mono font-bold text-cyan-300">
@@ -73,7 +73,7 @@ export default function CustomerLicensesPage() {
               </Button>
             </div>
 
-            <div className="text-xs text-[#6F8583] flex items-center gap-2">
+            <div className="text-xs text-[#64748B] flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>Status: <strong className="text-white">{lic.status.toUpperCase()}</strong> • Berlaku untuk unlimited deployment deployment institusi/pribadi.</span>
             </div>

@@ -21,17 +21,17 @@ export function ToastContainer() {
 
 function ToastItem({ toast, onClose }: { toast: ToastMessage; onClose: () => void }) {
   const icons = {
-    success: <CheckCircle2 className="w-4 h-4 text-[#49D7A5] shrink-0 mt-0.5" />,
+    success: <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />,
     error: <AlertCircle className="w-4 h-4 text-[#E06C75] shrink-0 mt-0.5" />,
     warning: <AlertTriangle className="w-4 h-4 text-[#E4C46A] shrink-0 mt-0.5" />,
-    info: <Info className="w-4 h-4 text-[#18D6D0] shrink-0 mt-0.5" />,
+    info: <Info className="w-4 h-4 text-[#2DD4F5] shrink-0 mt-0.5" />,
   };
 
   const borders = {
-    success: "border-[#49D7A5]/30 bg-[#08191B]/95 text-[#F2FAF9]",
-    error: "border-[#E06C75]/30 bg-[#08191B]/95 text-[#F2FAF9]",
-    warning: "border-[#E4C46A]/30 bg-[#08191B]/95 text-[#F2FAF9]",
-    info: "border-[#18D6D0]/30 bg-[#08191B]/95 text-[#F2FAF9]",
+    success: "border-[#7CF2C3]/30 bg-[#0F172A]/95 text-[#F8FAFC]",
+    error: "border-[#E06C75]/30 bg-[#0F172A]/95 text-[#F8FAFC]",
+    warning: "border-[#E4C46A]/30 bg-[#0F172A]/95 text-[#F8FAFC]",
+    info: "border-[#2DD4F5]/30 bg-[#0F172A]/95 text-[#F8FAFC]",
   };
 
   return (
@@ -43,11 +43,11 @@ function ToastItem({ toast, onClose }: { toast: ToastMessage; onClose: () => voi
     >
       {icons[toast.type]}
       <div className="flex-1 min-w-0">
-        <h4 className="text-xs sm:text-sm font-semibold text-[#F2FAF9]">
+        <h4 className="text-xs sm:text-sm font-semibold text-[#F8FAFC]">
           {toast.title}
         </h4>
         {toast.message && (
-          <p className="text-xs text-[#A8BCBA] mt-0.5 leading-relaxed">
+          <p className="text-xs text-[#94A3B8] mt-0.5 leading-relaxed">
             {toast.message}
           </p>
         )}
@@ -56,7 +56,7 @@ function ToastItem({ toast, onClose }: { toast: ToastMessage; onClose: () => voi
         type="button"
         onClick={onClose}
         aria-label="Tutup Notifikasi"
-        className="p-1 text-[#6F8583] hover:text-[#F2FAF9] rounded-lg hover:bg-white/[0.05] transition-colors shrink-0"
+        className="p-1 text-[#64748B] hover:text-[#F8FAFC] rounded-lg hover:bg-white/[0.05] transition-colors shrink-0"
       >
         <X className="w-3.5 h-3.5" />
       </button>

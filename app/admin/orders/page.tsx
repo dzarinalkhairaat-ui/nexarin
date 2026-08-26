@@ -30,14 +30,14 @@ export default function AdminOrdersPage() {
           label="Total Volume Transaksi"
           value={formatCurrency(totalRevenue, "IDR")}
           subtext="Semua pesanan lunas"
-          icon={<ShoppingBag className="w-4 h-4 text-[#49D7A5]" />}
+          icon={<ShoppingBag className="w-4 h-4 text-[#7CF2C3]" />}
         />
 
         <AdminStatCard
           label="Pesanan Terverifikasi"
           value={`${paidOrdersCount} / ${orders.length}`}
           subtext="100% gateway success"
-          icon={<ShieldCheck className="w-4 h-4 text-[#18D6D0]" />}
+          icon={<ShieldCheck className="w-4 h-4 text-[#2DD4F5]" />}
         />
 
         <AdminStatCard
@@ -55,8 +55,8 @@ export default function AdminOrdersPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-3">
                 <span className="font-bold text-white text-sm">#{order.orderNumber}</span>
-                <span className="text-[#A8BCBA] font-sans text-xs">
-                  {order.customerName} (<span className="text-[#6F8583]">{order.customerEmail}</span>)
+                <span className="text-[#94A3B8] font-sans text-xs">
+                  {order.customerName} (<span className="text-[#64748B]">{order.customerEmail}</span>)
                 </span>
               </div>
               <Badge variant={order.status === "paid" ? "mint" : "warning"} size="sm">
@@ -64,18 +64,18 @@ export default function AdminOrdersPage() {
               </Badge>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[#F2FAF9] font-sans text-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[#F8FAFC] font-sans text-xs">
               <span className="font-medium">
                 Item: {order.items.map((i) => `${i.productName} (${i.version})`).join(", ")}
               </span>
-              <strong className="font-mono text-[#18D6D0] text-sm">
+              <strong className="font-mono text-[#2DD4F5] text-sm">
                 {formatCurrency(order.total, order.currency)}
               </strong>
             </div>
 
-            <div className="pt-2 text-[11px] text-[#6F8583] flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.08]">
+            <div className="pt-2 text-[11px] text-[#64748B] flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.08]">
               <span>
-                Gateway: <strong className="text-[#F2FAF9]">{order.paymentProvider}</strong> • Ref: <span className="text-cyan-400">{order.paymentReference}</span>
+                Gateway: <strong className="text-[#F8FAFC]">{order.paymentProvider}</strong> • Ref: <span className="text-cyan-400">{order.paymentReference}</span>
               </span>
               <span>{formatDateTime(order.createdAt)}</span>
             </div>

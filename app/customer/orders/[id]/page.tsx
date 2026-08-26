@@ -32,7 +32,7 @@ export default function CustomerOrderDetailPage() {
       <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <CustomerCard className="p-8 space-y-4">
           <h2 className="text-xl font-bold text-white">Pesanan Tidak Ditemukan</h2>
-          <p className="text-xs text-[#6F8583]">
+          <p className="text-xs text-[#64748B]">
             Faktur transaksi pesanan yang Anda tuju tidak tersedia atau tidak terdaftar pada akun Anda.
           </p>
           <Link href="/customer/orders">
@@ -51,7 +51,7 @@ export default function CustomerOrderDetailPage() {
       <div>
         <Link
           href="/customer/orders"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Riwayat Pesanan</span>
@@ -69,11 +69,11 @@ export default function CustomerOrderDetailPage() {
       <CustomerCard className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
           <div>
-            <span className="text-xs font-mono text-[#6F8583]">ID Referensi Pembayaran:</span>
+            <span className="text-xs font-mono text-[#64748B]">ID Referensi Pembayaran:</span>
             <p className="text-sm font-mono font-bold text-cyan-400 mt-0.5">{order.paymentReference}</p>
           </div>
           <div className="sm:text-right">
-            <span className="text-xs font-mono text-[#6F8583]">Status Pembayaran:</span>
+            <span className="text-xs font-mono text-[#64748B]">Status Pembayaran:</span>
             <div className="mt-0.5">
               <Badge variant={order.status === "paid" ? "mint" : "warning"} size="sm">
                 {order.status === "paid" ? "Pembayaran Terverifikasi" : order.status}
@@ -84,7 +84,7 @@ export default function CustomerOrderDetailPage() {
 
         {/* Item List */}
         <div className="space-y-3">
-          <h4 className="text-xs font-mono uppercase text-[#6F8583] font-bold tracking-wider">
+          <h4 className="text-xs font-mono uppercase text-[#64748B] font-bold tracking-wider">
             Item Produk yang Dibeli
           </h4>
           <div className="divide-y divide-slate-800">
@@ -92,7 +92,7 @@ export default function CustomerOrderDetailPage() {
               <div key={idx} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h5 className="text-sm font-bold text-white">{item.productName}</h5>
-                  <span className="text-xs text-[#6F8583] font-mono">
+                  <span className="text-xs text-[#64748B] font-mono">
                     Versi: {item.version} • Lisensi: {item.licenseType.toUpperCase()}
                   </span>
                 </div>
@@ -117,7 +117,7 @@ export default function CustomerOrderDetailPage() {
 
         {/* Financial Breakdown */}
         <div className="pt-4 border-t border-white/[0.08] space-y-2 text-xs font-mono">
-          <div className="flex justify-between text-[#6F8583]">
+          <div className="flex justify-between text-[#64748B]">
             <span>Subtotal:</span>
             <span>{formatCurrency(order.subtotal, order.currency)}</span>
           </div>
@@ -129,7 +129,7 @@ export default function CustomerOrderDetailPage() {
           )}
           <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/[0.08]">
             <span>Total Pembayaran:</span>
-            <span className="text-[#18D6D0]">{formatCurrency(order.total, order.currency)}</span>
+            <span className="text-[#2DD4F5]">{formatCurrency(order.total, order.currency)}</span>
           </div>
         </div>
       </CustomerCard>

@@ -40,10 +40,10 @@ export default function AdminCustomersPage() {
                 </div>
                 <div>
                   <h3 className="text-sm sm:text-base font-bold text-white">{c.name}</h3>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#6F8583] mt-0.5">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#64748B] mt-0.5">
                     <span>{c.email}</span>
                     <span>•</span>
-                    <span className="text-[#A8BCBA] flex items-center gap-1">
+                    <span className="text-[#94A3B8] flex items-center gap-1">
                       <Building className="w-3 h-3 text-cyan-400" />
                       {c.company}
                     </span>
@@ -57,15 +57,15 @@ export default function AdminCustomersPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08]">
-                <span className="text-[#6F8583] block text-[11px]">Produk Dimiliki:</span>
+              <div className="p-3 rounded-xl bg-[#0B1120] border border-white/[0.08]">
+                <span className="text-[#64748B] block text-[11px]">Produk Dimiliki:</span>
                 <strong className="text-white text-sm font-bold mt-0.5 block">
                   {c.ownedProductsCount} Lisensi Aktif
                 </strong>
               </div>
-              <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] text-right">
-                <span className="text-[#6F8583] block text-[11px]">Total Transaksi:</span>
-                <strong className="text-[#18D6D0] text-sm font-bold mt-0.5 block">
+              <div className="p-3 rounded-xl bg-[#0B1120] border border-white/[0.08] text-right">
+                <span className="text-[#64748B] block text-[11px]">Total Transaksi:</span>
+                <strong className="text-[#2DD4F5] text-sm font-bold mt-0.5 block">
                   Rp {c.totalSpent.toLocaleString("id-ID")}
                 </strong>
               </div>

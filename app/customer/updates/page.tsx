@@ -38,7 +38,7 @@ export default function CustomerUpdatesPage() {
                     <Badge variant="mint" size="sm">
                       Versi Baru: {latestVersion.version}
                     </Badge>
-                    <span className="text-xs font-mono text-[#6F8583]">
+                    <span className="text-xs font-mono text-[#64748B]">
                       (Versi Anda: {license.ownedVersion})
                     </span>
                   </div>
@@ -58,7 +58,7 @@ export default function CustomerUpdatesPage() {
                     Unduh Versi {latestVersion.version}
                   </Button>
                   <Link href={`/customer/products/${product.id}`}>
-                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
+                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white">
                       Detail
                     </Button>
                   </Link>
@@ -67,20 +67,20 @@ export default function CustomerUpdatesPage() {
 
               {/* Changelog Notes */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#A8BCBA] font-mono">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#94A3B8] font-mono">
                   What's New in Version {latestVersion.version}:
                 </h4>
-                <ul className="space-y-1.5 text-xs text-[#A8BCBA]">
+                <ul className="space-y-1.5 text-xs text-[#94A3B8]">
                   {latestVersion.releaseNotes.map((note, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#49D7A5] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
                       <span>{note}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="pt-2 text-[11px] text-[#6F8583] font-mono flex items-center justify-between border-t border-white/[0.08]">
+              <div className="pt-2 text-[11px] text-[#64748B] font-mono flex items-center justify-between border-t border-white/[0.08]">
                 <span>Ukuran File: {latestVersion.fileSize}</span>
                 <span>Tanggal Rilis: {formatDate(latestVersion.releaseDate)}</span>
               </div>

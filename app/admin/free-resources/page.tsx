@@ -191,8 +191,8 @@ export default function AdminFreeResourcesPage() {
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                     {res.badge}
                   </span>
-                  <span className="text-xs text-[#6F8583] font-mono">Format: <strong className="text-[#F2FAF9]">{res.format}</strong></span>
-                  <span className="text-xs text-[#6F8583] font-mono">Ukuran: <strong className="text-[#F2FAF9]">{res.fileSize}</strong></span>
+                  <span className="text-xs text-[#64748B] font-mono">Format: <strong className="text-[#F8FAFC]">{res.format}</strong></span>
+                  <span className="text-xs text-[#64748B] font-mono">Ukuran: <strong className="text-[#F8FAFC]">{res.fileSize}</strong></span>
                 </div>
                 <h3 className="text-base font-bold text-white leading-snug">
                   {res.title}
@@ -201,15 +201,15 @@ export default function AdminFreeResourcesPage() {
 
               <div className="flex items-center gap-4">
                 <div className="sm:text-right">
-                  <span className="text-xs text-[#6F8583] font-mono block">Total Diunduh</span>
-                  <span className="text-lg font-black text-[#49D7A5] font-mono">
+                  <span className="text-xs text-[#64748B] font-mono block">Total Diunduh</span>
+                  <span className="text-lg font-black text-[#7CF2C3] font-mono">
                     {res.downloadsCount.toLocaleString()}x
                   </span>
                 </div>
               </div>
             </div>
 
-            <p className="text-xs text-[#A8BCBA] leading-relaxed">
+            <p className="text-xs text-[#94A3B8] leading-relaxed">
               {res.description}
             </p>
 
@@ -228,7 +228,7 @@ export default function AdminFreeResourcesPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
+                  className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
                   onClick={() => handleEdit(res)}
                 >
                   <FileEdit className="w-3.5 h-3.5 mr-1 text-cyan-400" />
@@ -254,72 +254,72 @@ export default function AdminFreeResourcesPage() {
       >
         <form onSubmit={handleCreate} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Nama Resource</label>
+            <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Nama Resource</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Contoh: Nexarin Microservices Boilerplate"
-              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Badge Label</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Badge Label</label>
               <input
                 type="text"
                 value={badge}
                 onChange={(e) => setBadge(e.target.value)}
                 placeholder="Featured Kit / Popular"
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Ukuran File</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Ukuran File</label>
               <input
                 type="text"
                 value={fileSize}
                 onChange={(e) => setFileSize(e.target.value)}
                 placeholder="2.4 MB"
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Format</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Format</label>
               <input
                 type="text"
                 value={format}
                 onChange={(e) => setFormat(e.target.value)}
                 placeholder="ZIP / Source Code"
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Download URL Path</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Download URL Path</label>
               <input
                 type="text"
                 value={downloadUrl}
                 onChange={(e) => setDownloadUrl(e.target.value)}
                 placeholder="/downloads/resource.zip"
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Deskripsi Ringkas</label>
+            <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Deskripsi Ringkas</label>
             <textarea
               required
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Jelaskan isi dan kegunaan resource gratis ini..."
-              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 
@@ -342,66 +342,66 @@ export default function AdminFreeResourcesPage() {
       >
         <form onSubmit={handleUpdate} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Nama Resource</label>
+            <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Nama Resource</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Badge Label</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Badge Label</label>
               <input
                 type="text"
                 value={badge}
                 onChange={(e) => setBadge(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Ukuran File</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Ukuran File</label>
               <input
                 type="text"
                 value={fileSize}
                 onChange={(e) => setFileSize(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Format</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Format</label>
               <input
                 type="text"
                 value={format}
                 onChange={(e) => setFormat(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Download URL Path</label>
+              <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Download URL Path</label>
               <input
                 type="text"
                 value={downloadUrl}
                 onChange={(e) => setDownloadUrl(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#A8BCBA] uppercase">Deskripsi</label>
+            <label className="block text-xs font-semibold text-[#94A3B8] uppercase">Deskripsi</label>
             <textarea
               required
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#08191B] text-white focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-white/[0.08] bg-[#0F172A] text-white focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 

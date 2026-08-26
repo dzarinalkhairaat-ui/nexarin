@@ -77,13 +77,13 @@ export default function ClassroomLessonPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#061214] text-[#F2FAF9] flex flex-col">
+    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">
       {/* CLASSROOM TOPBAR */}
-      <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-[#061214]/95 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-[#0B1120]/95 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
           <Link
             href={`/tutorials/${course.slug}`}
-            className="p-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-[#6F8583] hover:text-white transition-colors flex-shrink-0"
+            className="p-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-[#64748B] hover:text-white transition-colors flex-shrink-0"
             title="Kembali ke Ringkasan Kelas"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -104,7 +104,7 @@ export default function ClassroomLessonPage() {
           <button
             type="button"
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-            className="lg:hidden p-2 rounded-xl border border-white/[0.08] bg-slate-900 text-[#A8BCBA] hover:text-white"
+            className="lg:hidden p-2 rounded-xl border border-white/[0.08] bg-slate-900 text-[#94A3B8] hover:text-white"
           >
             {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -117,8 +117,8 @@ export default function ClassroomLessonPage() {
             className={cn(
               "text-xs font-bold transition-all",
               isDone
-                ? "bg-[#49D7A5] text-slate-950 font-extrabold"
-                : "border-white/[0.10] text-[#A8BCBA] hover:text-white"
+                ? "bg-[#7CF2C3] text-slate-950 font-extrabold"
+                : "border-white/[0.10] text-[#94A3B8] hover:text-white"
             )}
           >
             <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
@@ -132,13 +132,13 @@ export default function ClassroomLessonPage() {
         {/* LEFT SIDEBAR CURRICULUM (Desktop + Mobile Drawer) */}
         <aside
           className={cn(
-            "fixed lg:static inset-y-0 left-0 z-20 w-80 lg:w-84 bg-[#061214] border-r border-white/[0.08] p-4 flex flex-col justify-between overflow-y-auto transition-transform duration-300",
+            "fixed lg:static inset-y-0 left-0 z-20 w-80 lg:w-84 bg-[#0B1120] border-r border-white/[0.08] p-4 flex flex-col justify-between overflow-y-auto transition-transform duration-300",
             mobileSidebarOpen ? "translate-x-0 top-14" : "-translate-x-full lg:translate-x-0"
           )}
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-              <span className="text-xs font-mono font-bold uppercase text-[#6F8583]">
+              <span className="text-xs font-mono font-bold uppercase text-[#64748B]">
                 Silabus Kelas
               </span>
               <span className="text-[11px] font-mono text-cyan-400">
@@ -157,7 +157,7 @@ export default function ClassroomLessonPage() {
 
           <div className="pt-4 border-t border-white/[0.08] space-y-2">
             <Link href={`/tutorials/${course.slug}`}>
-              <Button variant="ghost" size="sm" className="w-full text-xs text-[#6F8583] hover:text-white">
+              <Button variant="ghost" size="sm" className="w-full text-xs text-[#64748B] hover:text-white">
                 <ArrowLeft className="w-3.5 h-3.5 mr-1.5" />
                 Halaman Utama Kelas
               </Button>
@@ -173,7 +173,7 @@ export default function ClassroomLessonPage() {
               <Badge variant="cyan" size="sm">
                 Pelajaran {currentIndex + 1} dari {allLessons.length}
               </Badge>
-              <span className="text-xs font-mono text-[#6F8583] flex items-center gap-1">
+              <span className="text-xs font-mono text-[#64748B] flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-slate-500" />
                 {currentLesson.duration}
               </span>
@@ -193,7 +193,7 @@ export default function ClassroomLessonPage() {
                   Poin Kunci Pelajaran:
                 </h4>
               </div>
-              <ul className="space-y-1.5 text-xs text-[#F2FAF9]">
+              <ul className="space-y-1.5 text-xs text-[#F8FAFC]">
                 {currentLesson.keyTakeaways.map((point, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0 mt-1.5" />
@@ -205,7 +205,7 @@ export default function ClassroomLessonPage() {
           )}
 
           {/* Rendered Lesson Content */}
-          <article className="prose prose-invert prose-cyan max-w-none text-xs sm:text-sm text-[#A8BCBA] leading-relaxed space-y-5">
+          <article className="prose prose-invert prose-cyan max-w-none text-xs sm:text-sm text-[#94A3B8] leading-relaxed space-y-5">
             {currentLesson.contentMarkdown.split("\n\n").map((paragraph, idx) => {
               if (paragraph.startsWith("# ")) {
                 return (
@@ -225,7 +225,7 @@ export default function ClassroomLessonPage() {
                 const lines = paragraph.split("\n");
                 const codeBody = lines.slice(1, -1).join("\n");
                 return (
-                  <div key={idx} className="my-4 rounded-xl bg-[#061214] border border-white/[0.08] p-4 font-mono text-xs overflow-x-auto text-cyan-300">
+                  <div key={idx} className="my-4 rounded-xl bg-[#0B1120] border border-white/[0.08] p-4 font-mono text-xs overflow-x-auto text-cyan-300">
                     <pre>{codeBody}</pre>
                   </div>
                 );
@@ -237,11 +237,11 @@ export default function ClassroomLessonPage() {
           {/* Practical Exercises */}
           {currentLesson.exercises && currentLesson.exercises.length > 0 && (
             <div className="p-6 rounded-2xl bg-white/[0.035] border border-white/[0.08] space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#49D7A5] font-mono flex items-center gap-2">
-                <Code2 className="w-4 h-4 text-[#49D7A5]" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#7CF2C3] font-mono flex items-center gap-2">
+                <Code2 className="w-4 h-4 text-[#7CF2C3]" />
                 Latihan Praktik Mandiri:
               </h4>
-              <ul className="space-y-2 text-xs text-[#A8BCBA]">
+              <ul className="space-y-2 text-xs text-[#94A3B8]">
                 {currentLesson.exercises.map((ex, idx) => (
                   <li key={idx} className="flex items-start gap-2.5">
                     <span className="font-mono text-cyan-400 font-bold">{idx + 1}.</span>
@@ -259,7 +259,7 @@ export default function ClassroomLessonPage() {
                 variant="outline"
                 size="md"
                 onClick={handlePrev}
-                className="w-full sm:w-auto text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
+                className="w-full sm:w-auto text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Pelajaran Sebelumnya

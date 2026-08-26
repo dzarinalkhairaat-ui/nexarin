@@ -41,15 +41,15 @@ export default function CategoryPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
       {/* Category Header */}
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#08191B] border border-white/[0.08] relative overflow-hidden">
+      <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-white/[0.08] relative overflow-hidden">
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18D6D0]/10 text-[#18D6D0] text-xs font-bold font-mono uppercase border border-[#18D6D0]/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 text-[#2DD4F5] text-xs font-bold font-mono uppercase border border-[#2DD4F5]/30">
             <span>Kanal Informasi Terkurasi</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             {categoryMeta.name}
           </h1>
-          <p className="text-xs sm:text-sm text-[#A8BCBA] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
             {categoryMeta.description}
           </p>
         </div>

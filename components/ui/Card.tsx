@@ -12,9 +12,9 @@ export function Card({ className, hoverable = false, elevated = false, children,
   return (
     <div
       className={cn(
-        "rounded-2xl border border-white/[0.08] backdrop-blur-md text-[#F2FAF9] overflow-hidden transition-all duration-200",
-        elevated ? "bg-white/[0.055] border-white/[0.12]" : "bg-white/[0.035]",
-        hoverable && "hover:bg-white/[0.055] hover:border-[#18D6D0]/25 hover:-translate-y-0.5",
+        "rounded-2xl border border-[#1E293B] backdrop-blur-md text-slate-100 overflow-hidden transition-all duration-200",
+        elevated ? "bg-[#131E32]/90 border-cyan-500/20" : "bg-[#131E32]/70",
+        hoverable && "hover:bg-[#131E32] hover:border-cyan-500/40 hover:-translate-y-0.5",
         className
       )}
       {...props}

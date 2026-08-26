@@ -64,14 +64,14 @@ export function CheckoutModal({ isOpen, onClose, product }: CheckoutModalProps) 
     >
       {step === "form" && (
         <div className="space-y-4">
-          <div className="p-3.5 rounded-2xl bg-[#061214] border border-white/[0.08] flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-[#0B1120] border border-white/[0.08] flex items-center justify-between">
             <div>
               <h5 className="text-xs font-bold text-white line-clamp-1">
                 {product.name}
               </h5>
-              <span className="text-[11px] text-[#6F8583] font-mono">Versi {product.currentVersion} • Lisensi Lifetime</span>
+              <span className="text-[11px] text-[#64748B] font-mono">Versi {product.currentVersion} • Lisensi Lifetime</span>
             </div>
-            <span className="text-sm font-extrabold text-[#18D6D0] font-mono">
+            <span className="text-sm font-extrabold text-[#2DD4F5] font-mono">
               {formatCurrency(product.price, product.currency)}
             </span>
           </div>
@@ -94,8 +94,8 @@ export function CheckoutModal({ isOpen, onClose, product }: CheckoutModalProps) 
             />
           </div>
 
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-[#A8BCBA] flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#49D7A5] shrink-0" />
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-[#94A3B8] flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#7CF2C3] shrink-0" />
             <span>Garansi akses update seumur hidup & dokumentasi implementasi.</span>
           </div>
 
@@ -117,16 +117,16 @@ export function CheckoutModal({ isOpen, onClose, product }: CheckoutModalProps) 
 
       {step === "payment" && (
         <div className="space-y-4 text-center">
-          <div className="p-4 rounded-2xl bg-[#08191B] text-white border border-cyan-500/30 space-y-3">
+          <div className="p-4 rounded-2xl bg-[#0F172A] text-white border border-cyan-500/30 space-y-3">
             <span className="text-[11px] font-mono uppercase text-cyan-400 font-bold block">
               Mayar Gateway Simulator
             </span>
             <div className="w-36 h-36 mx-auto bg-white rounded-xl p-2 flex items-center justify-center">
               <QrCode className="w-32 h-32 text-slate-950" />
             </div>
-            <div className="text-xs text-[#A8BCBA]">
-              <span className="block text-[#6F8583]">Total Pembayaran:</span>
-              <span className="text-lg font-bold font-mono text-[#49D7A5]">
+            <div className="text-xs text-[#94A3B8]">
+              <span className="block text-[#64748B]">Total Pembayaran:</span>
+              <span className="text-lg font-bold font-mono text-[#7CF2C3]">
                 {formatCurrency(product.price, product.currency)}
               </span>
             </div>
@@ -153,7 +153,7 @@ export function CheckoutModal({ isOpen, onClose, product }: CheckoutModalProps) 
             <h4 className="text-lg font-extrabold text-white">
               Pembayaran Berhasil Dikonfirmasi!
             </h4>
-            <p className="text-xs text-[#A8BCBA] max-w-sm mx-auto leading-relaxed">
+            <p className="text-xs text-[#94A3B8] max-w-sm mx-auto leading-relaxed">
               Lisensi Lifetime untuk <strong>{product.name}</strong> telah diterbitkan dan langsung tersedia di Customer Dashboard Anda.
             </p>
           </div>

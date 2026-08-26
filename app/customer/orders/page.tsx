@@ -38,7 +38,7 @@ export default function CustomerOrdersPage() {
                   <span className="font-bold text-white block sm:inline mr-3">
                     #{order.orderNumber}
                   </span>
-                  <span className="text-[#6F8583]">{formatDateTime(order.createdAt)}</span>
+                  <span className="text-[#64748B]">{formatDateTime(order.createdAt)}</span>
                 </div>
                 <Badge variant={order.status === "paid" ? "mint" : "warning"} size="sm">
                   {order.status === "paid" ? "Lunas (Paid)" : order.status}
@@ -52,7 +52,7 @@ export default function CustomerOrdersPage() {
                       <h4 className="font-bold text-white">
                         {item.productName}
                       </h4>
-                      <span className="text-[11px] text-[#6F8583] font-mono">Versi {item.version} • Lisensi Lifetime</span>
+                      <span className="text-[11px] text-[#64748B] font-mono">Versi {item.version} • Lisensi Lifetime</span>
                     </div>
                     <span className="font-mono font-bold text-white">
                       {formatCurrency(item.price, order.currency)}
@@ -62,12 +62,12 @@ export default function CustomerOrdersPage() {
               </div>
 
               <div className="pt-3 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
-                <div className="text-xs font-mono text-[#6F8583]">
-                  Payment: <strong className="text-[#F2FAF9]">{order.paymentProvider}</strong> ({order.paymentReference})
+                <div className="text-xs font-mono text-[#64748B]">
+                  Payment: <strong className="text-[#F8FAFC]">{order.paymentProvider}</strong> ({order.paymentReference})
                 </div>
                 <div className="flex items-center gap-2">
                   <Link href={`/customer/orders/${order.id}`}>
-                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
+                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white">
                       Rincian Faktur <ChevronRight className="w-3 h-3 ml-1" />
                     </Button>
                   </Link>
@@ -86,7 +86,7 @@ export default function CustomerOrdersPage() {
           ))}
         </div>
       ) : (
-        <CustomerCard className="p-12 text-center text-xs text-[#6F8583]">
+        <CustomerCard className="p-12 text-center text-xs text-[#64748B]">
           Belum ada riwayat pesanan yang terdaftar pada akun Anda.
         </CustomerCard>
       )}
@@ -100,8 +100,8 @@ export default function CustomerOrdersPage() {
           description="Bukti pembayaran resmi Nexarin by Rins"
           maxWidth="lg"
         >
-          <div className="space-y-6 text-xs text-[#A8BCBA]">
-            <div className="p-4 rounded-2xl bg-[#061214] border border-white/[0.08] space-y-2">
+          <div className="space-y-6 text-xs text-[#94A3B8]">
+            <div className="p-4 rounded-2xl bg-[#0B1120] border border-white/[0.08] space-y-2">
               <div className="flex justify-between">
                 <span>Nama Pelanggan:</span>
                 <strong className="text-white">{selectedInvoice.customerName}</strong>
@@ -129,7 +129,7 @@ export default function CustomerOrdersPage() {
                     <td className="py-3 font-semibold text-white">
                       {item.productName} ({item.version})
                     </td>
-                    <td className="py-3 text-right font-mono font-bold text-[#F2FAF9]">
+                    <td className="py-3 text-right font-mono font-bold text-[#F8FAFC]">
                       {formatCurrency(item.price, selectedInvoice.currency)}
                     </td>
                   </tr>
@@ -138,7 +138,7 @@ export default function CustomerOrdersPage() {
               <tfoot>
                 <tr className="border-t-2 border-white/[0.08] font-bold text-sm">
                   <td className="py-3 text-white">Total Bayar:</td>
-                  <td className="py-3 text-right font-mono text-[#18D6D0]">
+                  <td className="py-3 text-right font-mono text-[#2DD4F5]">
                     {formatCurrency(selectedInvoice.total, selectedInvoice.currency)}
                   </td>
                 </tr>

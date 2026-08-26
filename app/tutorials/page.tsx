@@ -119,7 +119,7 @@ export default function TutorialsHubPage() {
     selectedType !== "all";
 
   return (
-    <div className="min-h-screen bg-[#061214] text-[#F2FAF9] selection:bg-[#18D6D0]/30">
+    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30">
       {/* 1. HERO SECTION WITH THEMATIC BACKGROUND IMAGE & BOTTOM GRADIENT */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
         {/* Background Image from External URL */}
@@ -130,7 +130,7 @@ export default function TutorialsHubPage() {
             className="w-full h-full object-cover object-center opacity-70 sm:opacity-75 scale-105 transform transition-transform duration-1000"
           />
           {/* Multi-layer Dark Gradient Overlays for Clear Visibility & Text Readability */}
-          <div className="absolute inset-0 bg-[#061214]/50 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[#0B1120]/50 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/75 via-[#080D1A]/40 to-[#0B1120]" />
           {/* Smooth Bottom Gradient Transition */}
           <div className="absolute bottom-0 left-0 right-0 h-44 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/90 to-transparent" />
@@ -146,10 +146,10 @@ export default function TutorialsHubPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-            Learn. Build. <span className="text-[#18D6D0]">Grow.</span>
+            Learn. Build. <span className="text-[#2DD4F5]">Grow.</span>
           </h1>
 
-          <p className="text-xs sm:text-sm md:text-base text-[#A8BCBA] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
             Pusat pembelajaran teknologi terstruktur: AI &amp; Otomasi, Software Engineering, UI/UX Design, Perangkat Keras, Otomotif Modern, dan Strategi Bisnis Digital.
           </p>
 
@@ -162,13 +162,13 @@ export default function TutorialsHubPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari kelas: 'AI Automation', 'Next.js 16', 'Mobil Listrik', 'Design System'..."
-                className="w-full h-13 pl-12 pr-4 rounded-2xl border border-white/[0.08] bg-white/[0.035] text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#18D6D0] transition-all"
+                className="w-full h-13 pl-12 pr-4 rounded-2xl border border-white/[0.08] bg-white/[0.035] text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] transition-all"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 text-xs font-mono text-[#6F8583] hover:text-white"
+                  className="absolute right-4 text-xs font-mono text-[#64748B] hover:text-white"
                 >
                   Clear
                 </button>
@@ -200,7 +200,7 @@ export default function TutorialsHubPage() {
         ) : (
           <section className="p-6 rounded-2xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
-              <span className="text-[10px] font-mono font-bold uppercase text-[#49D7A5]">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#7CF2C3]">
                 Mulai Perjalanan Belajar Anda
               </span>
               <h3 className="text-base font-bold text-white">
@@ -234,7 +234,7 @@ export default function TutorialsHubPage() {
                   "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border",
                   selectedCategory === "all"
                     ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-400 font-bold"
-                    : "bg-white/[0.035] border-white/[0.08] text-[#6F8583] hover:text-[#F2FAF9]"
+                    : "bg-white/[0.035] border-white/[0.08] text-[#64748B] hover:text-[#F8FAFC]"
                 )}
               >
                 Semua Kategori
@@ -252,7 +252,7 @@ export default function TutorialsHubPage() {
                     "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border",
                     selectedCategory === cat.id
                       ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-400 font-bold"
-                      : "bg-white/[0.035] border-white/[0.08] text-[#6F8583] hover:text-[#F2FAF9]"
+                      : "bg-white/[0.035] border-white/[0.08] text-[#64748B] hover:text-[#F8FAFC]"
                   )}
                 >
                   {cat.name}
@@ -282,7 +282,7 @@ export default function TutorialsHubPage() {
                       "px-2.5 py-1 rounded-lg transition-colors",
                       selectedLevel === lvl
                         ? "bg-cyan-500/20 text-cyan-300 font-bold"
-                        : "text-[#6F8583] hover:text-[#F2FAF9]"
+                        : "text-[#64748B] hover:text-[#F8FAFC]"
                     )}
                   >
                     {lvl === "all" ? "All Level" : lvl}
@@ -294,7 +294,7 @@ export default function TutorialsHubPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-white/[0.035] border border-white/[0.08] text-[#A8BCBA] text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                className="bg-white/[0.035] border border-white/[0.08] text-[#94A3B8] text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400"
               >
                 <option value="popular">Paling Populer</option>
                 <option value="latest">Terbaru</option>
@@ -307,7 +307,7 @@ export default function TutorialsHubPage() {
           {isFiltering && (
             <div className="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-white/[0.08] text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[#6F8583] font-mono">Filter Aktif:</span>
+                <span className="text-[#64748B] font-mono">Filter Aktif:</span>
                 {searchQuery && (
                   <Badge variant="cyan" size="sm">
                     Query: "{searchQuery}"
@@ -323,7 +323,7 @@ export default function TutorialsHubPage() {
                     Level: {selectedLevel}
                   </Badge>
                 )}
-                <span className="text-[#6F8583] font-mono ml-2">
+                <span className="text-[#64748B] font-mono ml-2">
                   Ditemukan: <strong className="text-cyan-400">{filteredCourses.length}</strong> kelas
                 </span>
               </div>
@@ -356,7 +356,7 @@ export default function TutorialsHubPage() {
               <div className="py-16 text-center space-y-4 rounded-2xl bg-white/[0.035] border border-white/[0.08] p-8 max-w-xl mx-auto">
                 <Search className="w-10 h-10 text-slate-500 mx-auto" />
                 <h3 className="text-base font-bold text-white">Tidak Ada Kelas yang Sesuai</h3>
-                <p className="text-xs text-[#6F8583] leading-relaxed">
+                <p className="text-xs text-[#64748B] leading-relaxed">
                   Tidak ditemukan tutorial atau kelas dengan kata kunci atau filter yang Anda pilih. Silakan coba kata kunci lain atau reset filter.
                 </p>
                 <Button variant="primary" size="sm" onClick={clearFilters}>
@@ -378,7 +378,7 @@ export default function TutorialsHubPage() {
                       Kelas Unggulan (Featured Classes)
                     </h2>
                   </div>
-                  <p className="text-xs text-[#6F8583] mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Materi komprehensif pilihan editor dengan kurikulum terlengkap dan latihan praktis.
                   </p>
                 </div>
@@ -396,12 +396,12 @@ export default function TutorialsHubPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-[#49D7A5]" />
+                    <Layers className="w-5 h-5 text-[#7CF2C3]" />
                     <h2 className="text-xl font-bold text-white tracking-tight">
                       Jelajahi Berdasarkan Kategori Utama ({categories.length} Kategori)
                     </h2>
                   </div>
-                  <p className="text-xs text-[#6F8583] mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Pilih bidang keahlian dan temukan puluhan subkategori pembelajaran mendalam.
                   </p>
                 </div>
@@ -424,14 +424,14 @@ export default function TutorialsHubPage() {
                           <span className="text-[10px] font-mono font-bold uppercase text-cyan-400">
                             {totalSubCount} Subkategori
                           </span>
-                          <span className="text-[11px] font-mono text-[#6F8583]">
+                          <span className="text-[11px] font-mono text-[#64748B]">
                             {totalClassesInCat} Kelas
                           </span>
                         </div>
                         <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug">
                           {cat.name}
                         </h3>
-                        <p className="text-xs text-[#6F8583] line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
                           {cat.description}
                         </p>
                       </div>
@@ -456,7 +456,7 @@ export default function TutorialsHubPage() {
                       Paling Populer &amp; Banyak Diikuti
                     </h2>
                   </div>
-                  <p className="text-xs text-[#6F8583] mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Kelas favorit yang paling banyak dipelajari oleh engineer dan profesional digital.
                   </p>
                 </div>
@@ -474,12 +474,12 @@ export default function TutorialsHubPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Award className="w-5 h-5 text-[#49D7A5]" />
+                    <Award className="w-5 h-5 text-[#7CF2C3]" />
                     <h2 className="text-xl font-bold text-white tracking-tight">
                       Ramah Pemula (Beginner Friendly)
                     </h2>
                   </div>
-                  <p className="text-xs text-[#6F8583] mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Mulai perjalanan belajar Anda dengan penjelasan konsep dasar langkah demi langkah tanpa prasyarat rumit.
                   </p>
                 </div>
@@ -502,7 +502,7 @@ export default function TutorialsHubPage() {
                       Tingkat Lanjutan (Intermediate &amp; Advanced)
                     </h2>
                   </div>
-                  <p className="text-xs text-[#6F8583] mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Pendalaman arsitektur kompleks, security zero-trust, dan optimasi performa skala enterprise.
                   </p>
                 </div>
@@ -539,7 +539,7 @@ export default function TutorialsHubPage() {
                     key={tag}
                     type="button"
                     onClick={() => setSearchQuery(tag)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900 border border-white/[0.08] text-[#A8BCBA] hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+                    className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900 border border-white/[0.08] text-[#94A3B8] hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
                   >
                     #{tag}
                   </button>
@@ -549,13 +549,13 @@ export default function TutorialsHubPage() {
 
             {/* CALL TO ACTION */}
             <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-cyan-500/30 text-center space-y-4">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#49D7A5]/10 text-[#49D7A5] border border-[#49D7A5]/30">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#7CF2C3]/10 text-[#7CF2C3] border border-[#7CF2C3]/30">
                 Ekosistem Terintegrasi Nexari
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Ingin Mengimplementasikan Kode Langsung ke Aplikasi Anda?
               </h2>
-              <p className="text-xs sm:text-sm text-[#A8BCBA] max-w-xl mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl mx-auto leading-relaxed">
                 Jelajahi Digital Shop kami untuk mendapatkan Source Code Sistem Absensi Sekolah, Template Admin Pro, dan Starter Kit siap pakai berlisensi lifetime.
               </p>
               <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -566,7 +566,7 @@ export default function TutorialsHubPage() {
                   </Button>
                 </Link>
                 <Link href="/free-resources">
-                  <Button variant="outline" size="md" className="font-bold text-xs border-white/[0.10] text-[#F2FAF9] hover:text-white">
+                  <Button variant="outline" size="md" className="font-bold text-xs border-white/[0.10] text-[#F8FAFC] hover:text-white">
                     Unduh Free Resources
                   </Button>
                 </Link>
@@ -584,7 +584,7 @@ export default function TutorialsHubPage() {
           title={`Kategori: ${activeCategoryModal.name}`}
         >
           <div className="space-y-4">
-            <p className="text-xs text-[#A8BCBA] leading-relaxed">
+            <p className="text-xs text-[#94A3B8] leading-relaxed">
               {activeCategoryModal.description}
             </p>
 
@@ -605,7 +605,7 @@ export default function TutorialsHubPage() {
                     }}
                     className="p-3 rounded-xl bg-slate-900 border border-white/[0.08] hover:border-cyan-500/40 text-left transition-colors flex items-center justify-between text-xs group"
                   >
-                    <span className="font-semibold text-[#F2FAF9] group-hover:text-cyan-400">
+                    <span className="font-semibold text-[#F8FAFC] group-hover:text-cyan-400">
                       {sub.name}
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">

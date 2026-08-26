@@ -40,7 +40,7 @@ export function ConfirmModal({
       </div>
     ),
     primary: (
-      <div className="w-12 h-12 rounded-2xl bg-[#18D6D0]/10 text-[#0891b2] dark:text-[#18D6D0] flex items-center justify-center mb-4">
+      <div className="w-12 h-12 rounded-2xl bg-[#2DD4F5]/10 text-[#0891b2] dark:text-[#2DD4F5] flex items-center justify-center mb-4">
         <Info className="w-6 h-6" />
       </div>
     )
@@ -50,10 +50,10 @@ export function ConfirmModal({
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="md">
       <div className="flex flex-col items-center text-center">
         {iconMap[variant]}
-        <h4 className="text-lg font-bold text-slate-900 dark:text-[#F2FAF9] mb-2">
+        <h4 className="text-lg font-bold text-slate-900 dark:text-[#F8FAFC] mb-2">
           {title}
         </h4>
-        <p className="text-sm text-slate-600 dark:text-[#6F8583] mb-6 leading-relaxed">
+        <p className="text-sm text-slate-600 dark:text-[#64748B] mb-6 leading-relaxed">
           {description}
         </p>
 

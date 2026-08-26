@@ -51,12 +51,12 @@ export function AdminTopbar({ onToggleMobileSidebar }: AdminTopbarProps) {
   };
 
   return (
-    <header className="h-16 border-b border-white/[0.08] bg-[#061214]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header className="h-16 border-b border-white/[0.08] bg-[#0B1120]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
       <div className="flex items-center gap-3">
         {onToggleMobileSidebar && (
           <button
             onClick={onToggleMobileSidebar}
-            className="lg:hidden p-2 rounded-xl text-[#6F8583] hover:text-white hover:bg-slate-800 transition-colors"
+            className="lg:hidden p-2 rounded-xl text-[#64748B] hover:text-white hover:bg-slate-800 transition-colors"
             aria-label="Toggle Menu"
           >
             <Menu className="w-5 h-5" />
@@ -85,7 +85,7 @@ export function AdminTopbar({ onToggleMobileSidebar }: AdminTopbarProps) {
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/[0.08] text-xs font-medium text-[#A8BCBA] hover:text-white hover:border-white/[0.10] transition-colors"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/[0.08] text-xs font-medium text-[#94A3B8] hover:text-white hover:border-white/[0.10] transition-colors"
           title="Buka Website Publik di tab baru"
         >
           <span>Lihat Website</span>

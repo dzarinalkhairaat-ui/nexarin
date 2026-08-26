@@ -50,9 +50,9 @@ function SearchContent() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ketik topik, kata kunci AI, framework, atau nama aplikasi..."
-            className="w-full px-5 py-3.5 pl-12 rounded-2xl border border-white/[0.08] bg-[#08191B] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#18D6D0] text-sm"
+            className="w-full px-5 py-3.5 pl-12 rounded-2xl border border-white/[0.08] bg-[#0F172A] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] text-sm"
           />
-          <Search className="w-5 h-5 text-[#6F8583] absolute left-4 top-4" />
+          <Search className="w-5 h-5 text-[#64748B] absolute left-4 top-4" />
         </div>
       </div>
 
@@ -99,7 +99,7 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-xs text-[#6F8583]">Memuat pencarian...</div>}>
+    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-xs text-[#64748B]">Memuat pencarian...</div>}>
       <SearchContent />
     </Suspense>
   );

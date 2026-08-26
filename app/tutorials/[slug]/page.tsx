@@ -41,7 +41,7 @@ export default function CourseDetailPage() {
       <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
         <div className="text-center space-y-4 max-w-md bg-white/[0.035] p-8 rounded-2xl border border-white/[0.08]">
           <h2 className="text-xl font-bold text-white">Kelas Tidak Ditemukan</h2>
-          <p className="text-xs text-[#6F8583]">
+          <p className="text-xs text-[#64748B]">
             Materi atau kelas dengan tautan "{slug}" tidak tersedia atau telah diperbarui.
           </p>
           <Link href="/tutorials">
@@ -66,18 +66,18 @@ export default function CourseDetailPage() {
     .slice(0, 3);
 
   const levelColor = {
-    Beginner: "bg-emerald-500/10 text-[#49D7A5] border-emerald-500/30",
+    Beginner: "bg-emerald-500/10 text-[#7CF2C3] border-emerald-500/30",
     Intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
     Advanced: "bg-purple-500/10 text-purple-400 border-purple-500/30"
   }[course.level];
 
   return (
-    <div className="min-h-screen bg-[#061214] text-[#F2FAF9] selection:bg-[#18D6D0]/30">
+    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30">
       {/* 1. BREADCRUMBS & COURSE HERO HEADER */}
       <section className="border-b border-white/[0.08] bg-gradient-to-b from-[#080D1A] to-[#0F172A] py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           {/* Breadcrumbs */}
-          <nav className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#6F8583]">
+          <nav className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#64748B]">
             <Link href="/" className="hover:text-cyan-400 transition-colors">
               Home
             </Link>
@@ -88,7 +88,7 @@ export default function CourseDetailPage() {
             <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
             <span className="text-cyan-400">{course.categoryName}</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-[#A8BCBA] truncate max-w-[200px] sm:max-w-none">
+            <span className="text-[#94A3B8] truncate max-w-[200px] sm:max-w-none">
               {course.title}
             </span>
           </nav>
@@ -112,30 +112,30 @@ export default function CourseDetailPage() {
                 {course.title}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#A8BCBA] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
                 {course.description}
               </p>
 
               {/* Stats Bar */}
-              <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2 text-xs font-mono text-[#A8BCBA]">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2 text-xs font-mono text-[#94A3B8]">
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-cyan-400" />
                   <span>Durasi: <strong>{course.duration}</strong></span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4 text-[#49D7A5]" />
+                  <BookOpen className="w-4 h-4 text-[#7CF2C3]" />
                   <span>Materi: <strong>{course.lessonCount} Lessons</strong></span>
                 </div>
                 <div className="flex items-center gap-1.5 text-amber-400">
                   <Star className="w-4 h-4 fill-amber-400" />
-                  <span className="text-[#F2FAF9] font-bold">{course.rating.toFixed(1)}</span>
+                  <span className="text-[#F8FAFC] font-bold">{course.rating.toFixed(1)}</span>
                   <span className="text-slate-500">({course.enrolledCount} Peserta)</span>
                 </div>
               </div>
             </div>
 
             {/* Right: Action Preview Box */}
-            <div className="p-6 rounded-2xl bg-[#061214] border border-white/[0.08] space-y-5">
+            <div className="p-6 rounded-2xl bg-[#0B1120] border border-white/[0.08] space-y-5">
               <div className="relative aspect-video rounded-xl overflow-hidden bg-slate-900 border border-white/[0.08]">
                 <img
                   src={course.thumbnail}
@@ -151,12 +151,12 @@ export default function CourseDetailPage() {
               {isStarted && (
                 <div className="space-y-1.5 p-3 rounded-xl bg-white/[0.035] border border-white/[0.08]">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-[#A8BCBA]">Progres Belajar</span>
-                    <span className="font-bold text-[#49D7A5]">{progress.percentage}%</span>
+                    <span className="text-[#94A3B8]">Progres Belajar</span>
+                    <span className="font-bold text-[#7CF2C3]">{progress.percentage}%</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-cyan-400 to-[#49D7A5] transition-all"
+                      className="h-full bg-gradient-to-r from-cyan-400 to-[#7CF2C3] transition-all"
                       style={{ width: `${progress.percentage}%` }}
                     />
                   </div>
@@ -176,7 +176,7 @@ export default function CourseDetailPage() {
                 </Link>
 
                 {!isCustomerAuthenticated && (
-                  <p className="text-[11px] text-center text-[#6F8583] leading-tight">
+                  <p className="text-[11px] text-center text-[#64748B] leading-tight">
                     Akses 100% Terbuka untuk umum.{" "}
                     <button
                       type="button"
@@ -202,12 +202,12 @@ export default function CourseDetailPage() {
             {/* What you'll learn */}
             <section className="p-6 sm:p-8 rounded-2xl bg-white/[0.035] border border-white/[0.08] space-y-4">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#49D7A5]" />
+                <CheckCircle2 className="w-5 h-5 text-[#7CF2C3]" />
                 <h3 className="text-lg font-bold text-white">Yang Akan Anda Pelajari</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {course.whatYouWillLearn.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 text-xs text-[#A8BCBA]">
+                  <div key={idx} className="flex items-start gap-2.5 text-xs text-[#94A3B8]">
                     <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </div>
@@ -222,7 +222,7 @@ export default function CourseDetailPage() {
                   <h3 className="text-xl font-bold text-white tracking-tight">
                     Kurikulum &amp; Silabus Kelas
                   </h3>
-                  <p className="text-xs text-[#6F8583] mt-0.5">
+                  <p className="text-xs text-[#64748B] mt-0.5">
                     {course.modules.length} Modul • {course.lessonCount} Pelajaran • {course.duration} Total Durasi
                   </p>
                 </div>
@@ -238,7 +238,7 @@ export default function CourseDetailPage() {
             {/* Requirements */}
             <section className="p-6 rounded-2xl bg-white/[0.035] border border-white/[0.08] space-y-3">
               <h3 className="text-base font-bold text-white">Prasyarat &amp; Kebutuhan</h3>
-              <ul className="space-y-2 text-xs text-[#A8BCBA]">
+              <ul className="space-y-2 text-xs text-[#94A3B8]">
                 {course.requirements.map((req, idx) => (
                   <li key={idx} className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
@@ -264,24 +264,24 @@ export default function CourseDetailPage() {
                 />
                 <div>
                   <h4 className="text-sm font-bold text-white">{course.instructor.name}</h4>
-                  <p className="text-[11px] text-[#6F8583] font-mono">{course.instructor.role}</p>
+                  <p className="text-[11px] text-[#64748B] font-mono">{course.instructor.role}</p>
                 </div>
               </div>
-              <p className="text-xs text-[#A8BCBA] leading-relaxed">
+              <p className="text-xs text-[#94A3B8] leading-relaxed">
                 {course.instructor.bio}
               </p>
             </div>
 
             {/* Course Tags */}
             <div className="p-6 rounded-2xl bg-white/[0.035] border border-white/[0.08] space-y-3">
-              <span className="text-[10px] font-mono font-bold uppercase text-[#6F8583] tracking-wider">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#64748B] tracking-wider">
                 Tags Materi
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {course.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-slate-900 border border-white/[0.08] text-[#A8BCBA]"
+                    className="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-slate-900 border border-white/[0.08] text-[#94A3B8]"
                   >
                     #{tag}
                   </span>
@@ -299,7 +299,7 @@ export default function CourseDetailPage() {
                 <h3 className="text-xl font-bold text-white tracking-tight">
                   Kelas Terkait Lainnya
                 </h3>
-                <p className="text-xs text-[#6F8583] mt-0.5">
+                <p className="text-xs text-[#64748B] mt-0.5">
                   Lanjutkan peningkatan keahlian Anda dengan materi sejenis.
                 </p>
               </div>

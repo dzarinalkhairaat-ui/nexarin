@@ -17,24 +17,24 @@ export function GuestAuthPromptModal() {
       title="Simpan Progres Belajar Anda"
     >
       <div className="space-y-5 text-center sm:text-left">
-        <div className="p-4 rounded-xl bg-[#18D6D0]/10 border border-[#18D6D0]/20 flex items-start gap-3">
-          <Sparkles className="w-4 h-4 text-[#18D6D0] flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-[#F2FAF9] leading-relaxed">
+        <div className="p-4 rounded-xl bg-[#2DD4F5]/10 border border-[#2DD4F5]/20 flex items-start gap-3">
+          <Sparkles className="w-4 h-4 text-[#2DD4F5] flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-[#F8FAFC] leading-relaxed">
             {guestPromptReason || "Masuk dengan Akun Pelanggan untuk menandai materi yang sudah selesai, menyimpan catatan, dan melanjutkan belajar kapan saja."}
           </p>
         </div>
 
-        <div className="space-y-2 text-xs text-[#A8BCBA]">
+        <div className="space-y-2 text-xs text-[#94A3B8]">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+            <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
             <span>Pelacakan progres persen (%) penyelesaian kelas</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+            <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
             <span>Akses kembali ke materi terakhir secara instan</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+            <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
             <span>Gratis 100% tanpa biaya pendaftaran</span>
           </div>
         </div>

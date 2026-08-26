@@ -31,8 +31,8 @@ export default function AdminAuditLogsPage() {
                 <span className="font-bold text-white font-sans text-sm">{log.entityName}</span>
               </div>
 
-              <div className="text-right text-[11px] text-[#6F8583] flex items-center gap-2">
-                <span className="text-[#F2FAF9] font-semibold flex items-center gap-1">
+              <div className="text-right text-[11px] text-[#64748B] flex items-center gap-2">
+                <span className="text-[#F8FAFC] font-semibold flex items-center gap-1">
                   <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
                   {log.adminName}
                 </span>
@@ -41,7 +41,7 @@ export default function AdminAuditLogsPage() {
               </div>
             </div>
 
-            <p className="text-[#A8BCBA] font-sans text-xs pt-1">
+            <p className="text-[#94A3B8] font-sans text-xs pt-1">
               {log.details}
             </p>
           </AdminCard>

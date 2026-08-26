@@ -36,7 +36,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
         <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-3 text-xs text-[#6F8583] mb-3 font-mono">
+            <div className="flex items-center gap-3 text-xs text-[#64748B] mb-3 font-mono">
               <span>{formatDate(article.publishedAt)}</span>
               <span>•</span>
               <span className="flex items-center gap-1">
@@ -46,12 +46,12 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
             </div>
 
             <Link href={`/article/${article.slug}`}>
-              <h2 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[#18D6D0] transition-colors leading-snug mb-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug mb-3">
                 {article.title}
               </h2>
             </Link>
 
-            <p className="text-sm text-[#A8BCBA] line-clamp-3 leading-relaxed mb-4">
+            <p className="text-sm text-[#94A3B8] line-clamp-3 leading-relaxed mb-4">
               {article.excerpt}
             </p>
           </div>
@@ -64,19 +64,19 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
                 onError={(e) => {
                   e.currentTarget.src = "/assets/avatar-default.svg";
                 }}
-                className="w-8 h-8 rounded-full object-cover border border-[#18D6D0]/40"
+                className="w-8 h-8 rounded-full object-cover border border-[#2DD4F5]/40"
               />
               <div>
-                <h4 className="text-xs font-bold text-[#F2FAF9]">
+                <h4 className="text-xs font-bold text-[#F8FAFC]">
                   {article.author.name}
                 </h4>
-                <span className="text-[10px] text-[#6F8583] font-mono">
+                <span className="text-[10px] text-[#64748B] font-mono">
                   {article.author.role}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs text-[#6F8583] font-mono">
+            <div className="flex items-center gap-1.5 text-xs text-[#64748B] font-mono">
               <Eye className="w-3.5 h-3.5" />
               <span>{article.views}</span>
             </div>
@@ -104,7 +104,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
-          <div className="flex items-center gap-2 text-xs text-[#6F8583] mb-2 font-mono">
+          <div className="flex items-center gap-2 text-xs text-[#64748B] mb-2 font-mono">
             <span>{formatDate(article.publishedAt)}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
@@ -114,18 +114,18 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           </div>
 
           <Link href={`/article/${article.slug}`}>
-            <h3 className="text-base font-bold text-white group-hover:text-[#18D6D0] transition-colors leading-snug line-clamp-2 mb-2">
+            <h3 className="text-base font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2 mb-2">
               {article.title}
             </h3>
           </Link>
 
-          <p className="text-xs text-[#6F8583] line-clamp-2 leading-relaxed">
+          <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
             {article.excerpt}
           </p>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] text-xs text-[#6F8583]">
-          <span className="font-semibold text-[#A8BCBA] truncate max-w-[120px]">
+        <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] text-xs text-[#64748B]">
+          <span className="font-semibold text-[#94A3B8] truncate max-w-[120px]">
             {article.author.name}
           </span>
           <div className="flex items-center gap-1 font-mono">

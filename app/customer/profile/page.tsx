@@ -48,17 +48,17 @@ export default function CustomerProfilePage() {
             onError={(e) => {
               e.currentTarget.src = "/assets/avatar-default.svg";
             }}
-            className="w-16 h-16 rounded-2xl object-cover border-2 border-[#18D6D0]"
+            className="w-16 h-16 rounded-2xl object-cover border-2 border-[#2DD4F5]"
           />
           <div>
             <h3 className="text-lg font-bold text-white">{customer?.name}</h3>
-            <span className="text-xs text-[#6F8583] font-mono">Tipe Akun: Customer Resmi</span>
+            <span className="text-xs text-[#64748B] font-mono">Tipe Akun: Customer Resmi</span>
           </div>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Nama Lengkap
             </label>
             <input
@@ -66,13 +66,13 @@ export default function CustomerProfilePage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0] focus:border-transparent placeholder:text-slate-500"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-500"
             />
           </div>
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Alamat Email (Akun Lisensi)
               </label>
               <span className="text-[10px] font-mono text-slate-500 flex items-center gap-1">
@@ -83,7 +83,7 @@ export default function CustomerProfilePage() {
               type="email"
               readOnly
               value={email}
-              className="w-full rounded-xl border border-white/[0.08] bg-slate-900/50 text-[#6F8583] px-4 py-2.5 text-sm cursor-not-allowed"
+              className="w-full rounded-xl border border-white/[0.08] bg-slate-900/50 text-[#64748B] px-4 py-2.5 text-sm cursor-not-allowed"
             />
             <span className="text-[10px] text-slate-500 block">
               Email lisensi tidak dapat diubah langsung demi keamanan aktivasi software.
@@ -91,7 +91,7 @@ export default function CustomerProfilePage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Organisasi / Institusi / Sekolah (Opsional)
             </label>
             <input
@@ -99,7 +99,7 @@ export default function CustomerProfilePage() {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Contoh: SMA Nusantara Digital"
-              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0] focus:border-transparent placeholder:text-slate-500"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-500"
             />
           </div>
 

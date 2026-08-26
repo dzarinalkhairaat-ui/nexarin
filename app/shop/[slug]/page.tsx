@@ -56,7 +56,7 @@ export default function ProductDetailPage() {
     return (
       <div className="max-w-4xl mx-auto py-24 px-4 text-center space-y-4">
         <h1 className="text-2xl font-bold text-white">Produk Tidak Ditemukan</h1>
-        <p className="text-[#6F8583]">Produk yang Anda cari tidak tersedia di katalog Nexarin.</p>
+        <p className="text-[#64748B]">Produk yang Anda cari tidak tersedia di katalog Nexarin.</p>
         <Link href="/shop">
           <Button variant="primary">Kembali ke Katalog</Button>
         </Link>
@@ -100,7 +100,7 @@ export default function ProductDetailPage() {
       <div>
         <Link
           href="/shop"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#64748B] hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Nexarin Digital Shop</span>
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Left: Gallery and Details */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="rounded-3xl overflow-hidden border border-white/[0.08] h-72 sm:h-96 bg-[#08191B]">
+          <div className="rounded-3xl overflow-hidden border border-white/[0.08] h-72 sm:h-96 bg-[#0F172A]">
             <img
               src={allImages[activeImageIndex] || product.featuredImage || "/assets/default-cover.svg"}
               alt={product.name}
@@ -129,7 +129,7 @@ export default function ProductDetailPage() {
                   key={idx}
                   onClick={() => setActiveImageIndex(idx)}
                   className={`w-20 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                    activeImageIndex === idx ? "border-[#18D6D0] scale-105 " : "border-transparent opacity-60 hover:opacity-100"
+                    activeImageIndex === idx ? "border-[#2DD4F5] scale-105 " : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
                   <img
@@ -150,7 +150,7 @@ export default function ProductDetailPage() {
             <h3 className="text-xl font-bold text-white">
               Deskripsi Produk Lengkap
             </h3>
-            <div className="text-sm text-[#A8BCBA] leading-relaxed space-y-4">
+            <div className="text-sm text-[#94A3B8] leading-relaxed space-y-4">
               {product.description.split("\n\n").map((p, idx) => (
                 <p key={idx}>{p}</p>
               ))}
@@ -169,7 +169,7 @@ export default function ProductDetailPage() {
                 <div className="flex items-center gap-1 text-amber-400 text-xs font-semibold">
                   <Star className="w-4 h-4 fill-current" />
                   <span>{product.rating}</span>
-                  <span className="text-[#6F8583]">({product.ratingCount} ulasan)</span>
+                  <span className="text-[#64748B]">({product.ratingCount} ulasan)</span>
                 </div>
               </div>
 
@@ -177,15 +177,15 @@ export default function ProductDetailPage() {
                 {product.name}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#A8BCBA] mt-2 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#94A3B8] mt-2 leading-relaxed">
                 {product.tagline}
               </p>
             </div>
 
             {/* Price Row */}
-            <div className="p-4 rounded-2xl bg-[#061214] border border-white/[0.08] flex items-baseline justify-between">
+            <div className="p-4 rounded-2xl bg-[#0B1120] border border-white/[0.08] flex items-baseline justify-between">
               <div>
-                <span className="text-xs text-[#6F8583] block font-medium">Lisensi Lifetime Resmi</span>
+                <span className="text-xs text-[#64748B] block font-medium">Lisensi Lifetime Resmi</span>
                 <span className="text-3xl font-extrabold text-white font-mono">
                   {formatCurrency(product.price, product.currency)}
                 </span>
@@ -218,7 +218,7 @@ export default function ProductDetailPage() {
                   variant="outline"
                   size="md"
                   onClick={handleTrialClick}
-                  className="w-full font-bold text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
+                  className="w-full font-bold text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
                   Coba Demo Gratis {product.trialDurationDays} Hari
@@ -227,7 +227,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Guarantee Badges */}
-            <div className="space-y-2.5 pt-4 border-t border-white/[0.08] text-xs text-[#A8BCBA]">
+            <div className="space-y-2.5 pt-4 border-t border-white/[0.08] text-xs text-[#94A3B8]">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
                 <span>Full Source Code &amp; Hak Lisensi Tanpa Batas Waktu</span>
@@ -250,13 +250,13 @@ export default function ProductDetailPage() {
         {/* Features list */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-[#18D6D0]" />
+            <Layers className="w-5 h-5 text-[#2DD4F5]" />
             <h3 className="text-lg font-bold text-white">Fitur Kunci &amp; Kemampuan Sistem</h3>
           </div>
           <div className="grid grid-cols-1 gap-2.5">
             {product.features.map((feat, idx) => (
-              <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.035] border border-white/[0.08] text-xs text-[#F2FAF9]">
-                <Check className="w-4 h-4 text-[#49D7A5] shrink-0 mt-0.5" />
+              <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.035] border border-white/[0.08] text-xs text-[#F8FAFC]">
+                <Check className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
                 <span>{feat}</span>
               </div>
             ))}
@@ -266,15 +266,15 @@ export default function ProductDetailPage() {
         {/* Technical Specs */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Server className="w-5 h-5 text-[#49D7A5]" />
+            <Server className="w-5 h-5 text-[#7CF2C3]" />
             <h3 className="text-lg font-bold text-white">Spesifikasi &amp; Kebutuhan Teknis</h3>
           </div>
           <Card className="p-5 space-y-4 bg-white/[0.035] border-white/[0.08]">
             <div>
-              <span className="text-[11px] font-mono uppercase text-[#6F8583] font-bold block mb-1">
+              <span className="text-[11px] font-mono uppercase text-[#64748B] font-bold block mb-1">
                 Platform yang Didukung:
               </span>
-              <ul className="text-xs text-[#F2FAF9] space-y-1 list-disc pl-4">
+              <ul className="text-xs text-[#F8FAFC] space-y-1 list-disc pl-4">
                 {product.requirements.platform.map((p, i) => (
                   <li key={i}>{p}</li>
                 ))}
@@ -283,11 +283,11 @@ export default function ProductDetailPage() {
 
             <div className="pt-2 border-t border-white/[0.08] grid grid-cols-2 gap-4 text-xs font-mono">
               <div>
-                <span className="text-[#6F8583] block text-[10px]">RUNTIME:</span>
+                <span className="text-[#64748B] block text-[10px]">RUNTIME:</span>
                 <span className="font-bold text-white">{product.requirements.runtime}</span>
               </div>
               <div>
-                <span className="text-[#6F8583] block text-[10px]">DATABASE:</span>
+                <span className="text-[#64748B] block text-[10px]">DATABASE:</span>
                 <span className="font-bold text-white">{product.requirements.database}</span>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function ProductDetailPage() {
       <section className="space-y-6 pt-8 border-t border-white/[0.08]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Terminal className="w-5 h-5 text-[#18D6D0]" />
+            <Terminal className="w-5 h-5 text-[#2DD4F5]" />
             <h3 className="text-xl font-bold text-white">Riwayat Versi &amp; Changelog</h3>
           </div>
           <span className="text-xs font-mono text-cyan-400 font-semibold">
@@ -315,16 +315,16 @@ export default function ProductDetailPage() {
                   <Badge variant={ver.isLatest ? "mint" : "slate"} size="sm">
                     {ver.version} {ver.isLatest ? "— Terbaru" : ""}
                   </Badge>
-                  <span className="text-xs text-[#6F8583] font-mono">
+                  <span className="text-xs text-[#64748B] font-mono">
                     Rilis: {formatDate(ver.releaseDate)}
                   </span>
                 </div>
-                <span className="text-xs font-mono text-[#6F8583]">
+                <span className="text-xs font-mono text-[#64748B]">
                   {ver.fileSize}
                 </span>
               </div>
 
-              <ul className="space-y-1.5 pl-4 list-disc text-xs text-[#A8BCBA]">
+              <ul className="space-y-1.5 pl-4 list-disc text-xs text-[#94A3B8]">
                 {ver.releaseNotes.map((note, idx) => (
                   <li key={idx}>{note}</li>
                 ))}
@@ -344,7 +344,7 @@ export default function ProductDetailPage() {
                 <h4 className="text-sm font-bold text-white">
                   {faq.question}
                 </h4>
-                <p className="text-xs text-[#A8BCBA] leading-relaxed">
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
                   {faq.answer}
                 </p>
               </Card>

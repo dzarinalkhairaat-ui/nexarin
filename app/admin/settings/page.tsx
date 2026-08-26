@@ -48,7 +48,7 @@ export default function AdminSettingsPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                   Nama Situs (Site Title)
                 </label>
                 <input
@@ -56,12 +56,12 @@ export default function AdminSettingsPage() {
                   required
                   value={siteName}
                   onChange={(e) => setSiteName(e.target.value)}
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                   Identitas Brand Author
                 </label>
                 <input
@@ -69,7 +69,7 @@ export default function AdminSettingsPage() {
                   required
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
                 />
               </div>
             </div>
@@ -77,14 +77,14 @@ export default function AdminSettingsPage() {
 
           {/* Section 2: Integrations */}
           <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase text-[#49D7A5] font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-white/[0.08]">
+            <h3 className="text-xs font-mono uppercase text-[#7CF2C3] font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-white/[0.08]">
               <CreditCard className="w-3.5 h-3.5" />
               Integrasi Payment Gateway &amp; Database
             </h3>
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                   Mayar Payment Secret Key (Simulasi)
                 </label>
                 <input
@@ -92,12 +92,12 @@ export default function AdminSettingsPage() {
                   required
                   value={mayarKey}
                   onChange={(e) => setMayarKey(e.target.value)}
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-cyan-300 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-cyan-300 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                   Supabase URL Production
                 </label>
                 <input
@@ -105,7 +105,7 @@ export default function AdminSettingsPage() {
                   required
                   value={supabaseUrl}
                   onChange={(e) => setSupabaseUrl(e.target.value)}
-                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
                 />
               </div>
             </div>

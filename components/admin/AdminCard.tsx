@@ -11,7 +11,7 @@ export function AdminCard({ children, className, ...props }: AdminCardProps) {
   return (
     <div
       className={cn(
-        "rounded-2xl bg-[#061214] border border-white/[0.08] p-5 ",
+        "rounded-2xl bg-[#0B1120] border border-white/[0.08] p-5 ",
         className
       )}
       {...props}

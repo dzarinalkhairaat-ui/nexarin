@@ -13,7 +13,7 @@ import {
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#061214] text-[#A8BCBA] text-sm selection:bg-[#18D6D0]/30">
+    <footer className="border-t border-white/[0.08] bg-[#0B1120] text-[#94A3B8] text-sm selection:bg-[#2DD4F5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-white/[0.08]">
@@ -27,26 +27,26 @@ export function Footer() {
               />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#18D6D0] transition-colors leading-none">
+                  <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#2DD4F5] transition-colors leading-none">
                     Nexarin
                   </span>
-                  <span className="text-[11px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#18D6D0]/10 text-[#18D6D0] border border-[#18D6D0]/20 leading-none">
+                  <span className="text-[11px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20 leading-none">
                     Tech Hub
                   </span>
                 </div>
-                <span className="text-[10px] text-[#6F8583] font-mono tracking-wider mt-1">
+                <span className="text-[10px] text-[#64748B] font-mono tracking-wider mt-1">
                   by Rins
                 </span>
               </div>
             </Link>
 
-            <p className="text-xs text-[#6F8583] leading-relaxed max-w-sm">
+            <p className="text-xs text-[#64748B] leading-relaxed max-w-sm">
               Platform ekosistem teknologi modern yang menggabungkan portal informasi kecerdasan buatan terkurasi, ulasan gadget, otomotif masa depan, serta marketplace produk digital siap pakai berlisensi lifetime.
             </p>
 
             {/* Official Social Media Channels with Real Brand Icons */}
             <div className="space-y-2 pt-1">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#6F8583] block font-semibold">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] block font-semibold">
                 Kanal Sosial &amp; Komunitas:
               </span>
               <div className="flex flex-wrap items-center gap-2">
@@ -56,7 +56,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Ikuti Nexarin di Instagram"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-[#E4405F] hover:border-[#E4405F]/40 hover:bg-[#E4405F]/10 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-[#E4405F] hover:border-[#E4405F]/40 hover:bg-[#E4405F]/10 flex items-center justify-center transition-all duration-150 group"
                   title="Instagram"
                 >
                   <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Tonton Tutorial Nexarin di YouTube"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-[#FF0000] hover:border-[#FF0000]/40 hover:bg-[#FF0000]/10 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-[#FF0000] hover:border-[#FF0000]/40 hover:bg-[#FF0000]/10 flex items-center justify-center transition-all duration-150 group"
                   title="YouTube"
                 >
                   <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Ikuti Nexarin di Facebook"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-[#1877F2] hover:border-[#1877F2]/40 hover:bg-[#1877F2]/10 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-[#1877F2] hover:border-[#1877F2]/40 hover:bg-[#1877F2]/10 flex items-center justify-center transition-all duration-150 group"
                   title="Facebook"
                 >
                   <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -98,7 +98,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Lihat Source Code di GitHub"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-white hover:border-white/[0.12] hover:bg-slate-800 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-white hover:border-white/[0.12] hover:bg-slate-800 flex items-center justify-center transition-all duration-150 group"
                   title="GitHub"
                 >
                   <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Ikuti update di X"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-white hover:border-white/[0.12] hover:bg-slate-800 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-white hover:border-white/[0.12] hover:bg-slate-800 flex items-center justify-center transition-all duration-150 group"
                   title="X (Twitter)"
                 >
                   <svg className="w-3.5 h-3.5 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Koneksi profesional di LinkedIn"
-                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#6F8583] hover:text-[#0A66C2] hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10 flex items-center justify-center transition-all duration-150 group"
+                  className="w-9 h-9 rounded-xl bg-[#0E1626] border border-white/[0.08] text-[#64748B] hover:text-[#0A66C2] hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10 flex items-center justify-center transition-all duration-150 group"
                   title="LinkedIn"
                 >
                   <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -139,10 +139,10 @@ export function Footer() {
 
           {/* Column 2: Explore Portal */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#18D6D0] mb-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#2DD4F5] mb-4">
               Jelajahi Portal
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#6F8583]">
+            <ul className="space-y-2.5 text-xs text-[#64748B]">
               <li>
                 <Link href="/ai" className="hover:text-white transition-colors flex items-center gap-1.5">
                   <span>Artificial Intelligence</span>
@@ -178,10 +178,10 @@ export function Footer() {
 
           {/* Column 3: Shop & Resources */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#49D7A5] mb-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#7CF2C3] mb-4">
               Toko &amp; Sumber Daya
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#6F8583]">
+            <ul className="space-y-2.5 text-xs text-[#64748B]">
               <li>
                 <Link href="/shop" className="hover:text-white transition-colors flex items-center gap-1.5">
                   <span>Nexarin Digital Shop</span>
@@ -215,10 +215,10 @@ export function Footer() {
 
           {/* Column 4: Company & Legal */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#A8BCBA] mb-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-4">
               Informasi &amp; Legal
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#6F8583]">
+            <ul className="space-y-2.5 text-xs text-[#64748B]">
               <li>
                 <Link href="/about" className="hover:text-white transition-colors">
                   Tentang Nexarin by Rins
@@ -254,7 +254,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar: Copyright & Service Status */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6F8583] font-mono">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64748B] font-mono">
           <p>© 2026 Nexarin Tech Hub — Brand of Nexarin by Rins. Hak cipta dilindungi undang-undang.</p>
 
           <div className="flex items-center gap-4">

@@ -38,14 +38,14 @@ export default function CustomerOverviewPage() {
       {/* Welcome Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0B1120] via-[#131E32] to-[#0B1120] text-white border border-cyan-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] text-xs font-mono font-bold border border-[#49D7A5]/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-xs font-mono font-bold border border-[#7CF2C3]/30">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Customer Portal &amp; License Hub</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
             Selamat Datang, {customer?.name || "Customer"}!
           </h1>
-          <p className="text-xs sm:text-sm text-[#A8BCBA] max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
             Kelola lisensi produk digital Anda, unduh source code versi terbaru, dan dapatkan pembaruan berkelanjutan.
           </p>
         </div>
@@ -71,9 +71,9 @@ export default function CustomerOverviewPage() {
           label="Update Tersedia"
           value={pendingUpdates.length}
           subtext="Versi baru siap unduh"
-          icon={<Sparkles className="w-5 h-5 text-[#49D7A5]" />}
+          icon={<Sparkles className="w-5 h-5 text-[#7CF2C3]" />}
           badge={pendingUpdates.length > 0 ? "Baru" : "Up-to-date"}
-          badgeColor={pendingUpdates.length > 0 ? "bg-emerald-500/20 text-[#49D7A5]" : "bg-slate-800 text-[#6F8583]"}
+          badgeColor={pendingUpdates.length > 0 ? "bg-emerald-500/20 text-[#7CF2C3]" : "bg-slate-800 text-[#64748B]"}
         />
 
         <CustomerStatCard
@@ -96,14 +96,14 @@ export default function CustomerOverviewPage() {
         <CustomerCard className="bg-emerald-500/10 border-emerald-500/30">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-[#49D7A5] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-[#7CF2C3] flex items-center justify-center shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white">
                   Terdapat {pendingUpdates.length} Pembaruan Versi Baru untuk Produk Anda!
                 </h3>
-                <p className="text-xs text-[#A8BCBA] mt-0.5">
+                <p className="text-xs text-[#94A3B8] mt-0.5">
                   Unduh versi terbaru secara gratis untuk mendapatkan peningkatan performa, perbaikan keamanan, dan fitur baru.
                 </p>
               </div>
@@ -124,7 +124,7 @@ export default function CustomerOverviewPage() {
           <h3 className="text-lg font-bold text-white">
             Produk Digital Aktif Anda
           </h3>
-          <Link href="/customer/products" className="text-xs font-bold text-[#18D6D0] hover:underline flex items-center gap-1">
+          <Link href="/customer/products" className="text-xs font-bold text-[#2DD4F5] hover:underline flex items-center gap-1">
             Lihat Semua Produk <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -158,8 +158,8 @@ export default function CustomerOverviewPage() {
                       {lic.productName}
                     </h4>
 
-                    <div className="mt-3 p-3 rounded-xl bg-[#061214] border border-white/[0.08] text-[11px] font-mono flex items-center justify-between">
-                      <span className="text-[#6F8583]">License Key:</span>
+                    <div className="mt-3 p-3 rounded-xl bg-[#0B1120] border border-white/[0.08] text-[11px] font-mono flex items-center justify-between">
+                      <span className="text-[#64748B]">License Key:</span>
                       <span className="font-bold text-cyan-300">{lic.licenseKey}</span>
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export default function CustomerOverviewPage() {
                       Unduh Build ({lic.ownedVersion})
                     </Button>
                     <Link href={`/customer/products/${lic.productId}`}>
-                      <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
+                      <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white">
                         Detail &amp; Notes
                       </Button>
                     </Link>
@@ -185,7 +185,7 @@ export default function CustomerOverviewPage() {
             })}
           </div>
         ) : (
-          <CustomerCard className="p-8 text-center text-xs text-[#6F8583]">
+          <CustomerCard className="p-8 text-center text-xs text-[#64748B]">
             <p className="mb-3">Anda belum memiliki lisensi produk digital aktif.</p>
             <Link href="/shop">
               <Button variant="mint" size="sm" className="font-bold text-slate-950">

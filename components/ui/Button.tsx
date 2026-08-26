@@ -16,17 +16,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        "bg-[#18D6D0] text-[#061214] hover:bg-[#43E0D8] active:bg-[#15b8b3] font-bold border border-[#18D6D0]/30",
+        "bg-[#2DD4F5] text-slate-950 hover:bg-[#38BDF8] active:bg-[#20b8d8] font-bold border border-[#2DD4F5]/30",
       mint:
-        "bg-[#49D7A5] text-[#061214] hover:bg-[#3ec495] active:bg-[#36b085] font-extrabold border border-[#49D7A5]/30",
+        "bg-[#7CF2C3] text-slate-950 hover:bg-[#60e0ad] active:bg-[#48c998] font-extrabold border border-[#7CF2C3]/30",
       secondary:
-        "bg-white/[0.055] text-[#F2FAF9] hover:bg-white/[0.08] hover:text-white border border-white/[0.10] active:bg-white/[0.10]",
+        "bg-[#0F172A]/80 backdrop-blur-md text-slate-100 hover:bg-[#1E293B] hover:text-white border border-[#1E293B]",
       outline:
-        "bg-transparent border border-white/[0.10] text-[#A8BCBA] hover:text-[#F2FAF9] hover:bg-white/[0.04] hover:border-[#18D6D0]/30",
+        "bg-transparent border border-[#1E293B] text-slate-300 hover:text-white hover:bg-[#0F172A]/60 hover:border-[#2DD4F5]/40",
       ghost:
-        "text-[#A8BCBA] hover:text-[#F2FAF9] hover:bg-white/[0.04] active:bg-white/[0.06]",
+        "text-slate-300 hover:text-white hover:bg-white/[0.05]",
       danger:
-        "bg-[#E06C75] text-white hover:bg-[#d45862] active:bg-[#c24b55] font-semibold border border-[#E06C75]/30",
+        "bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 font-semibold border border-rose-500/30",
     };
 
     const sizeStyles = {

@@ -32,7 +32,7 @@ export function AdminPageHeader({
           )}
         </div>
         {description && (
-          <p className="text-xs text-[#6F8583] leading-relaxed max-w-2xl">
+          <p className="text-xs text-[#64748B] leading-relaxed max-w-2xl">
             {description}
           </p>
         )}

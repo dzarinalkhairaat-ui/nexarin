@@ -83,11 +83,11 @@ export default function AdminAffiliatePage() {
                     {aff.marketplace}
                   </span>
                   {aff.badgeLabel && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-500/10 text-[#49D7A5] border border-emerald-500/20">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-500/10 text-[#7CF2C3] border border-emerald-500/20">
                       {aff.badgeLabel}
                     </span>
                   )}
-                  <span className="text-xs text-[#6F8583] font-mono">{aff.category}</span>
+                  <span className="text-xs text-[#64748B] font-mono">{aff.category}</span>
                 </div>
                 <h3 className="text-base font-bold text-white">
                   {aff.productName}
@@ -96,7 +96,7 @@ export default function AdminAffiliatePage() {
 
               <div className="flex items-center gap-4">
                 <div className="sm:text-right">
-                  <span className="text-xs text-[#6F8583] font-mono block">Total Klik Terlacak</span>
+                  <span className="text-xs text-[#64748B] font-mono block">Total Klik Terlacak</span>
                   <span className="text-lg font-black text-cyan-400 font-mono">
                     {aff.clicksCount} klik
                   </span>
@@ -114,15 +114,15 @@ export default function AdminAffiliatePage() {
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2">
-                <span className="text-[#6F8583] font-mono">Estimasi Harga:</span>
-                <strong className="text-[#F2FAF9] font-mono">{aff.priceEstimate}</strong>
+                <span className="text-[#64748B] font-mono">Estimasi Harga:</span>
+                <strong className="text-[#F8FAFC] font-mono">{aff.priceEstimate}</strong>
               </div>
 
               <a
                 href={aff.affiliateUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#18D6D0] hover:text-cyan-300 font-mono font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08]"
+                className="text-[#2DD4F5] hover:text-cyan-300 font-mono font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08]"
               >
                 <span>Uji Tautan Eksternal</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -142,7 +142,7 @@ export default function AdminAffiliatePage() {
       >
         <form onSubmit={handleCreate} className="space-y-4 text-xs">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Nama Produk Rekomendasi
             </label>
             <input
@@ -151,18 +151,18 @@ export default function AdminAffiliatePage() {
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               placeholder="Contoh: Keychron K2 V2 Wireless Mechanical Keyboard"
-              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Platform Marketplace
             </label>
             <select
               value={marketplace}
               onChange={(e) => setMarketplace(e.target.value as MarketplaceType)}
-              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
             >
               <option value="Shopee">Shopee</option>
               <option value="Tokopedia">Tokopedia</option>
@@ -173,7 +173,7 @@ export default function AdminAffiliatePage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
               Affiliate URL (Tautan Tracking)
             </label>
             <input
@@ -182,13 +182,13 @@ export default function AdminAffiliatePage() {
               value={affiliateUrl}
               onChange={(e) => setAffiliateUrl(e.target.value)}
               placeholder="https://shopee.co.id/product-link?ref=nexarin"
-              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Estimasi Harga
               </label>
               <input
@@ -196,11 +196,11 @@ export default function AdminAffiliatePage() {
                 value={priceEstimate}
                 onChange={(e) => setPriceEstimate(e.target.value)}
                 placeholder="Rp 1.250.000"
-                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Label Badge
               </label>
               <input
@@ -208,7 +208,7 @@ export default function AdminAffiliatePage() {
                 value={badgeLabel}
                 onChange={(e) => setBadgeLabel(e.target.value)}
                 placeholder="Pilihan Editor"
-                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
               />
             </div>
           </div>

@@ -26,13 +26,13 @@ export function CustomerPageHeader({
             {title}
           </h1>
           {badge && (
-            <span className="px-2.5 py-0.5 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] text-[11px] font-mono font-bold border border-[#49D7A5]/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-[11px] font-mono font-bold border border-[#7CF2C3]/30">
               {badge}
             </span>
           )}
         </div>
         {description && (
-          <p className="text-xs text-[#6F8583] leading-relaxed max-w-2xl">
+          <p className="text-xs text-[#64748B] leading-relaxed max-w-2xl">
             {description}
           </p>
         )}

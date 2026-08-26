@@ -44,14 +44,14 @@ export default function FreeResourcesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] text-xs font-mono font-bold border border-[#49D7A5]/30">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-xs font-mono font-bold border border-[#7CF2C3]/30">
           <DownloadCloud className="w-3.5 h-3.5" />
           <span>100% Free Resources &amp; Assets</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
           Template, Starter Kits, &amp; Source Code Gratis
         </h1>
-        <p className="text-xs sm:text-sm text-[#A8BCBA] leading-relaxed max-w-xl mx-auto">
+        <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed max-w-xl mx-auto">
           Akselerasi proses pengembangan web dan aplikasi Anda dengan aset berkualitas tinggi yang dibuat dan dikurasi langsung oleh tim Nexarin.
         </p>
       </div>
@@ -65,25 +65,25 @@ export default function FreeResourcesPage() {
                 <Badge variant="cyan" size="sm">
                   {res.badge}
                 </Badge>
-                <span className="text-[11px] font-mono text-[#6F8583]">{res.fileSize}</span>
+                <span className="text-[11px] font-mono text-[#64748B]">{res.fileSize}</span>
               </div>
 
               <h3 className="text-lg font-bold text-white mb-2 leading-snug">
                 {res.title}
               </h3>
 
-              <p className="text-xs text-[#6F8583] leading-relaxed mb-4">
+              <p className="text-xs text-[#64748B] leading-relaxed mb-4">
                 {res.description}
               </p>
 
-              <div className="space-y-1 py-2 border-t border-white/[0.08] text-[11px] text-[#6F8583] font-mono">
+              <div className="space-y-1 py-2 border-t border-white/[0.08] text-[11px] text-[#64748B] font-mono">
                 <div className="flex items-center justify-between">
                   <span>Format:</span>
-                  <span className="font-semibold text-[#A8BCBA]">{res.format}</span>
+                  <span className="font-semibold text-[#94A3B8]">{res.format}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Diunduh:</span>
-                  <span className="font-semibold text-[#49D7A5]">{res.downloadsCount.toLocaleString()}x</span>
+                  <span className="font-semibold text-[#7CF2C3]">{res.downloadsCount.toLocaleString()}x</span>
                 </div>
               </div>
             </div>

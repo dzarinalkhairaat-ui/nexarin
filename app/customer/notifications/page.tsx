@@ -18,7 +18,7 @@ export default function CustomerNotificationsPage() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             Pusat Notifikasi
           </h1>
-          <p className="text-xs text-slate-500 dark:text-[#6F8583]">
+          <p className="text-xs text-slate-500 dark:text-[#64748B]">
             Pemberitahuan pembaruan versi produk, lisensi, dan status transaksi
           </p>
         </div>
@@ -53,15 +53,15 @@ export default function CustomerNotificationsPage() {
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                     {notif.title}
                   </h4>
-                  <span className="text-[11px] font-mono text-[#6F8583]">
+                  <span className="text-[11px] font-mono text-[#64748B]">
                     {formatDateTime(notif.createdAt)}
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-[#6F8583] mt-1 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-[#64748B] mt-1 leading-relaxed">
                   {notif.message}
                 </p>
                 {notif.link && (
-                  <Link href={notif.link} className="inline-block mt-2 text-xs font-bold text-[#0891b2] dark:text-[#18D6D0] hover:underline">
+                  <Link href={notif.link} className="inline-block mt-2 text-xs font-bold text-[#0891b2] dark:text-[#2DD4F5] hover:underline">
                     Buka Detail →
                   </Link>
                 )}

@@ -23,13 +23,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // If on Admin Login page, render clean isolated full-screen container
   if (isLoginPage) {
-    return <div className="min-h-screen bg-[#061214] text-[#F2FAF9]">{children}</div>;
+    return <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC]">{children}</div>;
   }
 
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#061214] flex items-center justify-center text-xs text-[#6F8583] font-mono">
+      <div className="min-h-screen bg-[#0B1120] flex items-center justify-center text-xs text-[#64748B] font-mono">
         <Terminal className="w-4 h-4 animate-spin mr-2 text-cyan-400" />
         <span>Memverifikasi Sesi Otoritas Administrator...</span>
       </div>
@@ -39,11 +39,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // Unauthorized guard fallback
   if (!isAdminAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#061214] flex items-center justify-center px-4">
-        <div className="max-w-md p-8 rounded-3xl bg-[#061214] border border-rose-500/30 text-center space-y-4">
+      <div className="min-h-screen bg-[#0B1120] flex items-center justify-center px-4">
+        <div className="max-w-md p-8 rounded-3xl bg-[#0B1120] border border-rose-500/30 text-center space-y-4">
           <ShieldAlert className="w-10 h-10 text-rose-500 mx-auto" />
           <h2 className="text-xl font-bold text-white">Akses Terbatas</h2>
-          <p className="text-xs text-[#6F8583]">
+          <p className="text-xs text-[#64748B]">
             Halaman ini berada dalam zona otorisasi Administrator Nexarin Tech.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // Authenticated Admin Workspace Layout
   return (
-    <div className="min-h-screen bg-[#061214] text-[#F2FAF9] flex flex-col">
+    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">
       <AdminTopbar onToggleMobileSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
       <div className="flex-1 flex">
         <AdminSidebar
