@@ -2,6 +2,25 @@ import { TutorialCategory, TutorialCourse } from "@/types/tutorial";
 
 export const TUTORIAL_CATEGORIES: TutorialCategory[] = [
   {
+    id: "microsoft-skills",
+    name: "Microsoft Skills",
+    slug: "microsoft-skills",
+    description: "Kuasai Microsoft Excel, Word, PowerPoint, Power BI, Outlook, Teams, dan integrasi Microsoft Copilot AI untuk produktivitas kerja.",
+    iconName: "FileSpreadsheet",
+    color: "from-blue-600 to-cyan-500",
+    subcategories: [
+      { id: "ms-excel", name: "Microsoft Excel", slug: "microsoft-excel", classCount: 8, description: "Rumus XLOOKUP, Pivot Table, Macro VBA, Power Query & Analisis Data" },
+      { id: "ms-word", name: "Microsoft Word", slug: "microsoft-word", classCount: 5, description: "Format Dokumen Profesional, Mail Merge, Template Laporan & Skripsi" },
+      { id: "ms-powerpoint", name: "Microsoft PowerPoint", slug: "microsoft-powerpoint", classCount: 6, description: "Desain Slide Presentasi Modern, Master Slide, Animasi & Pitch Deck" },
+      { id: "ms-powerbi", name: "Microsoft Power BI", slug: "microsoft-power-bi", classCount: 4, description: "Visualisasi Data Interaktif, Dashboard Bisnis & Formula DAX" },
+      { id: "ms-copilot", name: "Microsoft 365 Copilot (AI)", slug: "microsoft-copilot-ai", classCount: 4, description: "Otomasi Dokumen & Spreadsheet Menggunakan AI Copilot" },
+      { id: "ms-outlook", name: "Microsoft Outlook", slug: "microsoft-outlook", classCount: 3, description: "Manajemen Email Produktif, Kalender Kerja & Aturan Otomatis" },
+      { id: "ms-teams", name: "Microsoft Teams", slug: "microsoft-teams", classCount: 3, description: "Kolaborasi Tim, Channel Manajemen & Integrasi Workspace" },
+      { id: "ms-onenote", name: "Microsoft OneNote", slug: "microsoft-onenote", classCount: 3, description: "Manajemen Catatan Digital, Notulensi Rapat & Second Brain" },
+      { id: "ms-access", name: "Microsoft Access", slug: "microsoft-access", classCount: 2, description: "Manajemen Database Relasional, Query Builder & Form" }
+    ]
+  },
+  {
     id: "ai",
     name: "AI & Artificial Intelligence",
     slug: "ai",
@@ -278,6 +297,271 @@ export const TUTORIAL_CATEGORIES: TutorialCategory[] = [
 ];
 
 export const TUTORIAL_COURSES: TutorialCourse[] = [
+  {
+    id: "course-ms-excel-01",
+    title: "Microsoft Excel Data Analytics & Automation Masterclass 2026",
+    slug: "microsoft-excel-data-analytics-automation-masterclass",
+    tagline: "Kuasai formula XLOOKUP, Pivot Table, Power Query, dan integrasi AI Copilot dari dasar hingga mahir.",
+    description: "Panduan lengkap menguasai Microsoft Excel untuk kebutuhan kerja profesional, rekapitulasi data sekolah/kantor, pembuatan dashboard analitik, dan otomatisasi pembersihan data (data cleaning).",
+    categoryId: "microsoft-skills",
+    categoryName: "Microsoft Skills",
+    subcategoryId: "ms-excel",
+    subcategoryName: "Microsoft Excel",
+    level: "Beginner",
+    duration: "2h 30m",
+    lessonCount: 4,
+    rating: 5.0,
+    reviewCount: 340,
+    enrolledCount: 2310,
+    thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop",
+    instructor: {
+      name: "Tim Pengajar Microsoft Skills Nexarin",
+      role: "Certified Data & Office Specialist",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+      bio: "Instruktur bersertifikasi dengan pengalaman lebih dari 8 tahun dalam otomasi spreadsheet dan business intelligence."
+    },
+    whatYouWillLearn: [
+      "Menguasai formula modern: XLOOKUP, FILTER, UNIQUE, SORT, dan SUMIFS",
+      "Membangun ringkasan laporan interaktif menggunakan Pivot Table & Slicers",
+      "Otomatisasi pengolahan data mentah tanpa coding menggunakan Power Query",
+      "Pemanfaatan prompt Microsoft Copilot AI untuk analisis tren data instan",
+      "Pembuatan grafik visualisasi profesional (Waterfall, Pareto, Line Charts)"
+    ],
+    requirements: [
+      "Aplikasi Microsoft Excel (Microsoft 365, Excel 2019/2021, atau Excel Online)",
+      "Tidak memerlukan pengetahuan matematika atau statistik tingkat tinggi"
+    ],
+    contentType: "course",
+    isFeatured: true,
+    isPopular: true,
+    isBeginnerFriendly: true,
+    tags: ["Microsoft Excel", "Spreadsheet", "XLOOKUP", "Pivot Table", "Data Analysis", "Copilot AI"],
+    publishedAt: "2026-08-22T09:00:00Z",
+    updatedAt: "2026-08-26T10:00:00Z",
+    seoTitle: "Microsoft Excel Data Analytics & Automation Masterclass — Nexari",
+    seoDescription: "Pelajari rumus Excel modern, Pivot Table, dan otomasi spreadsheet untuk profesional.",
+    modules: [
+      {
+        id: "mod-excel-01",
+        courseId: "course-ms-excel-01",
+        title: "Modul 01: Fondasi Formula Modern & Pencarian Data",
+        description: "Tinggalkan VLOOKUP lama dan kuasai fungsi dinamis tercepat di Microsoft Excel.",
+        order: 1,
+        lessons: [
+          {
+            id: "les-excel-01",
+            courseId: "course-ms-excel-01",
+            moduleId: "mod-excel-01",
+            title: "Menguasai XLOOKUP vs VLOOKUP: Pencarian Data Tanpa Error",
+            slug: "menguasai-xlookup-vs-vlookup-pencarian-data-tanpa-error",
+            duration: "20 min",
+            order: 1,
+            contentType: "course",
+            isPreviewAvailable: true,
+            keyTakeaways: [
+              "Kelebihan XLOOKUP: pencarian ke kiri & kanan secara bebas",
+              "Penanganan error bawaan tanpa perlu membungkus IFERROR",
+              "Pengembalian data multi-kolom sekaligus (Array Spill)"
+            ],
+            exercises: [
+              "Buat tabel pencarian NISN siswa dan nilai rapor menggunakan formula XLOOKUP"
+            ],
+            contentMarkdown: `# Menguasai XLOOKUP vs VLOOKUP: Pencarian Data Tanpa Error
+
+Selamat datang di kelas **Microsoft Excel Data Analytics Masterclass**! Di era spreadsheet modern, formula \`XLOOKUP\` resmi menggantikan formula klasik \`VLOOKUP\` dan \`HLOOKUP\` karena jauh lebih fleksibel, cepat, dan aman dari error pergeseran kolom.
+
+---
+
+## 1. Mengapa XLOOKUP Lebih Unggul?
+
+- **Pencarian Bebas Arah**: Mampu mencari data ke kolom kiri tanpa batasan posisi *lookup column*.
+- **Penanganan #N/A Otomatis**: Parameter \`[if_not_found]\` sudah tersedia langsung di dalam rumus.
+- **Kecocokan Tepat Default**: Tidak perlu lagi mengetik \`FALSE\` atau \`0\` di akhir rumus.
+
+\`\`\`excel
+=XLOOKUP(D2, A2:A100, B2:B100, "Data Tidak Ditemukan")
+\`\`\`
+
+---
+
+## 2. Dynamic Array Formulas: FILTER & UNIQUE
+
+Dengan Excel versi modern, Anda dapat mengekstrak daftar data unik secara instan:
+
+\`\`\`excel
+=UNIQUE(A2:A100)
+=FILTER(A2:C100, B2:B100 = "Lulus")
+\`\`\`
+
+Data akan otomatis mengalir (*spill*) ke sel di bawahnya tanpa perlu meng-copy rumus ke ratusan baris!`
+          },
+          {
+            id: "les-excel-02",
+            courseId: "course-ms-excel-01",
+            moduleId: "mod-excel-01",
+            title: "Membangun Dashboard Interaktif dengan Pivot Table & Slicers",
+            slug: "membangun-dashboard-interaktif-pivot-table-slicers",
+            duration: "25 min",
+            order: 2,
+            contentType: "course",
+            isPreviewAvailable: true,
+            keyTakeaways: [
+              "Struktur 4 kuadran Pivot: Filters, Columns, Rows, Values",
+              "Kustomisasi Calculated Fields dan persentase kontribusi",
+              "Menghubungkan Slicers ke beberapa Pivot Table sekaligus"
+            ],
+            exercises: [
+              "Rancang ringkasan data transaksi penjualan bulanan dengan filter Slicer interaktif"
+            ],
+            contentMarkdown: `# Membangun Dashboard Interaktif dengan Pivot Table & Slicers
+
+Pivot Table adalah fitur paling efisien di Microsoft Excel untuk mengagregasi ribuan baris data transaksi menjadi tabel ringkasan yang siap dipresentasikan.`
+          },
+          {
+            id: "les-excel-03",
+            courseId: "course-ms-excel-01",
+            moduleId: "mod-excel-01",
+            title: "Otomasi Pembersihan Data (Data Cleaning) dengan Power Query",
+            slug: "otomasi-pembersihan-data-power-query",
+            duration: "30 min",
+            order: 3,
+            contentType: "course",
+            isPreviewAvailable: false,
+            keyTakeaways: [
+              "Menggabungkan puluhan file Excel/CSV dalam satu folder otomatis",
+              "Transformasi unpivot kolom dan split text tanpa coding",
+              "Cukup 1 kali klik Refresh untuk memperbarui seluruh data baru"
+            ],
+            exercises: [
+              "Import 3 file CSV absensi bulanan dan gabungkan secara otomatis menggunakan Power Query"
+            ],
+            contentMarkdown: `# Otomasi Pembersihan Data dengan Power Query
+
+Power Query memungkinkan Anda mencatat langkah pembersihan data sekali saja, lalu menjalankannya secara berulang setiap kali ada data baru.`
+          },
+          {
+            id: "les-excel-04",
+            courseId: "course-ms-excel-01",
+            moduleId: "mod-excel-01",
+            title: "Integrasi Microsoft 365 Copilot AI untuk Analisis Cepat",
+            slug: "integrasi-microsoft-365-copilot-ai-analisis-cepat",
+            duration: "22 min",
+            order: 4,
+            contentType: "course",
+            isPreviewAvailable: false,
+            keyTakeaways: [
+              "Prompting Copilot untuk membuat formula rumit secara otomatis",
+              "Meminta Copilot menyoroti outlier dan anomali pada data",
+              "Menghasilkan visualisasi chart otomatis dengan perintah teks biasa"
+            ],
+            exercises: [
+              "Ketik prompt 'Tampilkan 5 produk dengan laba tertinggi' pada Excel Copilot dan amati hasilnya"
+            ],
+            contentMarkdown: `# Integrasi Microsoft 365 Copilot AI untuk Analisis Cepat
+
+Pelajari cara berinteraksi dengan asisten kecerdasan buatan Microsoft Copilot langsung di dalam lembar kerja Excel Anda.`
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "course-ms-ppt-02",
+    title: "Microsoft PowerPoint Professional Presentation & Pitch Deck Masterclass",
+    slug: "microsoft-powerpoint-professional-presentation-pitch-deck",
+    tagline: "Desain slide presentasi berkelas dunia dengan prinsip grid modern dan animasi Morph.",
+    description: "Ubah slide presentasi yang membosankan menjadi karya visual memukau yang mampu meyakinkan klien, pimpinan perusahaan, investor startup, dan audiens seminar.",
+    categoryId: "microsoft-skills",
+    categoryName: "Microsoft Skills",
+    subcategoryId: "ms-powerpoint",
+    subcategoryName: "Microsoft PowerPoint",
+    level: "Beginner",
+    duration: "2h 10m",
+    lessonCount: 3,
+    rating: 4.9,
+    reviewCount: 215,
+    enrolledCount: 1540,
+    thumbnail: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1600&auto=format&fit=crop",
+    instructor: {
+      name: "Rins",
+      role: "Presentation Design Specialist",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+      bio: "Spesialis desain presentasi bisnis dan komunikasi visual efektif."
+    },
+    whatYouWillLearn: [
+      "Prinsip hierarki visual, whitespace, dan tipografi presentasi modern",
+      "Membuat Master Slide kustom agar format konsisten di 50+ slide",
+      "Menggunakan transisi Morph untuk animasi objek mulus tanpa plugin",
+      "Visualisasi data angka menjadi infografis yang mudah dipahami audiens"
+    ],
+    requirements: [
+      "Aplikasi Microsoft PowerPoint (Microsoft 365 / PowerPoint 2019+)"
+    ],
+    contentType: "course",
+    isFeatured: true,
+    isPopular: false,
+    isBeginnerFriendly: true,
+    tags: ["Microsoft PowerPoint", "Presentation", "Pitch Deck", "Morph Transition", "Design"],
+    publishedAt: "2026-08-20T14:00:00Z",
+    updatedAt: "2026-08-26T10:00:00Z",
+    seoTitle: "Microsoft PowerPoint Professional Presentation Masterclass — Nexari",
+    seoDescription: "Pelajari cara membuat slide presentasi modern dengan PowerPoint dan transisi Morph.",
+    modules: [
+      {
+        id: "mod-ppt-01",
+        courseId: "course-ms-ppt-02",
+        title: "Modul 01: Desain Slide & Transisi Dinamis",
+        description: "Teknik mendesain slide pitch deck yang rapi, profesional, dan berdaya pikat tinggi.",
+        order: 1,
+        lessons: [
+          {
+            id: "les-ppt-01",
+            courseId: "course-ms-ppt-02",
+            moduleId: "mod-ppt-01",
+            title: "Prinsip Desain Slide Modern: Grid & Whitespace",
+            slug: "prinsip-desain-slide-modern-grid-whitespace",
+            duration: "20 min",
+            order: 1,
+            contentType: "course",
+            isPreviewAvailable: true,
+            keyTakeaways: [
+              "Aturan 1 Slide = 1 Pesan Kunci",
+              "Menghindari bullet point berlebihan dengan kartu visual (card layout)",
+              "Penggunaan font kontras tebal & ramping untuk hierarki baca yang jelas"
+            ],
+            exercises: [
+              "Redesain 1 slide penuh teks menjadi slide berbasis card visual yang bersih"
+            ],
+            contentMarkdown: `# Prinsip Desain Slide Modern: Grid & Whitespace
+
+Slide presentasi yang hebat bukan yang memuat semua teks, melainkan yang memandu perhatian audiens pada pesan utama yang disampaikan.`
+          },
+          {
+            id: "les-ppt-02",
+            courseId: "course-ms-ppt-02",
+            moduleId: "mod-ppt-01",
+            title: "Animasi Transisi Morph untuk Efek Sinematik",
+            slug: "animasi-transisi-morph-efek-sinematik",
+            duration: "25 min",
+            order: 2,
+            contentType: "course",
+            isPreviewAvailable: true,
+            keyTakeaways: [
+              "Cara kerja transisi Morph dalam melacak perubahan posisi objek",
+              "Menggunakan prefix ganda (!!) untuk transisi antar bentuk berbeda",
+              "Membuat efek zooming dan perpindahan tab yang halus"
+            ],
+            exercises: [
+              "Buat animasi pergeseran timeline produk menggunakan transisi Morph"
+            ],
+            contentMarkdown: `# Animasi Transisi Morph untuk Efek Sinematik
+
+Transisi Morph adalah salah satu fitur terkuat di PowerPoint yang memungkinkan pembuatan animasi kompleks hanya dengan menduplikasi slide dan mengubah posisi objek.`
+          }
+        ]
+      }
+    ]
+  },
   {
     id: "course-ai-auto-01",
     title: "AI Automation & Autonomous Agents Masterclass 2026",
