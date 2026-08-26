@@ -39,7 +39,7 @@ export default function CustomerDownloadsPage() {
                   <h4 className="text-sm font-bold text-white line-clamp-1">
                     {lic.productName}
                   </h4>
-                  <span className="text-xs font-mono text-slate-400 mt-0.5 block">
+                  <span className="text-xs font-mono text-[#6F8583] mt-0.5 block">
                     Versi Dimiliki: <strong className="text-cyan-300">{lic.ownedVersion}</strong> • ZIP Build Package
                   </span>
                 </div>
@@ -56,16 +56,16 @@ export default function CustomerDownloadsPage() {
             ))}
           </div>
         ) : (
-          <CustomerCard className="p-8 text-center text-xs text-slate-400">
+          <CustomerCard className="p-8 text-center text-xs text-[#6F8583]">
             Anda belum memiliki lisensi produk digital untuk diunduh.
           </CustomerCard>
         )}
       </section>
 
       {/* Download Activity Records */}
-      <section className="space-y-4 pt-4 border-t border-slate-800">
+      <section className="space-y-4 pt-4 border-t border-white/[0.08]">
         <div className="flex items-center gap-2">
-          <Terminal className="w-4 h-4 text-[#7CF2C3]" />
+          <Terminal className="w-4 h-4 text-[#49D7A5]" />
           <h3 className="text-base font-bold text-white tracking-tight">
             Log Jejak Token Unduhan Terverifikasi
           </h3>
@@ -79,12 +79,12 @@ export default function CustomerDownloadsPage() {
                   <span className="font-bold text-white block">
                     {dl.productName} ({dl.version})
                   </span>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-[11px] text-[#6F8583]">
                     Checksum SHA-256: {dl.checksum.slice(0, 28)}...
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-right">
-                  <span className="text-slate-400 text-[11px]">{formatDateTime(dl.downloadedAt)}</span>
+                  <span className="text-[#6F8583] text-[11px]">{formatDateTime(dl.downloadedAt)}</span>
                   <Badge variant="mint" size="sm">
                     Verified
                   </Badge>
@@ -93,7 +93,7 @@ export default function CustomerDownloadsPage() {
             ))}
           </div>
         ) : (
-          <CustomerCard className="p-6 text-xs text-slate-400 text-center font-mono">
+          <CustomerCard className="p-6 text-xs text-[#6F8583] text-center font-mono">
             Belum ada catatan aktivitas unduhan terbaru.
           </CustomerCard>
         )}

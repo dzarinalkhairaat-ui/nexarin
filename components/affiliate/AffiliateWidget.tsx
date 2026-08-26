@@ -25,7 +25,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
   };
 
   return (
-    <div className="my-8 p-5 sm:p-6 rounded-3xl border border-cyan-500/20 bg-[#131E32] shadow-sm">
+    <div className="my-8 p-5 sm:p-6 rounded-3xl border border-cyan-500/20 bg-white/[0.035]">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <img
@@ -34,7 +34,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
             onError={(e) => {
               e.currentTarget.src = "/assets/default-cover.svg";
             }}
-            className="w-16 h-16 rounded-2xl object-cover border border-slate-800 shrink-0"
+            className="w-16 h-16 rounded-2xl object-cover border border-white/[0.08] shrink-0"
           />
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -51,7 +51,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
               {affiliate.productName}
             </h4>
             {affiliate.priceEstimate && (
-              <span className="text-xs font-mono font-semibold text-slate-400">
+              <span className="text-xs font-mono font-semibold text-[#6F8583]">
                 Estimasi Harga: {affiliate.priceEstimate}
               </span>
             )}
@@ -71,7 +71,7 @@ export function AffiliateWidget({ affiliate }: AffiliateWidgetProps) {
           </Button>
         </a>
       </div>
-      <p className="text-[10px] text-slate-400 mt-3 text-center sm:text-left">
+      <p className="text-[10px] text-[#6F8583] mt-3 text-center sm:text-left">
         * Rekomendasi terkurasi oleh editorial Nexarin. Transaksi dilakukan di marketplace resmi terkait.
       </p>
     </div>

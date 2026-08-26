@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-8 text-slate-700 dark:text-slate-300 leading-relaxed text-sm">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-8 text-slate-700 dark:text-[#A8BCBA] leading-relaxed text-sm">
       <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
         Kebijakan Privasi (Privacy Policy)
       </h1>

@@ -62,7 +62,7 @@ export default function CustomerProductsPage() {
 
             return (
               <CustomerCard key={lic.id} className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant={lic.licenseType === "lifetime" ? "mint" : "warning"} size="sm">
@@ -79,23 +79,23 @@ export default function CustomerProductsPage() {
                     </h3>
                   </div>
 
-                  <div className="text-right text-xs text-slate-400 font-mono">
+                  <div className="text-right text-xs text-[#6F8583] font-mono">
                     <span>Terdaftar: {formatDate(lic.issuedAt)}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-3.5 rounded-2xl bg-[#0B1120] border border-slate-800 space-y-1.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">
+                  <div className="p-3.5 rounded-2xl bg-[#061214] border border-white/[0.08] space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase text-[#6F8583] font-bold block">
                       License Key
                     </span>
                     <div className="flex items-center justify-between">
-                      <code className="text-xs font-mono font-bold text-[#2DD4F5]">
+                      <code className="text-xs font-mono font-bold text-[#18D6D0]">
                         {lic.licenseKey}
                       </code>
                       <button
                         onClick={() => copyKey(lic.licenseKey)}
-                        className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-slate-800 text-[#6F8583] hover:text-white transition-colors"
                         title="Salin License Key"
                       >
                         <Copy className="w-3.5 h-3.5" />
@@ -103,12 +103,12 @@ export default function CustomerProductsPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-[#0B1120] border border-slate-800 space-y-1.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">
+                  <div className="p-3.5 rounded-2xl bg-[#061214] border border-white/[0.08] space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase text-[#6F8583] font-bold block">
                       Versi Build
                     </span>
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span>Dimiliki: <strong className="text-slate-200">{lic.ownedVersion}</strong></span>
+                      <span>Dimiliki: <strong className="text-[#F2FAF9]">{lic.ownedVersion}</strong></span>
                       <span>Terbaru: <strong className="text-cyan-400">{product?.currentVersion}</strong></span>
                     </div>
                   </div>
@@ -126,7 +126,7 @@ export default function CustomerProductsPage() {
                   </Button>
 
                   <Link href={`/customer/products/${lic.productId}`}>
-                    <Button variant="outline" size="sm" className="text-xs border-slate-700 text-slate-300 hover:text-white">
+                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
                       Detail &amp; Changelog <ChevronRight className="w-3 h-3 ml-1" />
                     </Button>
                   </Link>
@@ -141,7 +141,7 @@ export default function CustomerProductsPage() {
                   )}
 
                   <Link href="/customer/docs">
-                    <Button variant="outline" size="sm" className="text-xs border-slate-700 text-slate-300 hover:text-white">
+                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
                       <FileCode className="w-3.5 h-3.5 mr-1.5" />
                       Dokumentasi Setup
                     </Button>

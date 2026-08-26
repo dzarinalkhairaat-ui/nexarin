@@ -46,38 +46,40 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      {/* Backdrop */}
+      {/* Quiet Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/55 backdrop-blur-md transition-opacity"
       />
 
-      {/* Modal Card */}
+      {/* Quiet Glass Modal Card */}
       <div
         className={cn(
-          "relative w-full bg-[#131E32] rounded-3xl border border-cyan-500/20 shadow-2xl overflow-hidden z-10 my-8 transition-all animate-in fade-in zoom-in-95 duration-200",
+          "relative w-full bg-[#08191B] rounded-2xl border border-white/[0.12] overflow-hidden z-10 my-8 backdrop-blur-xl transition-all animate-in fade-in zoom-in-95 duration-200",
           maxWidthClasses[maxWidth]
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-800">
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-white/[0.08]">
           <div>
             {title && (
-              <h3 className="text-lg font-bold text-white tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-[#F2FAF9] tracking-tight">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-[#A8BCBA] mt-0.5">
                 {description}
               </p>
             )}
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            aria-label="Tutup Dialog"
+            className="p-1.5 text-[#A8BCBA] hover:text-[#F2FAF9] rounded-lg hover:bg-white/[0.05] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 

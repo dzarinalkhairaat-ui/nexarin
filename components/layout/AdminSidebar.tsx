@@ -66,7 +66,7 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
       label: "DIGITAL SHOP",
       items: [
         { href: "/admin/shop", label: "Katalog & Versi", icon: <ShoppingBag className="w-4 h-4" /> },
-        { href: "/admin/free-resources", label: "Free Resources", icon: <DownloadCloud className="w-4 h-4 text-[#7CF2C3]" /> },
+        { href: "/admin/free-resources", label: "Free Resources", icon: <DownloadCloud className="w-4 h-4 text-[#49D7A5]" /> },
         { href: "/admin/orders", label: "Transaksi & Orders", icon: <FolderGit2 className="w-4 h-4" /> },
         { href: "/admin/customers", label: "Data Pelanggan", icon: <Users className="w-4 h-4" /> },
       ]
@@ -92,9 +92,9 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#0B1120] border-r border-[#1E293B]">
+    <div className="flex flex-col h-full bg-[#061214] border-r border-white/[0.08]">
       {/* Admin Branding Header */}
-      <div className="p-4 border-b border-[#1E293B] flex items-center justify-between">
+      <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
             src="/assets/nexarin-logo.png"
@@ -103,9 +103,9 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
           />
           <div>
             <span className="font-extrabold text-sm text-white tracking-tight block leading-tight">
-              Nexarin <span className="text-[#2DD4F5] font-mono">Console</span>
+              Nexarin <span className="text-[#18D6D0] font-mono">Console</span>
             </span>
-            <span className="text-[10px] font-mono text-slate-400 block leading-tight">
+            <span className="text-[10px] font-mono text-[#6F8583] block leading-tight">
               Internal Admin v2.4
             </span>
           </div>
@@ -114,7 +114,7 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
         {onCloseMobile && (
           <button
             onClick={onCloseMobile}
-            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="lg:hidden p-1.5 rounded-lg text-[#6F8583] hover:text-white hover:bg-slate-800"
           >
             <X className="w-4 h-4" />
           </button>
@@ -138,12 +138,12 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
                   className={cn(
                     "flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group",
                     isActive
-                      ? "bg-[#2DD4F5]/15 text-[#2DD4F5] font-bold border border-[#2DD4F5]/30 shadow-sm"
-                      : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                      ? "bg-[#18D6D0]/15 text-[#18D6D0] font-bold border border-[#18D6D0]/30 sm"
+                      : "text-[#6F8583] hover:text-white hover:bg-slate-800/60"
                   )}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className={cn(isActive ? "text-[#2DD4F5]" : "text-slate-400 group-hover:text-slate-200")}>
+                    <span className={cn(isActive ? "text-[#18D6D0]" : "text-[#6F8583] group-hover:text-[#F2FAF9]")}>
                       {item.icon}
                     </span>
                     <span className="truncate">{item.label}</span>
@@ -163,13 +163,13 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
       </div>
 
       {/* Admin User Footer in Sidebar */}
-      <div className="p-3 border-t border-[#1E293B] bg-[#090F1C]">
-        <div className="flex items-center justify-between p-2 rounded-xl bg-[#131E32] border border-[#1E293B]">
+      <div className="p-3 border-t border-white/[0.08] bg-[#090F1C]">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-white/[0.035] border border-white/[0.08]">
           <div className="min-w-0 flex-1 mr-2">
             <span className="text-xs font-bold text-white block truncate">
               {admin?.name || "Admin Rins"}
             </span>
-            <span className="text-[10px] font-mono text-slate-400 block truncate">
+            <span className="text-[10px] font-mono text-[#6F8583] block truncate">
               {admin?.email || "admin@nexarin.tech"}
             </span>
           </div>

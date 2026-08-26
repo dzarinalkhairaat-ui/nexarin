@@ -59,7 +59,7 @@ export default function AdminContentPage() {
               variant="outline"
               size="sm"
               onClick={syncGeminiSpark}
-              className="text-xs border-slate-700 text-slate-300 hover:text-white"
+              className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
             >
               <RefreshCw className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
               Sync Staging
@@ -83,7 +83,7 @@ export default function AdminContentPage() {
           {pendingDrafts.length > 0 ? (
             pendingDrafts.map((draft) => (
               <AdminCard key={draft.id} className="space-y-4 border-amber-500/30 hover:border-amber-500/50 transition-colors">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="warning" size="sm">
                       Menunggu Review Editor
@@ -91,11 +91,11 @@ export default function AdminContentPage() {
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                       {draft.category}
                     </span>
-                    <span className="text-xs font-mono text-slate-400">
-                      Sumber: <strong className="text-slate-200">{draft.sourceName}</strong>
+                    <span className="text-xs font-mono text-[#6F8583]">
+                      Sumber: <strong className="text-[#F2FAF9]">{draft.sourceName}</strong>
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400 font-mono flex items-center gap-1">
+                  <span className="text-xs text-[#6F8583] font-mono flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-slate-500" />
                     Sinkron: {formatDate(draft.syncDate)}
                   </span>
@@ -105,12 +105,12 @@ export default function AdminContentPage() {
                   <h3 className="text-base font-bold text-white leading-snug">
                     {draft.title}
                   </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[#A8BCBA] leading-relaxed line-clamp-2">
                     {draft.summary}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#1E293B]">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.08]">
                   <div className="flex items-center gap-2">
                     <Button
                       variant="danger"
@@ -125,7 +125,7 @@ export default function AdminContentPage() {
                       href={draft.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800"
+                      className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08]"
                     >
                       <span>Sumber Asli</span>
                       <ExternalLink className="w-3 h-3" />
@@ -157,7 +157,7 @@ export default function AdminContentPage() {
         <div className="space-y-4">
           {articles.map((art) => (
             <AdminCard key={art.id} className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
                 <div className="flex items-center gap-2">
                   <Badge variant="mint" size="sm">
                     LIVE PUBLISHED
@@ -165,11 +165,11 @@ export default function AdminContentPage() {
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                     {art.category.name}
                   </span>
-                  <span className="text-xs font-mono text-slate-400">
-                    Views: <strong className="text-[#2DD4F5]">{art.views.toLocaleString()}</strong>
+                  <span className="text-xs font-mono text-[#6F8583]">
+                    Views: <strong className="text-[#18D6D0]">{art.views.toLocaleString()}</strong>
                   </span>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">
+                <span className="text-xs text-[#6F8583] font-mono">
                   Rilis: {formatDate(art.publishedAt)}
                 </span>
               </div>
@@ -178,12 +178,12 @@ export default function AdminContentPage() {
                 <h3 className="text-base font-bold text-white">
                   {art.title}
                 </h3>
-                <p className="text-xs text-slate-300 line-clamp-2">
+                <p className="text-xs text-[#A8BCBA] line-clamp-2">
                   {art.excerpt}
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-[#1E293B]">
+              <div className="flex items-center justify-between pt-3 border-t border-white/[0.08]">
                 <Button
                   variant="danger"
                   size="sm"
@@ -195,7 +195,7 @@ export default function AdminContentPage() {
                 </Button>
 
                 <Link href={`/article/${art.slug}`} target="_blank">
-                  <Button variant="outline" size="sm" className="text-xs border-slate-700 text-slate-300 hover:text-white">
+                  <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
                     <Eye className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
                     Lihat di Portal Publik <ExternalLink className="w-3 h-3 ml-1" />
                   </Button>

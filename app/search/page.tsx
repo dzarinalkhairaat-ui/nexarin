@@ -50,9 +50,9 @@ function SearchContent() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ketik topik, kata kunci AI, framework, atau nama aplikasi..."
-            className="w-full px-5 py-3.5 pl-12 rounded-2xl border border-slate-800 bg-[#0F172A] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] text-sm shadow-xl"
+            className="w-full px-5 py-3.5 pl-12 rounded-2xl border border-white/[0.08] bg-[#08191B] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#18D6D0] text-sm"
           />
-          <Search className="w-5 h-5 text-slate-400 absolute left-4 top-4" />
+          <Search className="w-5 h-5 text-[#6F8583] absolute left-4 top-4" />
         </div>
       </div>
 
@@ -61,7 +61,7 @@ function SearchContent() {
         {/* Products Results */}
         {matchedProducts.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+            <h2 className="text-lg font-bold text-white border-b border-white/[0.08] pb-2">
               Produk Digital Terkait ({matchedProducts.length})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -75,7 +75,7 @@ function SearchContent() {
         {/* Articles Results */}
         {matchedArticles.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+            <h2 className="text-lg font-bold text-white border-b border-white/[0.08] pb-2">
               Artikel & Tutorial ({matchedArticles.length})
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-xs text-slate-400">Memuat pencarian...</div>}>
+    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center text-xs text-[#6F8583]">Memuat pencarian...</div>}>
       <SearchContent />
     </Suspense>
   );

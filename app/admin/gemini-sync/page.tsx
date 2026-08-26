@@ -44,24 +44,24 @@ export default function AdminGeminiSyncPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
-          <div className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] space-y-1">
+          <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] space-y-1">
             <span className="text-[10px] text-cyan-400 font-bold uppercase block">1. Ingest &amp; Scrape</span>
-            <span className="text-slate-200">3 RSS Feed Harian (TechCrunch, Verge, dsb.)</span>
+            <span className="text-[#F2FAF9]">3 RSS Feed Harian (TechCrunch, Verge, dsb.)</span>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] space-y-1">
+          <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] space-y-1">
             <span className="text-[10px] text-purple-400 font-bold uppercase block">2. Gemini Spark AI</span>
-            <span className="text-slate-200">Sintesis Opini, Klasifikasi Kategori, SEO Meta</span>
+            <span className="text-[#F2FAF9]">Sintesis Opini, Klasifikasi Kategori, SEO Meta</span>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] space-y-1">
+          <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] space-y-1">
             <span className="text-[10px] text-amber-400 font-bold uppercase block">3. Sheets Staging</span>
-            <span className="text-slate-200">Antrean Draft Editor (Buffer sebelum Live)</span>
+            <span className="text-[#F2FAF9]">Antrean Draft Editor (Buffer sebelum Live)</span>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] space-y-1">
-            <span className="text-[10px] text-[#7CF2C3] font-bold uppercase block">4. Supabase Live</span>
-            <span className="text-slate-200">Persetujuan Editor Manusia → Publikasi Portal</span>
+          <div className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] space-y-1">
+            <span className="text-[10px] text-[#49D7A5] font-bold uppercase block">4. Supabase Live</span>
+            <span className="text-[#F2FAF9]">Persetujuan Editor Manusia → Publikasi Portal</span>
           </div>
         </div>
       </AdminCard>
@@ -80,7 +80,7 @@ export default function AdminGeminiSyncPage() {
         <div className="space-y-3">
           {drafts.map((d) => (
             <AdminCard key={d.id} className="space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#1E293B]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/[0.08]">
                 <div className="flex items-center gap-2">
                   <Badge variant={d.status === "draft" ? "warning" : "mint"} size="sm">
                     {d.status === "draft" ? "MENUNGGU REVIEW" : "PUBLISHED"}
@@ -88,12 +88,12 @@ export default function AdminGeminiSyncPage() {
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                     {d.category}
                   </span>
-                  <span className="font-mono text-xs text-slate-400">
-                    Sumber: <strong className="text-slate-200">{d.sourceName}</strong>
+                  <span className="font-mono text-xs text-[#6F8583]">
+                    Sumber: <strong className="text-[#F2FAF9]">{d.sourceName}</strong>
                   </span>
                 </div>
 
-                <span className="text-[11px] font-mono text-slate-400">
+                <span className="text-[11px] font-mono text-[#6F8583]">
                   Disinkron: {d.scrapedAt.split("T")[0]}
                 </span>
               </div>
@@ -102,15 +102,15 @@ export default function AdminGeminiSyncPage() {
                 <h4 className="text-sm font-bold text-white">
                   {d.title}
                 </h4>
-                <p className="text-xs text-slate-400 line-clamp-1 font-mono">{d.sourceUrl}</p>
+                <p className="text-xs text-[#6F8583] line-clamp-1 font-mono">{d.sourceUrl}</p>
               </div>
 
-              <div className="pt-2 flex items-center justify-between border-t border-[#1E293B]">
+              <div className="pt-2 flex items-center justify-between border-t border-white/[0.08]">
                 <a
                   href={d.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-slate-400 hover:text-white flex items-center gap-1 font-mono"
+                  className="text-xs text-[#6F8583] hover:text-white flex items-center gap-1 font-mono"
                 >
                   <span>Buka URL Asli</span>
                   <ExternalLink className="w-3 h-3" />

@@ -28,7 +28,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-[#1E293B] bg-[#080D1A]/90 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-30 w-full border-b border-white/[0.08] bg-[#061214]/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Brand Identity */}
@@ -37,18 +37,18 @@ export function Navbar() {
               <img
                 src="/assets/nexarin-logo.png"
                 alt="Nexarin Logo"
-                className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-md group-hover:scale-105 transition-transform"
+                className="w-11 h-11 sm:w-12 sm:h-12 object-contain group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#2DD4F5] transition-colors leading-none">
+                  <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#18D6D0] transition-colors leading-none">
                     Nexarin
                   </span>
-                  <span className="text-[11px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20 leading-none">
+                  <span className="text-[11px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#18D6D0]/10 text-[#18D6D0] border border-[#18D6D0]/20 leading-none">
                     Tech
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-400 font-mono tracking-wider mt-1">
+                <span className="text-[10px] text-[#6F8583] font-mono tracking-wider mt-1">
                   by Rins
                 </span>
               </div>
@@ -68,14 +68,14 @@ export function Navbar() {
                     className={cn(
                       "px-3 py-1.5 rounded-xl text-xs font-semibold transition-all relative flex items-center gap-1.5 select-none",
                       isActive
-                        ? "text-[#2DD4F5] bg-[#2DD4F5]/10 font-bold border border-[#2DD4F5]/25 shadow-sm"
-                        : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+                        ? "text-[#18D6D0] bg-[#18D6D0]/10 font-bold border border-[#18D6D0]/25 "
+                        : "text-[#A8BCBA] hover:text-white hover:bg-white/[0.04]/60"
                     )}
                   >
                     {link.label}
                     {link.badge && (
-                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold border border-[#7CF2C3]/30 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#7CF2C3] animate-pulse" />
+                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] font-bold border border-[#49D7A5]/30 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#49D7A5] animate-pulse" />
                         {link.badge}
                       </span>
                     )}
@@ -91,7 +91,7 @@ export function Navbar() {
             <Link
               href="/search"
               aria-label="Cari Artikel & Produk"
-              className="p-2.5 rounded-xl border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/80 hover:border-cyan-500/30 transition-colors"
+              className="p-2.5 rounded-xl border border-white/[0.08] text-[#A8BCBA] hover:text-white hover:bg-white/[0.04]/80 hover:border-cyan-500/30 transition-colors"
             >
               <Search className="w-4 h-4" />
             </Link>
@@ -103,11 +103,11 @@ export function Navbar() {
                 <Link
                   href="/customer/notifications"
                   aria-label="Notifikasi Customer"
-                  className="relative p-2.5 rounded-xl border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+                  className="relative p-2.5 rounded-xl border border-white/[0.08] text-[#A8BCBA] hover:text-white hover:bg-white/[0.04]/80 transition-colors"
                 >
                   <Bell className="w-4 h-4" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">
                       {unreadCount}
                     </span>
                   )}
@@ -116,7 +116,7 @@ export function Navbar() {
                 {/* Customer Dashboard Link */}
                 <Link href="/customer">
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/15 text-cyan-300 transition-colors">
-                    <User className="w-3.5 h-3.5 text-[#2DD4F5]" />
+                    <User className="w-3.5 h-3.5 text-[#18D6D0]" />
                     <span className="text-xs font-bold font-mono">
                       {customer.name.split(" ")[0]} (Portal)
                     </span>
@@ -128,7 +128,7 @@ export function Navbar() {
                   onClick={logoutCustomer}
                   title="Keluar dari akun Customer"
                   aria-label="Logout"
-                  className="p-2 rounded-xl border border-slate-800 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/30 transition-colors"
+                  className="p-2 rounded-xl border border-white/[0.08] text-[#6F8583] hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/30 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -137,13 +137,13 @@ export function Navbar() {
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold text-[#A8BCBA] hover:text-white hover:bg-white/[0.04]/80 transition-colors"
                 >
                   Masuk
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#2DD4F5] hover:bg-[#20b8d8] text-slate-950 shadow-sm shadow-[#2DD4F5]/15 active:scale-[0.98] transition-all"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#18D6D0] hover:bg-[#20b8d8] text-slate-950 /15 active:scale-[0.98] transition-all"
                 >
                   Daftar
                 </Link>
@@ -154,7 +154,7 @@ export function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? "Tutup menu" : "Buka menu navigasi"}
-              className="p-2.5 lg:hidden rounded-xl border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+              className="p-2.5 lg:hidden rounded-xl border border-white/[0.08] text-[#A8BCBA] hover:bg-white/[0.04] hover:text-white transition-colors"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -164,8 +164,8 @@ export function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-800 bg-[#080D1A] px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-150">
-          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-slate-800">
+        <div className="lg:hidden border-t border-white/[0.08] bg-[#061214] px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-150">
+          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-white/[0.08]">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -174,13 +174,13 @@ export function Navbar() {
                 className={cn(
                   "px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors",
                   pathname === link.href
-                    ? "bg-[#2DD4F5]/15 text-[#2DD4F5] border border-[#2DD4F5]/30 font-bold"
-                    : "text-slate-300 hover:bg-slate-800/60"
+                    ? "bg-[#18D6D0]/15 text-[#18D6D0] border border-[#18D6D0]/30 font-bold"
+                    : "text-[#A8BCBA] hover:bg-white/[0.04]/60"
                 )}
               >
                 <span>{link.label}</span>
                 {link.badge && (
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold">
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] font-bold">
                     {link.badge}
                   </span>
                 )}

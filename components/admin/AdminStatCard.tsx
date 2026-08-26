@@ -24,13 +24,13 @@ export function AdminStatCard({
   className
 }: AdminStatCardProps) {
   return (
-    <div className={cn("p-4 rounded-2xl bg-[#0B1120] border border-[#1E293B] flex flex-col justify-between space-y-3", className)}>
+    <div className={cn("p-4 rounded-2xl bg-[#061214] border border-white/[0.08] flex flex-col justify-between space-y-3", className)}>
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+        <span className="text-[11px] font-mono uppercase tracking-wider text-[#6F8583] font-semibold">
           {label}
         </span>
         {icon && (
-          <div className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-slate-900 border border-white/[0.08] text-cyan-400 flex items-center justify-center">
             {icon}
           </div>
         )}
@@ -54,7 +54,7 @@ export function AdminStatCard({
             </span>
           )}
           {subtext && (
-            <span className="text-[11px] text-slate-400 truncate">
+            <span className="text-[11px] text-[#6F8583] truncate">
               {subtext}
             </span>
           )}

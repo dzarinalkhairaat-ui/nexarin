@@ -39,7 +39,7 @@ export default function AdminProductVersionsPage() {
       <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <AdminCard className="p-8 space-y-4">
           <h3 className="text-lg font-bold text-white">Produk Tidak Ditemukan</h3>
-          <p className="text-xs text-slate-400">ID produk tidak valid atau belum terdaftar pada katalog.</p>
+          <p className="text-xs text-[#6F8583]">ID produk tidak valid atau belum terdaftar pada katalog.</p>
           <Link href="/admin/shop">
             <Button variant="primary" size="sm">Kembali ke Katalog</Button>
           </Link>
@@ -69,7 +69,7 @@ export default function AdminProductVersionsPage() {
       <div>
         <Link
           href="/admin/shop"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Katalog Produk</span>
@@ -85,15 +85,15 @@ export default function AdminProductVersionsPage() {
 
       {/* Publish New Version Form */}
       <AdminCard className="space-y-5 border-cyan-500/30">
-        <div className="flex items-center gap-2 pb-2 border-b border-[#1E293B]">
-          <Sparkles className="w-5 h-5 text-[#2DD4F5]" />
+        <div className="flex items-center gap-2 pb-2 border-b border-white/[0.08]">
+          <Sparkles className="w-5 h-5 text-[#18D6D0]" />
           <h3 className="text-base font-bold text-white">
             Formulir Rilis Versi Baru (Product Update Pipeline)
           </h3>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#080D1A] border border-cyan-500/20 text-xs text-slate-300 flex items-start gap-3">
-          <Bell className="w-5 h-5 text-[#7CF2C3] shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-[#061214] border border-cyan-500/20 text-xs text-[#A8BCBA] flex items-start gap-3">
+          <Bell className="w-5 h-5 text-[#49D7A5] shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             Sesuai arsitektur PRD: Ketika versi baru dirilis, sistem secara otomatis akan memicu notifikasi pembaruan ke seluruh akun customer yang memiliki lisensi produk ini, dan file ZIP baru akan langsung tersedia di menu <strong>Available Updates</strong> pada Customer Dashboard mereka.
           </p>
@@ -101,7 +101,7 @@ export default function AdminProductVersionsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Nomor Versi Baru (SemVer)
             </label>
             <input
@@ -110,12 +110,12 @@ export default function AdminProductVersionsPage() {
               value={versionNumber}
               onChange={(e) => setVersionNumber(e.target.value)}
               placeholder="Contoh: v2.2.0"
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Ukuran File Paket Build
             </label>
             <input
@@ -124,13 +124,13 @@ export default function AdminProductVersionsPage() {
               value={fileSize}
               onChange={(e) => setFileSize(e.target.value)}
               placeholder="Contoh: 19.2 MB"
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
             Catatan Rilis / Changelog (1 baris per poin fitur)
           </label>
           <textarea
@@ -139,7 +139,7 @@ export default function AdminProductVersionsPage() {
             value={releaseNotesStr}
             onChange={(e) => setReleaseNotesStr(e.target.value)}
             placeholder="Integrasi AI Scanner QR Real-time&#10;Peningkatan performa database Supabase&#10;Perbaikan bug export PDF"
-            className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 font-mono px-4 py-2.5 text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+            className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
           />
         </div>
 
@@ -147,7 +147,7 @@ export default function AdminProductVersionsPage() {
           <Button
             variant="mint"
             size="md"
-            className="font-black text-xs text-slate-950 shadow-md"
+            className="font-black text-xs text-slate-950"
             disabled={!versionNumber}
             onClick={() => setConfirmOpen(true)}
           >
@@ -159,7 +159,7 @@ export default function AdminProductVersionsPage() {
 
       {/* Version History Table / List */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
+        <div className="flex items-center gap-2 pb-2 border-b border-white/[0.08]">
           <History className="w-4 h-4 text-cyan-400" />
           <h3 className="text-base font-bold text-white tracking-tight">
             Riwayat Rilis Versi Sebelumnya ({product.versions.length} Rilis)
@@ -169,15 +169,15 @@ export default function AdminProductVersionsPage() {
         <div className="space-y-3">
           {product.versions.map((v) => (
             <AdminCard key={v.id} className="space-y-3">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                 <div className="flex items-center gap-2.5">
                   <Badge variant={v.isLatest ? "mint" : "slate"} size="sm">
                     {v.version} {v.isLatest ? "— VERSI AKTIF" : ""}
                   </Badge>
-                  <span className="text-xs text-slate-400 font-mono">
+                  <span className="text-xs text-[#6F8583] font-mono">
                     Rilis: {formatDate(v.releaseDate)}
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">
+                  <span className="text-xs text-[#6F8583] font-mono">
                     ? {v.fileSize}
                   </span>
                 </div>
@@ -187,10 +187,10 @@ export default function AdminProductVersionsPage() {
               </div>
 
               <div className="space-y-1">
-                <span className="text-[11px] font-mono text-slate-400 font-bold uppercase block">
+                <span className="text-[11px] font-mono text-[#6F8583] font-bold uppercase block">
                   Changelog:
                 </span>
-                <ul className="space-y-1 pl-4 list-disc text-xs text-slate-300">
+                <ul className="space-y-1 pl-4 list-disc text-xs text-[#A8BCBA]">
                   {v.releaseNotes.map((note, idx) => (
                     <li key={idx}>{note}</li>
                   ))}

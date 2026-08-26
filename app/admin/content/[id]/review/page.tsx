@@ -64,7 +64,7 @@ export default function AdminDraftReviewPage() {
       <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <AdminCard className="p-8 space-y-4 border-amber-500/30">
           <h3 className="text-lg font-bold text-white">Draft Tidak Ditemukan</h3>
-          <p className="text-xs text-slate-400">Draft mungkin telah dipublikasikan ke portal live atau telah dihapus.</p>
+          <p className="text-xs text-[#6F8583]">Draft mungkin telah dipublikasikan ke portal live atau telah dihapus.</p>
           <Link href="/admin/content">
             <Button variant="primary" size="sm">Kembali ke Editorial Hub</Button>
           </Link>
@@ -107,7 +107,7 @@ export default function AdminDraftReviewPage() {
       <div>
         <Link
           href="/admin/content"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Pusat Editorial</span>
@@ -148,7 +148,7 @@ export default function AdminDraftReviewPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
-            <span className="text-slate-300">
+            <span className="text-[#A8BCBA]">
               Artikel disintesis oleh <strong className="text-purple-300">Gemini Spark AI</strong> dari sumber: <strong className="text-white">{draft.sourceName}</strong>
             </span>
           </div>
@@ -173,7 +173,7 @@ export default function AdminDraftReviewPage() {
           </h3>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Judul Artikel (Headline)
             </label>
             <input
@@ -181,13 +181,13 @@ export default function AdminDraftReviewPage() {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent font-bold"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0] focus:border-transparent font-bold"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Slug URL
               </label>
               <input
@@ -195,18 +195,18 @@ export default function AdminDraftReviewPage() {
                 required
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-cyan-400 font-mono px-4 py-2 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-cyan-400 font-mono px-4 py-2 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Kategori Portal
               </label>
               <select
                 value={categorySlug}
                 onChange={(e) => setCategorySlug(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-3 py-2 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.slug} value={c.slug}>
@@ -218,45 +218,45 @@ export default function AdminDraftReviewPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Ringkasan / Excerpt
             </label>
             <textarea
               rows={3}
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 px-4 py-2.5 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-xs transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
         </AdminCard>
 
         {/* Content Body & Editorial Analysis */}
         <AdminCard className="space-y-5">
-          <h3 className="text-xs font-mono uppercase text-[#7CF2C3] font-bold tracking-wider">
+          <h3 className="text-xs font-mono uppercase text-[#49D7A5] font-bold tracking-wider">
             Badan Konten &amp; Analisis Opini
           </h3>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Isi Konten Artikel (Markdown Didukung)
             </label>
             <textarea
               rows={12}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 font-mono px-4 py-3 text-xs leading-relaxed transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-3 text-xs leading-relaxed transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Analisis Editorial &amp; Opini Spesialis (PRD Requirement)
             </label>
             <textarea
               rows={5}
               value={opinion}
               onChange={(e) => setOpinion(e.target.value)}
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 font-mono px-4 py-2.5 text-xs leading-relaxed transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs leading-relaxed transition-all focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
         </AdminCard>
@@ -265,63 +265,63 @@ export default function AdminDraftReviewPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* SEO Metadata */}
           <AdminCard className="space-y-4">
-            <h3 className="text-xs font-mono uppercase text-slate-300 font-bold tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-mono uppercase text-[#A8BCBA] font-bold tracking-wider flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5 text-cyan-400" />
               SEO &amp; Search Discovery
             </h3>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 SEO Meta Title
               </label>
               <input
                 type="text"
                 value={metaTitle}
                 onChange={(e) => setMetaTitle(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Meta Description
               </label>
               <textarea
                 rows={3}
                 value={metaDescription}
                 onChange={(e) => setMetaDescription(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Tags (Pisahkan Koma)
               </label>
               <input
                 type="text"
                 value={tagsStr}
                 onChange={(e) => setTagsStr(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
           </AdminCard>
 
           {/* Affiliate Widget Binding */}
           <AdminCard className="space-y-4">
-            <h3 className="text-xs font-mono uppercase text-slate-300 font-bold tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-mono uppercase text-[#A8BCBA] font-bold tracking-wider flex items-center gap-1.5">
               <Share2 className="w-3.5 h-3.5 text-purple-400" />
               Tautkan Widget Affiliate (Monetasi)
             </h3>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Pilih Rekomendasi Affiliate
               </label>
               <select
                 value={selectedAffiliateId}
                 onChange={(e) => setSelectedAffiliateId(e.target.value)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               >
                 <option value="">-- Tanpa Widget Rekomendasi --</option>
                 {affiliates.map((aff) => (
@@ -330,7 +330,7 @@ export default function AdminDraftReviewPage() {
                   </option>
                 ))}
               </select>
-              <span className="text-[11px] text-slate-400 block mt-1">
+              <span className="text-[11px] text-[#6F8583] block mt-1">
                 Widget produk ini akan disematkan secara otomatis di tengah artikel portal publik.
               </span>
             </div>
@@ -338,11 +338,11 @@ export default function AdminDraftReviewPage() {
         </div>
 
         {/* Action Button Bar */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#1E293B]">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
           <Button variant="secondary" size="md" onClick={() => router.push("/admin/content")}>
             Batal
           </Button>
-          <Button variant="primary" size="md" className="font-extrabold text-sm shadow-md" onClick={() => setConfirmPublishOpen(true)}>
+          <Button variant="primary" size="md" className="font-extrabold text-sm" onClick={() => setConfirmPublishOpen(true)}>
             <CheckCircle2 className="w-4 h-4 mr-2" />
             Setujui &amp; Publikasikan Sekarang
           </Button>

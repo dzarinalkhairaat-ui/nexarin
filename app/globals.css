@@ -1,33 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  --nexarin-cyan: #2DD4F5;
-  --nexarin-cyan-hover: #38BDF8;
-  --nexarin-mint: #7CF2C3;
-  --deep-navy: #0B1120;
-  --surface-navy: #0F172A;
-  --card-navy: #131E32;
-  --card-hover: #1E293B;
-  --border-cyan: rgba(45, 212, 245, 0.18);
-  --border-subtle: #1E293B;
+  /* Nexari Quiet Premium Glass Color System */
+  --bg-primary: #061214;
+  --bg-secondary: #08191B;
+  --bg-tertiary: #0B2022;
 
-  --bg-primary: #0B1120;
-  --bg-secondary: #0F172A;
-  --bg-card: #131E32;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border-color: #1E293B;
+  --glass-surface: rgba(255, 255, 255, 0.035);
+  --glass-surface-strong: rgba(255, 255, 255, 0.055);
+  --glass-surface-hover: rgba(255, 255, 255, 0.075);
+
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(24, 214, 208, 0.25);
+  --border-active: rgba(24, 214, 208, 0.40);
+
+  --cyan-primary: #18D6D0;
+  --cyan-secondary: #43E0D8;
+  --cyan-soft: #8BEDE6;
+
+  --text-primary: #F2FAF9;
+  --text-secondary: #A8BCBA;
+  --text-muted: #6F8583;
+
+  --color-success: #49D7A5;
+  --color-warning: #E4C46A;
+  --color-error: #E06C75;
 }
 
 html {
   color-scheme: dark;
-  background-color: #0B1120;
+  background-color: #061214;
 }
 
 body {
-  background-color: #0B1120;
-  color: #F8FAFC;
+  background-color: #061214;
+  color: #F2FAF9;
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
@@ -37,46 +45,110 @@ code, pre, .font-mono {
   font-family: var(--font-geist-mono), monospace;
 }
 
-/* Custom Dark Cyan Scrollbar */
+/* Zero Shadow Enforcement Policy */
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Custom Dark Cyan Quiet Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B1120;
+  background: #061214;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #0B2022;
   border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2DD4F5;
+  background: #18D6D0;
 }
 
-/* Shimmer animation */
+/* Quiet Glass Utility Classes */
+.glass-surface {
+  background-color: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-surface-strong {
+  background-color: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-navbar {
+  background-color: rgba(6, 18, 20, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.glass-card:hover {
+  background-color: rgba(255, 255, 255, 0.055);
+  border-color: rgba(24, 214, 208, 0.25);
+  transform: translateY(-1px);
+}
+
+.glass-card-elevated {
+  background-color: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-modal {
+  background-color: #08191B;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-input {
+  background-color: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #F2FAF9;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.glass-input:focus {
+  border-color: rgba(24, 214, 208, 0.40);
+  background-color: rgba(255, 255, 255, 0.055);
+  outline: none;
+}
+
+.glass-dropdown {
+  background-color: #08191B;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Subtle Shimmer for Skeleton States */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, rgba(15,23,42,0) 0%, rgba(45,212,245,0.12) 50%, rgba(15,23,42,0) 100%);
+  background: linear-gradient(90deg, rgba(8, 25, 27, 0) 0%, rgba(24, 214, 208, 0.08) 50%, rgba(8, 25, 27, 0) 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
-}
-
-/* Subtle Card Hover with Dark Cyan Touch */
-.nexarin-card {
-  background-color: #131E32;
-  border: 1px solid #1E293B;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-}
-
-.nexarin-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(45, 212, 245, 0.35);
-  box-shadow: 0 12px 30px -8px rgba(45, 212, 245, 0.12);
 }

@@ -76,7 +76,7 @@ export default function ArticleDetailPage() {
         <div>
           <Link
             href={`/${article.category.slug}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Kembali ke Kanal {article.category.name}</span>
@@ -84,7 +84,7 @@ export default function ArticleDetailPage() {
         </div>
 
         {/* Article Header */}
-        <header className="space-y-5 border-b border-slate-800 pb-8">
+        <header className="space-y-5 border-b border-white/[0.08] pb-8">
           <div className="flex items-center gap-2">
             <CategoryBadge category={article.category} />
             <span className="text-xs font-mono uppercase text-cyan-400 font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20">
@@ -96,12 +96,12 @@ export default function ArticleDetailPage() {
             {article.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#A8BCBA] leading-relaxed font-normal">
             {article.excerpt}
           </p>
 
           {/* Author and Metadata Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs text-[#6F8583]">
             <div className="flex items-center gap-3">
               <img
                 src={article.author.avatar || "/assets/avatar-default.svg"}
@@ -109,13 +109,13 @@ export default function ArticleDetailPage() {
                 onError={(e) => {
                   e.currentTarget.src = "/assets/avatar-default.svg";
                 }}
-                className="w-10 h-10 rounded-full object-cover border-2 border-[#2DD4F5]/40"
+                className="w-10 h-10 rounded-full object-cover border-2 border-[#18D6D0]/40"
               />
               <div>
                 <span className="font-bold text-white text-sm block">
                   {article.author.name}
                 </span>
-                <span className="text-slate-400 text-[11px] block">{article.author.role}</span>
+                <span className="text-[#6F8583] text-[11px] block">{article.author.role}</span>
               </div>
             </div>
 
@@ -134,7 +134,7 @@ export default function ArticleDetailPage() {
         </header>
 
         {/* Featured Image */}
-        <div className="rounded-3xl overflow-hidden shadow-2xl border border-[#1E293B] h-72 sm:h-96 lg:h-[450px] bg-[#0F172A]">
+        <div className="rounded-3xl overflow-hidden border border-white/[0.08] h-72 sm:h-96 lg:h-[450px] bg-[#08191B]">
           <img
             src={article.featuredImage || "/assets/default-cover.svg"}
             alt={article.title}
@@ -146,13 +146,13 @@ export default function ArticleDetailPage() {
         </div>
 
         {/* Article Body Content */}
-        <article className="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-6 text-sm sm:text-base">
+        <article className="prose prose-invert max-w-none text-[#A8BCBA] leading-relaxed space-y-6 text-sm sm:text-base">
           {article.content.split("\n\n").map((paragraph, index) => {
             if (paragraph.startsWith("### ")) {
               return (
                 <h3
                   key={index}
-                  className="text-xl sm:text-2xl font-bold text-white pt-6 pb-2 border-b border-slate-800"
+                  className="text-xl sm:text-2xl font-bold text-white pt-6 pb-2 border-b border-white/[0.08]"
                 >
                   {paragraph.replace("### ", "")}
                 </h3>
@@ -163,7 +163,7 @@ export default function ArticleDetailPage() {
               return (
                 <ul key={index} className="space-y-2 pl-4 list-disc">
                   {lines.map((l, li) => (
-                    <li key={li} className="text-slate-300">
+                    <li key={li} className="text-[#A8BCBA]">
                       {l.replace(/^[-*]|\d+\.\s/, "")}
                     </li>
                   ))}
@@ -179,15 +179,15 @@ export default function ArticleDetailPage() {
         </article>
 
         {/* Tags & Action Bar */}
-        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-slate-400 font-mono flex items-center gap-1">
+            <span className="text-xs text-[#6F8583] font-mono flex items-center gap-1">
               <Tag className="w-3.5 h-3.5" /> Tags:
             </span>
             {article.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-1 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-300 font-mono"
+                className="px-2.5 py-1 rounded-xl bg-slate-800/80 border border-white/[0.10] text-xs text-[#A8BCBA] font-mono"
               >
                 #{tag}
               </span>
@@ -195,7 +195,7 @@ export default function ArticleDetailPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleShare} className="text-xs border-slate-700 text-slate-300 hover:text-white">
+            <Button variant="outline" size="sm" onClick={handleShare} className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
               <Share2 className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
               Bagikan Artikel
             </Button>
@@ -206,7 +206,7 @@ export default function ArticleDetailPage() {
         {affiliate && (
           <section className="pt-6">
             <div className="space-y-2 mb-4">
-              <span className="text-xs font-mono uppercase text-[#2DD4F5] font-bold tracking-wider">
+              <span className="text-xs font-mono uppercase text-[#18D6D0] font-bold tracking-wider">
                 Rekomendasi Perangkat / Hardware Relevan:
               </span>
             </div>
@@ -216,7 +216,7 @@ export default function ArticleDetailPage() {
 
         {/* Product Conversion CTA Card */}
         {relatedProduct && (
-          <Card className="p-6 sm:p-8 bg-gradient-to-br from-[#0F172A] to-[#131E32] border-cyan-500/30 text-white space-y-4 shadow-xl">
+          <Card className="p-6 sm:p-8 bg-gradient-to-br from-[#0F172A] to-[#131E32] border-cyan-500/30 text-white space-y-4">
             <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold">
               <Sparkles className="w-4 h-4" />
               <span>Solusi Terkait dari Nexarin Digital Shop</span>
@@ -225,7 +225,7 @@ export default function ArticleDetailPage() {
               <h4 className="text-lg sm:text-xl font-bold text-white">
                 {relatedProduct.name}
               </h4>
-              <p className="text-xs sm:text-sm text-slate-300">
+              <p className="text-xs sm:text-sm text-[#A8BCBA]">
                 {relatedProduct.shortDescription}
               </p>
             </div>
@@ -242,13 +242,13 @@ export default function ArticleDetailPage() {
 
         {/* Related Articles Carousel/Grid */}
         {relatedArticles.length > 0 && (
-          <section className="pt-10 border-t border-slate-800 space-y-6">
+          <section className="pt-10 border-t border-white/[0.08] space-y-6">
             <h3 className="text-xl font-bold text-white">
               Artikel Terkait Lainnya di Kanal {article.category.name}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {relatedArticles.map((rel) => (
-                <Card key={rel.id} hoverable className="p-4 flex flex-col justify-between bg-[#131E32] border-[#1E293B]">
+                <Card key={rel.id} hoverable className="p-4 flex flex-col justify-between bg-white/[0.035] border-white/[0.08]">
                   <div className="space-y-2">
                     <img
                       src={rel.featuredImage || "/assets/default-cover.svg"}
@@ -259,12 +259,12 @@ export default function ArticleDetailPage() {
                       className="w-full h-32 rounded-xl object-cover"
                     />
                     <Link href={`/article/${rel.slug}`}>
-                      <h4 className="text-xs font-bold text-white hover:text-[#2DD4F5] line-clamp-2 transition-colors">
+                      <h4 className="text-xs font-bold text-white hover:text-[#18D6D0] line-clamp-2 transition-colors">
                         {rel.title}
                       </h4>
                     </Link>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-400 mt-2 block">
+                  <span className="text-[11px] font-mono text-[#6F8583] mt-2 block">
                     {rel.readingTimeMinutes} mnt baca
                   </span>
                 </Card>

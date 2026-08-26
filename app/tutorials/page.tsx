@@ -119,7 +119,7 @@ export default function TutorialsHubPage() {
     selectedType !== "all";
 
   return (
-    <div className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
+    <div className="min-h-screen bg-[#061214] text-[#F2FAF9] selection:bg-[#18D6D0]/30">
       {/* 1. HERO SECTION WITH THEMATIC BACKGROUND IMAGE & BOTTOM GRADIENT */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
         {/* Background Image from External URL */}
@@ -130,7 +130,7 @@ export default function TutorialsHubPage() {
             className="w-full h-full object-cover object-center opacity-70 sm:opacity-75 scale-105 transform transition-transform duration-1000"
           />
           {/* Multi-layer Dark Gradient Overlays for Clear Visibility & Text Readability */}
-          <div className="absolute inset-0 bg-[#080D1A]/50 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[#061214]/50 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/75 via-[#080D1A]/40 to-[#0B1120]" />
           {/* Smooth Bottom Gradient Transition */}
           <div className="absolute bottom-0 left-0 right-0 h-44 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/90 to-transparent" />
@@ -146,10 +146,10 @@ export default function TutorialsHubPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-            Learn. Build. <span className="text-[#2DD4F5]">Grow.</span>
+            Learn. Build. <span className="text-[#18D6D0]">Grow.</span>
           </h1>
 
-          <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-[#A8BCBA] max-w-2xl mx-auto leading-relaxed">
             Pusat pembelajaran teknologi terstruktur: AI &amp; Otomasi, Software Engineering, UI/UX Design, Perangkat Keras, Otomotif Modern, dan Strategi Bisnis Digital.
           </p>
 
@@ -162,13 +162,13 @@ export default function TutorialsHubPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Cari kelas: 'AI Automation', 'Next.js 16', 'Mobil Listrik', 'Design System'..."
-                className="w-full h-13 pl-12 pr-4 rounded-2xl border border-slate-800 bg-[#0F172A] text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] shadow-2xl transition-all"
+                className="w-full h-13 pl-12 pr-4 rounded-2xl border border-white/[0.08] bg-white/[0.035] text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#18D6D0] transition-all"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 text-xs font-mono text-slate-400 hover:text-white"
+                  className="absolute right-4 text-xs font-mono text-[#6F8583] hover:text-white"
                 >
                   Clear
                 </button>
@@ -198,9 +198,9 @@ export default function TutorialsHubPage() {
             </section>
           )
         ) : (
-          <section className="p-6 rounded-2xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-[#1E293B] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <section className="p-6 rounded-2xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
-              <span className="text-[10px] font-mono font-bold uppercase text-[#7CF2C3]">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#49D7A5]">
                 Mulai Perjalanan Belajar Anda
               </span>
               <h3 className="text-base font-bold text-white">
@@ -211,7 +211,7 @@ export default function TutorialsHubPage() {
               variant="mint"
               size="sm"
               onClick={() => openGuestPrompt("Masuk ke akun Anda untuk melacak progres belajar.")}
-              className="font-extrabold text-xs text-slate-950 whitespace-nowrap shadow-md shadow-emerald-500/10"
+              className="font-extrabold text-xs text-slate-950 whitespace-nowrap"
             >
               Masuk untuk Simpan Progres
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -221,7 +221,7 @@ export default function TutorialsHubPage() {
 
         {/* 3. FILTER & NAVIGATION BAR */}
         <section className="space-y-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-[#1E293B]">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
             {/* Category horizontal pills */}
             <div className="flex items-center gap-2 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 scrollbar-none">
               <button
@@ -234,7 +234,7 @@ export default function TutorialsHubPage() {
                   "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border",
                   selectedCategory === "all"
                     ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-400 font-bold"
-                    : "bg-[#0F172A] border-[#1E293B] text-slate-400 hover:text-slate-200"
+                    : "bg-white/[0.035] border-white/[0.08] text-[#6F8583] hover:text-[#F2FAF9]"
                 )}
               >
                 Semua Kategori
@@ -252,7 +252,7 @@ export default function TutorialsHubPage() {
                     "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border",
                     selectedCategory === cat.id
                       ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-400 font-bold"
-                      : "bg-[#0F172A] border-[#1E293B] text-slate-400 hover:text-slate-200"
+                      : "bg-white/[0.035] border-white/[0.08] text-[#6F8583] hover:text-[#F2FAF9]"
                   )}
                 >
                   {cat.name}
@@ -272,7 +272,7 @@ export default function TutorialsHubPage() {
             {/* Difficulty & Type Filters */}
             <div className="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
               {/* Difficulty */}
-              <div className="flex items-center gap-1 bg-[#0F172A] p-1 rounded-xl border border-[#1E293B] text-xs font-mono">
+              <div className="flex items-center gap-1 bg-white/[0.035] p-1 rounded-xl border border-white/[0.08] text-xs font-mono">
                 {(["all", "Beginner", "Intermediate", "Advanced"] as const).map((lvl) => (
                   <button
                     key={lvl}
@@ -282,7 +282,7 @@ export default function TutorialsHubPage() {
                       "px-2.5 py-1 rounded-lg transition-colors",
                       selectedLevel === lvl
                         ? "bg-cyan-500/20 text-cyan-300 font-bold"
-                        : "text-slate-400 hover:text-slate-200"
+                        : "text-[#6F8583] hover:text-[#F2FAF9]"
                     )}
                   >
                     {lvl === "all" ? "All Level" : lvl}
@@ -294,7 +294,7 @@ export default function TutorialsHubPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-[#0F172A] border border-[#1E293B] text-slate-300 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                className="bg-white/[0.035] border border-white/[0.08] text-[#A8BCBA] text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-400"
               >
                 <option value="popular">Paling Populer</option>
                 <option value="latest">Terbaru</option>
@@ -305,9 +305,9 @@ export default function TutorialsHubPage() {
 
           {/* Active Filter Badges */}
           {isFiltering && (
-            <div className="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800 text-xs">
+            <div className="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-white/[0.08] text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-slate-400 font-mono">Filter Aktif:</span>
+                <span className="text-[#6F8583] font-mono">Filter Aktif:</span>
                 {searchQuery && (
                   <Badge variant="cyan" size="sm">
                     Query: "{searchQuery}"
@@ -323,7 +323,7 @@ export default function TutorialsHubPage() {
                     Level: {selectedLevel}
                   </Badge>
                 )}
-                <span className="text-slate-400 font-mono ml-2">
+                <span className="text-[#6F8583] font-mono ml-2">
                   Ditemukan: <strong className="text-cyan-400">{filteredCourses.length}</strong> kelas
                 </span>
               </div>
@@ -353,10 +353,10 @@ export default function TutorialsHubPage() {
                 ))}
               </div>
             ) : (
-              <div className="py-16 text-center space-y-4 rounded-2xl bg-[#0F172A] border border-[#1E293B] p-8 max-w-xl mx-auto">
+              <div className="py-16 text-center space-y-4 rounded-2xl bg-white/[0.035] border border-white/[0.08] p-8 max-w-xl mx-auto">
                 <Search className="w-10 h-10 text-slate-500 mx-auto" />
                 <h3 className="text-base font-bold text-white">Tidak Ada Kelas yang Sesuai</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-[#6F8583] leading-relaxed">
                   Tidak ditemukan tutorial atau kelas dengan kata kunci atau filter yang Anda pilih. Silakan coba kata kunci lain atau reset filter.
                 </p>
                 <Button variant="primary" size="sm" onClick={clearFilters}>
@@ -378,7 +378,7 @@ export default function TutorialsHubPage() {
                       Kelas Unggulan (Featured Classes)
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#6F8583] mt-1">
                     Materi komprehensif pilihan editor dengan kurikulum terlengkap dan latihan praktis.
                   </p>
                 </div>
@@ -392,16 +392,16 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* BROWSE ALL 12 PRIMARY CATEGORIES */}
-            <section className="space-y-6 pt-6 border-t border-[#1E293B]">
+            <section className="space-y-6 pt-6 border-t border-white/[0.08]">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-[#7CF2C3]" />
+                    <Layers className="w-5 h-5 text-[#49D7A5]" />
                     <h2 className="text-xl font-bold text-white tracking-tight">
                       Jelajahi Berdasarkan Kategori Utama ({categories.length} Kategori)
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#6F8583] mt-1">
                     Pilih bidang keahlian dan temukan puluhan subkategori pembelajaran mendalam.
                   </p>
                 </div>
@@ -417,26 +417,26 @@ export default function TutorialsHubPage() {
                       key={cat.id}
                       type="button"
                       onClick={() => setActiveCategoryModal(cat)}
-                      className="group p-5 rounded-2xl bg-[#0F172A] border border-[#1E293B] hover:border-cyan-500/40 text-left transition-all hover:bg-[#131E32] flex flex-col justify-between space-y-4"
+                      className="group p-5 rounded-2xl bg-white/[0.035] border border-white/[0.08] hover:border-cyan-500/40 text-left transition-all hover:bg-white/[0.055] flex flex-col justify-between space-y-4"
                     >
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-mono font-bold uppercase text-cyan-400">
                             {totalSubCount} Subkategori
                           </span>
-                          <span className="text-[11px] font-mono text-slate-400">
+                          <span className="text-[11px] font-mono text-[#6F8583]">
                             {totalClassesInCat} Kelas
                           </span>
                         </div>
                         <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug">
                           {cat.name}
                         </h3>
-                        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-[#6F8583] line-clamp-2 leading-relaxed">
                           {cat.description}
                         </p>
                       </div>
 
-                      <div className="pt-2 border-t border-[#1E293B] flex items-center justify-between text-xs font-bold text-cyan-400 font-mono">
+                      <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between text-xs font-bold text-cyan-400 font-mono">
                         <span>Lihat Subkategori</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -447,7 +447,7 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* POPULAR CLASSES */}
-            <section className="space-y-6 pt-6 border-t border-[#1E293B]">
+            <section className="space-y-6 pt-6 border-t border-white/[0.08]">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
@@ -456,7 +456,7 @@ export default function TutorialsHubPage() {
                       Paling Populer &amp; Banyak Diikuti
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#6F8583] mt-1">
                     Kelas favorit yang paling banyak dipelajari oleh engineer dan profesional digital.
                   </p>
                 </div>
@@ -470,16 +470,16 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* BEGINNER FRIENDLY */}
-            <section className="space-y-6 pt-6 border-t border-[#1E293B]">
+            <section className="space-y-6 pt-6 border-t border-white/[0.08]">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Award className="w-5 h-5 text-[#7CF2C3]" />
+                    <Award className="w-5 h-5 text-[#49D7A5]" />
                     <h2 className="text-xl font-bold text-white tracking-tight">
                       Ramah Pemula (Beginner Friendly)
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#6F8583] mt-1">
                     Mulai perjalanan belajar Anda dengan penjelasan konsep dasar langkah demi langkah tanpa prasyarat rumit.
                   </p>
                 </div>
@@ -493,7 +493,7 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* INTERMEDIATE & ADVANCED */}
-            <section className="space-y-6 pt-6 border-t border-[#1E293B]">
+            <section className="space-y-6 pt-6 border-t border-white/[0.08]">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
@@ -502,7 +502,7 @@ export default function TutorialsHubPage() {
                       Tingkat Lanjutan (Intermediate &amp; Advanced)
                     </h2>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-[#6F8583] mt-1">
                     Pendalaman arsitektur kompleks, security zero-trust, dan optimasi performa skala enterprise.
                   </p>
                 </div>
@@ -516,7 +516,7 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* LEARNING TOPICS CLOUD */}
-            <section className="p-8 rounded-2xl bg-[#0F172A] border border-[#1E293B] space-y-4">
+            <section className="p-8 rounded-2xl bg-white/[0.035] border border-white/[0.08] space-y-4">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
                 Topik Populer yang Sering Dicari:
               </h3>
@@ -539,7 +539,7 @@ export default function TutorialsHubPage() {
                     key={tag}
                     type="button"
                     onClick={() => setSearchQuery(tag)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+                    className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-900 border border-white/[0.08] text-[#A8BCBA] hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
                   >
                     #{tag}
                   </button>
@@ -548,14 +548,14 @@ export default function TutorialsHubPage() {
             </section>
 
             {/* CALL TO ACTION */}
-            <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-cyan-500/30 text-center space-y-4 shadow-2xl">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#7CF2C3]/10 text-[#7CF2C3] border border-[#7CF2C3]/30">
+            <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-cyan-500/30 text-center space-y-4">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#49D7A5]/10 text-[#49D7A5] border border-[#49D7A5]/30">
                 Ekosistem Terintegrasi Nexari
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Ingin Mengimplementasikan Kode Langsung ke Aplikasi Anda?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#A8BCBA] max-w-xl mx-auto leading-relaxed">
                 Jelajahi Digital Shop kami untuk mendapatkan Source Code Sistem Absensi Sekolah, Template Admin Pro, dan Starter Kit siap pakai berlisensi lifetime.
               </p>
               <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -566,7 +566,7 @@ export default function TutorialsHubPage() {
                   </Button>
                 </Link>
                 <Link href="/free-resources">
-                  <Button variant="outline" size="md" className="font-bold text-xs border-slate-700 text-slate-200 hover:text-white">
+                  <Button variant="outline" size="md" className="font-bold text-xs border-white/[0.10] text-[#F2FAF9] hover:text-white">
                     Unduh Free Resources
                   </Button>
                 </Link>
@@ -584,7 +584,7 @@ export default function TutorialsHubPage() {
           title={`Kategori: ${activeCategoryModal.name}`}
         >
           <div className="space-y-4">
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#A8BCBA] leading-relaxed">
               {activeCategoryModal.description}
             </p>
 
@@ -603,9 +603,9 @@ export default function TutorialsHubPage() {
                       setSelectedSubcategory(sub.id);
                       setActiveCategoryModal(null);
                     }}
-                    className="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 text-left transition-colors flex items-center justify-between text-xs group"
+                    className="p-3 rounded-xl bg-slate-900 border border-white/[0.08] hover:border-cyan-500/40 text-left transition-colors flex items-center justify-between text-xs group"
                   >
-                    <span className="font-semibold text-slate-200 group-hover:text-cyan-400">
+                    <span className="font-semibold text-[#F2FAF9] group-hover:text-cyan-400">
                       {sub.name}
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">
@@ -616,7 +616,7 @@ export default function TutorialsHubPage() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-white/[0.08] flex justify-end">
               <Button
                 variant="primary"
                 size="sm"

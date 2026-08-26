@@ -19,20 +19,20 @@ export function CustomerPageHeader({
   className
 }: CustomerPageHeaderProps) {
   return (
-    <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#1E293B]", className)}>
+    <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]", className)}>
       <div className="space-y-1">
         <div className="flex items-center gap-2.5">
           <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
             {title}
           </h1>
           {badge && (
-            <span className="px-2.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-[11px] font-mono font-bold border border-[#7CF2C3]/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#49D7A5]/15 text-[#49D7A5] text-[11px] font-mono font-bold border border-[#49D7A5]/30">
               {badge}
             </span>
           )}
         </div>
         {description && (
-          <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+          <p className="text-xs text-[#6F8583] leading-relaxed max-w-2xl">
             {description}
           </p>
         )}

@@ -23,13 +23,13 @@ export function CustomerStatCard({
   className
 }: CustomerStatCardProps) {
   return (
-    <div className={cn("p-5 rounded-2xl bg-[#131E32] border border-[#1E293B] flex flex-col justify-between space-y-3 shadow-sm", className)}>
+    <div className={cn("p-5 rounded-2xl bg-white/[0.035] border border-white/[0.08] flex flex-col justify-between space-y-3 ", className)}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-slate-400">
+        <span className="text-xs font-medium text-[#6F8583]">
           {label}
         </span>
         {icon && (
-          <div className="w-10 h-10 rounded-xl bg-[#0B1120] border border-slate-800 flex items-center justify-center text-[#2DD4F5]">
+          <div className="w-10 h-10 rounded-xl bg-[#061214] border border-white/[0.08] flex items-center justify-center text-[#18D6D0]">
             {icon}
           </div>
         )}
@@ -47,7 +47,7 @@ export function CustomerStatCard({
           )}
         </div>
         {subtext && (
-          <p className="text-[11px] text-slate-400 mt-1 truncate">
+          <p className="text-[11px] text-[#6F8583] mt-1 truncate">
             {subtext}
           </p>
         )}

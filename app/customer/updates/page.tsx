@@ -32,13 +32,13 @@ export default function CustomerUpdatesPage() {
         <div className="space-y-4">
           {pendingUpdates.map(({ product, license, latestVersion }) => (
             <CustomerCard key={product.id} className="space-y-4 border-emerald-500/30">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Badge variant="mint" size="sm">
                       Versi Baru: {latestVersion.version}
                     </Badge>
-                    <span className="text-xs font-mono text-slate-400">
+                    <span className="text-xs font-mono text-[#6F8583]">
                       (Versi Anda: {license.ownedVersion})
                     </span>
                   </div>
@@ -58,7 +58,7 @@ export default function CustomerUpdatesPage() {
                     Unduh Versi {latestVersion.version}
                   </Button>
                   <Link href={`/customer/products/${product.id}`}>
-                    <Button variant="outline" size="sm" className="text-xs border-slate-700 text-slate-300 hover:text-white">
+                    <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
                       Detail
                     </Button>
                   </Link>
@@ -67,20 +67,20 @@ export default function CustomerUpdatesPage() {
 
               {/* Changelog Notes */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#A8BCBA] font-mono">
                   What's New in Version {latestVersion.version}:
                 </h4>
-                <ul className="space-y-1.5 text-xs text-slate-300">
+                <ul className="space-y-1.5 text-xs text-[#A8BCBA]">
                   {latestVersion.releaseNotes.map((note, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#49D7A5] shrink-0 mt-0.5" />
                       <span>{note}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="pt-2 text-[11px] text-slate-400 font-mono flex items-center justify-between border-t border-slate-800">
+              <div className="pt-2 text-[11px] text-[#6F8583] font-mono flex items-center justify-between border-t border-white/[0.08]">
                 <span>Ukuran File: {latestVersion.fileSize}</span>
                 <span>Tanggal Rilis: {formatDate(latestVersion.releaseDate)}</span>
               </div>

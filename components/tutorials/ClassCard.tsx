@@ -4,9 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { TutorialCourse } from "@/types/tutorial";
 import { useTutorials } from "@/context/TutorialContext";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Clock, BookOpen, Star, Users, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Clock, BookOpen, Star, ArrowRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ClassCardProps {
@@ -21,42 +20,42 @@ export function ClassCard({ course, className }: ClassCardProps) {
   const isCompleted = progress && progress.percentage >= 100;
 
   const levelColor = {
-    Beginner: "bg-emerald-500/10 text-[#7CF2C3] border-emerald-500/30",
-    Intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-    Advanced: "bg-purple-500/10 text-purple-400 border-purple-500/30"
-  }[course.level] || "bg-slate-800 text-slate-300 border-slate-700";
+    Beginner: "bg-[#49D7A5]/10 text-[#49D7A5] border-[#49D7A5]/25",
+    Intermediate: "bg-[#18D6D0]/10 text-[#18D6D0] border-[#18D6D0]/25",
+    Advanced: "bg-purple-500/10 text-purple-300 border-purple-500/25"
+  }[course.level] || "bg-white/[0.04] text-[#A8BCBA] border-white/[0.08]";
 
   return (
     <div
       className={cn(
-        "group relative flex flex-col justify-between rounded-2xl bg-[#0F172A] border border-[#1E293B] hover:border-cyan-500/40 transition-all duration-300 shadow-lg hover:shadow-cyan-500/5 overflow-hidden",
+        "group relative flex flex-col justify-between rounded-2xl bg-white/[0.035] border border-white/[0.08] hover:border-[#18D6D0]/30 hover:bg-white/[0.055] transition-all duration-200 overflow-hidden backdrop-blur-md",
         className
       )}
     >
-      {/* Top: Thumbnail & Overlays */}
-      <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+      {/* Top: Thumbnail & Badges */}
+      <div className="relative aspect-video w-full overflow-hidden bg-[#08191B]">
         <img
           src={course.thumbnail}
           alt={course.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#061214] via-[#061214]/40 to-transparent opacity-90" />
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-          <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border", levelColor)}>
+          <span className={cn("px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold uppercase border", levelColor)}>
             {course.level}
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-black/60 backdrop-blur-md text-slate-300 border border-white/10 flex items-center gap-1">
-            <Clock className="w-3 h-3 text-cyan-400" />
+          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-[#061214]/80 backdrop-blur-md text-[#F2FAF9] border border-white/[0.10] flex items-center gap-1">
+            <Clock className="w-3 h-3 text-[#18D6D0]" />
             {course.duration}
           </span>
         </div>
 
         {/* Category Pill */}
         <div className="absolute bottom-2.5 left-3">
-          <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 tracking-wider">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#18D6D0] tracking-wider">
             {course.categoryName} • {course.subcategoryName}
           </span>
         </div>
@@ -66,26 +65,26 @@ export function ClassCard({ course, className }: ClassCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
           <Link href={`/tutorials/${course.slug}`}>
-            <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug line-clamp-2">
+            <h3 className="text-sm sm:text-base font-bold text-[#F2FAF9] group-hover:text-[#18D6D0] transition-colors leading-snug line-clamp-2">
               {course.title}
             </h3>
           </Link>
-          <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+          <p className="text-xs text-[#A8BCBA] leading-relaxed line-clamp-2">
             {course.tagline || course.description}
           </p>
         </div>
 
         {/* Metadata stats */}
-        <div className="pt-3 border-t border-[#1E293B] space-y-3">
-          <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
+        <div className="pt-3 border-t border-white/[0.08] space-y-3">
+          <div className="flex items-center justify-between text-xs text-[#A8BCBA] font-mono">
             <div className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-slate-500" />
+              <BookOpen className="w-3.5 h-3.5 text-[#6F8583]" />
               <span>{course.lessonCount} Lessons</span>
             </div>
-            <div className="flex items-center gap-1 text-amber-400">
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              <span className="font-bold text-slate-200">{course.rating.toFixed(1)}</span>
-              <span className="text-[10px] text-slate-500 font-normal">({course.enrolledCount})</span>
+            <div className="flex items-center gap-1 text-[#E4C46A]">
+              <Star className="w-3.5 h-3.5 fill-[#E4C46A]" />
+              <span className="font-bold text-[#F2FAF9]">{course.rating.toFixed(1)}</span>
+              <span className="text-[10px] text-[#6F8583] font-normal">({course.enrolledCount})</span>
             </div>
           </div>
 
@@ -93,15 +92,15 @@ export function ClassCard({ course, className }: ClassCardProps) {
           {isStarted && (
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="text-slate-400 flex items-center gap-1">
-                  {isCompleted ? <CheckCircle2 className="w-3 h-3 text-[#7CF2C3]" /> : null}
+                <span className="text-[#A8BCBA] flex items-center gap-1">
+                  {isCompleted ? <CheckCircle2 className="w-3 h-3 text-[#49D7A5]" /> : null}
                   Progres: {progress.percentage}%
                 </span>
-                <span className="text-cyan-400">{isCompleted ? "Selesai" : "Sedang Berjalan"}</span>
+                <span className="text-[#18D6D0]">{isCompleted ? "Selesai" : "Sedang Berjalan"}</span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-white/[0.05] overflow-hidden border border-white/[0.06]">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-500 to-[#7CF2C3] transition-all duration-500"
+                  className="h-full bg-[#18D6D0] transition-all duration-300"
                   style={{ width: `${progress.percentage}%` }}
                 />
               </div>
@@ -114,9 +113,9 @@ export function ClassCard({ course, className }: ClassCardProps) {
               <img
                 src={course.instructor.avatar}
                 alt={course.instructor.name}
-                className="w-6 h-6 rounded-full object-cover border border-slate-700"
+                className="w-6 h-6 rounded-full object-cover border border-white/[0.12]"
               />
-              <span className="text-xs text-slate-300 font-medium truncate max-w-[110px]">
+              <span className="text-xs text-[#A8BCBA] font-medium truncate max-w-[110px]">
                 {course.instructor.name}
               </span>
             </div>
@@ -125,12 +124,7 @@ export function ClassCard({ course, className }: ClassCardProps) {
               <Button
                 variant={isStarted ? "mint" : "outline"}
                 size="sm"
-                className={cn(
-                  "text-xs px-3 py-1.5 font-bold transition-all",
-                  isStarted
-                    ? "text-slate-950 font-extrabold"
-                    : "border-slate-700 text-slate-200 hover:text-white hover:border-cyan-400"
-                )}
+                className="text-xs px-3 py-1 font-bold"
               >
                 {isCompleted ? "Ulas Materi" : isStarted ? "Lanjut Belajar" : "Mulai Kelas"}
                 <ArrowRight className="w-3 h-3 ml-1" />

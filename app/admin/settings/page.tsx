@@ -41,14 +41,14 @@ export default function AdminSettingsPage() {
         <form onSubmit={handleSave} className="space-y-6">
           {/* Section 1: Platform Identity */}
           <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase text-cyan-400 font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-[#1E293B]">
+            <h3 className="text-xs font-mono uppercase text-cyan-400 font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-white/[0.08]">
               <Globe className="w-3.5 h-3.5" />
               Identitas &amp; Metadata Portal
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                   Nama Situs (Site Title)
                 </label>
                 <input
@@ -56,12 +56,12 @@ export default function AdminSettingsPage() {
                   required
                   value={siteName}
                   onChange={(e) => setSiteName(e.target.value)}
-                  className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                   Identitas Brand Author
                 </label>
                 <input
@@ -69,7 +69,7 @@ export default function AdminSettingsPage() {
                   required
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
                 />
               </div>
             </div>
@@ -77,14 +77,14 @@ export default function AdminSettingsPage() {
 
           {/* Section 2: Integrations */}
           <div className="space-y-4">
-            <h3 className="text-xs font-mono uppercase text-[#7CF2C3] font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-[#1E293B]">
+            <h3 className="text-xs font-mono uppercase text-[#49D7A5] font-bold tracking-wider flex items-center gap-1.5 pb-2 border-b border-white/[0.08]">
               <CreditCard className="w-3.5 h-3.5" />
               Integrasi Payment Gateway &amp; Database
             </h3>
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                   Mayar Payment Secret Key (Simulasi)
                 </label>
                 <input
@@ -92,12 +92,12 @@ export default function AdminSettingsPage() {
                   required
                   value={mayarKey}
                   onChange={(e) => setMayarKey(e.target.value)}
-                  className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-cyan-300 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-cyan-300 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                   Supabase URL Production
                 </label>
                 <input
@@ -105,18 +105,18 @@ export default function AdminSettingsPage() {
                   required
                   value={supabaseUrl}
                   onChange={(e) => setSupabaseUrl(e.target.value)}
-                  className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#1E293B] flex justify-end">
+          <div className="pt-4 border-t border-white/[0.08] flex justify-end">
             <Button
               type="submit"
               variant="primary"
               size="md"
-              className="font-extrabold text-xs shadow-md"
+              className="font-extrabold text-xs"
               disabled={loading}
             >
               {loading ? (

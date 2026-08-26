@@ -74,7 +74,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#080D1A] text-slate-100 flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
+    <div className="min-h-screen w-full bg-[#061214] text-[#F2FAF9] flex flex-col justify-between relative overflow-hidden selection:bg-[#18D6D0]/30">
       {/* 1. Layered Background Atmosphere */}
       {/* External Architectural Texture */}
       <div
@@ -87,45 +87,45 @@ function LoginForm() {
 
       {/* Dark Vignette & Deep Cyan Atmospheric Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/80 via-[#080D1A]/95 to-[#080D1A] pointer-events-none" />
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-[#2DD4F5]/10 via-[#0891B2]/5 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-[#18D6D0]/10 via-[#0891B2]/5 to-transparent blur-3xl pointer-events-none" />
 
       {/* 2. Top Header Bar */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors group"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-[#6F8583] hover:text-white transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors" />
           <span>Kembali ke Beranda</span>
         </Link>
 
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#2DD4F5]" />
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 border border-white/[0.08] text-[11px] font-mono text-[#6F8583]">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#18D6D0]" />
           <span>Customer Portal • SSL Secured</span>
         </div>
       </header>
 
       {/* 3. Center Section: Premium Login Card */}
       <main className="relative z-10 w-full flex items-center justify-center px-4 py-8 sm:py-12">
-        <div className="w-full max-w-[420px] bg-[#0E1626] border border-[#1E293B] rounded-2xl p-7 sm:p-9 shadow-[0_24px_64px_rgba(0,0,0,0.65)] space-y-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="w-full max-w-[420px] bg-[#0E1626] border border-white/[0.08] rounded-2xl p-7 sm:p-9 space-y-6 animate-in fade-in zoom-in-95 duration-200">
           {/* Brand Header */}
           <div className="text-center space-y-3">
             <Link href="/" className="inline-flex items-center justify-center group mb-1">
               <img
                 src="/assets/nexarin-logo.png"
                 alt="Nexarin Logo"
-                className="w-16 h-16 object-contain drop-shadow-md group-hover:scale-105 transition-transform mx-auto"
+                className="w-16 h-16 object-contain drop- group-hover:scale-105 transition-transform mx-auto"
               />
             </Link>
 
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/20 text-[10px] font-mono font-bold uppercase tracking-wider text-[#2DD4F5]">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#18D6D0]/10 border border-[#18D6D0]/20 text-[10px] font-mono font-bold uppercase tracking-wider text-[#18D6D0]">
                 <span>Customer Access</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                 Selamat Datang Kembali
               </h1>
-              <p className="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto">
+              <p className="text-xs text-[#6F8583] leading-relaxed max-w-xs mx-auto">
                 Masuk ke akun untuk mengunduh produk, lisensi, dan pembaruan aplikasi.
               </p>
             </div>
@@ -133,7 +133,7 @@ function LoginForm() {
             {/* Context Intent Banner (e.g. from shop / direct checkout) */}
             {redirectUrl && redirectUrl !== "/customer" && (
               <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/25 text-left text-xs text-cyan-300 flex items-start gap-2.5 animate-in fade-in">
-                <Sparkles className="w-4 h-4 text-[#2DD4F5] shrink-0 mt-0.5" />
+                <Sparkles className="w-4 h-4 text-[#18D6D0] shrink-0 mt-0.5" />
                 <span className="leading-snug">
                   Masuk ke akun Anda untuk menyelesaikan pembelian atau aktivasi lisensi produk.
                 </span>
@@ -153,7 +153,7 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-1.5 text-left">
-              <label htmlFor="customer-email" className="block text-xs font-semibold text-slate-300">
+              <label htmlFor="customer-email" className="block text-xs font-semibold text-[#A8BCBA]">
                 Email Customer
               </label>
               <div className="relative flex items-center">
@@ -168,7 +168,7 @@ function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="nama@email.com"
-                  className="w-full h-11 rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 pl-10 pr-4 text-xs font-medium placeholder:text-slate-500 transition-colors focus:outline-none focus:border-[#2DD4F5] focus:ring-1 focus:ring-[#2DD4F5]"
+                  className="w-full h-11 rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] pl-10 pr-4 text-xs font-medium placeholder:text-slate-500 transition-colors focus:outline-none focus:border-[#18D6D0] focus:ring-1 focus:ring-[#18D6D0]"
                 />
               </div>
             </div>
@@ -176,12 +176,12 @@ function LoginForm() {
             {/* Password Field */}
             <div className="space-y-1.5 text-left">
               <div className="flex items-center justify-between">
-                <label htmlFor="customer-password" className="block text-xs font-semibold text-slate-300">
+                <label htmlFor="customer-password" className="block text-xs font-semibold text-[#A8BCBA]">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-[#2DD4F5] hover:text-cyan-300 font-medium transition-colors hover:underline"
+                  className="text-xs text-[#18D6D0] hover:text-cyan-300 font-medium transition-colors hover:underline"
                 >
                   Lupa password?
                 </Link>
@@ -198,12 +198,12 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full h-11 rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 pl-10 pr-11 text-xs font-medium placeholder:text-slate-500 transition-colors focus:outline-none focus:border-[#2DD4F5] focus:ring-1 focus:ring-[#2DD4F5]"
+                  className="w-full h-11 rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] pl-10 pr-11 text-xs font-medium placeholder:text-slate-500 transition-colors focus:outline-none focus:border-[#18D6D0] focus:ring-1 focus:ring-[#18D6D0]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 p-1.5 text-slate-400 hover:text-slate-200 transition-colors"
+                  className="absolute right-3 p-1.5 text-[#6F8583] hover:text-[#F2FAF9] transition-colors"
                   aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -213,12 +213,12 @@ function LoginForm() {
 
             {/* Remember Me */}
             <div className="flex items-center justify-between text-xs pt-0.5">
-              <label className="flex items-center gap-2 text-slate-400 hover:text-slate-300 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-[#6F8583] hover:text-[#A8BCBA] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-900 text-[#2DD4F5] focus:ring-[#2DD4F5] focus:ring-offset-0"
+                  className="rounded border-white/[0.10] bg-slate-900 text-[#18D6D0] focus:ring-[#18D6D0] focus:ring-offset-0"
                 />
                 <span>Ingat saya</span>
               </label>
@@ -228,7 +228,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 sm:h-12 rounded-xl bg-[#2DD4F5] hover:bg-[#20b8d8] active:scale-[0.99] text-slate-950 font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-[#2DD4F5]/10 transition-all duration-150 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-3"
+              className="w-full h-11 sm:h-12 rounded-xl bg-[#18D6D0] hover:bg-[#20b8d8] active:scale-[0.99] text-slate-950 font-bold text-xs sm:text-sm tracking-wide /10 transition-all duration-150 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-3"
             >
               {loading ? (
                 <>
@@ -242,11 +242,11 @@ function LoginForm() {
           </form>
 
           {/* Register CTA */}
-          <div className="pt-4 border-t border-[#1E293B] text-center text-xs text-slate-400">
+          <div className="pt-4 border-t border-white/[0.08] text-center text-xs text-[#6F8583]">
             Belum memiliki akun customer?{" "}
             <Link
               href={`/register${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ""}${actionIntent ? `&action=${actionIntent}` : ""}`}
-              className="text-[#2DD4F5] hover:text-cyan-300 font-bold transition-colors hover:underline"
+              className="text-[#18D6D0] hover:text-cyan-300 font-bold transition-colors hover:underline"
             >
               Daftar Sekarang →
             </Link>
@@ -266,7 +266,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#080D1A] flex items-center justify-center text-xs text-slate-400 font-mono">
+        <div className="min-h-screen bg-[#061214] flex items-center justify-center text-xs text-[#6F8583] font-mono">
           Memuat halaman masuk...
         </div>
       }

@@ -26,7 +26,7 @@ export default function Error({
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
             Terjadi Kesalahan Sistem
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-[#6F8583] leading-relaxed">
             Terjadi kendala saat memproses permintaan Anda. Silakan coba muat ulang halaman.
           </p>
         </div>

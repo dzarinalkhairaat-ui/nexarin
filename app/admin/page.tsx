@@ -41,7 +41,7 @@ export default function AdminOverviewPage() {
               variant="outline"
               size="sm"
               onClick={syncGeminiSpark}
-              className="text-xs border-slate-700 text-slate-300 hover:text-white"
+              className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white"
             >
               <RefreshCw className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
               Sync Gemini Spark
@@ -70,7 +70,7 @@ export default function AdminOverviewPage() {
           label="Artikel Live"
           value={articles.length}
           subtext="Terkurasi di portal publik"
-          icon={<TrendingUp className="w-4 h-4 text-[#2DD4F5]" />}
+          icon={<TrendingUp className="w-4 h-4 text-[#18D6D0]" />}
           trend={{ value: "100% active", positive: true }}
         />
 
@@ -78,7 +78,7 @@ export default function AdminOverviewPage() {
           label="Total Pendapatan"
           value={formatCurrency(totalRevenue, "IDR")}
           subtext={`${orders.length} transaksi Mayar`}
-          icon={<ShoppingBag className="w-4 h-4 text-[#7CF2C3]" />}
+          icon={<ShoppingBag className="w-4 h-4 text-[#49D7A5]" />}
           trend={{ value: "Lifetime", positive: true }}
         />
 
@@ -102,7 +102,7 @@ export default function AdminOverviewPage() {
               <h3 className="text-sm font-bold text-white">
                 Pipeline Gemini Spark Editorial AI: Online &amp; Terhubung
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#6F8583]">
                 Otomatisasi pengolahan 3 RSS Feed harian → Google Sheets → Siap direview editor manusia.
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function AdminOverviewPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pending Review Drafts */}
         <AdminCard className="space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
               <FileEdit className="w-4 h-4 text-amber-400" />
               <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
@@ -138,7 +138,7 @@ export default function AdminOverviewPage() {
             {pendingDrafts.slice(0, 3).map((draft) => (
               <div
                 key={draft.id}
-                className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] flex items-center justify-between gap-3 hover:border-slate-700 transition-colors"
+                className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] flex items-center justify-between gap-3 hover:border-white/[0.10] transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -166,14 +166,14 @@ export default function AdminOverviewPage() {
 
         {/* Recent Transactions */}
         <AdminCard className="space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-4 h-4 text-[#7CF2C3]" />
+              <ShoppingBag className="w-4 h-4 text-[#49D7A5]" />
               <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
                 Transaksi Pesanan Terbaru ({orders.length})
               </h3>
             </div>
-            <Link href="/admin/orders" className="text-xs font-mono font-bold text-[#7CF2C3] hover:underline">
+            <Link href="/admin/orders" className="text-xs font-mono font-bold text-[#49D7A5] hover:underline">
               Semua Pesanan ?
             </Link>
           </div>
@@ -182,7 +182,7 @@ export default function AdminOverviewPage() {
             {orders.slice(0, 3).map((order) => (
               <div
                 key={order.id}
-                className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] flex items-center justify-between gap-3 hover:border-slate-700 transition-colors"
+                className="p-3 rounded-xl bg-[#061214] border border-white/[0.08] flex items-center justify-between gap-3 hover:border-white/[0.10] transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -193,7 +193,7 @@ export default function AdminOverviewPage() {
                       {order.status.toUpperCase()}
                     </Badge>
                   </div>
-                  <span className="text-xs text-slate-400 truncate block">
+                  <span className="text-xs text-[#6F8583] truncate block">
                     {order.customerName} • {order.items[0]?.productName}
                   </span>
                 </div>
@@ -214,7 +214,7 @@ export default function AdminOverviewPage() {
 
       {/* Security Audit Trail Snippet */}
       <AdminCard className="space-y-3">
-        <div className="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+        <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
             <History className="w-4 h-4 text-cyan-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
@@ -233,7 +233,7 @@ export default function AdminOverviewPage() {
                 <span className="text-cyan-400 font-bold uppercase text-[11px] shrink-0">
                   [{log.action}]
                 </span>
-                <span className="text-slate-300 truncate">
+                <span className="text-[#A8BCBA] truncate">
                   {log.details}
                 </span>
               </div>

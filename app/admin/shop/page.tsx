@@ -93,7 +93,7 @@ export default function AdminShopPage() {
       <div className="space-y-4">
         {products.map((prod) => (
           <AdminCard key={prod.id} className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1E293B]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -114,21 +114,21 @@ export default function AdminShopPage() {
               </div>
 
               <div className="sm:text-right">
-                <span className="text-lg font-black text-[#2DD4F5] font-mono block">
+                <span className="text-lg font-black text-[#18D6D0] font-mono block">
                   {formatCurrency(prod.price, prod.currency)}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">
+                <span className="text-xs text-[#6F8583] font-mono">
                   {prod.salesCount} Penjualan • ★ {prod.rating}
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#A8BCBA] leading-relaxed">
               {prod.shortDescription}
             </p>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#1E293B]">
-              <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.08]">
+              <div className="flex items-center gap-3 text-xs font-mono text-[#6F8583]">
                 <span>Total Rilis: <strong className="text-white">{prod.versions.length} Versi</strong></span>
                 <span>•</span>
                 <span>Lisensi: <strong className="text-white">{prod.licenseType.toUpperCase()}</strong></span>
@@ -143,7 +143,7 @@ export default function AdminShopPage() {
                 </Link>
 
                 <Link href={`/shop/${prod.slug}`} target="_blank">
-                  <Button variant="outline" size="sm" className="text-xs border-slate-700 text-slate-300 hover:text-white">
+                  <Button variant="outline" size="sm" className="text-xs border-white/[0.10] text-[#A8BCBA] hover:text-white">
                     Lihat di Toko <ExternalLink className="w-3 h-3 ml-1" />
                   </Button>
                 </Link>
@@ -163,7 +163,7 @@ export default function AdminShopPage() {
       >
         <form onSubmit={handleCreate} className="space-y-4 text-xs">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Nama Produk Digital
             </label>
             <input
@@ -172,13 +172,13 @@ export default function AdminShopPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Contoh: Nexarin Sistem Absensi Sekolah"
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Slug URL (Opsional)
               </label>
               <input
@@ -186,18 +186,18 @@ export default function AdminShopPage() {
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="nexarin-sistem-absensi"
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Kategori
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               >
                 <option value="applications">Applications (Sistem Aplikasi)</option>
                 <option value="templates">Templates (Next.js / Tailwind)</option>
@@ -208,7 +208,7 @@ export default function AdminShopPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Harga (IDR)
               </label>
               <input
@@ -217,12 +217,12 @@ export default function AdminShopPage() {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="349000"
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
                 Nomor Versi Awal
               </label>
               <input
@@ -231,13 +231,13 @@ export default function AdminShopPage() {
                 value={currentVersion}
                 onChange={(e) => setCurrentVersion(e.target.value)}
                 placeholder="v1.0.0"
-                className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] font-mono px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A8BCBA]">
               Deskripsi Singkat Produk
             </label>
             <textarea
@@ -246,7 +246,7 @@ export default function AdminShopPage() {
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
               placeholder="Jelaskan fitur unggulan dan stack teknologi produk ini..."
-              className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#061214] text-[#F2FAF9] px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#18D6D0]"
             />
           </div>
 
@@ -256,14 +256,14 @@ export default function AdminShopPage() {
               id="trialCheck"
               checked={trialEnabled}
               onChange={(e) => setTrialEnabled(e.target.checked)}
-              className="rounded border-slate-700 bg-slate-900 text-cyan-500"
+              className="rounded border-white/[0.10] bg-slate-900 text-cyan-500"
             />
-            <label htmlFor="trialCheck" className="text-xs text-slate-300 cursor-pointer">
+            <label htmlFor="trialCheck" className="text-xs text-[#A8BCBA] cursor-pointer">
               Aktifkan Akses Trial 3 Hari untuk Customer Terdaftar
             </label>
           </div>
 
-          <div className="flex items-center gap-3 pt-3 border-t border-[#1E293B]">
+          <div className="flex items-center gap-3 pt-3 border-t border-white/[0.08]">
             <Button type="button" variant="secondary" className="flex-1" onClick={() => setCreateModalOpen(false)}>
               Batal
             </Button>

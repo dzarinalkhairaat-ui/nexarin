@@ -51,12 +51,12 @@ export function AdminTopbar({ onToggleMobileSidebar }: AdminTopbarProps) {
   };
 
   return (
-    <header className="h-16 border-b border-[#1E293B] bg-[#0B1120] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header className="h-16 border-b border-white/[0.08] bg-[#061214]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
       <div className="flex items-center gap-3">
         {onToggleMobileSidebar && (
           <button
             onClick={onToggleMobileSidebar}
-            className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="lg:hidden p-2 rounded-xl text-[#6F8583] hover:text-white hover:bg-slate-800 transition-colors"
             aria-label="Toggle Menu"
           >
             <Menu className="w-5 h-5" />
@@ -85,7 +85,7 @@ export function AdminTopbar({ onToggleMobileSidebar }: AdminTopbarProps) {
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-medium text-slate-300 hover:text-white hover:border-slate-700 transition-colors"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/[0.08] text-xs font-medium text-[#A8BCBA] hover:text-white hover:border-white/[0.10] transition-colors"
           title="Buka Website Publik di tab baru"
         >
           <span>Lihat Website</span>
@@ -93,7 +93,7 @@ export function AdminTopbar({ onToggleMobileSidebar }: AdminTopbarProps) {
         </a>
 
         {/* Admin Identity Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#131E32] border border-[#1E293B]">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.035] border border-white/[0.08]">
           <div className="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-[10px] font-bold">
             AD
           </div>

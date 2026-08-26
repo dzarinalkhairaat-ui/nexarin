@@ -19,7 +19,7 @@ export function AdminPageHeader({
   className
 }: AdminPageHeaderProps) {
   return (
-    <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#1E293B]", className)}>
+    <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]", className)}>
       <div className="space-y-1">
         <div className="flex items-center gap-2.5">
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -32,7 +32,7 @@ export function AdminPageHeader({
           )}
         </div>
         {description && (
-          <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+          <p className="text-xs text-[#6F8583] leading-relaxed max-w-2xl">
             {description}
           </p>
         )}

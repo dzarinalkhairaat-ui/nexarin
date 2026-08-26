@@ -53,33 +53,33 @@ export function TrialModal({ isOpen, onClose, product }: TrialModalProps) {
     >
       <div className="space-y-5">
         <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-start gap-3">
-          <Clock className="w-5 h-5 text-[#2DD4F5] shrink-0 mt-0.5" />
+          <Clock className="w-5 h-5 text-[#18D6D0] shrink-0 mt-0.5" />
           <div className="text-xs space-y-1">
             <h5 className="font-bold text-white">
               Durasi Uji Coba: 3 x 24 Jam (72 Jam Penuh)
             </h5>
-            <p className="text-slate-400 leading-relaxed">
+            <p className="text-[#6F8583] leading-relaxed">
               Anda mendapatkan akses ke semua fitur aplikasi dan source code selama 3 hari ke akun <strong>{customer?.email}</strong>. Tanpa kartu kredit atau komitmen biaya tersembunyi.
             </p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <h5 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          <h5 className="text-xs font-bold uppercase tracking-wider text-[#A8BCBA]">
             Fitur yang Langsung Terbuka:
           </h5>
-          <ul className="space-y-1.5 text-xs text-slate-400">
+          <ul className="space-y-1.5 text-xs text-[#6F8583]">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
-              <span className="text-slate-300">Full Source Code & Database Schema ({product.currentVersion})</span>
+              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+              <span className="text-[#A8BCBA]">Full Source Code & Database Schema ({product.currentVersion})</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
-              <span className="text-slate-300">Lisensi Trial & Akses Download di Customer Dashboard</span>
+              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+              <span className="text-[#A8BCBA]">Lisensi Trial & Akses Download di Customer Dashboard</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#7CF2C3]" />
-              <span className="text-slate-300">Panduan Setup & Dokumentasi Lengkap</span>
+              <CheckCircle2 className="w-4 h-4 text-[#49D7A5]" />
+              <span className="text-[#A8BCBA]">Panduan Setup & Dokumentasi Lengkap</span>
             </li>
           </ul>
         </div>
@@ -88,7 +88,7 @@ export function TrialModal({ isOpen, onClose, product }: TrialModalProps) {
           <Button variant="secondary" className="flex-1" onClick={onClose} disabled={loading}>
             Batal
           </Button>
-          <Button variant="primary" className="flex-1 font-bold shadow-md shadow-cyan-500/10" onClick={handleActivate} isLoading={loading}>
+          <Button variant="primary" className="flex-1 font-bold" onClick={handleActivate} isLoading={loading}>
             <Sparkles className="w-4 h-4 mr-1.5 text-slate-950" />
             Aktifkan Sekarang
           </Button>

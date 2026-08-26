@@ -11,7 +11,7 @@ export function CustomerCard({ children, className, ...props }: CustomerCardProp
   return (
     <div
       className={cn(
-        "rounded-2xl bg-[#131E32] border border-[#1E293B] p-5 sm:p-6 shadow-sm",
+        "rounded-2xl bg-white/[0.035] border border-white/[0.08] p-5 sm:p-6 ",
         className
       )}
       {...props}

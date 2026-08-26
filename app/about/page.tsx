@@ -6,18 +6,18 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-12">
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 text-[#0891b2] dark:text-[#2DD4F5] text-xs font-bold font-mono uppercase">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18D6D0]/10 text-[#0891b2] dark:text-[#18D6D0] text-xs font-bold font-mono uppercase">
           <span>Tentang Platform</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Nexarin Tech Hub — by Rins
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-[#6F8583] max-w-xl mx-auto leading-relaxed">
           Menghubungkan wawasan teknologi mutakhir, edukasi AI, dan produk rekayasa digital siap pakai dalam satu ekosistem terpadu.
         </p>
       </div>
 
-      <div className="space-y-6 text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+      <div className="space-y-6 text-sm sm:text-base text-slate-700 dark:text-[#A8BCBA] leading-relaxed">
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white pt-4">
           Filosofi & Visi Kami
         </h2>
