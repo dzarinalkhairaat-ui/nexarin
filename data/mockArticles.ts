@@ -2,6 +2,158 @@ import { Article } from "@/types/content";
 
 export const INITIAL_ARTICLES: Article[] = [
   {
+    id: "art-tech-003",
+    sourceId: "src-tech-003",
+    title: "Next.js 16 & React 19 Compiler: Panduan Migrasi Komprehensif Arsitektur Frontend Tanpa useMemo",
+    slug: "nextjs-16-react-19-compiler-panduan-migrasi-komprehensif-arsitektur-frontend",
+    excerpt: "Eksplorasi optimasi performa otomatis React Compiler yang mengeliminasi kebutuhan manual memoization dan merevolusi lifecycle rendering aplikasi web modern.",
+    content: `Rilis Next.js 16 dengan dukungan penuh React 19 Compiler merevolusi cara frontend engineer membangun antarmuka web. Kompiler baru ini secara otomatis mengidentifikasi re-rendering yang tidak perlu pada level AST code, sehingga developer tidak perlu lagi menulis \`useMemo\` dan \`useCallback\` secara berulang.`,
+    contentType: "analysis",
+    category: {
+      id: "technology",
+      name: "Technology",
+      slug: "technology",
+      description: "Inovasi software engineering, cloud architecture, dev tools, dan ekosistem open-source.",
+      icon: "Cpu",
+      color: "from-blue-500 to-indigo-600"
+    },
+    tags: ["Software Engineering", "Next.js 16", "React 19", "Web Architecture", "Frontend"],
+    featuredImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Next.js 16 & React 19 Compiler Panduan Migrasi | Nexari Tech",
+    metaDescription: "Analisis mendalam fitur React 19 Compiler pada Next.js 16 dan dampaknya terhadap kecepatan rendering frontend.",
+    status: "published",
+    author: {
+      name: "Rins",
+      role: "Lead Tech Architect",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 5,
+    views: 4380,
+    publishedAt: "2026-08-25T16:00:00Z",
+    createdAt: "2026-08-25T15:30:00Z",
+    updatedAt: "2026-08-25T16:00:00Z",
+    featured: true,
+    breaking: false,
+    source: {
+      name: "Vercel Engineering",
+      url: "https://vercel.com/blog"
+    }
+  },
+  {
+    id: "art-tech-004",
+    sourceId: "src-tech-004",
+    title: "Arsitektur Microservices vs Modular Monolith di 2026: Mengapa Tim Engineering Kembali ke Single Codebase",
+    slug: "arsitektur-microservices-vs-modular-monolith-2026-single-codebase",
+    excerpt: "Analisis pergeseran paradigma infrastruktur cloud: Mengapa modular monolith dengan strict domain boundaries menghemat biaya operasional hingga 60%.",
+    content: `Kompleksitas jaringan, latensi antar-layanan, dan beban observabilitas microservices mendorong banyak organisasi skala menengah beralih kembali ke arsitektur **Modular Monolith**. Dengan isolasi domain yang ketat dan database schemas yang modular, tim pengembang dapat mempertahankan kecepatan rilis tanpa overhead Kubernetes yang masif.`,
+    contentType: "opinion",
+    category: {
+      id: "technology",
+      name: "Technology",
+      slug: "technology",
+      description: "Inovasi software engineering, cloud architecture, dev tools, dan ekosistem open-source.",
+      icon: "Cpu",
+      color: "from-blue-500 to-indigo-600"
+    },
+    tags: ["Cloud & DevOps", "Modular Monolith", "Architecture", "Microservices", "Backend"],
+    featuredImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Microservices vs Modular Monolith di 2026 | Nexari Tech",
+    metaDescription: "Analisis teknis mengapa arsitektur Modular Monolith menjadi pilihan utama arsitek perangkat lunak di 2026.",
+    status: "published",
+    author: {
+      name: "Rins",
+      role: "Lead Tech Architect",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 6,
+    views: 3950,
+    publishedAt: "2026-08-25T10:00:00Z",
+    createdAt: "2026-08-25T09:30:00Z",
+    updatedAt: "2026-08-25T10:00:00Z",
+    featured: false,
+    breaking: true,
+    source: {
+      name: "InfoQ Software",
+      url: "https://infoq.com"
+    }
+  },
+  {
+    id: "art-tech-005",
+    sourceId: "src-tech-005",
+    title: "PostgreSQL 17 Benchmark: Fitur Baru JIT Query Execution dan Efisiensi Indeks B-Tree",
+    slug: "postgresql-17-benchmark-jit-query-execution-efisiensi-btree",
+    excerpt: "Pengujian performa query analitik berat pada PostgreSQL 17 membuktikan peningkatan throughput transaksi per detik hingga 35% pada beban kerja tinggi.",
+    content: `PostgreSQL 17 membawa perbaikan signifikan pada mesin eksekusi query memory, manajemen vacuum terdistribusi, serta peningkatan optimasi JSON storage. Hal ini menjadikannya basis data relasional paling tangguh untuk sistem modern.`,
+    contentType: "news",
+    category: {
+      id: "technology",
+      name: "Technology",
+      slug: "technology",
+      description: "Inovasi software engineering, cloud architecture, dev tools, dan ekosistem open-source.",
+      icon: "Cpu",
+      color: "from-blue-500 to-indigo-600"
+    },
+    tags: ["Database & Backend", "PostgreSQL 17", "SQL", "Performance", "Cloud"],
+    featuredImage: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "PostgreSQL 17 Benchmark & Query Optimization | Nexari",
+    metaDescription: "Hasil pengujian benchmark performa PostgreSQL 17 pada transaksi berskala tinggi.",
+    status: "published",
+    author: {
+      name: "Abi Dzarin",
+      role: "Database Engineer",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 4,
+    views: 3120,
+    publishedAt: "2026-08-24T14:00:00Z",
+    createdAt: "2026-08-24T13:30:00Z",
+    updatedAt: "2026-08-24T14:00:00Z",
+    featured: false,
+    breaking: false,
+    source: {
+      name: "PostgreSQL Global Development",
+      url: "https://postgresql.org"
+    }
+  },
+  {
+    id: "art-tech-006",
+    sourceId: "src-tech-006",
+    title: "Zero-Trust Security & API Hardening: Proteksi Layanan Web dari Serangan Credential Stuffing & Botnet",
+    slug: "zero-trust-security-api-hardening-credential-stuffing-botnet",
+    excerpt: "Strategi komprehensif mengamankan endpoint publik menggunakan token rotasi dinamis, rate limiting berbasis fingerprint, dan mTLS.",
+    content: `Keamanan siber di tahun 2026 menuntut penerapan model Zero-Trust secara menyeluruh. Tidak ada traffic internal yang diasumsikan aman tanpa verifikasi identitas kriptografis berlapis.`,
+    contentType: "news",
+    category: {
+      id: "technology",
+      name: "Technology",
+      slug: "technology",
+      description: "Inovasi software engineering, cloud architecture, dev tools, dan ekosistem open-source.",
+      icon: "Cpu",
+      color: "from-blue-500 to-indigo-600"
+    },
+    tags: ["Cybersecurity", "Zero Trust", "API Security", "DevSecOps", "Cloud"],
+    featuredImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1200&auto=format&fit=crop",
+    metaTitle: "Zero-Trust Security & API Hardening Guide | Nexari",
+    metaDescription: "Panduan arsitektur keamanan API dan penerapan Zero Trust untuk sistem komputasi cloud.",
+    status: "published",
+    author: {
+      name: "Abi Dzarin",
+      role: "Security Researcher",
+      avatar: "/assets/avatar-default.svg"
+    },
+    readingTimeMinutes: 5,
+    views: 2840,
+    publishedAt: "2026-08-24T09:00:00Z",
+    createdAt: "2026-08-24T08:30:00Z",
+    updatedAt: "2026-08-24T09:00:00Z",
+    featured: false,
+    breaking: false,
+    source: {
+      name: "Cloudflare Blog",
+      url: "https://blog.cloudflare.com"
+    }
+  },
+  {
     id: "art-ai-002",
     sourceId: "src-ai-002",
     title: "Claude 3.7 Sonnet & Hybrid Reasoning: Bagaimana Dynamic Thinking Mengubah Standar Coding AI",
