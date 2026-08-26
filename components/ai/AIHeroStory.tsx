@@ -13,47 +13,57 @@ interface AIHeroStoryProps {
 export function AIHeroStory({ article }: AIHeroStoryProps) {
   const sourceName = article.source?.name || "Nexari Intelligence";
 
+  // Use a crisp high-res editorial image if default SVG is provided
+  const coverImage =
+    article.featuredImage &&
+    !article.featuredImage.includes(".svg") &&
+    !article.featuredImage.includes("placeholder")
+      ? article.featuredImage
+      : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop";
+
   return (
-    <article className="group relative rounded-2xl bg-[#131E32]/70 border border-[#1E293B] hover:border-[#2DD4F5]/35 overflow-hidden transition-all duration-300 backdrop-blur-md">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-0 items-center">
-        {/* 1:1 Aspect Ratio Media Cover */}
-        <div className="md:col-span-5 relative aspect-square w-full overflow-hidden bg-slate-900 shrink-0">
+    <article className="group relative rounded-2xl bg-[#131E32]/75 border border-[#1E293B] hover:border-[#2DD4F5]/35 p-5 sm:p-6 transition-all duration-300 backdrop-blur-md">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-6 lg:gap-8">
+        {/* Inset 1:1 Aspect-Square Image Container */}
+        <div className="w-full md:w-[280px] lg:w-[340px] aspect-square rounded-xl overflow-hidden relative border border-white/[0.08] shrink-0 bg-slate-950">
           <img
-            src={article.featuredImage || "/assets/article-ai.svg"}
+            src={coverImage}
             alt={article.title}
             onError={(e) => {
-              e.currentTarget.src = "/assets/default-cover.svg";
+              e.currentTarget.src =
+                "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=1000&auto=format&fit=crop";
             }}
-            className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-500"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120]/70 via-transparent to-transparent" />
+          {/* Subtle gradient for badge legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120]/80 via-transparent to-black/30 pointer-events-none" />
 
           {/* Badges Overlay */}
-          <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase bg-[#2DD4F5]/20 text-[#2DD4F5] border border-[#2DD4F5]/40 backdrop-blur-md">
+          <div className="absolute top-3 left-3 flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold uppercase bg-[#2DD4F5]/20 text-[#2DD4F5] border border-[#2DD4F5]/40 backdrop-blur-md">
               Top Story
             </span>
             {article.breaking && (
-              <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-wider animate-pulse">
+              <span className="px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-bold uppercase tracking-wider animate-pulse">
                 Breaking
               </span>
             )}
           </div>
 
-          <div className="absolute bottom-3.5 left-3.5">
-            <span className="text-[11px] font-mono font-bold uppercase text-[#7CF2C3] tracking-wider bg-[#0B1120]/80 px-2 py-0.5 rounded border border-[#7CF2C3]/30 backdrop-blur-md">
+          <div className="absolute bottom-3 left-3">
+            <span className="text-[11px] font-mono font-bold uppercase text-[#7CF2C3] tracking-wider bg-[#0B1120]/85 px-2.5 py-0.5 rounded-md border border-[#7CF2C3]/30 backdrop-blur-md">
               {article.tags?.[0] || "Artificial Intelligence"}
             </span>
           </div>
         </div>
 
-        {/* Editorial Content */}
-        <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-5 h-full">
-          <div className="space-y-3.5">
+        {/* Editorial Content Column */}
+        <div className="flex-1 flex flex-col justify-between space-y-4 min-w-0">
+          <div className="space-y-3">
             {/* Metadata Bar */}
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#64748B] font-mono">
-              <span className="text-[#2DD4F5] font-semibold">{sourceName}</span>
+              <span className="text-[#2DD4F5] font-bold">{sourceName}</span>
               <span>•</span>
               <span>{formatDate(article.publishedAt)}</span>
               <span>•</span>
@@ -65,7 +75,7 @@ export function AIHeroStory({ article }: AIHeroStoryProps) {
 
             {/* Headline */}
             <Link href={`/article/${article.slug}`}>
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-white group-hover:text-[#2DD4F5] transition-colors leading-tight">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-3">
                 {article.title}
               </h2>
             </Link>
@@ -77,7 +87,7 @@ export function AIHeroStory({ article }: AIHeroStoryProps) {
           </div>
 
           {/* Author & Footer Metadata */}
-          <div className="pt-3.5 border-t border-[#1E293B] flex items-center justify-between">
+          <div className="pt-4 border-t border-[#1E293B] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img
                 src={article.author.avatar || "/assets/avatar-default.svg"}
@@ -98,8 +108,8 @@ export function AIHeroStory({ article }: AIHeroStoryProps) {
             </div>
 
             <div className="flex items-center gap-1.5 text-xs text-[#64748B] font-mono">
-              <Eye className="w-3.5 h-3.5" />
-              <span>{article.views.toLocaleString()} views</span>
+              <Eye className="w-3.5 h-3.5 text-[#2DD4F5]" />
+              <span className="text-[#94A3B8]">{article.views.toLocaleString()} views</span>
             </div>
           </div>
         </div>
