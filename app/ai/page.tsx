@@ -11,7 +11,7 @@ import { AIAnalysisSection } from "@/components/ai/AIAnalysisSection";
 import { AISkeleton } from "@/components/ai/AISkeleton";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { Button } from "@/components/ui/Button";
-import { Sparkles, Search, SlidersHorizontal, RefreshCw } from "lucide-react";
+import { Sparkles, Search, SlidersHorizontal, RefreshCw, X } from "lucide-react";
 
 export default function AIPortalPage() {
   const { articles } = useContent();
@@ -137,16 +137,36 @@ export default function AIPortalPage() {
             </p>
           </div>
 
-          {/* Quick Filter Search */}
-          <div className="w-full md:w-80 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B] pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari berita AI: 'Agent', 'LLM'..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#1E293B] bg-[#0F172A]/80 backdrop-blur-md text-xs sm:text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#2DD4F5]"
-            />
+          {/* Premium Editorial Search Bar */}
+          <div className="w-full md:w-96 relative group">
+            <div className="relative flex items-center rounded-2xl bg-[#0F172A]/90 border border-white/[0.12] hover:border-[#2DD4F5]/40 focus-within:border-[#2DD4F5] focus-within:bg-[#0B1120] focus-within:ring-1 focus-within:ring-[#2DD4F5]/30 transition-all duration-200 backdrop-blur-xl p-1.5 pl-3.5 pr-2">
+              <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                <Search className="w-4 h-4 text-[#64748B] group-focus-within:text-[#2DD4F5] transition-colors shrink-0" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari liputan AI, model LLM, tools..."
+                  className="w-full bg-transparent text-xs sm:text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none"
+                />
+              </div>
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Bersihkan pencarian"
+                  className="p-1 text-[#64748B] hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors text-[11px] font-mono shrink-0"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <div className="hidden sm:flex items-center gap-1 pl-2 shrink-0">
+                  <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold text-[#64748B] bg-white/[0.05] rounded-md border border-white/[0.08]">
+                    ⌘K
+                  </kbd>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
