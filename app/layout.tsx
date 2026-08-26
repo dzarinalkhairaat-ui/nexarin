@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { ContentProvider } from "@/context/ContentContext";
 import { ShopProvider } from "@/context/ShopContext";
+import { TutorialProvider } from "@/context/TutorialContext";
 import { ToastContainer } from "@/components/ui/Toast";
 import { AppLayoutShell } from "@/components/layout/AppLayoutShell";
 
@@ -67,7 +68,9 @@ export default function RootLayout({
           <AuthProvider>
             <ContentProvider>
               <ShopProvider>
-                <AppLayoutShell>{children}</AppLayoutShell>
+                <TutorialProvider>
+                  <AppLayoutShell>{children}</AppLayoutShell>
+                </TutorialProvider>
                 <ToastContainer />
               </ShopProvider>
             </ContentProvider>
