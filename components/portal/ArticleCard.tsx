@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Article } from "@/types/content";
@@ -14,7 +16,7 @@ interface ArticleCardProps {
 export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   if (featured) {
     return (
-      <Card hoverable className="group grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden bg-white/[0.035] border-white/[0.08]">
+      <Card hoverable className="group grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden bg-[#131E32]/70 backdrop-blur-md border-[#1E293B] hover:border-[#2DD4F5]/35 hover:bg-[#131E32]">
         <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-full min-h-[300px] overflow-hidden bg-slate-900">
           <img
             src={article.featuredImage || "/assets/article-ai.svg"}
@@ -56,7 +58,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+          <div className="flex items-center justify-between pt-4 border-t border-[#1E293B]">
             <div className="flex items-center gap-2.5">
               <img
                 src={article.author.avatar || "/assets/avatar-default.svg"}
@@ -87,7 +89,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   }
 
   return (
-    <Card hoverable className="group flex flex-col h-full overflow-hidden bg-white/[0.035] border-white/[0.08]">
+    <Card hoverable className="group flex flex-col h-full overflow-hidden bg-[#131E32]/70 backdrop-blur-md border-[#1E293B] hover:border-[#2DD4F5]/35 hover:bg-[#131E32]">
       <div className="relative h-48 w-full overflow-hidden bg-slate-900">
         <img
           src={article.featuredImage || "/assets/article-ai.svg"}
@@ -102,15 +104,12 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
         </div>
       </div>
 
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
         <div>
-          <div className="flex items-center gap-2 text-xs text-[#64748B] mb-2 font-mono">
+          <div className="flex items-center gap-2 text-[11px] text-[#64748B] mb-2 font-mono">
             <span>{formatDate(article.publishedAt)}</span>
             <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {article.readingTimeMinutes} mnt
-            </span>
+            <span>{article.readingTimeMinutes} mnt baca</span>
           </div>
 
           <Link href={`/article/${article.slug}`}>
@@ -119,16 +118,16 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
             </h3>
           </Link>
 
-          <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
+          <p className="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
             {article.excerpt}
           </p>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] text-xs text-[#64748B]">
-          <span className="font-semibold text-[#94A3B8] truncate max-w-[120px]">
+        <div className="flex items-center justify-between pt-3 border-t border-[#1E293B] text-xs">
+          <span className="text-[11px] font-medium text-slate-300 truncate max-w-[140px]">
             {article.author.name}
           </span>
-          <div className="flex items-center gap-1 font-mono">
+          <div className="flex items-center gap-1 text-[#64748B] font-mono text-[11px]">
             <Eye className="w-3 h-3" />
             <span>{article.views}</span>
           </div>

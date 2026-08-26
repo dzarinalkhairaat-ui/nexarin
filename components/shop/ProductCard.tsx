@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card hoverable className="group flex flex-col h-full overflow-hidden border-white/[0.08] bg-white/[0.035] hover:border-cyan-500/40">
+      <Card hoverable className="group flex flex-col h-full overflow-hidden border-[#1E293B] bg-[#131E32]/70 hover:border-[#2DD4F5]/35 hover:bg-[#131E32]">
         <div className="relative h-48 w-full overflow-hidden bg-slate-900">
           <img
             src={product.featuredImage || "/assets/default-cover.svg"}
@@ -63,7 +63,7 @@ export function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           <div className="absolute top-3 left-3 flex items-center gap-1.5">
-            <span className="px-2.5 py-0.5 rounded-full bg-slate-950/90 backdrop-blur-md text-white text-[11px] font-mono font-semibold border border-white/[0.08]">
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-950/90 backdrop-blur-md text-white text-[11px] font-mono font-semibold border border-[#1E293B]">
               {product.currentVersion}
             </span>
             {product.trialEnabled && (
@@ -97,7 +97,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.shortDescription}
             </p>
 
-            <div className="space-y-1 py-2 border-y border-white/[0.08]">
+            <div className="space-y-1 py-2 border-y border-[#1E293B]">
               {product.features.slice(0, 2).map((feat, idx) => (
                 <div key={idx} className="flex items-center gap-1.5 text-[11px] text-[#94A3B8]">
                   <Check className="w-3.5 h-3.5 text-[#7CF2C3] shrink-0" />

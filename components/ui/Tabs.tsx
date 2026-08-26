@@ -12,18 +12,19 @@ interface TabsProps {
 
 export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
   return (
-    <div className={cn("flex space-x-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-white/[0.10]/60 overflow-x-auto", className)}>
+    <div className={cn("flex space-x-1.5 p-1.5 bg-[#0F172A]/80 backdrop-blur-md rounded-2xl border border-[#1E293B] overflow-x-auto scrollbar-none", className)}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
           <button
             key={tab.id}
+            type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap",
+              "flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap",
               isActive
-                ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white  border border-slate-200/50 dark:border-white/[0.10]/50"
-                : "text-slate-600 dark:text-[#64748B] hover:text-slate-900 dark:hover:text-[#F8FAFC] hover:bg-slate-800 hover:text-[#F8FAFC]"
+                ? "bg-[#131E32] text-white border border-[#2DD4F5]/30 font-bold"
+                : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
             )}
           >
             {tab.icon}
@@ -31,10 +32,10 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  "px-2 py-0.5 text-[10px] rounded-full",
+                  "px-2 py-0.5 text-[10px] font-mono rounded-full font-bold",
                   isActive
-                    ? "bg-[#2DD4F5]/20 text-[#0891b2] dark:text-[#2DD4F5]"
-                    : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-[#94A3B8]"
+                    ? "bg-[#2DD4F5]/15 text-[#2DD4F5]"
+                    : "bg-white/[0.06] text-[#64748B]"
                 )}
               >
                 {tab.count}
