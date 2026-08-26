@@ -179,47 +179,25 @@ export default function TutorialsHubPage() {
       </section>
 
       {/* MAIN CONTAINER */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
-        {/* 2. CONTINUE LEARNING (Logged-in Customer) or Guest CTA Banner */}
-        {isCustomerAuthenticated ? (
-          continueList.length > 0 && (
-            <section className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Flame className="w-5 h-5 text-amber-400" />
-                <h2 className="text-lg font-bold text-white tracking-tight">
-                  Lanjutkan Pembelajaran Anda
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {continueList.map(({ course, progress }) => (
-                  <ContinueLearningCard key={course.id} course={course} progress={progress} />
-                ))}
-              </div>
-            </section>
-          )
-        ) : (
-          <section className="p-6 rounded-2xl bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="space-y-1 text-center sm:text-left">
-              <span className="text-[10px] font-mono font-bold uppercase text-[#7CF2C3]">
-                Mulai Perjalanan Belajar Anda
-              </span>
-              <h3 className="text-base font-bold text-white">
-                Simpan progres belajar, tandai materi selesai, dan lanjutkan kapan saja.
-              </h3>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+        {/* CONTINUE LEARNING (Only when Logged-in Customer has active progress) */}
+        {isCustomerAuthenticated && continueList.length > 0 && (
+          <section className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Flame className="w-5 h-5 text-amber-400" />
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Lanjutkan Pembelajaran Anda
+              </h2>
             </div>
-            <Button
-              variant="mint"
-              size="sm"
-              onClick={() => openGuestPrompt("Masuk ke akun Anda untuk melacak progres belajar.")}
-              className="font-extrabold text-xs text-slate-950 whitespace-nowrap"
-            >
-              Masuk untuk Simpan Progres
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-            </Button>
+            <div className="space-y-4">
+              {continueList.map(({ course, progress }) => (
+                <ContinueLearningCard key={course.id} course={course} progress={progress} />
+              ))}
+            </div>
           </section>
         )}
 
-        {/* 3. FILTER & NAVIGATION BAR */}
+        {/* 2. FILTER & CATEGORY NAVIGATION BAR (Directly below Hero) */}
         <section className="space-y-4">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
             {/* Category horizontal pills */}
