@@ -19,7 +19,10 @@ import {
   Car,
   BookOpen,
   ShoppingBag,
-  DownloadCloud
+  DownloadCloud,
+  Layers,
+  CheckCircle2,
+  GraduationCap
 } from "lucide-react";
 
 export default function HomePage() {
@@ -34,12 +37,15 @@ export default function HomePage() {
   const primaryAffiliate = affiliates[0];
 
   return (
-    <div className="space-y-16 sm:space-y-24 bg-[#0B1120]">
-      {/* 1. Hero Section */}
+    <div className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
+      {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 sm:pt-14 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Subtle ambient light */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/30 text-[#2DD4F5] text-xs font-bold tracking-wide">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/30 text-[#2DD4F5] text-xs font-bold tracking-wide backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Ekosistem Teknologi Terintegrasi • Nexarin by Rins</span>
             </div>
@@ -53,33 +59,39 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
-              Portal berita terkurasi AI & software engineering, ulasan gadget, otomotif masa depan, serta marketplace aplikasi berlisensi lifetime dengan uji coba gratis 3 hari.
+              Portal berita terkurasi AI &amp; software engineering, ulasan gadget, otomotif masa depan, tutorial praktis, serta marketplace aplikasi berlisensi lifetime dengan uji coba gratis 3 hari.
             </p>
 
             {/* Quick Action Chips */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               <Link href="/ai">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white">
+                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
                   <Cpu className="w-3.5 h-3.5 mr-1 text-[#2DD4F5]" />
-                  AI & Agents
+                  AI &amp; Agents
+                </Button>
+              </Link>
+              <Link href="/tutorials">
+                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
+                  <GraduationCap className="w-3.5 h-3.5 mr-1 text-[#7CF2C3]" />
+                  Tutorial Class Hub
                 </Button>
               </Link>
               <Link href="/gadget">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white">
+                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
                   <Smartphone className="w-3.5 h-3.5 mr-1 text-purple-400" />
                   Gadgets
                 </Button>
               </Link>
               <Link href="/automotive">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white">
+                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
                   <Car className="w-3.5 h-3.5 mr-1 text-emerald-400" />
                   EV Tech
                 </Button>
               </Link>
               <Link href="/shop">
-                <Button variant="primary" size="sm" className="rounded-full text-xs font-bold">
+                <Button variant="primary" size="sm" className="rounded-full text-xs font-extrabold">
                   <ShoppingBag className="w-3.5 h-3.5 mr-1" />
-                  Katalog Shop
+                  Digital Shop
                 </Button>
               </Link>
             </div>
@@ -94,13 +106,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. Latest Feed & Grid */}
+      {/* 2. LATEST FEED & GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#2DD4F5]" />
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              Wawasan & Berita Terkini
+              Wawasan &amp; Berita Terkini
             </h2>
           </div>
           <Link href="/news" className="text-xs font-bold text-[#2DD4F5] hover:underline flex items-center gap-1">
@@ -115,155 +127,92 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Product Ecosystem Spotlight */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] text-xs font-mono font-bold border border-[#7CF2C3]/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Nexarin Digital Solutions</span>
+      {/* 3. TUTORIAL CLASS HUB BANNER CALLOUT */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative rounded-3xl p-8 sm:p-10 border border-cyan-500/25 bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] backdrop-blur-xl overflow-hidden group">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#7CF2C3]/10 text-[#7CF2C3] border border-[#7CF2C3]/20">
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Pusat Pembelajaran Digital</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Nexari Tutorial Class Hub
+              </h3>
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                Pelajari AI Automation, Microsoft Skills (Excel, PowerPoint, Word), Next.js 16, UI/UX Design System, dan Otomotif EV dengan silabus terstruktur dan classroom viewer mandiri.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Aplikasi & Source Code Siap Pakai
-            </h2>
-            <p className="text-xs sm:text-sm text-[#64748B] max-w-xl">
-              Dapatkan lisensi seumur hidup, full source code terstruktur, dan dukungan uji coba 3 hari tanpa risiko.
+            <Link href="/tutorials">
+              <Button variant="mint" size="md" className="font-extrabold text-xs text-slate-950 whitespace-nowrap">
+                Mulai Belajar Sekarang
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-white/[0.08]">
+          <div>
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5 text-[#7CF2C3]" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Nexarin Digital Shop &amp; Source Code
+              </h2>
+            </div>
+            <p className="text-xs text-[#94A3B8] mt-1">
+              Aplikasi siap pakai berlisensi lifetime dengan fitur trial gratis 3 hari dan update berkelanjutan.
             </p>
           </div>
-
-          <Link href="/shop">
-            <Button variant="mint" size="md" className="font-bold text-slate-950">
-              Jelajahi Semua Produk ({products.length}) →
-            </Button>
+          <Link href="/shop" className="text-xs font-bold text-[#2DD4F5] hover:underline flex items-center gap-1">
+            Jelajahi Semua Produk <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {topProducts.map((prod) => (
-            <ProductCard key={prod.id} product={prod} />
+          {topProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
 
-      {/* 4. AI & Tutorials Double Section */}
+      {/* 5. FREE RESOURCES BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* AI Focus */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2">
-                <Cpu className="w-5 h-5 text-[#2DD4F5]" />
-                <h3 className="text-lg font-bold text-white">
-                  Artificial Intelligence
-                </h3>
-              </div>
-              <Link href="/ai" className="text-xs font-bold text-[#2DD4F5] hover:underline">
-                Lihat Kanal AI →
-              </Link>
-            </div>
-
-            <div className="space-y-4">
-              {aiArticles.map((art) => (
-                <Card key={art.id} hoverable className="p-4 flex gap-4 items-center bg-white/[0.035] border-white/[0.08]">
-                  <img
-                    src={art.featuredImage || "/assets/default-cover.svg"}
-                    alt={art.title}
-                    onError={(e) => {
-                      e.currentTarget.src = "/assets/default-cover.svg";
-                    }}
-                    className="w-24 h-20 rounded-xl object-cover shrink-0"
-                  />
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <Link href={`/article/${art.slug}`}>
-                      <h4 className="text-sm font-bold text-white hover:text-[#2DD4F5] line-clamp-2 transition-colors">
-                        {art.title}
-                      </h4>
-                    </Link>
-                    <span className="text-[11px] text-[#64748B] font-mono block">
-                      {art.readingTimeMinutes} mnt baca • {art.views} views
-                    </span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Tutorials Focus */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-[#7CF2C3]" />
-                <h3 className="text-lg font-bold text-white">
-                  Tutorial & Implementasi
-                </h3>
-              </div>
-              <Link href="/tutorials" className="text-xs font-bold text-[#7CF2C3] hover:underline">
-                Lihat Semua Tutorial →
-              </Link>
-            </div>
-
-            <div className="space-y-4">
-              {tutorialArticles.map((art) => (
-                <Card key={art.id} hoverable className="p-4 flex gap-4 items-center bg-white/[0.035] border-white/[0.08]">
-                  <img
-                    src={art.featuredImage || "/assets/default-cover.svg"}
-                    alt={art.title}
-                    onError={(e) => {
-                      e.currentTarget.src = "/assets/default-cover.svg";
-                    }}
-                    className="w-24 h-20 rounded-xl object-cover shrink-0"
-                  />
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <Link href={`/article/${art.slug}`}>
-                      <h4 className="text-sm font-bold text-white hover:text-[#7CF2C3] line-clamp-2 transition-colors">
-                        {art.title}
-                      </h4>
-                    </Link>
-                    <span className="text-[11px] text-[#64748B] font-mono block">
-                      {art.readingTimeMinutes} mnt baca • {art.views} views
-                    </span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Affiliate Recommendations */}
-      {primaryAffiliate && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AffiliateWidget affiliate={primaryAffiliate} />
-        </section>
-      )}
-
-      {/* 6. Free Resources & Assets Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-white/[0.035] border border-cyan-500/20 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 text-cyan-400 text-xs font-mono font-bold">
+        <div className="p-8 sm:p-10 rounded-3xl border border-white/[0.08] bg-[#0F172A]/70 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20">
               <DownloadCloud className="w-3.5 h-3.5" />
-              <span>100% Free Resources</span>
+              <span>Free Resources</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Unduh Starter Kits & Template Gratis
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Template Excel, Source Code &amp; Starter Kit Gratis
             </h3>
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-              Mulai proyek Next.js, Supabase, Tailwind, dan modul autentikasi Anda dengan arsitektur standar produksi tanpa biaya.
+            <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl">
+              Unduh aset pendukung produktivitas, format absensi, dan komponen UI siap pakai tanpa biaya.
             </p>
           </div>
-
           <Link href="/free-resources">
-            <Button variant="primary" size="lg" className="font-bold text-sm whitespace-nowrap">
-              Akses Free Resources →
+            <Button variant="outline" size="md" className="font-bold text-xs whitespace-nowrap border-white/[0.12] text-white hover:border-[#2DD4F5]/40">
+              Unduh Free Resources
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
         </div>
       </section>
 
-      {/* 7. Newsletter Subscription Box */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <NewsletterBox />
+      {/* 6. AFFILIATE & NEWSLETTER SECTION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-7">
+            {primaryAffiliate && <AffiliateWidget affiliate={primaryAffiliate} />}
+          </div>
+          <div className="lg:col-span-5">
+            <NewsletterBox />
+          </div>
+        </div>
       </section>
     </div>
   );
