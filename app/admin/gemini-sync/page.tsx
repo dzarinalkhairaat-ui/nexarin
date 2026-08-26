@@ -19,7 +19,7 @@ export default function AdminGeminiSyncPage() {
       {/* Page Header */}
       <AdminPageHeader
         title="Pipeline AI Gemini Spark & Google Sheets Staging"
-        description="Monitoring pipeline otomatis: Scraping RSS Feed harian ? Sintesis Opini Gemini Spark ? Staging Google Sheets ? Review Editor Manusia."
+        description="Monitoring pipeline otomatis: Scraping RSS Feed harian → Sintesis Opini Gemini Spark → Staging Google Sheets → Review Editor Manusia."
         badge="Staging Layer Online"
         actions={
           <Button
@@ -61,7 +61,7 @@ export default function AdminGeminiSyncPage() {
 
           <div className="p-3 rounded-xl bg-[#080D1A] border border-[#1E293B] space-y-1">
             <span className="text-[10px] text-[#7CF2C3] font-bold uppercase block">4. Supabase Live</span>
-            <span className="text-slate-200">Persetujuan Editor Manusia ? Publikasi Portal</span>
+            <span className="text-slate-200">Persetujuan Editor Manusia → Publikasi Portal</span>
           </div>
         </div>
       </AdminCard>

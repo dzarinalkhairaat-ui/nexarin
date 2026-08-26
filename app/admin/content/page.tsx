@@ -51,7 +51,7 @@ export default function AdminContentPage() {
       {/* Page Header */}
       <AdminPageHeader
         title="Pusat Editorial & Manajemen Konten"
-        description="Pipeline kurasi artikel terstruktur: Gemini Spark AI (Google Sheets) ? Review & Modifikasi Manual ? Live Portal Supabase."
+        description="Pipeline kurasi artikel terstruktur: Gemini Spark AI (Google Sheets) → Review & Modifikasi Manual → Live Portal Supabase."
         badge={`${pendingDrafts.length} Menunggu Review`}
         actions={
           <div className="flex items-center gap-2">
@@ -135,7 +135,7 @@ export default function AdminContentPage() {
                   <Link href={`/admin/content/${draft.id}/review`}>
                     <Button variant="primary" size="sm" className="font-extrabold text-xs">
                       <FileEdit className="w-3.5 h-3.5 mr-1.5" />
-                      Review &amp; Edit Publikasi ?
+                      Review &amp; Edit Publikasi →
                     </Button>
                   </Link>
                 </div>

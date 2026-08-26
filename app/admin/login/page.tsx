@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="????????"
+                placeholder="••••••••"
                 className="w-full rounded-xl border border-[#1E293B] bg-[#080D1A] text-slate-100 px-4 py-2.5 pr-11 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-600"
               />
               <button
@@ -144,7 +144,7 @@ export default function AdminLoginPage() {
         {/* Subtle Security Protocol Note */}
         <div className="pt-4 border-t border-slate-800/80 text-center">
           <span className="text-[10px] font-mono text-slate-500 block">
-            Authorized Personnel Only ? IP &amp; Action Logged
+            Authorized Personnel Only • IP &amp; Action Logged
           </span>
         </div>
       </div>

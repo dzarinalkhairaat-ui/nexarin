@@ -58,7 +58,7 @@ export default function AdminAffiliatePage() {
       <AdminPageHeader
         title="Manajemen Tautan Afiliasi & Rekomendasi"
         description="Kelola tautan marketplace (Shopee, Tokopedia, TikTok Shop), pantau metrik klik, dan sematkan rekomendasi ke artikel."
-        badge={`${affiliates.length} Link Aktif ? ${totalClicks} Klik`}
+        badge={`${affiliates.length} Link Aktif • ${totalClicks} Klik`}
         actions={
           <Button
             variant="primary"

@@ -138,7 +138,7 @@ export default function AdminShopPage() {
                 <Link href={`/admin/shop/${prod.id}/versions`}>
                   <Button variant="mint" size="sm" className="font-bold text-xs text-slate-950">
                     <History className="w-3.5 h-3.5 mr-1.5" />
-                    Kelola Versi &amp; Rilis Baru ?
+                    Kelola Versi &amp; Rilis Baru →
                   </Button>
                 </Link>
 
