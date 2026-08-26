@@ -120,10 +120,24 @@ export default function TutorialsHubPage() {
 
   return (
     <div className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-14 sm:pt-20 sm:pb-20 border-b border-[#1E293B] overflow-hidden bg-gradient-to-b from-[#080D1A] via-[#0B1120] to-[#0B1120]">
-        {/* Subtle background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+      {/* 1. HERO SECTION WITH THEMATIC BACKGROUND IMAGE & BOTTOM GRADIENT */}
+      <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
+        {/* Background Image from External URL */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2000&auto=format&fit=crop"
+            alt="Nexari Tutorial Learning Background"
+            className="w-full h-full object-cover object-center opacity-25 scale-105 transform transition-transform duration-1000"
+          />
+          {/* Multi-layer Dark Gradient Overlays */}
+          <div className="absolute inset-0 bg-[#080D1A]/80 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/95 via-[#080D1A]/70 to-[#0B1120]" />
+          {/* Smooth Bottom Gradient Transition */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/80 to-transparent" />
+        </div>
+
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[320px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none z-0" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-mono font-bold border border-cyan-500/20">
