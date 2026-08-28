@@ -1,5 +1,6 @@
 "use client";
 
+import { useAntiInspect } from "@/hooks/useAntiInspect";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { ShieldCheck, Lock, AlertCircle, Eye, EyeOff, Terminal, KeyRound } from "lucide-react";
 
 export default function AdminLoginPage() {
+  useAntiInspect("Admin Login Console");
   const [email, setEmail] = useState("admin@nexarin.tech");
   const [password, setPassword] = useState("admin123");
   const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +52,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] flex flex-col items-center justify-center p-4 sm:p-6 text-[#F8FAFC]">
+    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] select-none flex flex-col items-center justify-center p-4 sm:p-6 text-[#F8FAFC]">
       {/* Central Admin Login Card */}
       <div className="w-full max-w-md bg-[#0B1120] rounded-3xl border border-white/[0.08] p-8 sm:p-10 space-y-6">
         {/* Brand & Identity Header */}

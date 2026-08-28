@@ -1,5 +1,6 @@
 "use client";
 
+import { useAntiInspect } from "@/hooks/useAntiInspect";
 import React, { useState } from "react";
 import Link from "next/link";
 import {
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 
 export default function ForgotPasswordPage() {
+  useAntiInspect("Portal Reset Password");
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
+    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] select-none text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
       {/* 1. Layered Background Atmosphere */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.14] pointer-events-none mix-blend-luminosity scale-105 transition-transform duration-1000"

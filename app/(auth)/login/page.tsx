@@ -1,5 +1,6 @@
 "use client";
 
+import { useAntiInspect } from "@/hooks/useAntiInspect";
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -100,7 +101,7 @@ function LoginForm() {
   };
 
   return (
-    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
+    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] select-none text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
       {/* 1. Layered Background Atmosphere */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.14] pointer-events-none mix-blend-luminosity scale-105 transition-transform duration-1000"
@@ -321,10 +322,11 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
+  useAntiInspect("Portal Login Customer");
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen w-full bg-[#0B1120] flex items-center justify-center">
+        <div className="min-h-screen w-full bg-[#0B1120] select-none flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-[#2DD4F5] border-t-transparent rounded-full animate-spin" />
         </div>
       }
