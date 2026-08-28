@@ -29,7 +29,7 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div suppressHydrationWarning className="space-y-8 max-w-3xl">
       {/* Page Header */}
       <AdminPageHeader
         title="Konfigurasi & Pengaturan Platform"

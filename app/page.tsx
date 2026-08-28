@@ -37,7 +37,7 @@ export default function HomePage() {
   const primaryAffiliate = affiliates[0];
 
   return (
-    <div className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
+    <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 sm:pt-14 pb-8">
         {/* Subtle ambient light */}

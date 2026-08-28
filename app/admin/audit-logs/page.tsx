@@ -12,7 +12,7 @@ export default function AdminAuditLogsPage() {
   const { auditLogs } = useShop();
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Sistem Log Jejak Audit (Security Audit Trail)"

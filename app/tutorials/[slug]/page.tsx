@@ -38,7 +38,7 @@ export default function CourseDetailPage() {
 
   if (!course) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
+      <div suppressHydrationWarning className="min-h-[70vh] flex items-center justify-center px-4 py-16">
         <div className="text-center space-y-4 max-w-md bg-white/[0.035] p-8 rounded-2xl border border-white/[0.08]">
           <h2 className="text-xl font-bold text-white">Kelas Tidak Ditemukan</h2>
           <p className="text-xs text-[#64748B]">

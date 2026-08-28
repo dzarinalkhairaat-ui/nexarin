@@ -70,7 +70,7 @@ export default function AdminShopPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Katalog Produk Digital & Versioning"

@@ -39,7 +39,7 @@ export default function ClassroomLessonPage() {
 
   if (!course) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center p-4">
+      <div suppressHydrationWarning className="min-h-[70vh] flex items-center justify-center p-4">
         <div className="text-center space-y-4 max-w-md bg-white/[0.035] p-8 rounded-2xl border border-white/[0.08]">
           <h2 className="text-lg font-bold text-white">Kelas Tidak Ditemukan</h2>
           <Link href="/tutorials">

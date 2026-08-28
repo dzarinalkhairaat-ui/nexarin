@@ -119,7 +119,7 @@ export default function TutorialsHubPage() {
     selectedType !== "all";
 
   return (
-    <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30">
+    <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30">
       {/* 1. HERO SECTION WITH THEMATIC BACKGROUND IMAGE & BOTTOM GRADIENT */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
         {/* Background Image from External URL */}

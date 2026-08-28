@@ -17,7 +17,7 @@ export default function CustomerDownloadsPage() {
   const userLicenses = getUserLicenses(customer?.id || "usr-cust-001");
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <CustomerPageHeader
         title="Pusat Unduhan Aman (Download Center)"

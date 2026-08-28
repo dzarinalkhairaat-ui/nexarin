@@ -21,7 +21,7 @@ export default function CustomerOrdersPage() {
   const userOrders = orders.filter((o) => o.userId === (customer?.id || "usr-cust-001") || o.customerEmail === customer?.email);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <CustomerPageHeader
         title="Riwayat Pesanan &amp; Faktur (Order History)"

@@ -37,7 +37,7 @@ export default function CustomerProductDetailPage() {
 
   if (!license || !product) {
     return (
-      <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
+      <div suppressHydrationWarning className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <CustomerCard className="p-8 space-y-4 border-amber-500/30">
           <h2 className="text-xl font-bold text-white">Kepemilikan Produk Tidak Ditemukan</h2>
           <p className="text-xs text-[#64748B]">

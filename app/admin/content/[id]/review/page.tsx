@@ -61,7 +61,7 @@ export default function AdminDraftReviewPage() {
 
   if (!draft) {
     return (
-      <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
+      <div suppressHydrationWarning className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <AdminCard className="p-8 space-y-4 border-amber-500/30">
           <h3 className="text-lg font-bold text-white">Draft Tidak Ditemukan</h3>
           <p className="text-xs text-[#64748B]">Draft mungkin telah dipublikasikan ke portal live atau telah dihapus.</p>

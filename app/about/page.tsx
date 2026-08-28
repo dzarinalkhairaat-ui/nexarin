@@ -4,7 +4,7 @@ import { Sparkles, ShieldCheck, Heart, Cpu, Code2, Users } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-12">
+    <div suppressHydrationWarning className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-12">
       <div className="text-center space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 text-[#0891b2] dark:text-[#2DD4F5] text-xs font-bold font-mono uppercase">
           <span>Tentang Platform</span>

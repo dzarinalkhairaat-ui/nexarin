@@ -16,7 +16,7 @@ export default function AdminOrdersPage() {
   const paidOrdersCount = orders.filter((o) => o.status === "paid").length;
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Data Transaksi & Pesanan (Orders Hub)"

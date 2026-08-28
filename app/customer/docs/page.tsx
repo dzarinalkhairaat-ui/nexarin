@@ -4,7 +4,7 @@ import { FileCode2, Terminal, Database, Sparkles, BookOpen } from "lucide-react"
 
 export default function CustomerDocsPage() {
   return (
-    <div className="space-y-6">
+    <div suppressHydrationWarning className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
           Dokumentasi & Panduan Setup

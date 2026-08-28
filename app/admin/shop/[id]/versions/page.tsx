@@ -36,7 +36,7 @@ export default function AdminProductVersionsPage() {
 
   if (!product) {
     return (
-      <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
+      <div suppressHydrationWarning className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <AdminCard className="p-8 space-y-4">
           <h3 className="text-lg font-bold text-white">Produk Tidak Ditemukan</h3>
           <p className="text-xs text-[#64748B]">ID produk tidak valid atau belum terdaftar pada katalog.</p>

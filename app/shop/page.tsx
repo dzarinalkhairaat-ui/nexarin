@@ -29,7 +29,7 @@ export default function ShopCatalogPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+    <div suppressHydrationWarning className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
       {/* Shop Hero */}
       <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-slate-950 via-[#0F172A] to-slate-950 border border-cyan-500/30 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#2DD4F5]/10 rounded-full blur-3xl pointer-events-none" />

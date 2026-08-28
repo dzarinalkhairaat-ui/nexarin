@@ -124,7 +124,7 @@ export default function TechnologyPortalPage() {
   const hasMore = remainingAfterHero.length > visibleCount + 3;
 
   return (
-    <div className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
+    <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
       {/* 1. EDITORIAL PORTAL HERO HEADER WITH THEMATIC 16:9 BACKGROUND IMAGE */}
       <header className="relative border-b border-[#1E293B] overflow-hidden pt-10 pb-12 sm:pt-16 sm:pb-18">
         {/* Thematic External 16:9 Technology Background Image */}

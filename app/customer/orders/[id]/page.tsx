@@ -29,7 +29,7 @@ export default function CustomerOrderDetailPage() {
 
   if (!order) {
     return (
-      <div className="max-w-3xl mx-auto py-16 text-center space-y-4">
+      <div suppressHydrationWarning className="max-w-3xl mx-auto py-16 text-center space-y-4">
         <CustomerCard className="p-8 space-y-4">
           <h2 className="text-xl font-bold text-white">Pesanan Tidak Ditemukan</h2>
           <p className="text-xs text-[#64748B]">

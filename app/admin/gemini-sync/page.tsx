@@ -15,7 +15,7 @@ export default function AdminGeminiSyncPage() {
   const pendingDrafts = drafts.filter((d) => d.status === "draft");
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Pipeline AI Gemini Spark & Google Sheets Staging"

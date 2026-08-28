@@ -47,7 +47,7 @@ export default function AdminContentPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Pusat Editorial & Manajemen Konten"

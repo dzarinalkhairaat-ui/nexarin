@@ -39,7 +39,7 @@ export default function CategoryPage() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <div suppressHydrationWarning className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
       {/* Category Header */}
       <div className="p-8 sm:p-12 rounded-3xl bg-[#0F172A] border border-white/[0.08] relative overflow-hidden">
         <div className="relative z-10 max-w-2xl space-y-3">

@@ -34,7 +34,7 @@ export default function CustomerOverviewPage() {
   const userOrders = orders.filter((o) => o.userId === (customer?.id || "usr-cust-001") || o.customerEmail === customer?.email);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Welcome Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0B1120] via-[#131E32] to-[#0B1120] text-white border border-cyan-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">

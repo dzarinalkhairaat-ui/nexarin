@@ -120,7 +120,7 @@ export default function CustomerProfilePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div suppressHydrationWarning className="space-y-8 max-w-3xl">
       {/* Page Header */}
       <CustomerPageHeader
         title="Pengaturan Profil Akun (Account Profile)"

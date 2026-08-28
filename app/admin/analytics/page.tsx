@@ -20,7 +20,7 @@ export default function AdminAnalyticsPage() {
   const totalClicks = affiliates.reduce((acc, a) => acc + a.clicksCount, 0);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Analitik Performa Platform & Konversi"

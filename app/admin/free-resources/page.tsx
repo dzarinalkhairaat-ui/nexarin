@@ -157,7 +157,7 @@ export default function AdminFreeResourcesPage() {
   const totalDownloads = resources.reduce((acc, r) => acc + (r.downloadsCount || 0), 0);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Header */}
       <AdminPageHeader
         title="Manajemen Free Resources &amp; Starter Kits"

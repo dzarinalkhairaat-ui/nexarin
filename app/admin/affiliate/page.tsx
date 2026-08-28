@@ -53,7 +53,7 @@ export default function AdminAffiliatePage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <AdminPageHeader
         title="Manajemen Tautan Afiliasi & Rekomendasi"

@@ -20,7 +20,7 @@ export default function CustomerUpdatesPage() {
   const pendingUpdates = updatesInfo.filter((u) => u.hasUpdate);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <CustomerPageHeader
         title="Pusat Pembaruan Versi (Product Updates)"

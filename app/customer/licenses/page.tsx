@@ -30,7 +30,7 @@ export default function CustomerLicensesPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <CustomerPageHeader
         title="Manajemen Lisensi Resmi (License Keys)"

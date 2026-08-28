@@ -29,7 +29,7 @@ export default function AdminOverviewPage() {
   const totalAffiliateClicks = affiliates.reduce((acc, a) => acc + a.clicksCount, 0);
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Operational Page Header */}
       <AdminPageHeader
         title="Operational Overview"

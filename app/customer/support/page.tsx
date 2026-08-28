@@ -24,7 +24,7 @@ export default function CustomerSupportPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div suppressHydrationWarning className="space-y-6 max-w-2xl">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
           Dukungan Pelanggan (Customer Support)

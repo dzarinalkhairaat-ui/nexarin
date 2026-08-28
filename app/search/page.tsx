@@ -38,7 +38,7 @@ function SearchContent() {
     : products;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <div suppressHydrationWarning className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
       {/* Search Header */}
       <div className="max-w-2xl mx-auto text-center space-y-4">
         <h1 className="text-3xl font-extrabold text-white tracking-tight">

@@ -39,7 +39,7 @@ export default function CustomerProductsPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div suppressHydrationWarning className="space-y-8">
       {/* Page Header */}
       <CustomerPageHeader
         title="Produk Digital Saya (My Products)"

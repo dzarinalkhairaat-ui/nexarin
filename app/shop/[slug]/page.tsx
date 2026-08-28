@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="max-w-4xl mx-auto py-24 px-4 text-center space-y-4">
+      <div suppressHydrationWarning className="max-w-4xl mx-auto py-24 px-4 text-center space-y-4">
         <h1 className="text-2xl font-bold text-white">Produk Tidak Ditemukan</h1>
         <p className="text-[#64748B]">Produk yang Anda cari tidak tersedia di katalog Nexarin.</p>
         <Link href="/shop">
