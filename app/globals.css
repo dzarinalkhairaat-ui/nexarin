@@ -133,3 +133,18 @@ code, pre, .font-mono {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* ============================================================================== */
+/* PERMANENTLY SUPPRESS DEV ERROR OVERLAY FOR BROWSER EXTENSIONS                   */
+/* ============================================================================== */
+nextjs-portal,
+[data-nextjs-dialog-overlay],
+[data-nextjs-dialog-backdrop],
+[data-nextjs-dialog],
+[data-nextjs-toast] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
