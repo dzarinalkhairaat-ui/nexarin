@@ -56,7 +56,7 @@ export function CustomerTopbar({ onToggleMobileSidebar }: CustomerTopbarProps) {
   };
 
   return (
-    <header className="h-16 border-b border-white/[0.08] bg-[#0B1120]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header suppressHydrationWarning className="h-16 border-b border-white/[0.08] bg-[#0B1120]/90 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
       {/* Left: Mobile menu toggle + Breadcrumb */}
       <div className="flex items-center gap-3">
         {onToggleMobileSidebar && (

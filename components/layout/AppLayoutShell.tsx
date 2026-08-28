@@ -16,24 +16,24 @@ export function AppLayoutShell({ children }: { children: React.ReactNode }) {
 
   // 1. Admin Application Domain (/admin/*)
   if (isAdminRoute) {
-    return <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
+    return <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
   }
 
   // 2. Customer Auth Domain (/login, /register, /forgot-password)
   if (isCustomerAuthRoute) {
-    return <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
+    return <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
   }
 
   // 3. Customer Dashboard Application Domain (/customer/*)
   if (isCustomerAppRoute) {
-    return <div className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
+    return <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-[#F8FAFC] flex flex-col">{children}</div>;
   }
 
   // 4. Public Website Domain (/, /shop, /article, /about, etc.)
   return (
     <>
       <Navbar />
-      <main className="flex-1 pb-16">{children}</main>
+      <main suppressHydrationWarning className="flex-1 pb-16">{children}</main>
       <Footer />
     </>
   );

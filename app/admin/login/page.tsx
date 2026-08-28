@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0B1120] flex flex-col items-center justify-center p-4 sm:p-6 text-[#F8FAFC]">
+    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] flex flex-col items-center justify-center p-4 sm:p-6 text-[#F8FAFC]">
       {/* Central Admin Login Card */}
       <div className="w-full max-w-md bg-[#0B1120] rounded-3xl border border-white/[0.08] p-8 sm:p-10 space-y-6">
         {/* Brand & Identity Header */}

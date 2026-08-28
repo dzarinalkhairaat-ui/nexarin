@@ -28,7 +28,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-white/[0.08] bg-[#0B1120]/85 backdrop-blur-md transition-colors">
+    <header suppressHydrationWarning className="sticky top-0 z-30 w-full border-b border-white/[0.08] bg-[#0B1120]/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Left: Brand Identity */}
@@ -55,7 +55,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav suppressHydrationWarning className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((link) => {
                 const isActive =
                   pathname === link.href ||

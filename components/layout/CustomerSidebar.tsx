@@ -198,7 +198,7 @@ export function CustomerSidebar({ mobileOpen = false, onCloseMobile }: CustomerS
   return (
     <>
       {/* Desktop Sidebar (Fixed) */}
-      <aside className="hidden lg:block w-64 shrink-0 h-[calc(100vh-4rem)] sticky top-16">
+      <aside suppressHydrationWarning className="hidden lg:block w-64 shrink-0 h-[calc(100vh-4rem)] sticky top-16">
         {sidebarContent}
       </aside>
 
