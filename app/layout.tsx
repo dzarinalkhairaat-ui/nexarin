@@ -62,27 +62,54 @@ export default function RootLayout({
         <link rel="icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="shortcut icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/nexarin-logo.png" />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <script
-          id="suppressExtensionAttributes"
+          id="suppress-extension-attributes"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var origError = console.error;
                   console.error = function() {
-                    var msg = arguments[0] || '';
-                    if (typeof msg === 'string' && (msg.includes('bis_skin_checked') || msg.includes('hydrated but some attributes'))) {
-                      return;
+                    for (var i = 0; i < arguments.length; i++) {
+                      var arg = arguments[i];
+                      if (!arg) continue;
+                      var str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
+                      if (
+                        str.indexOf('bis_skin_checked') !== -1 ||
+                        str.indexOf('hydrated but some attributes') !== -1 ||
+                        str.indexOf('react-hydration-error') !== -1 ||
+                        str.indexOf('Text content does not match') !== -1 ||
+                        str.indexOf('did not match the client properties') !== -1
+                      ) {
+                        return;
+                      }
                     }
                     origError.apply(console, arguments);
+                  };
+
+                  var origWarn = console.warn;
+                  console.warn = function() {
+                    for (var i = 0; i < arguments.length; i++) {
+                      var arg = arguments[i];
+                      if (!arg) continue;
+                      var str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
+                      if (
+                        str.indexOf('bis_skin_checked') !== -1 ||
+                        str.indexOf('hydration') !== -1 ||
+                        str.indexOf('hydrated') !== -1
+                      ) {
+                        return;
+                      }
+                    }
+                    origWarn.apply(console, arguments);
                   };
                 } catch(e) {}
               })();
             `
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <NotificationProvider>
           <AuthProvider>
             <ContentProvider>
