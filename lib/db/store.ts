@@ -22,6 +22,26 @@ export interface DBTrial {
 }
 
 class MemoryDataStore {
+  public users = [
+    {
+      id: "usr-adm-001",
+      name: "Rins (Administrator)",
+      email: "admin@nexarin.tech",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+      role: "admin" as const,
+      joinedAt: "2026-01-01T00:00:00Z",
+      company: "Nexarin Tech HQ"
+    },
+    {
+      id: "usr-cust-001",
+      name: "Ahmad Fadillah",
+      email: "ahmad.fadillah@example.com",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+      role: "customer" as const,
+      joinedAt: "2026-06-10T00:00:00Z",
+      company: "SMA Nusantara Digital"
+    }
+  ];
   public articles: Article[] = [...INITIAL_ARTICLES];
   public products: Product[] = [...INITIAL_PRODUCTS];
   public drafts: GeminiSparkDraft[] = [...INITIAL_DRAFTS];
