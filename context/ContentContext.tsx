@@ -14,10 +14,12 @@ interface ContentContextType {
   searchArticles: (query: string, category?: string) => Article[];
   publishDraft: (draftId: string, editedData?: Partial<Article>) => Promise<void>;
   deleteDraft: (draftId: string) => Promise<void>;
+  deleteMultipleDrafts: (draftIds: string[]) => Promise<void>;
   updateDraft: (draftId: string, updatedDraft: Partial<GeminiSparkDraft>) => void;
   createArticle: (article: Omit<Article, "id" | "views" | "createdAt" | "updatedAt">) => Promise<void>;
   updateArticle: (id: string, article: Partial<Article>) => Promise<void>;
   deleteArticle: (id: string) => Promise<void>;
+  deleteMultipleArticles: (articleIds: string[]) => Promise<void>;
   syncGeminiSpark: () => Promise<void>;
 }
 
@@ -103,6 +105,36 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       type: "success",
       title: "Artikel Berhasil Dipublikasikan",
       message: "Draft telah diterbitkan dan langsung tayang di portal publik dan database Supabase."
+    });
+  };
+
+  const deleteMultipleDrafts = async (draftIds: string[]) => {
+    if (draftIds.length === 0) return;
+    setDrafts((prev) => prev.filter((d) => !draftIds.includes(d.id)));
+    try {
+      await Promise.all(draftIds.map(id => fetch(`/api/gemini-sync/drafts/${id}`, { method: "DELETE" })));
+    } catch (e) {
+      console.error("Bulk delete drafts error:", e);
+    }
+    showToast({
+      type: "info",
+      title: "Draft Terpilih Dihapus",
+      message: `${draftIds.length} draft artikel berhasil dihapus secara massal.`
+    });
+  };
+
+  const deleteMultipleArticles = async (articleIds: string[]) => {
+    if (articleIds.length === 0) return;
+    setArticles((prev) => prev.filter((a) => !articleIds.includes(a.id)));
+    try {
+      await Promise.all(articleIds.map(id => fetch(`/api/articles/${id}`, { method: "DELETE" })));
+    } catch (e) {
+      console.error("Bulk delete articles error:", e);
+    }
+    showToast({
+      type: "info",
+      title: "Artikel Terpilih Dihapus",
+      message: `${articleIds.length} artikel berhasil dihapus dari portal publik.`
     });
   };
 
@@ -226,6 +258,8 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
         searchArticles,
         publishDraft,
         deleteDraft,
+        deleteMultipleDrafts,
+        deleteMultipleArticles,
         updateDraft,
         createArticle,
         updateArticle,
