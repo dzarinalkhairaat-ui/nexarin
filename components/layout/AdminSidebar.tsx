@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useContent } from "@/context/ContentContext";
 import {
   LayoutDashboard,
+  GraduationCap,
   DownloadCloud,
   FileEdit,
   Sparkles,
@@ -54,6 +55,11 @@ export function AdminSidebar({ mobileOpen = false, onCloseMobile }: AdminSidebar
           icon: <FileEdit className="w-4 h-4" />,
           badge: pendingDraftsCount > 0 ? `${pendingDraftsCount}` : undefined,
           badgeColor: "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+        },
+        {
+          href: "/admin/tutorials",
+          label: "Kelas & Tutorial",
+          icon: <GraduationCap className="w-4 h-4 text-[#7CF2C3]" />
         },
         {
           href: "/admin/gemini-sync",

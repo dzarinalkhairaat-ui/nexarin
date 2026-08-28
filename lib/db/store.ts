@@ -1,3 +1,5 @@
+import { TUTORIAL_COURSES, TUTORIAL_CATEGORIES } from "@/data/mockTutorials";
+import { TutorialCourse, TutorialCategory } from "@/types/tutorial";
 import { INITIAL_ARTICLES } from "@/data/mockArticles";
 import { INITIAL_PRODUCTS } from "@/data/mockProducts";
 import { INITIAL_DRAFTS } from "@/data/mockDrafts";
@@ -22,6 +24,8 @@ export interface DBTrial {
 }
 
 class MemoryDataStore {
+  public tutorialCourses: TutorialCourse[] = [...TUTORIAL_COURSES];
+  public tutorialCategories: TutorialCategory[] = [...TUTORIAL_CATEGORIES];
   public users = [
     {
       id: "usr-adm-001",
