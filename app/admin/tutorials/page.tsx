@@ -292,6 +292,101 @@ export default function AdminTutorialsPage() {
       message: `Modul '${newModuleTitle}' berhasil ditambahkan ke kurikulum kelas.`
     });
   };
+  // Delete Module Handler
+  const handleDeleteModule = async (moduleId: string) => {
+    if (!curriculumCourse) return;
+    const updatedModules = (curriculumCourse.modules || []).filter((m) => m.id !== moduleId);
+    const totalLessons = updatedModules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
+
+    const res = await updateCourse(curriculumCourse.id, {
+      modules: updatedModules,
+      lessonCount: totalLessons
+    });
+
+    if (res.data) {
+      setCurriculumCourse(res.data);
+    }
+    showToast({
+      type: "info",
+      title: "Modul Dihapus",
+      message: "Modul dan pelajaran terkait berhasil dihapus dari kurikulum."
+    });
+  };
+
+  // Add Lesson to Module Handler
+  const handleAddLesson = async (moduleId: string, lessonTitle: string, duration = "15 Menit") => {
+    if (!curriculumCourse || !lessonTitle.trim()) return;
+
+    const slug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString().slice(-3);
+    const updatedModules = (curriculumCourse.modules || []).map((mod) => {
+      if (mod.id === moduleId) {
+        const newLesson = {
+          id: `les-${Date.now().toString().slice(-4)}`,
+          courseId: curriculumCourse.id,
+          moduleId: mod.id,
+          title: lessonTitle,
+          slug,
+          duration,
+          order: (mod.lessons?.length || 0) + 1,
+          contentType: "tutorial" as const,
+          contentMarkdown: `### ${lessonTitle}\n\nSelamat datang di sesi pelajaran ini. Silakan tuliskan panduan materi dan instruksi latihan di sini...`,
+          keyTakeaways: ["Konsep penting", "Praktik implementasi"],
+          isPreviewAvailable: true
+        };
+        return {
+          ...mod,
+          lessons: [...(mod.lessons || []), newLesson]
+        };
+      }
+      return mod;
+    });
+
+    const totalLessons = updatedModules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
+    const res = await updateCourse(curriculumCourse.id, {
+      modules: updatedModules,
+      lessonCount: totalLessons
+    });
+
+    if (res.data) {
+      setCurriculumCourse(res.data);
+    }
+    showToast({
+      type: "success",
+      title: "Materi Ditambahkan",
+      message: `Pelajaran '${lessonTitle}' berhasil ditambahkan ke modul.`
+    });
+  };
+
+  // Delete Lesson from Module Handler
+  const handleDeleteLesson = async (moduleId: string, lessonId: string) => {
+    if (!curriculumCourse) return;
+
+    const updatedModules = (curriculumCourse.modules || []).map((mod) => {
+      if (mod.id === moduleId) {
+        return {
+          ...mod,
+          lessons: (mod.lessons || []).filter((l) => l.id !== lessonId)
+        };
+      }
+      return mod;
+    });
+
+    const totalLessons = updatedModules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
+    const res = await updateCourse(curriculumCourse.id, {
+      modules: updatedModules,
+      lessonCount: totalLessons
+    });
+
+    if (res.data) {
+      setCurriculumCourse(res.data);
+    }
+    showToast({
+      type: "info",
+      title: "Materi Dihapus",
+      message: "Pelajaran berhasil dihapus dari kurikulum."
+    });
+  };
+
 
   const isAllSelected =
     filteredCourses.length > 0 && selectedCourseIds.length === filteredCourses.length;
@@ -892,9 +987,19 @@ export default function AdminTutorialsPage() {
                         </span>
                         <h4 className="text-sm font-bold text-white">{mod.title}</h4>
                       </div>
-                      <span className="text-[11px] font-mono text-[#64748B]">
-                        {mod.lessons?.length || 0} Pelajaran
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[11px] font-mono text-[#64748B]">
+                          {mod.lessons?.length || 0} Pelajaran
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteModule(mod.id)}
+                          className="p-1 rounded text-[#64748B] hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          title="Hapus Modul Ini"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
 
                     {/* Lessons list */}
@@ -903,7 +1008,7 @@ export default function AdminTutorialsPage() {
                         mod.lessons.map((les, lIdx) => (
                           <div
                             key={les.id}
-                            className="p-2.5 rounded-xl bg-slate-950/60 border border-white/[0.04] flex items-center justify-between text-xs"
+                            className="p-2.5 rounded-xl bg-slate-950/60 border border-white/[0.04] flex items-center justify-between text-xs group"
                           >
                             <div className="flex items-center gap-2">
                               <PlayCircle className="w-3.5 h-3.5 text-emerald-400" />
@@ -911,14 +1016,40 @@ export default function AdminTutorialsPage() {
                                 {lIdx + 1}. {les.title}
                               </span>
                             </div>
-                            <span className="text-[10px] font-mono text-[#64748B]">
-                              {les.duration}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-mono text-[#64748B]">
+                                {les.duration}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteLesson(mod.id, les.id)}
+                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-rose-400 transition-opacity"
+                                title="Hapus Pelajaran"
+                              >
+                                ✕
+                              </button>
+                            </div>
                           </div>
                         ))
                       ) : (
                         <p className="text-xs text-[#64748B] italic">Belum ada materi pelajaran.</p>
                       )}
+
+                      {/* Quick Add Lesson to this Module */}
+                      <div className="pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const title = prompt("Masukkan Judul Pelajaran Baru:");
+                            if (title && title.trim()) {
+                              handleAddLesson(mod.id, title.trim());
+                            }
+                          }}
+                          className="text-xs text-cyan-400 hover:text-cyan-300 font-mono flex items-center gap-1 transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> + Tambah Pelajaran ke Modul Ini
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
