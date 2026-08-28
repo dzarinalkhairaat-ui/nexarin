@@ -62,6 +62,25 @@ export default function RootLayout({
         <link rel="icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="shortcut icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/nexarin-logo.png" />
+        <script
+          id="suppressExtensionAttributes"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var origError = console.error;
+                  console.error = function() {
+                    var msg = arguments[0] || '';
+                    if (typeof msg === 'string' && (msg.includes('bis_skin_checked') || msg.includes('hydrated but some attributes'))) {
+                      return;
+                    }
+                    origError.apply(console, arguments);
+                  };
+                } catch(e) {}
+              })();
+            `
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <NotificationProvider>

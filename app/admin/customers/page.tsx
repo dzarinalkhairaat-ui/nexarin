@@ -307,7 +307,7 @@ export default function AdminCustomersPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div suppressHydrationWarning className="space-y-8 max-w-7xl">
       {/* 1. Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <AdminPageHeader
@@ -329,7 +329,7 @@ export default function AdminCustomersPage() {
       </div>
 
       {/* 2. Top Stats Overview Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div suppressHydrationWarning className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <div className="p-4 sm:p-5 rounded-2xl bg-[#0F172A]/80 border border-white/[0.08] backdrop-blur-md space-y-1.5">
           <div className="flex items-center justify-between text-[#64748B] text-xs font-mono">
             <span>Total Pelanggan</span>
@@ -429,7 +429,7 @@ export default function AdminCustomersPage() {
       </div>
 
       {/* 4. Customer Directory List / Cards */}
-      <div className="space-y-4">
+      <div suppressHydrationWarning className="space-y-4">
         {filteredCustomers.length > 0 ? (
           filteredCustomers.map((cust) => {
             const customerLicenses = licenses.filter((l) => l.userId === cust.id);
@@ -639,7 +639,7 @@ export default function AdminCustomersPage() {
       {/* 5. MODAL DETAIL LENGKAP CUSTOMER (Tabs: Profil, Lisensi, Orders)           */}
       {/* ========================================================================= */}
       {isDetailModalOpen && selectedCustomer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+        <div suppressHydrationWarning className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
           <div className="w-full max-w-3xl max-h-[90vh] bg-[#0F172A] border border-white/[0.15] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl flex flex-col overflow-hidden">
             {/* Modal Header */}
             <div className="flex items-start justify-between pb-4 border-b border-white/[0.08]">
@@ -726,7 +726,7 @@ export default function AdminCustomersPage() {
             <div className="flex-1 overflow-y-auto pr-1 space-y-4">
               {/* TAB 1: PROFIL LENGKAP */}
               {detailActiveTab === "profile" && (
-                <div className="space-y-4">
+                <div suppressHydrationWarning className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-4 rounded-2xl bg-[#0B1120] border border-white/[0.08] space-y-1">
                       <span className="text-[11px] font-mono text-[#64748B]">Nama Lengkap:</span>
@@ -791,7 +791,7 @@ export default function AdminCustomersPage() {
 
               {/* TAB 2: LISENSI & LANGGANAN */}
               {detailActiveTab === "licenses" && (
-                <div className="space-y-4">
+                <div suppressHydrationWarning className="space-y-4">
                   {licenses.filter((l) => l.userId === selectedCustomer.id).length > 0 ? (
                     licenses
                       .filter((l) => l.userId === selectedCustomer.id)
@@ -858,7 +858,7 @@ export default function AdminCustomersPage() {
 
               {/* TAB 3: RIWAYAT PESANAN */}
               {detailActiveTab === "orders" && (
-                <div className="space-y-4">
+                <div suppressHydrationWarning className="space-y-4">
                   {orders.filter((o) => o.userId === selectedCustomer.id).length > 0 ? (
                     orders
                       .filter((o) => o.userId === selectedCustomer.id)
@@ -946,7 +946,7 @@ export default function AdminCustomersPage() {
       {/* 6. MODAL FORM: TAMBAH / EDIT CUSTOMER                                    */}
       {/* ========================================================================= */}
       {isFormModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+        <div suppressHydrationWarning className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
           <div className="w-full max-w-lg bg-[#0F172A] border border-white/[0.15] rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
@@ -1076,7 +1076,7 @@ export default function AdminCustomersPage() {
       {/* 7. MODAL KONFIRMASI HAPUS CUSTOMER                                        */}
       {/* ========================================================================= */}
       {isDeleteModalOpen && customerToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+        <div suppressHydrationWarning className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
           <div className="w-full max-w-md bg-[#0F172A] border border-rose-500/30 rounded-3xl p-6 sm:p-7 space-y-5 shadow-2xl">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
               <AlertTriangle className="w-6 h-6" />
