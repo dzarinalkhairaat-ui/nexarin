@@ -75,20 +75,73 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     try {
       const savedCustomer = localStorage.getItem("nexarin_customer_session");
-      if (savedCustomer) {
+      if (savedCustomer && isMounted) {
         setCustomer(JSON.parse(savedCustomer));
       }
 
       const savedAdmin = localStorage.getItem("nexarin_admin_session");
-      if (savedAdmin) {
+      if (savedAdmin && isMounted) {
         setAdmin(JSON.parse(savedAdmin));
+      }
+
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (session?.user && isMounted) {
+            const userMeta = session.user.user_metadata || {};
+            const isGoogle = session.user.app_metadata?.provider === "google" || session.user.identities?.some(i => i.provider === "google");
+            const customerUser: CustomerUser = {
+              id: session.user.id,
+              name: userMeta.full_name || userMeta.name || session.user.email?.split("@")[0] || "Customer",
+              email: session.user.email || "",
+              avatar: userMeta.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+              role: "customer",
+              joinedAt: session.user.created_at || new Date().toISOString(),
+              company: userMeta.company,
+              googleLinked: Boolean(isGoogle),
+              googleEmail: isGoogle ? session.user.email : undefined
+            };
+            setCustomer(customerUser);
+            localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
+          }
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+          if (session?.user && isMounted) {
+            const userMeta = session.user.user_metadata || {};
+            const isGoogle = session.user.app_metadata?.provider === "google" || session.user.identities?.some(i => i.provider === "google");
+            const customerUser: CustomerUser = {
+              id: session.user.id,
+              name: userMeta.full_name || userMeta.name || session.user.email?.split("@")[0] || "Customer",
+              email: session.user.email || "",
+              avatar: userMeta.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
+              role: "customer",
+              joinedAt: session.user.created_at || new Date().toISOString(),
+              company: userMeta.company,
+              googleLinked: Boolean(isGoogle),
+              googleEmail: isGoogle ? session.user.email : undefined
+            };
+            setCustomer(customerUser);
+            localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
+          } else if (_event === "SIGNED_OUT" && isMounted) {
+            setCustomer(null);
+            localStorage.removeItem("nexarin_customer_session");
+          }
+        });
+
+        return () => {
+          isMounted = false;
+          subscription.unsubscribe();
+        };
       }
     } catch (e) {
       console.error("Failed to load auth session", e);
     } finally {
-      setIsLoading(false);
+      if (isMounted) setIsLoading(false);
     }
   }, []);
 

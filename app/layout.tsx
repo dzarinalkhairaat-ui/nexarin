@@ -63,7 +63,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/nexarin-logo.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30">
+      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <NotificationProvider>
           <AuthProvider>
             <ContentProvider>

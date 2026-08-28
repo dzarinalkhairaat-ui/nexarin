@@ -98,7 +98,7 @@ function RegisterForm() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0B1120] text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
+    <div suppressHydrationWarning className="min-h-screen w-full bg-[#0B1120] text-[#F8FAFC] flex flex-col justify-between relative overflow-hidden selection:bg-[#2DD4F5]/30">
       {/* 1. Background Atmosphere */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.14] pointer-events-none mix-blend-luminosity scale-105 transition-transform duration-1000"
@@ -205,7 +205,7 @@ function RegisterForm() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+          <form suppressHydrationWarning onSubmit={handleSubmit} className="space-y-3.5">
             {/* Nama Lengkap */}
             <div className="space-y-1 text-left">
               <label htmlFor="reg-name" className="block text-xs font-semibold text-[#94A3B8]">
