@@ -133,7 +133,7 @@ export function Navbar() {
 
             {/* Authenticated State: Avatar Only Profile Trigger with Glassmorphic Dropdown */}
             {isAuthenticated ? (
-              <div className="relative hidden sm:block" ref={dropdownRef}>
+              <div className="relative block" ref={dropdownRef}>
                 <button
                   type="button"
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -155,7 +155,7 @@ export function Navbar() {
                 {isProfileDropdownOpen && (
                   <div
                     suppressHydrationWarning
-                    className="absolute right-0 top-full mt-2.5 w-64 rounded-2xl p-2 border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-150 z-50 pointer-events-auto"
+                    className="absolute right-0 top-full mt-2.5 w-64 max-w-[calc(100vw-24px)] rounded-2xl p-2 border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-150 z-50 pointer-events-auto"
                     style={{
                       background:
                         "linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(11, 17, 32, 0.98)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.20), rgba(45,212,245,0.18)) border-box",
