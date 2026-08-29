@@ -58,13 +58,6 @@ export default function HomePage() {
             
             {/* Left Content (col-span-7) */}
             <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
-              {/* Award / Ecosystem Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] backdrop-blur-xl text-zinc-300 text-xs font-semibold shadow-inner">
-                <span className="text-[10px] sm:text-xs tracking-wider uppercase flex items-center gap-1.5 font-mono text-cyan-400">
-                  <Sparkles className="w-3.5 h-3.5 text-[#2DD4F5]" />
-                  Award-Winning Tech Ecosystem
-                </span>
-              </div>
 
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05]">
