@@ -133,35 +133,25 @@ export default function HomePage() {
 
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12">
           
-          {/* Left: Pure Floating Logo & Clean Modern Content */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 text-center sm:text-left max-w-3xl">
-            {/* Pure Floating Slendro AI Logo (No background box/frame) */}
+          {/* Left: Pure Floating Logo (Enlarged & Pulsing) & Clean Modern Content */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-10 text-center sm:text-left max-w-3xl">
+            {/* Enlarged Pure Floating Slendro AI Logo with Breathing Pulse Animation */}
             <div className="relative shrink-0 group">
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-purple-600/30 via-pink-500/20 to-cyan-400/30 blur-2xl animate-pulse pointer-events-none" />
               <img
                 src="/logo_slendro.png"
                 alt="Slendro-Ai Logo"
-                className="w-24 h-24 sm:w-28 sm:h-28 object-contain filter drop-shadow-[0_0_25px_rgba(168,85,247,0.6)] drop-shadow-[0_0_45px_rgba(45,212,245,0.35)] group-hover:scale-110 transition-transform duration-500"
+                className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_30px_rgba(168,85,247,0.75)] drop-shadow-[0_0_55px_rgba(45,212,245,0.45)] animate-pulse transition-all duration-700 hover:scale-105"
               />
             </div>
 
-            {/* Text & Feature Highlights */}
+            {/* Text & Feature Highlights (Badges Removed) */}
             <div className="space-y-3.5">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                  <Zap className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Featured AI Suite</span>
-                </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                  <Sparkles className="w-3 h-3 text-cyan-400" />
-                  <span>Unlimited Free</span>
-                </span>
-              </div>
-
               <div>
-                <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
                   Slendro-Ai
                 </h3>
-                <p className="text-base sm:text-lg text-[#94A3B8] font-medium leading-relaxed mt-1.5">
+                <p className="text-base sm:text-lg text-[#94A3B8] font-medium leading-relaxed mt-2 max-w-xl">
                   Slendro Ai - Unlimites Free Ai Video, Music &amp; Image Generator.
                 </p>
               </div>
