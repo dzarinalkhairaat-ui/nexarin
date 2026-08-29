@@ -42,10 +42,10 @@ export default function HomePage() {
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
       {/* 1. HERO SECTION (2-Column Ultra-Premium Layout with Unicorn Studio Interactive WebGL Background) */}
       <section
-        className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-20 sm:pb-32 lg:pb-40 min-h-[660px]"
+        className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-36 sm:pb-48 lg:pb-60 min-h-[750px]"
         style={{
-          maskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 85%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 85%, transparent 100%)"
+          maskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)"
         }}
       >
         {/* Unicorn Studio Project Background */}
@@ -54,8 +54,8 @@ export default function HomePage() {
         {/* Top Smooth Gradient Fade (blending seamlessly with Header) */}
         <div className="absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/50 to-transparent pointer-events-none z-0" />
 
-        {/* Bottom Smooth Gradient Fade (extending animation without cut-off) */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/80 to-transparent pointer-events-none z-0" />
+        {/* Bottom Gentle Transition at the absolute edge (leaving full animation visible above) */}
+        <div className="absolute bottom-0 left-0 right-0 h-28 sm:h-36 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/60 to-transparent pointer-events-none z-0" />
 
         {/* Subtle Dark overlay & ambient glow for optimal typography contrast */}
         <div className="absolute inset-0 bg-[#0B1120]/25 backdrop-blur-[0.5px] pointer-events-none z-0" />
