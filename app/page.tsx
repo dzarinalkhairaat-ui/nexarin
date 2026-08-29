@@ -39,11 +39,19 @@ export default function HomePage() {
 
   return (
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
-      {/* 1. HERO SECTION (2-Column Ultra-Premium Layout) */}
-      <section className="relative overflow-hidden pt-6 sm:pt-12 pb-8">
-        {/* Subtle ambient light */}
-        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/3 right-10 w-[500px] h-[350px] bg-[#7CF2C3]/5 rounded-full blur-[130px] pointer-events-none" />
+      {/* 1. HERO SECTION (2-Column Ultra-Premium Layout with Background Image & Gradient Mask) */}
+      <section
+        className="relative overflow-hidden pt-10 sm:pt-20 pb-12 sm:pb-16 bg-center bg-cover"
+        style={{
+          backgroundImage: "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a72ca2f3-9dd1-4fe4-84ba-fe86468a5237_3840w.webp?w=1600&q=85')",
+          maskImage: "linear-gradient(180deg, transparent 0%, black 10%, black 90%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 10%, black 90%, transparent 100%)"
+        }}
+      >
+        {/* Dark overlay & ambient glow */}
+        <div className="absolute inset-0 bg-[#0B1120]/80 backdrop-blur-[2px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-[500px] h-[350px] bg-[#7CF2C3]/10 rounded-full blur-[130px] pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12 sm:mb-16">
