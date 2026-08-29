@@ -21,7 +21,9 @@ import {
   DownloadCloud,
   Layers,
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  Zap,
+  ExternalLink
 } from "lucide-react";
 
 export default function HomePage() {
@@ -122,7 +124,100 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. PRODUCT ECOSYSTEM SPOTLIGHT */}
+            {/* 3. SLENDRO-AI SHOWCASE SECTION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className="relative overflow-hidden p-7 sm:p-10 rounded-3xl border border-transparent backdrop-blur-xl shadow-2xl transition-all duration-300 hover:shadow-purple-500/15"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(11, 17, 32, 0.75)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.22), rgba(168, 85, 247, 0.35), rgba(45, 212, 245, 0.30), rgba(255, 255, 255, 0.05)) border-box",
+            border: "1px solid transparent",
+            backdropFilter: "blur(20px) saturate(140%)",
+            WebkitBackdropFilter: "blur(20px) saturate(140%)",
+            boxShadow: "0 15px 40px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+          }}
+        >
+          {/* Ambient Lighting Accents */}
+          <div className="absolute -top-24 -left-24 w-72 h-72 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-cyan-500/20 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+            {/* Left: Logo & Info */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left max-w-2xl">
+              {/* Slendro AI Logo with glowing frame */}
+              <div className="relative shrink-0 group">
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-purple-600 to-cyan-400 opacity-40 blur-md group-hover:opacity-75 transition-opacity" />
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-950/80 border border-white/15 p-3 flex items-center justify-center backdrop-blur-md shadow-xl">
+                  <img
+                    src="/logo_slendro.png"
+                    alt="Slendro-Ai Logo"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(168,85,247,0.5)] group-hover:scale-105 transition-transform"
+                  />
+                </div>
+              </div>
+
+              {/* Text & Features */}
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    <Zap className="w-3.5 h-3.5 text-purple-400" />
+                    <span>Featured AI Suite</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                    <Sparkles className="w-3 h-3 text-cyan-400" />
+                    <span>Unlimited Free</span>
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    Slendro-Ai
+                  </h3>
+                  <p className="text-sm sm:text-base text-[#94A3B8] font-medium leading-relaxed mt-1">
+                    Slendro Ai - Unlimites Free Ai Video, Music &amp; Image Generator.
+                  </p>
+                </div>
+
+                {/* Feature Tags */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                  <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-white/90">
+                    🎬 AI Video Generator
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-cyan-300">
+                    🎵 AI Music Synthesizer
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-purple-300">
+                    🎨 AI Image Generator
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: CTA Action */}
+            <div className="shrink-0 flex flex-col items-center lg:items-end gap-2.5 w-full sm:w-auto">
+              <a
+                href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto block"
+              >
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto font-black text-sm px-8 py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white shadow-xl shadow-purple-500/25 hover:shadow-cyan-500/35 transition-all duration-300 rounded-2xl flex items-center justify-center gap-2 group"
+                >
+                  <span>Akses Disini</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </a>
+              <span className="text-[11px] text-[#64748B] font-mono text-center lg:text-right">
+                ✓ Akses Penuh &amp; Pendaftaran Cepat
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-white/[0.08]">
           <div>
