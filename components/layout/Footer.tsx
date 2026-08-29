@@ -3,13 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
-import {
-  Globe,
-  ArrowUpRight,
-  ShieldCheck,
-  Zap,
-  Sparkles
-} from "lucide-react";
 
 export function Footer() {
   return (
@@ -17,23 +10,19 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-white/[0.08]">
+          
           {/* Brand & Socials Column (2-Span) */}
           <div className="lg:col-span-2 space-y-5">
             <Link href="/" className="flex items-center gap-3 group inline-flex">
               <img
                 src="/assets/nexarin-logo.png"
                 alt="Nexarin Logo"
-                className="w-12 h-12 object-contain -md group-hover:scale-105 transition-transform"
+                className="w-11 h-11 object-contain group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#2DD4F5] transition-colors leading-none">
-                    Nexarin
-                  </span>
-                  <span className="text-[11px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20 leading-none">
-                    Tech Hub
-                  </span>
-                </div>
+                <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#2DD4F5] transition-colors leading-none">
+                  Nexarin
+                </span>
                 <span className="text-[10px] text-[#64748B] font-mono tracking-wider mt-1">
                   by Rins
                 </span>
@@ -44,8 +33,8 @@ export function Footer() {
               Platform ekosistem teknologi modern yang menggabungkan portal informasi kecerdasan buatan terkurasi, ulasan gadget, otomotif masa depan, serta marketplace produk digital siap pakai berlisensi lifetime.
             </p>
 
-            {/* Official Social Media Channels with Real Brand Icons */}
-            <div className="space-y-2 pt-1">
+            {/* Official Social Media Channels */}
+            <div className="space-y-2.5 pt-1">
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] block font-semibold">
                 Kanal Sosial &amp; Komunitas:
               </span>
@@ -142,35 +131,35 @@ export function Footer() {
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#2DD4F5] mb-4">
               Jelajahi Portal
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#64748B]">
+            <ul className="space-y-2.5 text-xs text-[#94A3B8]">
               <li>
-                <Link href="/ai" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Artificial Intelligence</span>
+                <Link href="/ai" className="hover:text-white transition-colors">
+                  Artificial Intelligence
                 </Link>
               </li>
               <li>
-                <Link href="/technology" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Technology &amp; Cloud</span>
+                <Link href="/technology" className="hover:text-white transition-colors">
+                  Technology &amp; Cloud
                 </Link>
               </li>
               <li>
-                <Link href="/digital" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Digital Transformation</span>
+                <Link href="/digital" className="hover:text-white transition-colors">
+                  Digital Transformation
                 </Link>
               </li>
               <li>
-                <Link href="/gadget" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Gadget &amp; Peripherals</span>
+                <Link href="/gadget" className="hover:text-white transition-colors">
+                  Gadget &amp; Peripherals
                 </Link>
               </li>
               <li>
-                <Link href="/automotive" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>EV &amp; Smart Mobility</span>
+                <Link href="/automotive" className="hover:text-white transition-colors">
+                  EV &amp; Smart Mobility
                 </Link>
               </li>
               <li>
-                <Link href="/tutorials" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Developer Tutorials</span>
+                <Link href="/tutorials" className="hover:text-white transition-colors">
+                  Developer Tutorials
                 </Link>
               </li>
             </ul>
@@ -181,13 +170,10 @@ export function Footer() {
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#7CF2C3] mb-4">
               Toko &amp; Sumber Daya
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#64748B]">
+            <ul className="space-y-2.5 text-xs text-[#94A3B8]">
               <li>
-                <Link href="/shop" className="hover:text-white transition-colors flex items-center gap-1.5">
-                  <span>Nexarin Digital Shop</span>
-                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">
-                    LIVE
-                  </span>
+                <Link href="/shop" className="hover:text-white transition-colors">
+                  Nexarin Digital Shop
                 </Link>
               </li>
               <li>
@@ -215,10 +201,10 @@ export function Footer() {
 
           {/* Column 4: Company & Legal */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-4">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-4">
               Informasi &amp; Legal
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#64748B]">
+            <ul className="space-y-2.5 text-xs text-[#94A3B8]">
               <li>
                 <Link href="/about" className="hover:text-white transition-colors">
                   Tentang Nexarin by Rins
@@ -253,19 +239,12 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Service Status */}
+        {/* Bottom Bar: Clean Copyright & Credit */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64748B] font-mono">
           <p>© 2026 Nexarin Tech Hub — Brand of Nexarin by Rins. Hak cipta dilindungi undang-undang.</p>
-
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-white/[0.08] text-[11px] text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Seluruh Layanan Online</span>
-            </div>
-            <span className="text-slate-500 hidden md:inline">
-              Built with precision &amp; modern engineering
-            </span>
-          </div>
+          <span className="text-slate-500 hidden sm:inline">
+            Built with precision &amp; modern engineering
+          </span>
         </div>
       </div>
     </footer>

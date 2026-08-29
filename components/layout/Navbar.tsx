@@ -25,8 +25,27 @@ import {
   Key,
   ChevronDown,
   LayoutDashboard,
-  Settings
+  Settings,
+  Home,
+  Cpu,
+  Globe,
+  Smartphone,
+  Car,
+  BookOpen,
+  Download
 } from "lucide-react";
+
+const NAV_ICONS: Record<string, React.ElementType> = {
+  Home,
+  Sparkles,
+  Cpu,
+  Globe,
+  Smartphone,
+  Car,
+  BookOpen,
+  ShoppingBag,
+  Download
+};
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -38,11 +57,49 @@ export function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
+  const linkRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+  const [indicatorStyle, setIndicatorStyle] = useState<{
+    left: number;
+    width: number;
+    opacity: number;
+  }>({ left: 0, width: 0, opacity: 0 });
 
-  // Close dropdown on pathname change
+  // Update sliding indicator position on pathname change or window resize
   useEffect(() => {
     setIsProfileDropdownOpen(false);
     setMobileMenuOpen(false);
+
+    const updateIndicator = () => {
+      const activeLink = NAV_LINKS.find(
+        (link) => pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+      );
+
+      if (activeLink && linkRefs.current[activeLink.href] && navContainerRef.current) {
+        const el = linkRefs.current[activeLink.href];
+        const container = navContainerRef.current;
+        if (el) {
+          const elRect = el.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          setIndicatorStyle({
+            left: elRect.left - containerRect.left,
+            width: elRect.width,
+            opacity: 1
+          });
+        }
+      } else {
+        setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+      }
+    };
+
+    // Small timeout to ensure DOM layout is complete
+    const timer = setTimeout(updateIndicator, 20);
+    window.addEventListener("resize", updateIndicator);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateIndicator);
+    };
   }, [pathname]);
 
   // Click outside to close profile dropdown
@@ -89,31 +146,58 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* 2. Center: Desktop Navigation Links (Pill Style) */}
-            <nav suppressHydrationWarning className="hidden lg:flex items-center gap-1">
+            {/* 2. Center: Desktop Navigation Links with Smooth Sliding Indicator */}
+            <nav
+              ref={navContainerRef}
+              suppressHydrationWarning
+              className="hidden lg:flex items-center gap-1 relative"
+            >
+              {/* Sliding Active Indicator Capsule with Spring Motion */}
+              <div
+                className="absolute top-0 bottom-0 rounded-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                  transform: `translateX(${indicatorStyle.left}px)`,
+                  width: `${indicatorStyle.width}px`,
+                  opacity: indicatorStyle.opacity,
+                  background:
+                    "linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)",
+                  border: "1px solid rgba(255, 255, 255, 0.18)",
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 8px rgba(0, 0, 0, 0.35)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)"
+                }}
+              />
+
               {NAV_LINKS.map((link) => {
                 const isActive =
                   pathname === link.href ||
                   (link.href !== "/" && pathname.startsWith(link.href));
+                const IconComponent = link.icon ? NAV_ICONS[link.icon] : null;
 
                 return (
                   <Link
                     key={link.href}
+                    ref={(el) => {
+                      linkRefs.current[link.href] = el;
+                    }}
                     href={link.href}
                     className={cn(
-                      "px-3 py-1 rounded-full text-xs font-medium transition-all relative flex items-center gap-1.5 select-none",
+                      "px-3 py-1 rounded-full text-xs font-medium transition-colors relative z-10 select-none flex items-center gap-1.5 group",
                       isActive
-                        ? "text-[#2DD4F5] bg-[#2DD4F5]/10 font-bold border border-[#2DD4F5]/25 shadow-sm shadow-cyan-500/10"
-                        : "text-white/60 hover:text-white hover:bg-white/5"
+                        ? "text-white font-semibold"
+                        : "text-slate-400 hover:text-white"
                     )}
                   >
-                    {link.label}
-                    {link.badge && (
-                      <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold border border-[#7CF2C3]/30 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#7CF2C3] animate-pulse" />
-                        {link.badge}
-                      </span>
+                    {IconComponent && (
+                      <IconComponent
+                        className={cn(
+                          "w-3.5 h-3.5 transition-colors",
+                          isActive ? "text-[#2DD4F5]" : "text-slate-400 group-hover:text-slate-200"
+                        )}
+                      />
                     )}
+                    <span>{link.label}</span>
                   </Link>
                 );
               })}
@@ -285,6 +369,7 @@ export function Navbar() {
                 const isActive =
                   pathname === link.href ||
                   (link.href !== "/" && pathname.startsWith(link.href));
+                const IconComponent = link.icon ? NAV_ICONS[link.icon] : null;
 
                 return (
                   <Link
@@ -294,16 +379,21 @@ export function Navbar() {
                     className={cn(
                       "flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all",
                       isActive
-                        ? "text-[#2DD4F5] bg-[#2DD4F5]/10 font-bold border border-[#2DD4F5]/30"
+                        ? "text-white bg-white/[0.12] font-semibold border border-white/20 shadow-sm"
                         : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
                     )}
                   >
-                    <span>{link.label}</span>
-                    {link.badge && (
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold border border-[#7CF2C3]/30">
-                        {link.badge}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2.5">
+                      {IconComponent && (
+                        <IconComponent
+                          className={cn(
+                            "w-4 h-4",
+                            isActive ? "text-[#2DD4F5]" : "text-[#94A3B8]"
+                          )}
+                        />
+                      )}
+                      <span>{link.label}</span>
+                    </div>
                   </Link>
                 );
               })}

@@ -103,35 +103,7 @@ export function CyberWaveBackground({ className = "" }: CyberWaveBackgroundProps
 
       ctx.clearRect(0, 0, width, height);
 
-      // =========================================================================
-      // 1. DYNAMIC AURORA MESH GLOWS
-      // =========================================================================
-      const g1X = width * 0.35 + Math.sin(time * 0.6) * 100;
-      const g1Y = height * 0.45 + Math.cos(time * 0.5) * 80;
-      const rad1 = ctx.createRadialGradient(g1X, g1Y, 20, g1X, g1Y, 420);
-      rad1.addColorStop(0, "rgba(45, 212, 245, 0.16)");
-      rad1.addColorStop(0.5, "rgba(45, 212, 245, 0.04)");
-      rad1.addColorStop(1, "transparent");
-      ctx.fillStyle = rad1;
-      ctx.fillRect(0, 0, width, height);
-
-      const g2X = width * 0.7 + Math.cos(time * 0.7) * 90;
-      const g2Y = height * 0.55 + Math.sin(time * 0.8) * 70;
-      const rad2 = ctx.createRadialGradient(g2X, g2Y, 20, g2X, g2Y, 400);
-      rad2.addColorStop(0, "rgba(124, 242, 195, 0.12)");
-      rad2.addColorStop(0.5, "rgba(124, 242, 195, 0.03)");
-      rad2.addColorStop(1, "transparent");
-      ctx.fillStyle = rad2;
-      ctx.fillRect(0, 0, width, height);
-
-      const g3X = width * 0.5 + Math.sin(time * 0.4) * 120;
-      const g3Y = height * 0.75 + Math.cos(time * 0.6) * 80;
-      const rad3 = ctx.createRadialGradient(g3X, g3Y, 20, g3X, g3Y, 450);
-      rad3.addColorStop(0, "rgba(129, 140, 248, 0.10)");
-      rad3.addColorStop(0.6, "rgba(129, 140, 248, 0.02)");
-      rad3.addColorStop(1, "transparent");
-      ctx.fillStyle = rad3;
-      ctx.fillRect(0, 0, width, height);
+// 1. Pure dark background without blurry gradient circles
 
       // =========================================================================
       // 2. PERSPECTIVE DIGITAL TECH GRID

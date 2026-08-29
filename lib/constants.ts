@@ -25,13 +25,13 @@ export const CATEGORIES = [
 ];
 
 export const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "AI", href: "/ai" },
-  { label: "Technology", href: "/technology" },
-  { label: "Digital", href: "/digital" },
-  { label: "Gadget", href: "/gadget" },
-  { label: "Automotive", href: "/automotive" },
-  { label: "Tutorials", href: "/tutorials" },
-  { label: "Shop", href: "/shop", badge: "Live" },
-  { label: "Free Resources", href: "/free-resources" },
+  { label: "Home", href: "/", icon: "Home" },
+  { label: "AI", href: "/ai", icon: "Sparkles" },
+  { label: "Technology", href: "/technology", icon: "Cpu" },
+  { label: "Digital", href: "/digital", icon: "Globe" },
+  { label: "Gadget", href: "/gadget", icon: "Smartphone" },
+  { label: "Automotive", href: "/automotive", icon: "Car" },
+  { label: "Tutorials", href: "/tutorials", icon: "BookOpen" },
+  { label: "Shop", href: "/shop", icon: "ShoppingBag" },
+  { label: "Free Resources", href: "/free-resources", icon: "Download" },
 ];

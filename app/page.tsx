@@ -91,7 +91,7 @@ export default function HomePage() {
   return (
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100 w-full max-w-full overflow-x-hidden">
       {/* 1. HERO SECTION (Ultra-Premium Layout with 3D Geometric Wave & Glowing Tech Aurora Background) */}
-      <section className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-36 sm:pb-48 lg:pb-60 min-h-[750px]">
+      <section className="relative isolate overflow-hidden pt-10 sm:pt-16 pb-10 sm:pb-14">
         {/* Pure 3D Geometric Wave, Tech Grid & Starlight Aurora Canvas */}
         <CyberWaveBackground className="z-0" />
 
@@ -99,11 +99,7 @@ export default function HomePage() {
           <div className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6 mb-12 sm:mb-16">
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
-              Informasi, Edukasi, &amp;{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
-                Produk Digital
-              </span>{" "}
-              Siap Pakai.
+              Informasi, Edukasi, &amp; Produk Digital Siap Pakai.
             </h1>
 
             {/* Subtitle description */}
