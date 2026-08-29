@@ -150,11 +150,6 @@ export default function AIPortalPage() {
             
             {/* Headline & Description */}
             <div className="space-y-4 max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 text-[#2DD4F5] text-xs font-mono font-bold uppercase border border-cyan-500/25 backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5 text-[#2DD4F5]" />
-                <span>Nexarin AI Intelligence &amp; Research Hub</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
                 Pusat Berita, Riset, &amp;{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
