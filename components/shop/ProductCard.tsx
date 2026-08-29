@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useNotification } from "@/context/NotificationContext";
 import { formatCurrency } from "@/lib/utils";
-import { Star, Check } from "lucide-react";
+import { Star, Check, Sparkles } from "lucide-react";
 import { TrialModal } from "./TrialModal";
 import { CheckoutModal } from "./CheckoutModal";
 
@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card hoverable className="group flex flex-col h-full overflow-hidden border-[#1E293B] bg-[#131E32]/70 hover:border-[#2DD4F5]/35 hover:bg-[#131E32]">
+      <Card hoverable className="group flex flex-col h-full overflow-hidden">
         <div className="relative h-48 w-full overflow-hidden bg-slate-900">
           <img
             src={product.featuredImage || "/assets/default-cover.svg"}
@@ -60,14 +60,14 @@ export function ProductCard({ product }: ProductCardProps) {
             onError={(e) => {
               e.currentTarget.src = "/assets/default-cover.svg";
             }}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-3 left-3 flex items-center gap-1.5">
-            <span className="px-2.5 py-0.5 rounded-full bg-slate-950/90 backdrop-blur-md text-white text-[11px] font-mono font-semibold border border-[#1E293B]">
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-950/90 backdrop-blur-md text-white text-[10px] font-mono font-semibold border border-white/[0.12]">
               {product.currentVersion}
             </span>
             {product.trialEnabled && (
-              <span className="px-2.5 py-0.5 rounded-full bg-[#7CF2C3]/90 text-slate-950 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#7CF2C3]/90 text-slate-950 text-[10px] font-bold shadow-md shadow-emerald-500/20">
                 Trial 3 Hari
               </span>
             )}
@@ -76,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
           <div>
-            <div className="flex items-center justify-between text-xs text-[#64748B] mb-1">
+            <div className="flex items-center justify-between text-xs text-[#64748B] mb-1.5">
               <span className="font-mono uppercase text-[10px] tracking-wider text-[#2DD4F5] font-bold">
                 {product.category.replace("-", " ")}
               </span>
@@ -93,11 +93,11 @@ export function ProductCard({ product }: ProductCardProps) {
               </h3>
             </Link>
 
-            <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed mb-3">
+            <p className="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed mb-3">
               {product.shortDescription}
             </p>
 
-            <div className="space-y-1 py-2 border-y border-[#1E293B]">
+            <div className="space-y-1.5 py-2.5 border-y border-white/[0.08]">
               {product.features.slice(0, 2).map((feat, idx) => (
                 <div key={idx} className="flex items-center gap-1.5 text-[11px] text-[#94A3B8]">
                   <Check className="w-3.5 h-3.5 text-[#7CF2C3] shrink-0" />
@@ -107,19 +107,14 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          <div>
+          <div className="pt-1">
             <div className="flex items-baseline justify-between mb-3">
-              <div>
-                <span className="text-xs text-[#64748B] block font-medium">Lisensi Lifetime</span>
-                <span className="text-lg font-extrabold text-white font-mono">
-                  {formatCurrency(product.price, product.currency)}
+              <span className="text-xs font-mono text-[#64748B]">Lisensi Lifetime</span>
+              <div className="text-right">
+                <span className="text-lg font-black text-white">
+                  {formatCurrency(product.price)}
                 </span>
               </div>
-              {product.originalPrice && (
-                <span className="text-xs text-slate-500 line-through font-mono">
-                  {formatCurrency(product.originalPrice, product.currency)}
-                </span>
-              )}
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -128,13 +123,13 @@ export function ProductCard({ product }: ProductCardProps) {
                   variant="outline"
                   size="sm"
                   onClick={handleTrialClick}
-                  className="w-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white"
+                  className="w-full text-xs font-semibold border-white/[0.12] text-slate-300 hover:text-white"
                 >
-                  Coba Trial
+                  Coba Gratis
                 </Button>
               ) : (
                 <Link href={`/shop/${product.slug}`} className="w-full">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/[0.12]">
                     Detail
                   </Button>
                 </Link>
@@ -144,26 +139,30 @@ export function ProductCard({ product }: ProductCardProps) {
                 variant="primary"
                 size="sm"
                 onClick={handleBuyClick}
-                className="w-full text-xs font-bold"
+                className="w-full text-xs font-extrabold shadow-md shadow-cyan-500/20"
               >
-                Beli Sekarang
+                Beli Lisensi
               </Button>
             </div>
           </div>
         </div>
       </Card>
 
-      <TrialModal
-        isOpen={trialOpen}
-        onClose={() => setTrialOpen(false)}
-        product={product}
-      />
-
-      <CheckoutModal
-        isOpen={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
-        product={product}
-      />
+      {/* Modals */}
+      {trialOpen && (
+        <TrialModal
+          isOpen={trialOpen}
+          onClose={() => setTrialOpen(false)}
+          product={product}
+        />
+      )}
+      {checkoutOpen && (
+        <CheckoutModal
+          isOpen={checkoutOpen}
+          onClose={() => setCheckoutOpen(false)}
+          product={product}
+        />
+      )}
     </>
   );
 }

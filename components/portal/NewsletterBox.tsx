@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, CheckCircle2 } from "lucide-react";
+import { Sparkles, CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useNotification } from "@/context/NotificationContext";
 
@@ -23,7 +23,17 @@ export function NewsletterBox() {
   };
 
   return (
-    <div className="relative rounded-3xl bg-white/[0.035] border border-cyan-500/20 p-8 sm:p-12 text-white overflow-hidden">
+    <div
+      className="relative rounded-3xl p-8 sm:p-12 text-white overflow-hidden backdrop-blur-xl transition-all duration-300"
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(11, 17, 32, 0.60)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.20), rgba(45, 212, 245, 0.18), rgba(255, 255, 255, 0.05)) border-box",
+        border: "1px solid transparent",
+        backdropFilter: "blur(20px) saturate(130%)",
+        WebkitBackdropFilter: "blur(20px) saturate(130%)",
+        boxShadow: "0 12px 35px -5px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.06)"
+      }}
+    >
       <div className="relative z-10 max-w-2xl mx-auto text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/30 text-[#2DD4F5] text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5" />
@@ -31,7 +41,7 @@ export function NewsletterBox() {
         </div>
 
         <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-          Dapatkan Kurasi Informasi AI & Tech Terkini Tanpa Noise
+          Dapatkan Kurasi Informasi AI &amp; Tech Terkini Tanpa Noise
         </h3>
 
         <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed max-w-xl mx-auto">
@@ -44,16 +54,16 @@ export function NewsletterBox() {
             <span>Terima kasih telah bergabung dengan komunitas Nexarin!</span>
           </div>
         ) : (
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto pt-2">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto pt-2">
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Masukkan alamat email Anda..."
-              className="flex-1 px-4 py-3 rounded-xl bg-[#0B1120] border border-white/[0.08] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
+              className="flex-1 px-4 py-3 rounded-xl bg-[#0B1120] border border-white/[0.12] text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]"
             />
-            <Button type="submit" variant="primary" size="md" className="font-bold">
+            <Button type="submit" variant="primary" size="md" className="font-bold text-xs shadow-lg shadow-cyan-500/20">
               Langganan Gratis
             </Button>
           </form>
