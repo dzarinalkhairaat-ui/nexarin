@@ -15,9 +15,6 @@ import {
   Sparkles,
   ArrowRight,
   TrendingUp,
-  Cpu,
-  Smartphone,
-  Car,
   BookOpen,
   ShoppingBag,
   DownloadCloud,
@@ -81,33 +78,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* 2. Quick Category Navigation Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-              <Link href="/ai">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
-                  <Cpu className="w-3.5 h-3.5 mr-1 text-[#2DD4F5]" />
-                  AI &amp; Agents
-                </Button>
-              </Link>
-              <Link href="/gadget">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
-                  <Smartphone className="w-3.5 h-3.5 mr-1 text-purple-400" />
-                  Gadgets
-                </Button>
-              </Link>
-              <Link href="/automotive">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
-                  <Car className="w-3.5 h-3.5 mr-1 text-emerald-400" />
-                  EV Tech
-                </Button>
-              </Link>
-              <Link href="/free-resources">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
-                  <DownloadCloud className="w-3.5 h-3.5 mr-1 text-cyan-400" />
-                  Free Resources
-                </Button>
-              </Link>
-            </div>
+
           </div>
 
           {/* Featured Article Spotlight */}
