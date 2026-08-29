@@ -10,7 +10,7 @@ import { AffiliateWidget } from "@/components/affiliate/AffiliateWidget";
 import { NewsletterBox } from "@/components/portal/NewsletterBox";
 import { Button } from "@/components/ui/Button";
 import { ShinyButton } from "@/components/ui/shiny-button";
-import { UnicornBackground } from "@/components/ui/unicorn-background";
+import { CyberMeshBackground } from "@/components/ui/cyber-mesh-background";
 import { Card } from "@/components/ui/Card";
 import {
   Sparkles,
@@ -49,7 +49,7 @@ export default function HomePage() {
         }}
       >
         {/* Unicorn Studio Project Background */}
-        <UnicornBackground projectId="NaoyTHRiquOhW7PvwNgE" className="z-0" />
+        <CyberMeshBackground className="z-0" />
 
         {/* Top Smooth Gradient Fade (blending seamlessly with Header) */}
         <div className="absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/50 to-transparent pointer-events-none z-0" />
