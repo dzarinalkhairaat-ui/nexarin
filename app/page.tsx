@@ -41,14 +41,14 @@ export default function HomePage() {
   return (
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
       {/* 1. HERO SECTION (2-Column Ultra-Premium Layout with Unicorn Studio Interactive WebGL Background) */}
-      <section className="relative overflow-hidden pt-10 sm:pt-20 pb-12 sm:pb-16 min-h-[580px]">
+      <section className="relative isolate overflow-hidden pt-10 sm:pt-20 pb-12 sm:pb-16 min-h-[580px]">
         {/* Unicorn Studio Project Background */}
-        <UnicornBackground projectId="NaoyTHRiquOhW7PvwNgE" />
+        <UnicornBackground projectId="NaoyTHRiquOhW7PvwNgE" className="z-0" />
 
         {/* Subtle Dark overlay & ambient glow for optimal typography contrast */}
-        <div className="absolute inset-0 bg-[#0B1120]/35 backdrop-blur-[1px] pointer-events-none -z-10" />
-        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-        <div className="absolute top-1/3 right-10 w-[450px] h-[300px] bg-[#7CF2C3]/8 rounded-full blur-[130px] pointer-events-none -z-10" />
+        <div className="absolute inset-0 bg-[#0B1120]/30 backdrop-blur-[0.5px] pointer-events-none z-0" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[300px] bg-[#7CF2C3]/8 rounded-full blur-[130px] pointer-events-none z-0" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12 sm:mb-16">

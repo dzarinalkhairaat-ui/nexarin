@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface UnicornBackgroundProps {
   projectId: string;
@@ -19,44 +19,40 @@ declare global {
 }
 
 export function UnicornBackground({ projectId, className = "" }: UnicornBackgroundProps) {
-  useEffect(() => {
-    let scriptEl = document.querySelector(
-      'script[src*="unicornStudio.umd.js"]'
-    ) as HTMLScriptElement | null;
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const initUnicorn = () => {
-      if (window.UnicornStudio && typeof window.UnicornStudio.init === "function") {
+  useEffect(() => {
+    const tryInit = () => {
+      if (typeof window !== "undefined" && window.UnicornStudio && typeof window.UnicornStudio.init === "function") {
         try {
           window.UnicornStudio.init();
         } catch (e) {
-          console.warn("UnicornStudio init:", e);
+          // ignore
         }
       }
     };
 
-    if (!scriptEl) {
-      window.UnicornStudio = window.UnicornStudio || { isInitialized: false };
-      scriptEl = document.createElement("script");
-      scriptEl.src =
-        "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.3/dist/unicornStudio.umd.js";
-      scriptEl.async = true;
-      scriptEl.onload = () => {
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initUnicorn);
-        } else {
-          initUnicorn();
-        }
-      };
-      (document.head || document.body).appendChild(scriptEl);
-    } else {
-      initUnicorn();
-    }
+    // Trigger immediate & deferred initializations
+    tryInit();
+    const t1 = setTimeout(tryInit, 80);
+    const t2 = setTimeout(tryInit, 300);
+    const t3 = setTimeout(tryInit, 800);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, [projectId]);
 
   return (
     <div
+      ref={containerRef}
       data-us-project={projectId}
-      className={`absolute inset-0 w-full h-full -z-10 pointer-events-none overflow-hidden ${className}`}
+      data-us-scale="1"
+      data-us-dpi="1.5"
+      className={`absolute inset-0 w-full h-full overflow-hidden ${className}`}
+      style={{ minHeight: "100%", width: "100%", height: "100%" }}
       suppressHydrationWarning
     />
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
@@ -38,16 +39,22 @@ export const metadata: Metadata = {
     description: "Platform teknologi modern yang menggabungkan konten edukasi terkurasi dan aplikasi digital siap pakai.",
     url: "https://nexarin.tech",
     siteName: "Nexarin Tech Hub",
-    locale: "id_ID",
-    type: "website",
     images: [
       {
         url: "/assets/nexarin-logo.png",
-        width: 512,
-        height: 512,
-        alt: "Nexarin Tech Hub Logo",
-      }
+        width: 800,
+        height: 800,
+        alt: "Nexarin Logo",
+      },
     ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nexarin Tech Hub",
+    description: "Portal Berita AI, Edukasi Software & Toko Produk Digital Siap Pakai",
+    images: ["/assets/nexarin-logo.png"],
   },
 };
 
@@ -62,8 +69,9 @@ export default function RootLayout({
         <link rel="icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="shortcut icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/nexarin-logo.png" />
-        <script
+        <Script
           id="anti-error-shield"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -160,6 +168,11 @@ export default function RootLayout({
               })();
             `
           }}
+        />
+        <Script
+          id="unicorn-studio-cdn"
+          src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.3/dist/unicornStudio.umd.js"
+          strategy="afterInteractive"
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>

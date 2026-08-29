@@ -81,7 +81,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
             <div className="flex items-center gap-1.5 text-xs text-[#64748B] font-mono">
               <Eye className="w-3.5 h-3.5 text-slate-500" />
-              <span>{article.views.toLocaleString()}</span>
+              <span>{article.views}</span>
             </div>
           </div>
         </div>
