@@ -11,7 +11,9 @@ import { AIAnalysisSection } from "@/components/ai/AIAnalysisSection";
 import { AISkeleton } from "@/components/ai/AISkeleton";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { Button } from "@/components/ui/Button";
-import { Sparkles, Search, SlidersHorizontal, RefreshCw, X } from "lucide-react";
+import { CyberWaveBackground } from "@/components/ui/cyber-wave-background";
+import { Sparkles, Search, RefreshCw, X, Radio, ArrowRight, BookOpen, Flame } from "lucide-react";
+import Link from "next/link";
 
 export default function AIPortalPage() {
   const { articles } = useContent();
@@ -120,86 +122,112 @@ export default function AIPortalPage() {
   const hasMore = remainingAfterHero.length > visibleCount + 3;
 
   return (
-    <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30">
-      {/* 1. EDITORIAL PORTAL HERO HEADER WITH THEMATIC BACKGROUND IMAGE */}
-      <header className="relative border-b border-[#1E293B] overflow-hidden pt-10 pb-12 sm:pt-16 sm:pb-18">
-        {/* Thematic External 16:9 AI Background Image */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop"
-            alt="Artificial Intelligence Neural Network Matrix"
-            className="w-full h-full object-cover object-center opacity-70 sm:opacity-80 scale-105 transform transition-transform duration-1000"
-          />
-          {/* Multi-layer Dark Gradient Overlays for High Legibility */}
-          <div className="absolute inset-0 bg-[#0B1120]/60 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080D1A]/80 via-[#080D1A]/50 to-[#0B1120]" />
-          {/* Smooth Bottom Gradient Transition */}
-          <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/90 to-transparent" />
-        </div>
+    <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30 w-full max-w-full overflow-x-hidden">
+      
+      {/* 1. HERO SECTION WITH 3D CYBER WAVE BACKGROUND (MATCHING HOME PAGE THEME) */}
+      <section
+        className="relative isolate overflow-hidden pt-12 sm:pt-20 pb-20 sm:pb-28 w-full max-w-full"
+        style={{
+          maskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)"
+        }}
+      >
+        {/* Pure 3D Geometric Wave & Starlight Aurora Canvas */}
+        <CyberWaveBackground className="z-0" />
 
-        {/* Ambient Glow */}
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[260px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none z-0" />
+        {/* Top Smooth Gradient Fade */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/50 to-transparent pointer-events-none z-0" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2DD4F5]/15 text-[#2DD4F5] text-xs font-mono font-bold uppercase border border-[#2DD4F5]/35 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Nexari AI Media &amp; Intelligence</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Pusat Berita &amp; Wawasan Artificial Intelligence
-            </h1>
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed max-w-xl">
-              Liputan mendalam mengenai perkembangan Autonomous AI Agents, LLM, prompt engineering, penelitian mutakhir, dan regulasi kecerdasan buatan global.
-            </p>
-          </div>
+        {/* Bottom Transition */}
+        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/70 to-transparent pointer-events-none z-0" />
 
-          {/* Premium Editorial Search Bar */}
-          <div className="w-full md:w-96 relative group">
-            <div className="relative flex items-center rounded-2xl bg-[#0F172A]/90 border border-white/[0.12] hover:border-[#2DD4F5]/40 focus-within:border-[#2DD4F5] focus-within:bg-[#0B1120] focus-within:ring-1 focus-within:ring-[#2DD4F5]/30 transition-all duration-200 backdrop-blur-xl p-1.5 pl-3.5 pr-2">
-              <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                <Search className="w-4 h-4 text-[#64748B] group-focus-within:text-[#2DD4F5] transition-colors shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari liputan AI, model LLM, tools..."
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none"
-                />
+        {/* Ambient Glows */}
+        <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[550px] h-[280px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute top-1/2 right-10 w-[400px] h-[260px] bg-[#7CF2C3]/8 rounded-full blur-[130px] pointer-events-none z-0" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 sm:gap-12">
+            
+            {/* Headline & Description */}
+            <div className="space-y-4 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 text-[#2DD4F5] text-xs font-mono font-bold uppercase border border-cyan-500/25 backdrop-blur-md">
+                <Sparkles className="w-3.5 h-3.5 text-[#2DD4F5]" />
+                <span>Nexarin AI Intelligence &amp; Research Hub</span>
               </div>
-              {searchQuery ? (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  aria-label="Bersihkan pencarian"
-                  className="p-1 text-[#64748B] hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors text-[11px] font-mono shrink-0"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              ) : (
-                <div className="hidden sm:flex items-center gap-1 pl-2 shrink-0">
-                  <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold text-[#64748B] bg-white/[0.05] rounded-md border border-white/[0.08]">
-                    ⌘K
-                  </kbd>
-                </div>
-              )}
+
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
+                Pusat Berita, Riset, &amp;{" "}
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
+                  Wawasan Artificial Intelligence
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] leading-relaxed max-w-2xl">
+                Liputan investigatif perkembangan Autonomous AI Agents, arsitektur LLM reasoning mutakhir, multimodal models, prompt engineering, open-source AI, &amp; regulasi global.
+              </p>
             </div>
+
+            {/* Premium Glassmorphic AI Search Bar */}
+            <div className="w-full lg:w-96 relative group shrink-0">
+              <div className="relative flex items-center rounded-2xl bg-[#0F172A]/85 border border-white/[0.12] hover:border-[#2DD4F5]/40 focus-within:border-[#2DD4F5] focus-within:bg-[#0B1120] focus-within:ring-1 focus-within:ring-[#2DD4F5]/30 transition-all duration-200 backdrop-blur-xl p-2 pl-4 pr-2">
+                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                  <Search className="w-4 h-4 text-[#64748B] group-focus-within:text-[#2DD4F5] transition-colors shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari liputan AI, model LLM, tools..."
+                    className="w-full bg-transparent text-xs sm:text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none"
+                  />
+                </div>
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    aria-label="Bersihkan pencarian"
+                    className="p-1 text-[#64748B] hover:text-white rounded-lg hover:bg-white/[0.08] transition-colors text-[11px] font-mono shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <div className="hidden sm:flex items-center gap-1 pl-2 shrink-0">
+                    <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold text-[#64748B] bg-white/[0.05] rounded-md border border-white/[0.08]">
+                      ⌘K
+                    </kbd>
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
-      </header>
+      </section>
 
-      {/* 2. SECONDARY SUBCATEGORY NAVIGATION */}
+      {/* 2. LIVE BREAKING AI DISPATCH TICKER (TOP TIER NEWS PORTAL FEATURE) */}
+      <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-hidden text-xs font-mono">
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold uppercase shrink-0 animate-pulse">
+            <Radio className="w-3 h-3 text-rose-400" />
+            Live AI Dispatch
+          </span>
+          <div className="text-slate-300 truncate text-xs">
+            Claude 3.7 Sonnet &amp; Hybrid Reasoning Diluncurkan • Gemini 2.0 Flash Multimodal Workflow • OpenAI Operator Browser Automation • DeepSeek R1 Open Reasoning
+          </div>
+        </div>
+      </div>
+
+      {/* 3. SUBCATEGORY FILTER NAVIGATION */}
       <AICategoryNav
         categories={subcategories}
         activeCategory={activeSubcategory}
         onSelectCategory={setActiveSubcategory}
       />
 
-      {/* 3. MAIN EDITORIAL CONTENT GRID */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
+      {/* 4. MAIN EDITORIAL CONTENT GRID */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-16 sm:space-y-20 w-full overflow-hidden">
         {filteredArticles.length > 0 ? (
           <>
-            {/* TOP STORY (HERO) + TRENDING SIDEBAR */}
+            {/* TOP STORY (HERO CARD) + TOP 5 TRENDING SIDEBAR */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-8">
                 {heroArticle && <AIHeroStory article={heroArticle} />}
@@ -214,48 +242,61 @@ export default function AIPortalPage() {
               <AIFeaturedStories articles={featuredStories} />
             )}
 
-            {/* LATEST NEWS LIST (Left) + AI ANALYSIS & OPINION (Right) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6 border-t border-[#1E293B]">
+            {/* LATEST NEWS LIST (Left) + AI ANALYSIS & PERSPECTIVES (Right) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-8 border-t border-white/[0.08]">
               <div className="lg:col-span-8 space-y-6">
                 <AILatestNews articles={latestNews.length > 0 ? latestNews : remainingAfterHero} />
 
                 {/* Load More Pagination Trigger */}
                 {hasMore && (
-                  <div className="pt-4 text-center">
+                  <div className="pt-6 text-center">
                     <Button
                       variant="outline"
                       size="md"
                       onClick={() => setVisibleCount((prev) => prev + 6)}
-                      className="font-bold text-xs border-[#1E293B] text-slate-300 hover:text-white hover:border-[#2DD4F5]/40"
+                      className="font-bold text-xs border-white/15 text-slate-300 hover:text-white hover:border-[#2DD4F5]/50 bg-white/[0.03]"
                     >
                       <RefreshCw className="w-3.5 h-3.5 mr-2" />
-                      Muat Lebih Banyak Berita AI
+                      Muat Lebih Banyak Liputan AI
                     </Button>
                   </div>
                 )}
               </div>
 
-              {/* Sidebar Analysis & Perspective */}
+              {/* Sidebar Analysis & Perspectives */}
               <div className="lg:col-span-4 space-y-8">
                 <AIAnalysisSection articles={analysisArticles} />
 
-                {/* Learning Callout Card */}
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-[#0F172A] to-[#131E32] border border-cyan-500/25 space-y-3">
-                  <span className="text-[10px] font-mono font-bold uppercase text-[#7CF2C3]">
-                    Kelas Edukasi Terkait
-                  </span>
-                  <h4 className="text-sm font-bold text-white leading-snug">
-                    Ingin Membangun Agen AI Sendiri?
-                  </h4>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed">
-                    Pelajari kurikulum lengkap di Nexari Tutorial Class Hub dengan panduan implementasi multi-agent dan tool use.
-                  </p>
-                  <a
-                    href="/tutorials/ai-automation-autonomous-agents-masterclass"
-                    className="inline-flex items-center text-xs font-bold text-[#2DD4F5] hover:underline pt-1"
+                {/* AI Tutorial Callout Card */}
+                <div
+                  className="p-6 sm:p-7 rounded-3xl border border-transparent backdrop-blur-xl text-white space-y-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.70)) padding-box, linear-gradient(120deg, rgba(45, 212, 245, 0.40), rgba(124, 242, 195, 0.30), rgba(255, 255, 255, 0.05)) border-box",
+                    border: "1px solid transparent"
+                  }}
+                >
+                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-[#2DD4F5]">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase text-[#7CF2C3] tracking-wider block">
+                      Nexarin Class Hub
+                    </span>
+                    <h4 className="text-base font-bold text-white mt-1">
+                      Ingin Membangun Autonomous AI Agent Sendiri?
+                    </h4>
+                    <p className="text-xs text-[#94A3B8] leading-relaxed mt-2">
+                      Pelajari kurikulum komprehensif mulai dari Function Calling, Multi-Agent Architecture, hingga integrasi tool use di Nexarin Class Hub.
+                    </p>
+                  </div>
+                  <Link
+                    href="/tutorials"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2DD4F5] hover:text-[#7CF2C3] transition-colors pt-1"
                   >
-                    Buka Tutorial Class AI →
-                  </a>
+                    <span>Jelajahi Kelas AI Sekarang</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
             </div>

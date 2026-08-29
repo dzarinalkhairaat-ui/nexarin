@@ -13,29 +13,29 @@ interface AILatestNewsProps {
 export function AILatestNews({ articles }: AILatestNewsProps) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
-        <div className="flex items-center gap-2">
-          <Newspaper className="w-4 h-4 text-[#2DD4F5]" />
-          <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
+      <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+        <div className="flex items-center gap-2.5">
+          <Newspaper className="w-5 h-5 text-[#2DD4F5]" />
+          <h3 className="text-lg font-bold text-white tracking-tight">
             Berita &amp; Perkembangan AI Terbaru
           </h3>
         </div>
-        <span className="text-xs font-mono text-[#64748B]">
-          {articles.length} Berita
+        <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+          {articles.length} Liputan
         </span>
       </div>
 
-      <div className="divide-y divide-[#1E293B] rounded-2xl bg-[#0F172A]/70 border border-[#1E293B] backdrop-blur-md overflow-hidden">
+      <div className="divide-y divide-white/[0.08] rounded-3xl bg-[#0F172A]/75 border border-white/[0.08] backdrop-blur-xl overflow-hidden">
         {articles.map((article) => {
-          const sourceName = article.source?.name || "Nexari Intelligence";
+          const sourceName = article.source?.name || "Nexarin Intelligence";
 
           return (
             <article
               key={article.id}
-              className="p-5 sm:p-6 hover:bg-[#131E32]/70 transition-colors group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+              className="p-5 sm:p-6 hover:bg-white/[0.03] transition-colors group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
             >
               {/* Thumbnail */}
-              <div className="relative w-full sm:w-44 h-32 sm:h-28 rounded-xl overflow-hidden bg-slate-900 shrink-0">
+              <div className="relative w-full sm:w-44 h-32 sm:h-28 rounded-2xl overflow-hidden bg-slate-900 border border-white/[0.08] shrink-0">
                 <img
                   src={article.featuredImage || "/assets/article-ai.svg"}
                   alt={article.title}
@@ -55,7 +55,7 @@ export function AILatestNews({ articles }: AILatestNewsProps) {
                   <span>{formatDate(article.publishedAt)}</span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
+                    <Clock className="w-3 h-3 text-cyan-400" />
                     {article.readingTimeMinutes} mnt
                   </span>
                 </div>
@@ -74,7 +74,7 @@ export function AILatestNews({ articles }: AILatestNewsProps) {
               {/* Views */}
               <div className="hidden lg:flex flex-col items-end text-xs font-mono text-[#64748B] shrink-0 pl-2">
                 <span className="flex items-center gap-1 text-[#F8FAFC]">
-                  <Eye className="w-3 h-3 text-[#2DD4F5]" />
+                  <Eye className="w-3.5 h-3.5 text-[#2DD4F5]" />
                   {article.views}
                 </span>
                 <span className="text-[10px] text-[#64748B]">views</span>
