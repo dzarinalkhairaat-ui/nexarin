@@ -62,54 +62,107 @@ export default function RootLayout({
         <link rel="icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="shortcut icon" href="/assets/nexarin-logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/assets/nexarin-logo.png" />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <script
-          id="suppress-extension-attributes"
+          id="anti-error-shield"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                try {
-                  var origError = console.error;
-                  console.error = function() {
+                if (typeof window === 'undefined') return;
+
+                // 1. Intercept global unhandled promise rejections (e.g. from Chrome extensions)
+                window.addEventListener('unhandledrejection', function(event) {
+                  try {
+                    var reason = event.reason;
+                    var str = typeof reason === 'string' ? reason : (reason ? (reason.stack || reason.message || String(reason)) : '');
+                    if (
+                      str.indexOf('chrome-extension://') !== -1 ||
+                      str.indexOf('M_ID') !== -1 ||
+                      str.indexOf('bis_skin_checked') !== -1 ||
+                      str.indexOf('executors/200.js') !== -1 ||
+                      str.indexOf('eppiocemhmnlbhjplcgkofciiegomcon') !== -1
+                    ) {
+                      event.stopImmediatePropagation();
+                      event.preventDefault();
+                      return;
+                    }
+                  } catch(e) {}
+                }, true);
+
+                // 2. Intercept global window errors from extensions
+                window.addEventListener('error', function(event) {
+                  try {
+                    var filename = event.filename || '';
+                    var msg = event.message || '';
+                    if (
+                      filename.indexOf('chrome-extension://') !== -1 ||
+                      filename.indexOf('eppiocemhmnlbhjplcgkofciiegomcon') !== -1 ||
+                      msg.indexOf('M_ID') !== -1 ||
+                      msg.indexOf('bis_skin_checked') !== -1 ||
+                      msg.indexOf('ResizeObserver loop') !== -1
+                    ) {
+                      event.stopImmediatePropagation();
+                      event.preventDefault();
+                      return;
+                    }
+                  } catch(e) {}
+                }, true);
+
+                // 3. Intercept console.error & console.warn to suppress hydration noise & extension errors
+                var origError = console.error;
+                console.error = function() {
+                  try {
                     for (var i = 0; i < arguments.length; i++) {
                       var arg = arguments[i];
                       if (!arg) continue;
                       var str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
                       if (
                         str.indexOf('bis_skin_checked') !== -1 ||
-                        str.indexOf('hydrated but some attributes') !== -1 ||
+                        str.indexOf('chrome-extension://') !== -1 ||
+                        str.indexOf('eppiocemhmnlbhjplcgkofciiegomcon') !== -1 ||
+                        str.indexOf('M_ID') !== -1 ||
+                        str.indexOf('hydration') !== -1 ||
+                        str.indexOf('Hydration') !== -1 ||
+                        str.indexOf('hydrated') !== -1 ||
                         str.indexOf('react-hydration-error') !== -1 ||
+                        str.indexOf('did not match the client properties') !== -1 ||
                         str.indexOf('Text content does not match') !== -1 ||
-                        str.indexOf('did not match the client properties') !== -1
+                        str.indexOf('Extra attributes from the server') !== -1
                       ) {
                         return;
                       }
                     }
-                    origError.apply(console, arguments);
-                  };
+                  } catch(e) {}
+                  origError.apply(console, arguments);
+                };
 
-                  var origWarn = console.warn;
-                  console.warn = function() {
+                var origWarn = console.warn;
+                console.warn = function() {
+                  try {
                     for (var i = 0; i < arguments.length; i++) {
                       var arg = arguments[i];
                       if (!arg) continue;
                       var str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
                       if (
                         str.indexOf('bis_skin_checked') !== -1 ||
+                        str.indexOf('chrome-extension://') !== -1 ||
+                        str.indexOf('eppiocemhmnlbhjplcgkofciiegomcon') !== -1 ||
+                        str.indexOf('M_ID') !== -1 ||
                         str.indexOf('hydration') !== -1 ||
+                        str.indexOf('Hydration') !== -1 ||
                         str.indexOf('hydrated') !== -1
                       ) {
                         return;
                       }
                     }
-                    origWarn.apply(console, arguments);
-                  };
-                } catch(e) {}
+                  } catch(e) {}
+                  origWarn.apply(console, arguments);
+                };
               })();
             `
           }}
         />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <NotificationProvider>
           <AuthProvider>
             <ContentProvider>
