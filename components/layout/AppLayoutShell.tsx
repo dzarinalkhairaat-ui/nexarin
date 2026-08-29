@@ -31,10 +31,10 @@ export function AppLayoutShell({ children }: { children: React.ReactNode }) {
 
   // 4. Public Website Domain (/, /shop, /article, /about, etc.)
   return (
-    <>
+    <div className="min-h-screen flex flex-col w-full max-w-full overflow-x-hidden bg-[#0B1120]">
       <Navbar />
-      <main suppressHydrationWarning className="flex-1 pb-16">{children}</main>
+      <main suppressHydrationWarning className="flex-1 pb-16 w-full max-w-full overflow-x-hidden">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }

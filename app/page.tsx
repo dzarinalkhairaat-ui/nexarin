@@ -89,7 +89,7 @@ export default function HomePage() {
   const primaryAffiliate = affiliates[0];
 
   return (
-    <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
+    <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100 w-full max-w-full overflow-x-hidden">
       {/* 1. HERO SECTION (Ultra-Premium Layout with 3D Geometric Wave & Glowing Tech Aurora Background) */}
       <section
         className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-36 sm:pb-48 lg:pb-60 min-h-[750px]"
@@ -157,7 +157,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. LATEST FEED & GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 w-full overflow-hidden">
         <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[#2DD4F5]" />
@@ -178,7 +178,7 @@ export default function HomePage() {
       </section>
 
             {/* 3. SLENDRO-AI SHOWCASE SECTION (2 Dual ShinyButtons & Documentation Modal) */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full overflow-hidden">
         {/* Subtle Ambient Radial Lighting in Background */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[130px] pointer-events-none -z-10" />
         <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-[130px] pointer-events-none -z-10" />
@@ -435,7 +435,7 @@ export default function HomePage() {
       )}
 
       {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 w-full overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-white/[0.08]">
           <div>
             <div className="flex items-center gap-2">
@@ -461,7 +461,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. FREE RESOURCES BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full overflow-hidden">
         <div
           className="p-8 sm:p-10 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-0.5"
           style={{
@@ -495,7 +495,7 @@ export default function HomePage() {
       </section>
 
             {/* 6. NEXARIN PREMIUM PRICING SECTION (Professional Multi-Tier & ULTRA Lifetime Pass) */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24" id="pricing">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full overflow-hidden" id="pricing">
         {/* Ambient Radial Lighting Accents */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
@@ -854,7 +854,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. AFFILIATE & NEWSLETTER SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7">
             {primaryAffiliate && <AffiliateWidget affiliate={primaryAffiliate} />}
