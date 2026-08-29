@@ -129,25 +129,9 @@ export default function DigitalPortalPage() {
     <div suppressHydrationWarning className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#2DD4F5]/30 w-full max-w-full overflow-x-hidden">
       
       {/* 1. HERO SECTION WITH 3D CYBER WAVE BACKGROUND (MATCHING HOME, AI & TECH THEME) */}
-      <section
-        className="relative isolate overflow-hidden pt-12 sm:pt-20 pb-20 sm:pb-28 w-full max-w-full"
-        style={{
-          maskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)"
-        }}
-      >
+      <section className="relative isolate overflow-hidden pt-12 sm:pt-20 pb-20 sm:pb-28 w-full max-w-full">
         {/* Pure 3D Geometric Wave & Starlight Aurora Canvas */}
         <CyberWaveBackground className="z-0" />
-
-        {/* Top Smooth Gradient Fade */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/50 to-transparent pointer-events-none z-0" />
-
-        {/* Bottom Transition */}
-        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/70 to-transparent pointer-events-none z-0" />
-
-        {/* Ambient Glows */}
-        <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[550px] h-[280px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
-        <div className="absolute top-1/2 right-10 w-[400px] h-[260px] bg-[#7CF2C3]/8 rounded-full blur-[130px] pointer-events-none z-0" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 sm:gap-12">
