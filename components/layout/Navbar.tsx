@@ -55,14 +55,9 @@ export function Navbar() {
                 alt="Nexarin Logo"
                 className="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded-lg group-hover:scale-105 transition-transform"
               />
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-sm sm:text-base tracking-tight text-white/90 group-hover:text-[#2DD4F5] transition-colors leading-none">
-                  Nexarin
-                </span>
-                <span className="text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded-full bg-[#2DD4F5]/15 text-[#2DD4F5] border border-[#2DD4F5]/25 leading-none">
-                  Tech
-                </span>
-              </div>
+              <span className="font-extrabold text-sm sm:text-base tracking-tight text-white/90 group-hover:text-[#2DD4F5] transition-colors leading-none">
+                Nexarin
+              </span>
             </Link>
 
             {/* 2. Center: Desktop Navigation Links (Pill Style) */}
