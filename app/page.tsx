@@ -192,7 +192,7 @@ export default function HomePage() {
               <img
                 src="/logo_slendro.png"
                 alt="Slendro-Ai Logo"
-                className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-contain animate-pulse-scale filter drop-shadow-[0_0_25px_rgba(168,85,247,0.5)] drop-shadow-[0_0_45px_rgba(45,212,245,0.35)]"
+                className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-contain animate-pulse-scale"
               />
             </div>
 
