@@ -111,31 +111,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. TUTORIAL CLASS HUB BANNER CALLOUT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl p-8 sm:p-10 border border-cyan-500/25 bg-gradient-to-r from-[#0F172A] via-[#131E32] to-[#0F172A] backdrop-blur-xl overflow-hidden group">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#7CF2C3]/10 text-[#7CF2C3] border border-[#7CF2C3]/20">
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Pusat Pembelajaran Digital</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Nexari Tutorial Class Hub
-              </h3>
-              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-                Pelajari AI Automation, Microsoft Skills (Excel, PowerPoint, Word), Next.js 16, UI/UX Design System, dan Otomotif EV dengan silabus terstruktur dan classroom viewer mandiri.
-              </p>
-            </div>
-            <Link href="/tutorials">
-              <Button variant="mint" size="md" className="font-extrabold text-xs text-slate-950 whitespace-nowrap">
-                Mulai Belajar Sekarang
-                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
