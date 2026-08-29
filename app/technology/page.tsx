@@ -155,10 +155,7 @@ export default function TechnologyPortalPage() {
             {/* Headline & Description */}
             <div className="space-y-4 max-w-3xl">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
-                Pusat Berita, Riset, &amp;{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
-                  Wawasan Teknologi Terkini
-                </span>
+                Pusat Berita, Riset, &amp; Wawasan Teknologi Terkini
               </h1>
 
               <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] leading-relaxed max-w-2xl">
@@ -202,15 +199,51 @@ export default function TechnologyPortalPage() {
         </div>
       </section>
 
-      {/* 2. LIVE BREAKING TECH DISPATCH TICKER */}
-      <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-hidden text-xs font-mono">
-          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-[#2DD4F5] border border-cyan-500/30 text-[10px] font-bold uppercase shrink-0 animate-pulse">
-            <Radio className="w-3 h-3 text-[#2DD4F5]" />
+      {/* 2. LIVE BREAKING TECH DISPATCH TICKER (CONTINUOUS SEAMLESS MARQUEE LOOP) */}
+      <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto flex items-center gap-4 overflow-hidden text-xs font-mono">
+          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-[#2DD4F5] border border-cyan-500/30 text-[10px] font-bold uppercase shrink-0 z-10 shadow-md">
+            <Radio className="w-3 h-3 text-[#2DD4F5] animate-pulse" />
             Live Tech Dispatch
           </span>
-          <div className="text-slate-300 truncate text-xs">
-            Next.js 16 &amp; React 19 Compiler Arsitektur Frontend • Rust dalam Infrastruktur Web Modern • Cloud Native Kubernetes Deployment • Zero-Trust API Security Standard
+
+          <div className="relative flex-1 overflow-hidden">
+            <div className="animate-marquee flex items-center gap-8 whitespace-nowrap text-slate-300 text-xs">
+              <span className="flex items-center gap-2">
+                <span>Next.js 16 &amp; React 19 Compiler Arsitektur Frontend</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Rust dalam Akselerasi Infrastruktur Web Modern</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Cloud Native Kubernetes Multi-Region Deployment</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Zero-Trust API Security &amp; Enterprise Authentication</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+
+              {/* Duplicate track for seamless infinite looping */}
+              <span className="flex items-center gap-2">
+                <span>Next.js 16 &amp; React 19 Compiler Arsitektur Frontend</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Rust dalam Akselerasi Infrastruktur Web Modern</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Cloud Native Kubernetes Multi-Region Deployment</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Zero-Trust API Security &amp; Enterprise Authentication</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>

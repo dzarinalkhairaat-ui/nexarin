@@ -151,10 +151,7 @@ export default function AIPortalPage() {
             {/* Headline & Description */}
             <div className="space-y-4 max-w-3xl">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
-                Pusat Berita, Riset, &amp;{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
-                  Wawasan Artificial Intelligence
-                </span>
+                Pusat Berita, Riset, &amp; Wawasan Artificial Intelligence
               </h1>
 
               <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] leading-relaxed max-w-2xl">
@@ -198,15 +195,59 @@ export default function AIPortalPage() {
         </div>
       </section>
 
-      {/* 2. LIVE BREAKING AI DISPATCH TICKER (TOP TIER NEWS PORTAL FEATURE) */}
-      <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-hidden text-xs font-mono">
-          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold uppercase shrink-0 animate-pulse">
-            <Radio className="w-3 h-3 text-rose-400" />
+      {/* 2. LIVE BREAKING AI DISPATCH TICKER (CONTINUOUS SEAMLESS MARQUEE LOOP) */}
+      <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto flex items-center gap-4 overflow-hidden text-xs font-mono">
+          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold uppercase shrink-0 z-10 shadow-md">
+            <Radio className="w-3 h-3 text-rose-400 animate-pulse" />
             Live AI Dispatch
           </span>
-          <div className="text-slate-300 truncate text-xs">
-            Claude 3.7 Sonnet &amp; Hybrid Reasoning Diluncurkan • Gemini 2.0 Flash Multimodal Workflow • OpenAI Operator Browser Automation • DeepSeek R1 Open Reasoning
+
+          <div className="relative flex-1 overflow-hidden">
+            <div className="animate-marquee flex items-center gap-8 whitespace-nowrap text-slate-300 text-xs">
+              <span className="flex items-center gap-2">
+                <span>Claude 3.7 Sonnet &amp; Hybrid Reasoning Diluncurkan</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Gemini 2.0 Flash Multimodal Agent Workflow Rilis Publik</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>OpenAI Operator: Autonomous Web Browser Action</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>DeepSeek R1 Open Reasoning Model Benchmark Update</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Llama 3.3 70B Mengubah Standar Efisiensi Open-Source AI</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+
+              {/* Duplicate track for seamless infinite looping */}
+              <span className="flex items-center gap-2">
+                <span>Claude 3.7 Sonnet &amp; Hybrid Reasoning Diluncurkan</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Gemini 2.0 Flash Multimodal Agent Workflow Rilis Publik</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>OpenAI Operator: Autonomous Web Browser Action</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>DeepSeek R1 Open Reasoning Model Benchmark Update</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>Llama 3.3 70B Mengubah Standar Efisiensi Open-Source AI</span>
+                <span className="text-cyan-400 font-bold">•</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
