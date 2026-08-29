@@ -10,7 +10,6 @@ import { AffiliateWidget } from "@/components/affiliate/AffiliateWidget";
 import { NewsletterBox } from "@/components/portal/NewsletterBox";
 import { Button } from "@/components/ui/Button";
 import { ShinyButton } from "@/components/ui/shiny-button";
-import { UnicornBackground } from "@/components/ui/unicorn-background";
 import { Card } from "@/components/ui/Card";
 import {
   Sparkles,
@@ -35,27 +34,25 @@ export default function HomePage() {
 
   return (
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
-      {/* 1. HERO SECTION (Ultra-Premium Layout with Unicorn Studio Interactive WebGL Background) */}
+      {/* 1. HERO SECTION (Ultra-Premium Layout with High-Definition Dark-Tech Background & Smooth Gradients) */}
       <section
-        className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-36 sm:pb-48 lg:pb-60 min-h-[750px]"
+        className="relative isolate overflow-hidden pt-12 sm:pt-24 pb-28 sm:pb-36 lg:pb-44 min-h-[640px] bg-center bg-cover bg-no-repeat"
         style={{
-          maskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 6%, black 95%, transparent 100%)"
+          backgroundImage: "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a72ca2f3-9dd1-4fe4-84ba-fe86468a5237_3840w.webp?w=1920&q=85')",
+          maskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 90%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 90%, transparent 100%)"
         }}
       >
-        {/* Unicorn Studio Project Background */}
-        <UnicornBackground projectId="NaoyTHRiquOhW7PvwNgE" className="z-0" />
-
         {/* Top Smooth Gradient Fade (blending seamlessly with Header) */}
-        <div className="absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/50 to-transparent pointer-events-none z-0" />
+        <div className="absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-[#0B1120] via-[#0B1120]/60 to-transparent pointer-events-none z-0" />
 
-        {/* Bottom Gentle Transition at the absolute edge (leaving full animation visible above) */}
-        <div className="absolute bottom-0 left-0 right-0 h-28 sm:h-36 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/60 to-transparent pointer-events-none z-0" />
+        {/* Bottom Smooth Gradient Fade (blending seamlessly with next section) */}
+        <div className="absolute bottom-0 left-0 right-0 h-44 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/75 to-transparent pointer-events-none z-0" />
 
-        {/* Subtle Dark overlay & ambient glow for optimal typography contrast */}
-        <div className="absolute inset-0 bg-[#0B1120]/25 backdrop-blur-[0.5px] pointer-events-none z-0" />
-        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
-        <div className="absolute top-1/3 right-10 w-[450px] h-[300px] bg-[#7CF2C3]/8 rounded-full blur-[130px] pointer-events-none z-0" />
+        {/* Dark overlay & ambient glow for optimal typography contrast & zero GPU lag */}
+        <div className="absolute inset-0 bg-[#0B1120]/70 backdrop-blur-[1px] pointer-events-none z-0" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[300px] bg-[#7CF2C3]/10 rounded-full blur-[130px] pointer-events-none z-0" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6 mb-12 sm:mb-16">

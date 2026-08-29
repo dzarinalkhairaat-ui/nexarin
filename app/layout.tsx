@@ -169,11 +169,7 @@ export default function RootLayout({
             `
           }}
         />
-        <Script
-          id="unicorn-studio-cdn"
-          src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.3/dist/unicornStudio.umd.js"
-          strategy="afterInteractive"
-        />
+
       </head>
       <body className="min-h-full flex flex-col bg-[#0B1120] text-[#F8FAFC] selection:bg-[#2DD4F5]/30" suppressHydrationWarning>
         <NotificationProvider>
