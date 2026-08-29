@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useContent } from "@/context/ContentContext";
 import { useShop } from "@/context/ShopContext";
@@ -33,6 +34,22 @@ import {
 
 export default function HomePage() {
   const [isSlendroDocsOpen, setIsSlendroDocsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isSlendroDocsOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSlendroDocsOpen]);
   const { articles } = useContent();
   const { products, affiliates } = useShop();
 
@@ -206,28 +223,29 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* SLENDRO-AI FEATURE DOCUMENTATION POPUP MODAL                              */}
+      {/* SLENDRO-AI FEATURE DOCUMENTATION FULLSCREEN PORTAL MODAL                  */}
       {/* ========================================================================= */}
-      {isSlendroDocsOpen && (
+      {mounted && isSlendroDocsOpen && createPortal(
         <div
           suppressHydrationWarning
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
         >
-          {/* Backdrop */}
+          {/* Fullscreen Edge-to-Edge Backdrop Blur */}
           <div
             onClick={() => setIsSlendroDocsOpen(false)}
-            className="absolute inset-0 bg-[#0B1120]/85 backdrop-blur-xl transition-opacity"
+            className="fixed inset-0 w-screen h-screen min-h-screen bg-[#0B1120]/85 backdrop-blur-2xl transition-opacity duration-300"
           />
 
           {/* Modal Container */}
           <div
             suppressHydrationWarning
-            className="relative z-10 w-full max-w-3xl rounded-3xl p-6 sm:p-8 border border-white/[0.15] shadow-2xl shadow-purple-500/10 space-y-6 max-h-[90vh] overflow-y-auto"
+            className="relative z-10 w-full max-w-3xl rounded-3xl p-6 sm:p-8 border border-white/[0.15] shadow-2xl shadow-purple-500/20 space-y-6 my-auto max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
             style={{
               background:
                 "linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 17, 32, 0.98) 100%)",
               backdropFilter: "blur(24px) saturate(160%)",
-              WebkitBackdropFilter: "blur(24px) saturate(160%)"
+              WebkitBackdropFilter: "blur(24px) saturate(160%)",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(168, 85, 247, 0.25)"
             }}
           >
             {/* Modal Header */}
@@ -382,7 +400,8 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
