@@ -1,14 +1,14 @@
 "use client";
 
 import { useAntiInspect } from "@/hooks/useAntiInspect";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useNotification } from "@/context/NotificationContext";
 import { Button } from "@/components/ui/Button";
 import { ShieldCheck, Lock, AlertCircle, Eye, EyeOff, Terminal, KeyRound } from "lucide-react";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   useAntiInspect("Admin Login Console");
   const [email, setEmail] = useState("admin@nexarin.tech");
   const [password, setPassword] = useState("admin123");
@@ -19,13 +19,15 @@ export default function AdminLoginPage() {
   const { loginAdmin, isAdminAuthenticated } = useAuth();
   const { showToast } = useNotification();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/";
 
-  // If already authenticated as admin, redirect to dashboard immediately
+  // If already authenticated as admin, redirect to website or redirectUrl
   useEffect(() => {
     if (isAdminAuthenticated) {
-      router.push("/admin");
+      router.push(redirectUrl);
     }
-  }, [isAdminAuthenticated, router]);
+  }, [isAdminAuthenticated, redirectUrl, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ export default function AdminLoginPage() {
           title: "Otorisasi Berhasil",
           message: "Selamat datang kembali di Admin Console."
         });
-        router.push("/admin");
+        router.push(redirectUrl);
       } else {
         setErrorMsg(res.error || "Kredensial Administrator Tidak Valid.");
       }
@@ -103,22 +105,22 @@ export default function AdminLoginPage() {
 
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
-              Security Password
+              Password
             </label>
-            <div className="relative flex items-center">
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 pr-11 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-600"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#0B1120] text-[#F8FAFC] px-4 py-2.5 pr-10 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2DD4F5] focus:border-transparent placeholder:text-slate-600"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 p-1.5 text-[#64748B] hover:text-[#F8FAFC] transition-colors"
-                title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#F8FAFC] transition-colors"
+                aria-label="Toggle password visibility"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -127,29 +129,41 @@ export default function AdminLoginPage() {
 
           <Button
             type="submit"
-            variant="primary"
-            size="md"
-            className="w-full font-extrabold text-sm text-slate-950 mt-2"
             disabled={loading}
+            className="w-full font-bold text-sm h-11 bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center gap-2 mt-2"
           >
             {loading ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                Memvalidasi Otoritas...
+                <span>Memverifikasi Akses...</span>
               </span>
             ) : (
-              "Sign In to Console"
+              <span className="flex items-center gap-2">
+                <KeyRound className="w-4 h-4" />
+                <span>Otorisasi Masuk Console</span>
+              </span>
             )}
           </Button>
         </form>
 
-        {/* Subtle Security Protocol Note */}
-        <div className="pt-4 border-t border-white/[0.08]/80 text-center">
-          <span className="text-[10px] font-mono text-slate-500 block">
-            Authorized Personnel Only • IP &amp; Action Logged
-          </span>
+        {/* Demo Credentials Info Box */}
+        <div className="p-3.5 rounded-2xl bg-cyan-500/5 border border-cyan-500/15 space-y-1 text-center">
+          <div className="text-[11px] font-mono font-bold text-cyan-400">
+            Kredensial Demo Administrator
+          </div>
+          <div className="text-xs text-[#94A3B8] font-mono">
+            Email: <span className="text-white">admin@nexarin.tech</span> | Pass: <span className="text-white">admin123</span>
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen w-full bg-[#0B1120]" />}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

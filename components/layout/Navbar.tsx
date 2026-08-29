@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS } from "@/lib/constants";
@@ -22,7 +22,10 @@ import {
   LogIn,
   Layers,
   Terminal,
-  Key
+  Key,
+  ChevronDown,
+  LayoutDashboard,
+  Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +35,32 @@ export function Navbar() {
   const { unreadCount } = useNotification();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Close dropdown on pathname change
+  useEffect(() => {
+    setIsProfileDropdownOpen(false);
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Click outside to close profile dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    }
+    if (isProfileDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileDropdownOpen]);
+
+  const isAuthenticated = (isCustomerAuthenticated && !!customer) || (isAdminAuthenticated && !!admin);
 
   return (
     <>
@@ -102,60 +131,138 @@ export function Navbar() {
               <Search className="w-3.5 h-3.5" />
             </Link>
 
-            {/* Customer Authenticated State */}
-            {isCustomerAuthenticated && customer ? (
-              <div className="hidden sm:flex items-center gap-2">
-                {/* Notification Bell */}
-                <Link
-                  href="/customer/notifications"
-                  aria-label="Notifikasi Customer"
-                  className="relative p-2 rounded-full border border-white/10 text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+            {/* Authenticated State: Profile Trigger with Glassmorphic Dropdown */}
+            {isAuthenticated ? (
+              <div className="relative hidden sm:block" ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center gap-2 py-1 pl-1.5 pr-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-cyan-500/40 transition-all duration-200 group"
+                  aria-expanded={isProfileDropdownOpen}
+                  aria-label="Menu Profil Pengguna"
                 >
-                  <Bell className="w-3.5 h-3.5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
-                      {unreadCount}
+                  {/* Avatar Circle */}
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#2DD4F5] to-[#7CF2C3] text-slate-950 font-black text-[11px] flex items-center justify-center shadow-sm">
+                    {isAdminAuthenticated && admin
+                      ? (admin.name ? admin.name.charAt(0).toUpperCase() : "A")
+                      : (customer?.name ? customer.name.charAt(0).toUpperCase() : "U")}
+                  </div>
+
+                  {/* Name and Role */}
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/90">
+                    <span className="max-w-[110px] truncate">
+                      {isAdminAuthenticated && admin
+                        ? admin.name || "Admin"
+                        : customer?.name.split(" ")[0] || "Customer"}
                     </span>
-                  )}
-                </Link>
-
-                {/* Customer Dashboard Link */}
-                <Link href="/customer">
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/15 text-cyan-300 transition-colors text-xs font-bold font-mono">
-                    <User className="w-3 h-3 text-[#2DD4F5]" />
-                    <span>{customer.name.split(" ")[0]}</span>
+                    <span
+                      className={cn(
+                        "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full uppercase leading-none",
+                        isAdminAuthenticated
+                          ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                          : "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+                      )}
+                    >
+                      {isAdminAuthenticated ? "Admin" : "Customer"}
+                    </span>
                   </div>
-                </Link>
 
-                {/* Logout Button */}
-                <button
-                  onClick={logoutCustomer}
-                  title="Keluar dari akun Customer"
-                  aria-label="Logout"
-                  className="p-1.5 rounded-full border border-white/10 text-[#64748B] hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/30 transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <ChevronDown
+                    className={cn(
+                      "w-3.5 h-3.5 text-white/60 group-hover:text-white transition-transform duration-200",
+                      isProfileDropdownOpen && "rotate-180 text-cyan-400"
+                    )}
+                  />
                 </button>
-              </div>
-            ) : isAdminAuthenticated && admin ? (
-              <div className="hidden sm:flex items-center gap-2">
-                {/* Admin Console Link */}
-                <Link href="/admin">
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/15 text-indigo-300 transition-colors text-xs font-bold font-mono">
-                    <ShieldCheck className="w-3 h-3 text-indigo-400" />
-                    <span>Console Admin</span>
+
+                {/* Glassmorphic Dropdown Menu */}
+                {isProfileDropdownOpen && (
+                  <div
+                    suppressHydrationWarning
+                    className="absolute right-0 top-full mt-2.5 w-64 rounded-2xl p-2 border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-150 z-50 pointer-events-auto"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(11, 17, 32, 0.98)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.20), rgba(45,212,245,0.18)) border-box",
+                      border: "1px solid transparent",
+                      backdropFilter: "blur(24px) saturate(150%)",
+                      WebkitBackdropFilter: "blur(24px) saturate(150%)",
+                      boxShadow: "0 15px 40px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                    }}
+                  >
+                    {/* User Info Header */}
+                    <div className="p-2.5 pb-3 border-b border-white/[0.08] flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#2DD4F5] to-[#7CF2C3] text-slate-950 font-black text-xs flex items-center justify-center shrink-0 shadow-md">
+                        {isAdminAuthenticated && admin
+                          ? (admin.name ? admin.name.charAt(0).toUpperCase() : "A")
+                          : (customer?.name ? customer.name.charAt(0).toUpperCase() : "U")}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-bold text-white truncate">
+                          {isAdminAuthenticated && admin ? admin.name : customer?.name}
+                        </div>
+                        <div className="text-[10px] text-[#94A3B8] font-mono truncate">
+                          {isAdminAuthenticated && admin ? admin.email : customer?.email}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Menu Actions */}
+                    <div className="py-1.5 space-y-0.5">
+                      <Link
+                        href={isAdminAuthenticated ? "/admin" : "/customer"}
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-white hover:text-cyan-300 hover:bg-cyan-500/10 transition-all group"
+                      >
+                        <LayoutDashboard className="w-4 h-4 text-[#2DD4F5] group-hover:scale-110 transition-transform" />
+                        <span>Masuk ke Dashboard</span>
+                      </Link>
+
+                      {isCustomerAuthenticated && (
+                        <>
+                          <Link
+                            href="/customer/orders"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-white/[0.05] transition-all"
+                          >
+                            <ShoppingBag className="w-4 h-4 text-[#7CF2C3]" />
+                            <span>Pesanan &amp; Lisensi Saya</span>
+                          </Link>
+                          <Link
+                            href="/customer/notifications"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-[#94A3B8] hover:text-white hover:bg-white/[0.05] transition-all"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <Bell className="w-4 h-4 text-cyan-400" />
+                              <span>Notifikasi</span>
+                            </div>
+                            {unreadCount > 0 && (
+                              <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-white text-[9px] font-bold">
+                                {unreadCount}
+                              </span>
+                            )}
+                          </Link>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="h-px bg-white/[0.08] my-1" />
+
+                    {/* Log Out Option */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false);
+                        if (isAdminAuthenticated) logoutAdmin();
+                        else logoutCustomer();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Log out</span>
+                    </button>
                   </div>
-                </Link>
-
-                {/* Logout Admin */}
-                <button
-                  onClick={logoutAdmin}
-                  title="Keluar dari Admin Console"
-                  aria-label="Logout Admin"
-                  className="p-1.5 rounded-full border border-white/10 text-[#64748B] hover:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/30 transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
+                )}
               </div>
             ) : (
               <div className="hidden sm:flex items-center">
@@ -228,57 +335,48 @@ export function Navbar() {
 
             {/* Mobile Auth Actions */}
             <div className="pt-4 mt-3 border-t border-white/[0.08] space-y-2">
-              {isCustomerAuthenticated && customer ? (
+              {isAuthenticated ? (
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between px-3 py-2 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono font-bold">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      <span>{customer.name} (Customer)</span>
+                  <div className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white/[0.04] border border-white/[0.10]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#2DD4F5] to-[#7CF2C3] text-slate-950 font-black text-xs flex items-center justify-center">
+                        {isAdminAuthenticated && admin
+                          ? (admin.name ? admin.name.charAt(0).toUpperCase() : "A")
+                          : (customer?.name ? customer.name.charAt(0).toUpperCase() : "U")}
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isAdminAuthenticated && admin ? admin.name : customer?.name}
+                        </div>
+                        <div className="text-[10px] text-cyan-400 font-mono">
+                          {isAdminAuthenticated ? "Administrator" : "Customer"}
+                        </div>
+                      </div>
                     </div>
                   </div>
+
                   <div className="grid grid-cols-2 gap-2">
-                    <Link href="/customer" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" size="sm" className="w-full text-xs">
-                        Portal Saya
+                    <Link
+                      href={isAdminAuthenticated ? "/admin" : "/customer"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button variant="outline" size="sm" className="w-full text-xs flex items-center justify-center gap-1.5 border-cyan-500/30 text-cyan-300">
+                        <LayoutDashboard className="w-3.5 h-3.5" />
+                        <span>Dashboard</span>
                       </Button>
                     </Link>
                     <Button
-                      variant="danger"
+                      variant="outline"
                       size="sm"
                       onClick={() => {
-                        logoutCustomer();
                         setMobileMenuOpen(false);
+                        if (isAdminAuthenticated) logoutAdmin();
+                        else logoutCustomer();
                       }}
-                      className="w-full text-xs"
+                      className="w-full text-xs text-rose-400 hover:text-rose-300 border-rose-500/30 hover:bg-rose-500/10 flex items-center justify-center gap-1.5"
                     >
-                      Keluar
-                    </Button>
-                  </div>
-                </div>
-              ) : isAdminAuthenticated && admin ? (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between px-3 py-2 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono font-bold">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                      <span>{admin.name} (Admin)</span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link href="/admin" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="primary" size="sm" className="w-full text-xs">
-                        Admin Console
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => {
-                        logoutAdmin();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="w-full text-xs"
-                    >
-                      Keluar
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Log out</span>
                     </Button>
                   </div>
                 </div>
@@ -289,10 +387,10 @@ export function Navbar() {
                     setMobileMenuOpen(false);
                     setIsLoginModalOpen(true);
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-[#7CF2C3]/20 border border-cyan-500/40 text-white font-bold text-xs shadow-lg shadow-cyan-500/10"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold font-mono hover:bg-cyan-500/20 transition-all"
                 >
-                  <LogIn className="w-4 h-4 text-[#2DD4F5]" />
-                  <span>Login ke Akun</span>
+                  <LogIn className="w-4 h-4" />
+                  <span>Login / Masuk Portal</span>
                 </button>
               )}
             </div>
@@ -355,7 +453,7 @@ export function Navbar() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Option 1: Customer Portal */}
               <Link
-                href="/login"
+                href="/login?redirect=/"
                 onClick={() => setIsLoginModalOpen(false)}
                 className="group relative p-5 rounded-2xl border border-cyan-500/25 bg-cyan-500/[0.04] hover:bg-cyan-500/[0.08] hover:border-cyan-400 transition-all duration-300 flex flex-col justify-between space-y-4 hover:shadow-lg hover:shadow-cyan-500/15"
               >
@@ -381,7 +479,7 @@ export function Navbar() {
 
               {/* Option 2: Admin Internal Console */}
               <Link
-                href="/admin/login"
+                href="/admin/login?redirect=/"
                 onClick={() => setIsLoginModalOpen(false)}
                 className="group relative p-5 rounded-2xl border border-indigo-500/25 bg-indigo-500/[0.04] hover:bg-indigo-500/[0.08] hover:border-indigo-400 transition-all duration-300 flex flex-col justify-between space-y-4 hover:shadow-lg hover:shadow-indigo-500/15"
               >

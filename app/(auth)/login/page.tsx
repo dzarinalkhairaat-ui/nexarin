@@ -32,7 +32,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const redirectUrl = searchParams.get("redirect") || "/customer";
+  const redirectUrl = searchParams.get("redirect") || "/";
   const actionIntent = searchParams.get("action");
 
   // If customer is already authenticated, redirect immediately
