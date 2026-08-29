@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useContent } from "@/context/ContentContext";
 import { useShop } from "@/context/ShopContext";
@@ -24,10 +24,15 @@ import {
   CheckCircle2,
   GraduationCap,
   Zap,
-  ExternalLink
+  ExternalLink,
+  X,
+  Video,
+  Music,
+  Image as ImageIcon
 } from "lucide-react";
 
 export default function HomePage() {
+  const [isSlendroDocsOpen, setIsSlendroDocsOpen] = useState(false);
   const { articles } = useContent();
   const { products, affiliates } = useShop();
 
@@ -125,7 +130,7 @@ export default function HomePage() {
         </div>
       </section>
 
-            {/* 3. SLENDRO-AI SHOWCASE SECTION (Clean Open Layout, Pure Floating Logo & WebGL Valence Button) */}
+            {/* 3. SLENDRO-AI SHOWCASE SECTION (2 Dual ShinyButtons & Documentation Modal) */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Subtle Ambient Radial Lighting in Background */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[130px] pointer-events-none -z-10" />
@@ -144,7 +149,7 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Text & Feature Highlights (Badges Removed) */}
+            {/* Text & Feature Highlights */}
             <div className="space-y-3.5">
               <div>
                 <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
@@ -170,58 +175,215 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right: Glassmorphic Glow Pill Button */}
-          <div className="shrink-0 flex flex-col items-center lg:items-end gap-2.5">
-            <div className="inline-block group relative">
-              <a
-                href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex min-w-[170px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 text-sm font-bold text-white/90 hover:text-white tracking-tight backdrop-blur-xl rounded-full py-3.5 px-6 relative items-center justify-center gap-2.5 select-none"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(168,85,247,0.50), rgba(45,212,245,0.40)) border-box",
-                  border: "1px solid transparent",
-                  backdropFilter: "blur(16px) saturate(140%)",
-                  WebkitBackdropFilter: "blur(16px) saturate(140%)",
-                  boxShadow: "0 10px 25px -5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
-                }}
-              >
-                {/* AI Sparkle & Lightning Icon */}
-                <Sparkles className="w-4 h-4 text-[#2DD4F5] group-hover:text-purple-300 transition-colors" />
-                <span className="relative font-bold text-white tracking-wide">Akses Disini</span>
-                <ArrowRight className="w-4 h-4 text-[#7CF2C3] group-hover:translate-x-1 transition-transform" />
+          {/* Right: Dual ShinyButtons (Akses Disini & Dokumentasi Fitur) */}
+          <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col items-center justify-center lg:items-end gap-3.5 w-full sm:w-auto">
+            {/* Button 1: Akses Disini */}
+            <a
+              href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto"
+            >
+              <ShinyButton className="w-full sm:w-auto">
+                <Zap className="w-4 h-4 text-purple-400" />
+                <span>Akses Disini</span>
+                <ArrowRight className="w-4 h-4 text-[#2DD4F5]" />
+              </ShinyButton>
+            </a>
 
-                {/* Inner Bottom Light Reflection Line */}
-                <span
-                  aria-hidden="true"
-                  className="transition-all duration-300 group-hover:opacity-100 opacity-25 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)"
-                  }}
-                />
-              </a>
-
-              {/* Bottom Radial Glow Puddle on Hover */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-7 w-48 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
-                style={{
-                  background:
-                    "radial-gradient(60% 100% at 50% 50%, rgba(168,85,247,0.65), rgba(45,212,245,0.35) 35%, transparent 70%)",
-                  filter: "blur(10px) saturate(130%)"
-                }}
-              />
-            </div>
-
-            <span className="text-[11px] text-[#64748B] font-mono text-center lg:text-right">
-              ✓ Akses Penuh &amp; Pendaftaran Cepat
-            </span>
+            {/* Button 2: Dokumentasi Fitur (Trigger Modal) */}
+            <ShinyButton
+              onClick={() => setIsSlendroDocsOpen(true)}
+              className="w-full sm:w-auto"
+            >
+              <BookOpen className="w-4 h-4 text-[#7CF2C3]" />
+              <span>Dokumentasi Fitur</span>
+              <Sparkles className="w-4 h-4 text-purple-400" />
+            </ShinyButton>
           </div>
 
         </div>
       </section>
+
+      {/* ========================================================================= */}
+      {/* SLENDRO-AI FEATURE DOCUMENTATION POPUP MODAL                              */}
+      {/* ========================================================================= */}
+      {isSlendroDocsOpen && (
+        <div
+          suppressHydrationWarning
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+        >
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsSlendroDocsOpen(false)}
+            className="absolute inset-0 bg-[#0B1120]/85 backdrop-blur-xl transition-opacity"
+          />
+
+          {/* Modal Container */}
+          <div
+            suppressHydrationWarning
+            className="relative z-10 w-full max-w-3xl rounded-3xl p-6 sm:p-8 border border-white/[0.15] shadow-2xl shadow-purple-500/10 space-y-6 max-h-[90vh] overflow-y-auto"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 17, 32, 0.98) 100%)",
+              backdropFilter: "blur(24px) saturate(160%)",
+              WebkitBackdropFilter: "blur(24px) saturate(160%)"
+            }}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-4 border-b border-white/[0.08]">
+              <div className="flex items-center gap-3.5">
+                <img
+                  src="/logo_slendro.png"
+                  alt="Slendro Logo"
+                  className="w-12 h-12 object-contain filter drop-shadow-[0_0_12px_rgba(168,85,247,0.6)]"
+                />
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/25 text-[10px] font-mono font-bold text-purple-300 uppercase">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Panduan &amp; Dokumentasi Resmi</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-1">
+                    Dokumentasi Fitur Slendro-Ai
+                  </h3>
+                  <p className="text-xs text-[#94A3B8]">
+                    Eksplorasi fitur generator kecerdasan buatan tanpa batas untuk kreator &amp; profesional.
+                  </p>
+                </div>
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsSlendroDocsOpen(false)}
+                className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-[#94A3B8] hover:text-white hover:bg-white/[0.10] transition-colors"
+                aria-label="Tutup Dokumentasi"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Feature Modules Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              {/* Feature 1: AI Video Generator */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-purple-500/20 hover:border-purple-500/40 transition-colors space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
+                    <Video className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-sm font-bold text-white">
+                    1. AI Video Generator
+                  </h4>
+                </div>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  Konversi teks prompt menjadi video cinematic HD/4K secara instan. Mendukung motion control kamera, transisi dinamis, dan animasi karakter realistis untuk kebutuhan konten sosial media.
+                </p>
+                <div className="text-[11px] font-mono text-purple-300 font-semibold">
+                  ✓ Text-to-Video &amp; Image-to-Video HD
+                </div>
+              </div>
+
+              {/* Feature 2: AI Music Synthesizer */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-cyan-500/20 hover:border-cyan-500/40 transition-colors space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-[#2DD4F5]">
+                    <Music className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-sm font-bold text-white">
+                    2. AI Music &amp; Audio Synthesizer
+                  </h4>
+                </div>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  Ciptakan aransemen musik orisinal lengkap dengan vokal, melodi, dan lirik otomatis. Tersedia berbagai genre: Lo-Fi, Cinematic, Pop, EDM, Rock, hingga latar musik podcast bebas royalti.
+                </p>
+                <div className="text-[11px] font-mono text-cyan-300 font-semibold">
+                  ✓ Vokal AI &amp; Backsound Bebas Royalti
+                </div>
+              </div>
+
+              {/* Feature 3: AI Image Generator */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-pink-500/20 hover:border-pink-500/40 transition-colors space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-300">
+                    <ImageIcon className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-sm font-bold text-white">
+                    3. AI Image &amp; Art Generator
+                  </h4>
+                </div>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  Sintesis visual ultra-realistis dengan resolusi tinggi (8K Upscaling). Cocok untuk pembuatan ilustrasi artikel, mockup produk digital, poster marketing, dan artwork digital tanpa watermark.
+                </p>
+                <div className="text-[11px] font-mono text-pink-300 font-semibold">
+                  ✓ Negative Prompt &amp; 8K Upscaling
+                </div>
+              </div>
+
+              {/* Feature 4: Unlimited Free Access */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-emerald-500/20 hover:border-emerald-500/40 transition-colors space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-sm font-bold text-white">
+                    4. Unlimited Free Access
+                  </h4>
+                </div>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  Dapatkan kebebasan berkreasi tanpa pembatasan token harian yang membebani. Komputasi awan berkecepatan tinggi dengan antrean rendering cepat bagi pengguna terdaftar.
+                </p>
+                <div className="text-[11px] font-mono text-[#7CF2C3] font-semibold">
+                  ✓ Akselerasi GPU Cloud &amp; Tanpa Kuota Ketat
+                </div>
+              </div>
+
+            </div>
+
+            {/* Quick Prompt Guide Box */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 via-cyan-500/10 to-transparent border border-white/[0.08] space-y-1.5">
+              <div className="text-xs font-mono font-bold text-white flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <span>Tips Cepat Memulai:</span>
+              </div>
+              <p className="text-xs text-[#94A3B8] leading-relaxed">
+                Gunakan format deskripsi prompt yang spesifik (Subjek + Gaya Visual + Pencahayaan + Resolusi) untuk mendapatkan hasil video, audio, atau gambar terbaik di platform Slendro-Ai.
+              </p>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/[0.08]">
+              <span className="text-xs text-[#64748B] font-mono">
+                Tersedia melalui jaringan partner resmi Nexarin
+              </span>
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={() => setIsSlendroDocsOpen(false)}
+                  className="w-full sm:w-auto text-xs border-white/10"
+                >
+                  Tutup
+                </Button>
+                <a
+                  href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <Button
+                    size="md"
+                    className="w-full sm:w-auto text-xs font-bold bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white shadow-lg shadow-purple-500/25"
+                  >
+                    <span>Daftar &amp; Buka Slendro AI</span>
+                    <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
