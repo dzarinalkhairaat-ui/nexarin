@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-geist-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-geist-mono: "JetBrains Mono", "Fira Code", monospace;
   /* Nexari Brand Colors from PRD.md */
   --nexarin-cyan: #2DD4F5;
   --nexarin-cyan-hover: #38BDF8;

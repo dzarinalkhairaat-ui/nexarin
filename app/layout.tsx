@@ -8,7 +8,6 @@ export const viewport: Viewport = {
 };
 
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { NotificationProvider } from "@/context/NotificationContext";
@@ -18,15 +17,8 @@ import { TutorialProvider } from "@/context/TutorialContext";
 import { ToastContainer } from "@/components/ui/Toast";
 import { AppLayoutShell } from "@/components/layout/AppLayoutShell";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = { variable: "font-sans" };
+const geistMono = { variable: "font-mono" };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nexarin.tech"),

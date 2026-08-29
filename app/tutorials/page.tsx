@@ -225,8 +225,8 @@ export default function TutorialsHubPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {continueList.map((course) => (
-                <ContinueLearningCard key={course.id} course={course} />
+              {continueList.map((item) => (
+                <ContinueLearningCard key={item.course.id} course={item.course} progress={item.progress} />
               ))}
             </div>
           </section>

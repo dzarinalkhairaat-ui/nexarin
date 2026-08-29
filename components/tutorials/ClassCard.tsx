@@ -82,7 +82,7 @@ export function ClassCard({ course, featured = false }: ClassCardProps) {
           <div className="absolute bottom-3 right-3">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold text-white bg-[#0B1120]/85 border border-white/20 backdrop-blur-md flex items-center gap-1">
               <Clock className="w-3 h-3 text-cyan-400" />
-              {course.durationHours}j {course.durationMinutes}m
+              {course.duration}
             </span>
           </div>
         </div>

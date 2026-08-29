@@ -167,7 +167,7 @@ export default function ClassroomLessonPage() {
           <main className="lg:col-span-8 space-y-6 sm:space-y-8 min-w-0">
             
             {/* Optional Video / Interactive Media Player */}
-            {currentLesson.type === "video" && currentLesson.videoUrl && (
+            {currentLesson.contentType === "video" && currentLesson.videoUrl && (
               <div className="relative aspect-video w-full rounded-3xl overflow-hidden bg-slate-950 border border-white/[0.10] shadow-2xl">
                 <iframe
                   src={currentLesson.videoUrl}
@@ -192,7 +192,7 @@ export default function ClassroomLessonPage() {
                 <span className="text-slate-500">•</span>
                 <span className="flex items-center gap-1 text-slate-400 bg-white/[0.04] px-2.5 py-1 rounded-lg border border-white/[0.08]">
                   <Clock className="w-3 h-3 text-[#7CF2C3]" />
-                  {currentLesson.durationMinutes || 15} Menit
+                  {currentLesson.duration || "15m"}
                 </span>
               </div>
 
@@ -225,10 +225,10 @@ export default function ClassroomLessonPage() {
 
             {/* LESSON BODY ARTICLE */}
             <article className="p-6 sm:p-8 rounded-3xl bg-[#0F172A]/75 border border-white/[0.08] space-y-6 text-sm sm:text-base text-slate-300 leading-relaxed overflow-hidden">
-              {currentLesson.content ? (
+              {currentLesson.contentMarkdown ? (
                 <div
                   className="prose prose-invert max-w-none prose-headings:text-white prose-headings:font-bold prose-h2:text-xl sm:prose-h2:text-2xl prose-p:text-slate-300 prose-p:leading-relaxed prose-pre:bg-slate-950 prose-pre:border prose-pre:border-white/10 prose-code:text-[#2DD4F5]"
-                  dangerouslySetInnerHTML={{ __html: currentLesson.content }}
+                  dangerouslySetInnerHTML={{ __html: currentLesson.contentMarkdown }}
                 />
               ) : (
                 <div className="space-y-6">
@@ -369,7 +369,7 @@ export default function ClassroomLessonPage() {
                               <span className="truncate">{les.title}</span>
                             </div>
                             <span className="text-[10px] font-mono text-slate-500 shrink-0 ml-2">
-                              {les.durationMinutes || 15}m
+                              {les.duration || "15m"}
                             </span>
                           </Link>
                         );
@@ -529,7 +529,7 @@ export default function ClassroomLessonPage() {
                             <span className="truncate">{les.title}</span>
                           </div>
                           <span className="text-[10px] font-mono text-slate-500 shrink-0 ml-2">
-                            {les.durationMinutes || 15}m
+                            {les.duration || "15m"}
                           </span>
                         </Link>
                       );
