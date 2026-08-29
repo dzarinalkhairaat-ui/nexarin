@@ -131,48 +131,24 @@ export function Navbar() {
               <Search className="w-3.5 h-3.5" />
             </Link>
 
-            {/* Authenticated State: Profile Trigger with Glassmorphic Dropdown */}
+            {/* Authenticated State: Avatar Only Profile Trigger with Glassmorphic Dropdown */}
             {isAuthenticated ? (
               <div className="relative hidden sm:block" ref={dropdownRef}>
                 <button
                   type="button"
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center gap-2 py-1 pl-1.5 pr-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-cyan-500/40 transition-all duration-200 group"
+                  className="relative p-0.5 rounded-full border border-white/20 hover:border-cyan-400 bg-white/[0.04] hover:bg-white/[0.10] transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[#2DD4F5]/40"
                   aria-expanded={isProfileDropdownOpen}
                   aria-label="Menu Profil Pengguna"
                 >
                   {/* Avatar Circle */}
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#2DD4F5] to-[#7CF2C3] text-slate-950 font-black text-[11px] flex items-center justify-center shadow-sm">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-[#2DD4F5] via-[#38BDF8] to-[#7CF2C3] text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
                     {isAdminAuthenticated && admin
                       ? (admin.name ? admin.name.charAt(0).toUpperCase() : "A")
                       : (customer?.name ? customer.name.charAt(0).toUpperCase() : "U")}
                   </div>
-
-                  {/* Name and Role */}
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/90">
-                    <span className="max-w-[110px] truncate">
-                      {isAdminAuthenticated && admin
-                        ? admin.name || "Admin"
-                        : customer?.name.split(" ")[0] || "Customer"}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full uppercase leading-none",
-                        isAdminAuthenticated
-                          ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                          : "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
-                      )}
-                    >
-                      {isAdminAuthenticated ? "Admin" : "Customer"}
-                    </span>
-                  </div>
-
-                  <ChevronDown
-                    className={cn(
-                      "w-3.5 h-3.5 text-white/60 group-hover:text-white transition-transform duration-200",
-                      isProfileDropdownOpen && "rotate-180 text-cyan-400"
-                    )}
-                  />
+                  {/* Online Status Dot */}
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0B1120] shadow-sm" />
                 </button>
 
                 {/* Glassmorphic Dropdown Menu */}
