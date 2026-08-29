@@ -20,7 +20,12 @@ import {
   DownloadCloud,
   Layers,
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  Target,
+  Award,
+  ShieldCheck,
+  Zap,
+  Star
 } from "lucide-react";
 
 export default function HomePage() {
@@ -29,51 +34,167 @@ export default function HomePage() {
 
   const featuredArticle = articles.find((a) => a.featured) || articles[0];
   const latestArticles = articles.filter((a) => a.id !== featuredArticle?.id).slice(0, 4);
-  const aiArticles = articles.filter((a) => a.category.slug === "ai").slice(0, 3);
-  const tutorialArticles = articles.filter((a) => a.category.slug === "tutorials").slice(0, 3);
   const topProducts = products.slice(0, 3);
   const primaryAffiliate = affiliates[0];
 
   return (
     <div suppressHydrationWarning className="space-y-16 sm:space-y-24 bg-[#0B1120] text-slate-100">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-8 sm:pt-14 pb-8">
+      {/* 1. HERO SECTION (2-Column Ultra-Premium Layout) */}
+      <section className="relative overflow-hidden pt-6 sm:pt-12 pb-8">
         {/* Subtle ambient light */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-[500px] h-[350px] bg-[#7CF2C3]/5 rounded-full blur-[130px] pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-10 sm:mb-14">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12 sm:mb-16">
+            
+            {/* Left Content (col-span-7) */}
+            <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
+              {/* Award / Ecosystem Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] backdrop-blur-xl text-zinc-300 text-xs font-semibold shadow-inner">
+                <span className="text-[10px] sm:text-xs tracking-wider uppercase flex items-center gap-1.5 font-mono text-cyan-400">
+                  <Sparkles className="w-3.5 h-3.5 text-[#2DD4F5]" />
+                  Award-Winning Tech Ecosystem
+                </span>
+              </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
-              Informasi, Edukasi, dan{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2DD4F5] to-[#7CF2C3]">
-                Produk Digital
-              </span>{" "}
-              Siap Pakai.
-            </h1>
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05]">
+                Informasi, Edukasi, &amp;<br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-white">
+                  Produk Digital
+                </span><br />
+                Siap Pakai.
+              </h1>
 
-            <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
-              Portal berita terkurasi AI &amp; software engineering, ulasan gadget, otomotif masa depan, tutorial praktis, serta marketplace aplikasi berlisensi lifetime dengan uji coba gratis 3 hari.
-            </p>
+              {/* Subtitle description */}
+              <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Portal berita terkurasi AI &amp; software engineering, ulasan gadget, otomotif masa depan, tutorial praktis, serta marketplace aplikasi berlisensi lifetime dengan uji coba gratis 3 hari.
+              </p>
 
-            {/* 1. Primary Hero CTAs with ShinyButton */}
-            <div className="flex flex-wrap items-center justify-center gap-3.5 pt-3">
-              <Link href="/shop">
-                <ShinyButton>
-                  <ShoppingBag className="w-4 h-4 text-[#2DD4F5]" />
-                  <span>Jelajahi Digital Shop</span>
-                  <ArrowRight className="w-4 h-4 text-[#7CF2C3]" />
-                </ShinyButton>
-              </Link>
-              <Link href="/tutorials">
-                <ShinyButton>
-                  <GraduationCap className="w-4 h-4 text-[#7CF2C3]" />
-                  <span>Tutorial Class Hub</span>
-                  <Sparkles className="w-4 h-4 text-[#2DD4F5]" />
-                </ShinyButton>
-              </Link>
+              {/* Primary CTAs with ShinyButton */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
+                <Link href="/shop" className="w-full sm:w-auto">
+                  <ShinyButton className="w-full sm:w-auto">
+                    <ShoppingBag className="w-4 h-4 text-[#2DD4F5]" />
+                    <span>Jelajahi Digital Shop</span>
+                    <ArrowRight className="w-4 h-4 text-[#7CF2C3]" />
+                  </ShinyButton>
+                </Link>
+                <Link href="/tutorials" className="w-full sm:w-auto">
+                  <ShinyButton className="w-full sm:w-auto">
+                    <GraduationCap className="w-4 h-4 text-[#7CF2C3]" />
+                    <span>Tutorial Class Hub</span>
+                    <Sparkles className="w-4 h-4 text-[#2DD4F5]" />
+                  </ShinyButton>
+                </Link>
+              </div>
             </div>
 
+            {/* Right Stats & Ecosystem Showcase (col-span-5) */}
+            <div className="lg:col-span-5 space-y-4 sm:space-y-5">
+              {/* Stats Card */}
+              <div
+                className="p-6 sm:p-8 rounded-3xl border border-transparent backdrop-blur-xl relative shadow-2xl transition-all duration-300 hover:shadow-cyan-500/10"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.65)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.22), rgba(45, 212, 245, 0.20), rgba(255, 255, 255, 0.05)) border-box",
+                  border: "1px solid transparent",
+                  backdropFilter: "blur(20px) saturate(130%)",
+                  WebkitBackdropFilter: "blur(20px) saturate(130%)",
+                  boxShadow: "0 15px 40px -5px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                }}
+              >
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <Target className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono">
+                      150+
+                    </div>
+                    <div className="text-xs sm:text-sm text-[#94A3B8]">
+                      Solusi &amp; Artikel Terkurasi
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5 mb-5">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="text-[#94A3B8]">Tingkat Kepuasan Pengguna</span>
+                    <span className="font-bold text-[#7CF2C3] font-mono">98.5%</span>
+                  </div>
+                  <div className="h-2 bg-slate-900 rounded-full overflow-hidden border border-white/[0.08]">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#2DD4F5] to-[#7CF2C3] rounded-full"
+                      style={{ width: "98.5%" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent my-4" />
+
+                <div className="grid grid-cols-3 gap-2 text-center mb-4">
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                    <div className="text-lg sm:text-xl font-bold text-white font-mono">5+</div>
+                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Tahun Inovasi</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                    <div className="text-lg sm:text-xl font-bold text-[#2DD4F5] font-mono">24/7</div>
+                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Lisensi Instan</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                    <div className="text-lg sm:text-xl font-bold text-[#7CF2C3] font-mono">100%</div>
+                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Verified Quality</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    LIVE PORTAL
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-mono font-bold">
+                    <Zap className="w-3 h-3 text-cyan-400" />
+                    PREMIUM SUITE
+                  </span>
+                </div>
+              </div>
+
+              {/* Tech Stack Marquee Card */}
+              <div
+                className="p-5 rounded-2xl border border-transparent backdrop-blur-xl"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(11, 17, 32, 0.50)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(45, 212, 245, 0.12), rgba(255, 255, 255, 0.04)) border-box",
+                  border: "1px solid transparent",
+                  backdropFilter: "blur(16px) saturate(130%)",
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.35)"
+                }}
+              >
+                <div className="text-xs font-mono text-[#64748B] uppercase mb-2.5 flex items-center justify-between">
+                  <span>Ekosistem Teknologi &amp; Integrasi</span>
+                  <span className="text-[#2DD4F5] text-[10px] font-bold">v2.4 Powered</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-white">
+                    Next.js 16
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-cyan-300">
+                    Supabase PostgreSQL
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-[#7CF2C3]">
+                    Gemini AI 2.0
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-purple-300">
+                    React 19
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-blue-300">
+                    TypeScript
+                  </span>
+                </div>
+              </div>
+            </div>
 
           </div>
 
@@ -107,8 +228,7 @@ export default function HomePage() {
         </div>
       </section>
 
-
-      {/* 4. PRODUCT ECOSYSTEM SPOTLIGHT */}
+      {/* 3. PRODUCT ECOSYSTEM SPOTLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-white/[0.08]">
           <div>
@@ -134,9 +254,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. FREE RESOURCES BANNER */}
+      {/* 4. FREE RESOURCES BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-10 rounded-3xl border border-white/[0.08] bg-[#0F172A]/70 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div
+          className="p-8 sm:p-10 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-0.5"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(11, 17, 32, 0.55)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.20), rgba(45, 212, 245, 0.18), rgba(255, 255, 255, 0.05)) border-box",
+            border: "1px solid transparent",
+            backdropFilter: "blur(20px) saturate(130%)",
+            WebkitBackdropFilter: "blur(20px) saturate(130%)",
+            boxShadow: "0 12px 35px -5px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.06)"
+          }}
+        >
           <div className="space-y-2 text-center md:text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20">
               <DownloadCloud className="w-3.5 h-3.5" />
@@ -150,7 +280,7 @@ export default function HomePage() {
             </p>
           </div>
           <Link href="/free-resources">
-            <Button variant="outline" size="md" className="font-bold text-xs whitespace-nowrap border-white/[0.12] text-white hover:border-[#2DD4F5]/40">
+            <Button variant="outline" size="md" className="font-bold text-xs whitespace-nowrap border-white/[0.15] text-white hover:border-[#2DD4F5]/50 bg-white/[0.04]">
               Unduh Free Resources
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
@@ -158,7 +288,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. AFFILIATE & NEWSLETTER SECTION */}
+      {/* 5. AFFILIATE & NEWSLETTER SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7">
