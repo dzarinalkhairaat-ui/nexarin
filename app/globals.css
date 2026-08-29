@@ -38,24 +38,29 @@ code, pre, .font-mono {
   font-family: var(--font-geist-mono), monospace;
 }
 
-/* Custom Dark Cyan Scrollbar */
+/* Hide custom vertical scroll line animation across all pages */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 0px;
+  height: 0px;
+  display: none;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B1120;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 9999px;
-  border: 1px solid rgba(45, 212, 245, 0.10);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2DD4F5;
+  background: transparent;
 }
 
 /* Premium Glass Effect Utility Classes */
