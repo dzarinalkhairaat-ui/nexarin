@@ -135,13 +135,12 @@ export default function HomePage() {
           
           {/* Left: Pure Floating Logo (Enlarged & Pulsing) & Clean Modern Content */}
           <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-10 text-center sm:text-left max-w-3xl">
-            {/* Enlarged Pure Floating Slendro AI Logo with Breathing Pulse Animation */}
-            <div className="relative shrink-0 group">
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-purple-600/30 via-pink-500/20 to-cyan-400/30 blur-2xl animate-pulse pointer-events-none" />
+            {/* Enlarged Pure Floating Slendro AI Logo with Scale Heartbeat Pulse Animation */}
+            <div className="relative shrink-0 flex items-center justify-center">
               <img
                 src="/logo_slendro.png"
                 alt="Slendro-Ai Logo"
-                className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_30px_rgba(168,85,247,0.75)] drop-shadow-[0_0_55px_rgba(45,212,245,0.45)] animate-pulse transition-all duration-700 hover:scale-105"
+                className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-contain animate-pulse-scale filter drop-shadow-[0_0_25px_rgba(168,85,247,0.5)] drop-shadow-[0_0_45px_rgba(45,212,245,0.35)]"
               />
             </div>
 
