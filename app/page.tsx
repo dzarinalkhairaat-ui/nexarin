@@ -170,12 +170,51 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right: Interactive WebGL Plasma Valence Core Button */}
-          <div className="shrink-0 flex flex-col items-center lg:items-end gap-2">
-            <ValenceButton
-              href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
-              label="AKSES DISINI"
-            />
+          {/* Right: Glassmorphic Glow Pill Button */}
+          <div className="shrink-0 flex flex-col items-center lg:items-end gap-2.5">
+            <div className="inline-block group relative">
+              <a
+                href="https://slendro-ai.com/register-user.php?ref=RINSAI.PRO3734"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex min-w-[170px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 text-sm font-bold text-white/90 hover:text-white tracking-tight backdrop-blur-xl rounded-full py-3.5 px-6 relative items-center justify-center gap-2.5 select-none"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(168,85,247,0.50), rgba(45,212,245,0.40)) border-box",
+                  border: "1px solid transparent",
+                  backdropFilter: "blur(16px) saturate(140%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(140%)",
+                  boxShadow: "0 10px 25px -5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                }}
+              >
+                {/* AI Sparkle & Lightning Icon */}
+                <Sparkles className="w-4 h-4 text-[#2DD4F5] group-hover:text-purple-300 transition-colors" />
+                <span className="relative font-bold text-white tracking-wide">Akses Disini</span>
+                <ArrowRight className="w-4 h-4 text-[#7CF2C3] group-hover:translate-x-1 transition-transform" />
+
+                {/* Inner Bottom Light Reflection Line */}
+                <span
+                  aria-hidden="true"
+                  className="transition-all duration-300 group-hover:opacity-100 opacity-25 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)"
+                  }}
+                />
+              </a>
+
+              {/* Bottom Radial Glow Puddle on Hover */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-7 w-48 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+                style={{
+                  background:
+                    "radial-gradient(60% 100% at 50% 50%, rgba(168,85,247,0.65), rgba(45,212,245,0.35) 35%, transparent 70%)",
+                  filter: "blur(10px) saturate(130%)"
+                }}
+              />
+            </div>
+
             <span className="text-[11px] text-[#64748B] font-mono text-center lg:text-right">
               ✓ Akses Penuh &amp; Pendaftaran Cepat
             </span>
