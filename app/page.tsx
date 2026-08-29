@@ -32,7 +32,13 @@ import {
   X,
   Video,
   Music,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Crown,
+  Clock,
+  Calendar,
+  Flame,
+  Star,
+  Infinity as InfinityIcon
 } from "lucide-react";
 
 export default function HomePage() {
@@ -44,13 +50,13 @@ export default function HomePage() {
   const { showToast } = useNotification();
   const router = useRouter();
 
-  const handlePlanSelect = (planName: string, monthlyPrice: string, yearlyPrice: string) => {
+  const handleSelectPlan = (planName: string, price: string) => {
     // 1. If logged in as Admin
     if (isAdminAuthenticated) {
       showToast({
-        type: "warning",
-        title: "Akses Administrator",
-        message: "Anda saat ini masuk sebagai Administrator. Paket langganan khusus diperuntukkan bagi akun Customer / Pelanggan."
+        type: "info",
+        title: "Akses Administrator Terdeteksi",
+        message: "Anda saat ini sedang login sebagai Administrator. Paket berlangganan ini ditujukan untuk akun Customer/Pelanggan."
       });
       return;
     }
@@ -58,42 +64,22 @@ export default function HomePage() {
     // 2. If not logged in as Customer
     if (!isCustomerAuthenticated) {
       showToast({
-        type: "info",
-        title: "Wajib Masuk / Daftar",
-        message: `Silakan Masuk atau Buat Akun Customer terlebih dahulu untuk memilih paket ${planName}.`
+        type: "warning",
+        title: "Wajib Login Customer",
+        message: `Silakan Masuk atau Daftar Akun Customer terlebih dahulu untuk melanjutkan pembelian ${planName}.`
       });
       router.push("/login?redirect=/#pricing");
       return;
     }
 
     // 3. If logged in as Customer
-    if (planName === "Enterprise") {
-      router.push("/contact?subject=Inquiry%20Enterprise%20Plan");
-      return;
-    }
-
     showToast({
       type: "success",
-      title: `Paket ${planName} Dipilih`,
-      message: `Melanjutkan langganan ${planName} (${billingCycle === "monthly" ? monthlyPrice : yearlyPrice}).`
+      title: "Paket Dipilih",
+      message: `Halo ${customer?.name || "Customer"}, ${planName} (${price}) berhasil dipilih. Mengarahkan ke gerbang pembayaran...`
     });
-    router.push("/customer/orders");
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (isSlendroDocsOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isSlendroDocsOpen]);
   const { articles } = useContent();
   const { products, affiliates } = useShop();
 
@@ -508,257 +494,362 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. PRICING SECTION */}
-      <section className="relative text-white py-20 sm:py-28" id="pricing">
-        {/* Ambient Glows */}
-        <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+            {/* 6. NEXARIN PREMIUM PRICING SECTION (Professional Multi-Tier & ULTRA Lifetime Pass) */}
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24" id="pricing">
+        {/* Ambient Radial Lighting Accents */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none -z-10" />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-10 sm:mb-14">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-orange-400 mb-3">
-              #PRICING
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-neutral-50 tracking-tight">
-              Pricing that grows with your content
-            </h2>
-            <p className="mt-3 text-sm md:text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-              Start small, scale when your publishing cadence and team grow. Every plan includes the Lexora editor and AI engine.
-            </p>
+        {/* Header Section */}
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-14 sm:mb-18">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-xs font-mono font-bold text-[#2DD4F5] uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Transparan &amp; Fleksibel • Pilihan Paket Berlangganan</span>
           </div>
 
-          {/* Billing Toggle */}
-          <div className="flex justify-center mb-12 sm:mb-14">
-            <div className="inline-flex items-center rounded-full bg-neutral-900/90 border border-neutral-700/70 p-1 text-sm shadow-[0_18px_60px_rgba(0,0,0,0.85)]">
-              <button
-                type="button"
-                onClick={() => setBillingCycle("monthly")}
-                className={`rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 ${
-                  billingCycle === "monthly"
-                    ? "bg-orange-500 text-black shadow-[0_0_0_1px_rgba(248,250,252,0.1)]"
-                    : "text-neutral-300/80 hover:text-white"
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                type="button"
-                onClick={() => setBillingCycle("yearly")}
-                className={`rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 flex items-center ${
-                  billingCycle === "yearly"
-                    ? "bg-orange-500 text-black shadow-[0_0_0_1px_rgba(248,250,252,0.1)]"
-                    : "text-neutral-300/80 hover:text-white"
-                }`}
-              >
-                <span className="mr-2">Yearly</span>
-                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold border transition-colors ${
-                  billingCycle === "yearly"
-                    ? "bg-black/20 text-black border-black/30"
-                    : "bg-orange-500/15 text-orange-400 border-orange-500/30"
-                }`}>
-                  30% OFF
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+            Investasi Cerdas untuk <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-[#2DD4F5] via-[#7CF2C3] to-[#A855F7] bg-clip-text text-transparent">
+              Perjalanan Karir &amp; Skill Anda
+            </span>
+          </h2>
+
+          <p className="text-sm sm:text-base text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
+            Pilih skema langganan yang tepat sesuai kebutuhan Anda—mulai dari akses harian kilat, bulanan, tahunan, hingga <strong className="text-white">Paket ULTRA Unlimited Seumur Hidup</strong> dengan update gratis selamanya.
+          </p>
+        </div>
+
+        {/* 4 Pricing Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+          
+          {/* ========================================================================= */}
+          {/* TIER 1: PAKET HARIAN (DAILY PASS)                                         */}
+          {/* ========================================================================= */}
+          <div
+            className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-500/40 hover:-translate-y-1.5"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.60)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(45, 212, 245, 0.20), rgba(255, 255, 255, 0.03)) border-box",
+              border: "1px solid transparent",
+              backdropFilter: "blur(16px)",
+              boxShadow: "0 12px 30px -5px rgba(0,0,0,0.4)"
+            }}
+          >
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-[#2DD4F5]">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-white/70">
+                  24 Jam Akses
                 </span>
-              </button>
-            </div>
-          </div>
+              </div>
 
-          {/* Pricing Cards Grid */}
-          <div className="grid gap-6 md:gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1fr)] items-stretch">
-            
-            {/* Starter Plan */}
-            <div className="rounded-[32px] bg-neutral-950/70 border border-neutral-800 shadow-[0_26px_80px_rgba(0,0,0,0.9)] p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-neutral-700">
               <div>
-                <h3 className="text-xl mb-2 font-bold text-white">Starter</h3>
-                <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
-                  For independent writers who want Lexora’s help on every draft without the team features.
+                <h3 className="text-lg font-bold text-white">Paket Harian</h3>
+                <p className="text-xs text-[#94A3B8] mt-1">
+                  Solusi ideal untuk riset kilat, tugas mendesak, atau evaluasi materi.
                 </p>
-
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <div className="relative h-12 overflow-hidden w-24">
-                      <div
-                        className="flex flex-col transition-transform duration-300 ease-out"
-                        style={{
-                          transform: billingCycle === "monthly" ? "translateY(0%)" : "translateY(-50%)"
-                        }}
-                      >
-                        {/* Monthly price row */}
-                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
-                          $19
-                        </span>
-                        {/* Yearly price row */}
-                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
-                          $13
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-neutral-400">/month</span>
-                  </div>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Billed <span>{billingCycle}</span>.
-                  </p>
-                </div>
               </div>
 
-              <div className="space-y-6 pt-4">
-                <button
-                  type="button"
-                  onClick={() => handlePlanSelect("Starter", "$19/bln", "$13/bln")}
-                  className="w-full rounded-full bg-neutral-800/80 hover:bg-neutral-700 hover:text-white transition-colors px-6 py-3.5 text-sm font-bold text-neutral-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-                >
-                  Get started with Starter
-                </button>
+              <div className="pt-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-white tracking-tight">Rp 15.000</span>
+                  <span className="text-xs text-[#64748B] font-mono">/hari</span>
+                </div>
+                <p className="text-[11px] text-[#64748B] mt-1">Akses penuh berlaku 24 jam</p>
+              </div>
 
-                <ul className="space-y-2.5 text-sm text-neutral-300">
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>Lexora editor with AI suggestions on every section.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>Up to 8 active projects at a time.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>25,000 AI-generated words each month.</span>
-                  </li>
-                </ul>
+              {/* Feature List */}
+              <div className="space-y-2.5 pt-4 border-t border-white/[0.08] text-xs text-[#94A3B8]">
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Akses 24 Jam ke Semua Modul Tutorial</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Unduh 2 Free Starter Kit &amp; Source Code</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Akses Komunitas Komentar &amp; Diskusi</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Responsive Web &amp; Mobile Friendly</span>
+                </div>
               </div>
             </div>
 
-            {/* Pro Plan (Highlighted) */}
-            <div className="relative rounded-[32px] bg-gradient-to-b from-orange-500/15 via-orange-500/5 to-black border border-orange-500/70 shadow-[0_30px_110px_rgba(249,115,22,0.4)] p-8 sm:p-10 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:border-orange-400">
-              <div
-                className="pointer-events-none absolute inset-0 opacity-50 mix-blend-screen"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 0 0,rgba(249,115,22,0.16),transparent 55%), radial-gradient(circle at 100% 100%,rgba(249,115,22,0.16),transparent 55%), repeating-linear-gradient(0deg,rgba(249,115,22,0.08),rgba(249,115,22,0.08) 1px,transparent 1px,transparent 3px)"
-                }}
-              />
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-extrabold text-white">Pro</h3>
-                  <span className="rounded-full border border-orange-500/60 bg-orange-500/20 px-3 py-1 text-[11px] tracking-[0.16em] uppercase text-orange-400 font-bold">
-                    Most popular
-                  </span>
-                </div>
-                <p className="text-sm text-neutral-100/90 mb-8 leading-relaxed">
-                  Built for content teams that publish often and need shared workspaces, approvals, and more control.
-                </p>
-
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <div className="relative h-12 overflow-hidden w-24">
-                      <div
-                        className="flex flex-col transition-transform duration-300 ease-out"
-                        style={{
-                          transform: billingCycle === "monthly" ? "translateY(0%)" : "translateY(-50%)"
-                        }}
-                      >
-                        {/* Monthly price row */}
-                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
-                          $49
-                        </span>
-                        {/* Yearly price row */}
-                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
-                          $39
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-neutral-400">/month</span>
-                  </div>
-                  <p className="mt-1 text-xs text-neutral-400">
-                    Billed <span>{billingCycle}</span>, per workspace.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative z-10 space-y-6 pt-4">
-                <button
-                  type="button"
-                  onClick={() => handlePlanSelect("Pro", "$49/bln", "$39/bln")}
-                  className="w-full rounded-full bg-orange-500 hover:bg-orange-400 transition-colors px-6 py-3.5 text-sm font-extrabold text-black shadow-lg shadow-orange-500/25 focus:outline-none focus:ring-2 focus:ring-orange-300"
-                >
-                  Upgrade to Pro
-                </button>
-
-                <ul className="space-y-2.5 text-sm text-neutral-50/90">
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
-                    <span>Unlimited projects and brand spaces for your team.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
-                    <span>Up to 100,000 AI-generated words per month.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
-                    <span>Advanced tone controls, templates, and content presets.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Enterprise Plan */}
-            <div className="rounded-[32px] bg-neutral-950/70 border border-neutral-800 shadow-[0_26px_80px_rgba(0,0,0,0.9)] p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-neutral-700">
-              <div>
-                <h3 className="text-xl mb-2 font-bold text-white">Enterprise</h3>
-                <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
-                  For organizations that need custom workflows, tighter security, and a partner on the Lexora side.
-                </p>
-
-                <div className="mb-6">
-                  <p className="text-3xl md:text-4xl font-extrabold tracking-tight mb-1 text-white">
-                    Contact us
-                  </p>
-                  <p className="text-xs text-neutral-500">
-                    We’ll design a plan that matches your volume, stack, and review process.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-6 pt-4">
-                <button
-                  type="button"
-                  onClick={() => handlePlanSelect("Enterprise", "Kustom", "Kustom")}
-                  className="w-full rounded-full bg-neutral-800/80 hover:bg-neutral-700 hover:text-white transition-colors px-6 py-3.5 text-sm font-bold text-neutral-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-                >
-                  Talk to sales
-                </button>
-
-                <ul className="space-y-2.5 text-sm text-neutral-300">
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>Unlimited workspaces, users, and documents.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>Single sign-on (SSO) and security review.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
-                    <span>Custom integrations, API access, and SLAs.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Full Pricing Button */}
-          <div className="mt-12 flex justify-center">
-            <Link href="/shop">
-              <button
+            <div className="pt-6">
+              <Button
                 type="button"
-                className="hover:bg-neutral-800 text-sm font-semibold text-neutral-100 bg-neutral-900/90 border border-neutral-700 rounded-full py-3.5 px-8 shadow-[0_20px_70px_rgba(0,0,0,0.85)] transition-colors flex items-center gap-2"
+                variant="outline"
+                onClick={() => handleSelectPlan("Paket Harian", "Rp 15.000/hari")}
+                className="w-full text-xs font-bold py-3 border-white/15 text-white hover:border-[#2DD4F5]/50 bg-white/[0.04]"
               >
-                <span>View all billing details</span>
-                <ArrowRight className="w-4 h-4 text-orange-400" />
-              </button>
-            </Link>
+                Pilih Paket Harian
+              </Button>
+            </div>
           </div>
+
+          {/* ========================================================================= */}
+          {/* TIER 2: PAKET BULANAN (MONTHLY PRO - POPULAR)                             */}
+          {/* ========================================================================= */}
+          <div
+            className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/60 hover:-translate-y-1.5 relative overflow-hidden"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.70)) padding-box, linear-gradient(120deg, rgba(45, 212, 245, 0.50), rgba(124, 242, 195, 0.40), rgba(255, 255, 255, 0.10)) border-box",
+              border: "1px solid transparent",
+              backdropFilter: "blur(16px)",
+              boxShadow: "0 18px 40px -5px rgba(6, 182, 212, 0.15)"
+            }}
+          >
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-[#2DD4F5]">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-cyan-500/20 text-[#2DD4F5] border border-cyan-500/30">
+                  ⚡ PALING POPULER
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-bold text-white">Paket Bulanan</h3>
+                <p className="text-xs text-[#94A3B8] mt-1">
+                  Pilihan utama developer, freelancer, dan mahasiswa aktif belajar.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-white tracking-tight">Rp 149.000</span>
+                  <span className="text-xs text-[#64748B] font-mono">/bulan</span>
+                </div>
+                <p className="text-[11px] text-cyan-400 font-semibold mt-1">Akses penuh 30 hari + bonus</p>
+              </div>
+
+              {/* Feature List */}
+              <div className="space-y-2.5 pt-4 border-t border-white/[0.08] text-xs text-[#94A3B8]">
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Akses Penuh 30 Hari Tanpa Batasan</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Unduh Semua Free Resources &amp; Template</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Diskon Eksklusif 25% Nexarin Digital Shop</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Update Modul &amp; Artikel Baru Tiap Minggu</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Dukungan Teknis Tanya Jawab via Portal</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-6">
+              <Button
+                type="button"
+                onClick={() => handleSelectPlan("Paket Bulanan", "Rp 149.000/bln")}
+                className="w-full text-xs font-black py-3 bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-slate-950 shadow-lg shadow-cyan-500/25"
+              >
+                Pilih Paket Bulanan
+              </Button>
+            </div>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* TIER 3: PAKET TAHUNAN (ANNUAL MASTER - BEST VALUE)                        */}
+          {/* ========================================================================= */}
+          <div
+            className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-purple-500/40 hover:-translate-y-1.5"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.60)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(168, 85, 247, 0.30), rgba(255, 255, 255, 0.03)) border-box",
+              border: "1px solid transparent",
+              backdropFilter: "blur(16px)",
+              boxShadow: "0 12px 30px -5px rgba(0,0,0,0.4)"
+            }}
+          >
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-300">
+                  <Flame className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/25">
+                  🔥 HEMAT 45%
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-bold text-white">Paket Tahunan</h3>
+                <p className="text-xs text-[#94A3B8] mt-1">
+                  Solusi komprehensif bagi praktisi profesional &amp; agensi digital.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-white tracking-tight">Rp 999.000</span>
+                  <span className="text-xs text-[#64748B] font-mono">/tahun</span>
+                </div>
+                <p className="text-[11px] text-purple-300 font-semibold mt-1">Setara Rp 83rb/bln (Hemat Rp 789rb)</p>
+              </div>
+
+              {/* Feature List */}
+              <div className="space-y-2.5 pt-4 border-t border-white/[0.08] text-xs text-[#94A3B8]">
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Akses Penuh 365 Hari ke Semua Modul</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Lisensi Komersial untuk 5 Proyek Klien</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Diskon Ekstra 40% Semua Source Code Shop</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Konsultasi Arsitektur 1-on-1 Bulanan</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Prioritas Request Materi &amp; Artikel Khusus</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleSelectPlan("Paket Tahunan", "Rp 999.000/thn")}
+                className="w-full text-xs font-bold py-3 border-purple-500/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400"
+              >
+                Pilih Paket Tahunan
+              </Button>
+            </div>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* TIER 4: PAKET ULTRA (UNLIMITED SEUMUR HIDUP / LIFETIME VIP - FLAGSHIP)    */}
+          {/* ========================================================================= */}
+          <div
+            className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 relative overflow-hidden group"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(20, 15, 38, 0.92), rgba(11, 17, 32, 0.85)) padding-box, linear-gradient(120deg, rgba(245, 158, 11, 0.70), rgba(168, 85, 247, 0.80), rgba(45, 212, 245, 0.70), rgba(124, 242, 195, 0.60)) border-box",
+              border: "1.5px solid transparent",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 20px 50px -5px rgba(168, 85, 247, 0.25), 0 0 35px -5px rgba(45, 212, 245, 0.20)"
+            }}
+          >
+            {/* Holographic Glowing Sweep Light Effect */}
+            <div className="absolute -top-20 -right-20 w-44 h-44 bg-gradient-to-br from-amber-400/20 via-purple-500/25 to-cyan-400/20 rounded-full blur-3xl pointer-events-none group-hover:scale-125 transition-transform duration-700" />
+
+            <div className="relative z-10 space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400/20 via-purple-500/20 to-cyan-400/20 border border-amber-400/30 flex items-center justify-center text-amber-300 shadow-md">
+                  <Crown className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-extrabold uppercase px-3 py-1 rounded-full bg-gradient-to-r from-amber-400/20 via-purple-500/20 to-cyan-400/20 text-amber-300 border border-amber-400/30 shadow-sm flex items-center gap-1">
+                  <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                  <span>ULTRA LIFETIME</span>
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-black text-white flex items-center gap-2">
+                  <span>Paket ULTRA</span>
+                  <InfinityIcon className="w-5 h-5 text-cyan-400" />
+                </h3>
+                <p className="text-xs text-amber-200/80 font-medium mt-1">
+                  Akses Unlimited Seumur Hidup + Gratis Semua Update Selamanya.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-white tracking-tight">Rp 2.499.000</span>
+                  <span className="text-xs text-emerald-400 font-mono font-bold">/Sekali Bayar</span>
+                </div>
+                <p className="text-[11px] text-emerald-400 font-semibold mt-1">✓ Sekali Bayar untuk Selamanya</p>
+              </div>
+
+              {/* Feature List */}
+              <div className="space-y-2.5 pt-4 border-t border-white/[0.12] text-xs text-slate-200">
+                <div className="flex items-start gap-2 font-bold text-white">
+                  <Crown className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span>Akses Tanpa Batas Seumur Hidup (Lifetime)</span>
+                </div>
+                <div className="flex items-start gap-2 font-semibold text-emerald-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Gratis Seluruh Update &amp; Versi Baru Selamanya</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#2DD4F5] shrink-0 mt-0.5" />
+                  <span>Free Download Semua Source Code Digital Shop</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-[#7CF2C3] shrink-0 mt-0.5" />
+                  <span>Jalur Khusus VIP AI Generator &amp; Cloud Tools</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-purple-300 shrink-0 mt-0.5" />
+                  <span>Lisensi Komersial Unlimited Tanpa Batas Proyek</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
+                  <span>Grup VIP Private &amp; Support Prioritas 24/7 Langsung</span>
+                </div>
+                <div className="flex items-start gap-2 text-white/90">
+                  <CheckCircle2 className="w-4 h-4 text-cyan-300 shrink-0 mt-0.5" />
+                  <span>Early-Bird Akses Produk Baru Sebelum Rilis Publik</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative z-10 pt-6">
+              <Button
+                type="button"
+                onClick={() => handleSelectPlan("Paket ULTRA Lifetime", "Rp 2.499.000 (Sekali Bayar)")}
+                className="w-full text-xs font-black py-3.5 bg-gradient-to-r from-amber-400 via-purple-600 to-cyan-500 hover:from-amber-300 hover:to-cyan-400 text-slate-950 shadow-xl shadow-purple-500/30 hover:shadow-cyan-500/40"
+              >
+                Ambil Paket ULTRA Lifetime
+              </Button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom Trust & Assurance Banner */}
+        <div className="mt-12 p-6 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 shrink-0">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white">Jaminan Transaksi Aman &amp; Aktivasi Otomatis</div>
+              <div className="text-xs text-[#94A3B8]">Semua paket didukung aktivasi lisensi instan dan jaminan garansi kepuasan.</div>
+            </div>
+          </div>
+          <Link href="/contact">
+            <Button variant="outline" size="sm" className="text-xs border-white/15 text-white/90 hover:border-cyan-400">
+              Konsultasi dengan Kami
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          </Link>
         </div>
       </section>
 
