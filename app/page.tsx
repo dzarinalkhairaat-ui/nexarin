@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useNotification } from "@/context/NotificationContext";
 import { useContent } from "@/context/ContentContext";
 import { useShop } from "@/context/ShopContext";
 import { ArticleCard } from "@/components/portal/ArticleCard";
@@ -35,6 +38,47 @@ import {
 export default function HomePage() {
   const [isSlendroDocsOpen, setIsSlendroDocsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+
+  const { isCustomerAuthenticated, customer, isAdminAuthenticated, admin } = useAuth();
+  const { showToast } = useNotification();
+  const router = useRouter();
+
+  const handlePlanSelect = (planName: string, monthlyPrice: string, yearlyPrice: string) => {
+    // 1. If logged in as Admin
+    if (isAdminAuthenticated) {
+      showToast({
+        type: "warning",
+        title: "Akses Administrator",
+        message: "Anda saat ini masuk sebagai Administrator. Paket langganan khusus diperuntukkan bagi akun Customer / Pelanggan."
+      });
+      return;
+    }
+
+    // 2. If not logged in as Customer
+    if (!isCustomerAuthenticated) {
+      showToast({
+        type: "info",
+        title: "Wajib Masuk / Daftar",
+        message: `Silakan Masuk atau Buat Akun Customer terlebih dahulu untuk memilih paket ${planName}.`
+      });
+      router.push("/login?redirect=/#pricing");
+      return;
+    }
+
+    // 3. If logged in as Customer
+    if (planName === "Enterprise") {
+      router.push("/contact?subject=Inquiry%20Enterprise%20Plan");
+      return;
+    }
+
+    showToast({
+      type: "success",
+      title: `Paket ${planName} Dipilih`,
+      message: `Melanjutkan langganan ${planName} (${billingCycle === "monthly" ? monthlyPrice : yearlyPrice}).`
+    });
+    router.push("/customer/orders");
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -461,6 +505,260 @@ export default function HomePage() {
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </Button>
           </Link>
+        </div>
+      </section>
+
+      {/* 6. PRICING SECTION */}
+      <section className="relative text-white py-20 sm:py-28" id="pricing">
+        {/* Ambient Glows */}
+        <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-10 sm:mb-14">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-orange-400 mb-3">
+              #PRICING
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-neutral-50 tracking-tight">
+              Pricing that grows with your content
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+              Start small, scale when your publishing cadence and team grow. Every plan includes the Lexora editor and AI engine.
+            </p>
+          </div>
+
+          {/* Billing Toggle */}
+          <div className="flex justify-center mb-12 sm:mb-14">
+            <div className="inline-flex items-center rounded-full bg-neutral-900/90 border border-neutral-700/70 p-1 text-sm shadow-[0_18px_60px_rgba(0,0,0,0.85)]">
+              <button
+                type="button"
+                onClick={() => setBillingCycle("monthly")}
+                className={`rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 ${
+                  billingCycle === "monthly"
+                    ? "bg-orange-500 text-black shadow-[0_0_0_1px_rgba(248,250,252,0.1)]"
+                    : "text-neutral-300/80 hover:text-white"
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                onClick={() => setBillingCycle("yearly")}
+                className={`rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 flex items-center ${
+                  billingCycle === "yearly"
+                    ? "bg-orange-500 text-black shadow-[0_0_0_1px_rgba(248,250,252,0.1)]"
+                    : "text-neutral-300/80 hover:text-white"
+                }`}
+              >
+                <span className="mr-2">Yearly</span>
+                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold border transition-colors ${
+                  billingCycle === "yearly"
+                    ? "bg-black/20 text-black border-black/30"
+                    : "bg-orange-500/15 text-orange-400 border-orange-500/30"
+                }`}>
+                  30% OFF
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Pricing Cards Grid */}
+          <div className="grid gap-6 md:gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1fr)] items-stretch">
+            
+            {/* Starter Plan */}
+            <div className="rounded-[32px] bg-neutral-950/70 border border-neutral-800 shadow-[0_26px_80px_rgba(0,0,0,0.9)] p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-neutral-700">
+              <div>
+                <h3 className="text-xl mb-2 font-bold text-white">Starter</h3>
+                <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
+                  For independent writers who want Lexora’s help on every draft without the team features.
+                </p>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-1">
+                    <div className="relative h-12 overflow-hidden w-24">
+                      <div
+                        className="flex flex-col transition-transform duration-300 ease-out"
+                        style={{
+                          transform: billingCycle === "monthly" ? "translateY(0%)" : "translateY(-50%)"
+                        }}
+                      >
+                        {/* Monthly price row */}
+                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
+                          $19
+                        </span>
+                        {/* Yearly price row */}
+                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
+                          $13
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-neutral-400">/month</span>
+                  </div>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Billed <span>{billingCycle}</span>.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-6 pt-4">
+                <button
+                  type="button"
+                  onClick={() => handlePlanSelect("Starter", "$19/bln", "$13/bln")}
+                  className="w-full rounded-full bg-neutral-800/80 hover:bg-neutral-700 hover:text-white transition-colors px-6 py-3.5 text-sm font-bold text-neutral-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                >
+                  Get started with Starter
+                </button>
+
+                <ul className="space-y-2.5 text-sm text-neutral-300">
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>Lexora editor with AI suggestions on every section.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>Up to 8 active projects at a time.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>25,000 AI-generated words each month.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Pro Plan (Highlighted) */}
+            <div className="relative rounded-[32px] bg-gradient-to-b from-orange-500/15 via-orange-500/5 to-black border border-orange-500/70 shadow-[0_30px_110px_rgba(249,115,22,0.4)] p-8 sm:p-10 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:border-orange-400">
+              <div
+                className="pointer-events-none absolute inset-0 opacity-50 mix-blend-screen"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 0 0,rgba(249,115,22,0.16),transparent 55%), radial-gradient(circle at 100% 100%,rgba(249,115,22,0.16),transparent 55%), repeating-linear-gradient(0deg,rgba(249,115,22,0.08),rgba(249,115,22,0.08) 1px,transparent 1px,transparent 3px)"
+                }}
+              />
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xl font-extrabold text-white">Pro</h3>
+                  <span className="rounded-full border border-orange-500/60 bg-orange-500/20 px-3 py-1 text-[11px] tracking-[0.16em] uppercase text-orange-400 font-bold">
+                    Most popular
+                  </span>
+                </div>
+                <p className="text-sm text-neutral-100/90 mb-8 leading-relaxed">
+                  Built for content teams that publish often and need shared workspaces, approvals, and more control.
+                </p>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-1">
+                    <div className="relative h-12 overflow-hidden w-24">
+                      <div
+                        className="flex flex-col transition-transform duration-300 ease-out"
+                        style={{
+                          transform: billingCycle === "monthly" ? "translateY(0%)" : "translateY(-50%)"
+                        }}
+                      >
+                        {/* Monthly price row */}
+                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
+                          $49
+                        </span>
+                        {/* Yearly price row */}
+                        <span className="h-12 flex items-center leading-none text-4xl tracking-tight font-extrabold text-white">
+                          $39
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-neutral-400">/month</span>
+                  </div>
+                  <p className="mt-1 text-xs text-neutral-400">
+                    Billed <span>{billingCycle}</span>, per workspace.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative z-10 space-y-6 pt-4">
+                <button
+                  type="button"
+                  onClick={() => handlePlanSelect("Pro", "$49/bln", "$39/bln")}
+                  className="w-full rounded-full bg-orange-500 hover:bg-orange-400 transition-colors px-6 py-3.5 text-sm font-extrabold text-black shadow-lg shadow-orange-500/25 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                >
+                  Upgrade to Pro
+                </button>
+
+                <ul className="space-y-2.5 text-sm text-neutral-50/90">
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
+                    <span>Unlimited projects and brand spaces for your team.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
+                    <span>Up to 100,000 AI-generated words per month.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-orange-400 shrink-0" />
+                    <span>Advanced tone controls, templates, and content presets.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="rounded-[32px] bg-neutral-950/70 border border-neutral-800 shadow-[0_26px_80px_rgba(0,0,0,0.9)] p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-neutral-700">
+              <div>
+                <h3 className="text-xl mb-2 font-bold text-white">Enterprise</h3>
+                <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
+                  For organizations that need custom workflows, tighter security, and a partner on the Lexora side.
+                </p>
+
+                <div className="mb-6">
+                  <p className="text-3xl md:text-4xl font-extrabold tracking-tight mb-1 text-white">
+                    Contact us
+                  </p>
+                  <p className="text-xs text-neutral-500">
+                    We’ll design a plan that matches your volume, stack, and review process.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-6 pt-4">
+                <button
+                  type="button"
+                  onClick={() => handlePlanSelect("Enterprise", "Kustom", "Kustom")}
+                  className="w-full rounded-full bg-neutral-800/80 hover:bg-neutral-700 hover:text-white transition-colors px-6 py-3.5 text-sm font-bold text-neutral-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                >
+                  Talk to sales
+                </button>
+
+                <ul className="space-y-2.5 text-sm text-neutral-300">
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>Unlimited workspaces, users, and documents.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>Single sign-on (SSO) and security review.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="mt-[5px] h-1.5 w-1.5 rounded-full bg-neutral-500 shrink-0" />
+                    <span>Custom integrations, API access, and SLAs.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Full Pricing Button */}
+          <div className="mt-12 flex justify-center">
+            <Link href="/shop">
+              <button
+                type="button"
+                className="hover:bg-neutral-800 text-sm font-semibold text-neutral-100 bg-neutral-900/90 border border-neutral-700 rounded-full py-3.5 px-8 shadow-[0_20px_70px_rgba(0,0,0,0.85)] transition-colors flex items-center gap-2"
+              >
+                <span>View all billing details</span>
+                <ArrowRight className="w-4 h-4 text-orange-400" />
+              </button>
+            </Link>
+          </div>
         </div>
       </section>
 
