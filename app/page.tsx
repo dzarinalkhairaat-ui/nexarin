@@ -9,6 +9,7 @@ import { ProductCard } from "@/components/shop/ProductCard";
 import { AffiliateWidget } from "@/components/affiliate/AffiliateWidget";
 import { NewsletterBox } from "@/components/portal/NewsletterBox";
 import { Button } from "@/components/ui/Button";
+import { ShinyButton } from "@/components/ui/shiny-button";
 import { Card } from "@/components/ui/Card";
 import {
   Sparkles,
@@ -62,18 +63,30 @@ export default function HomePage() {
               Portal berita terkurasi AI &amp; software engineering, ulasan gadget, otomotif masa depan, tutorial praktis, serta marketplace aplikasi berlisensi lifetime dengan uji coba gratis 3 hari.
             </p>
 
-            {/* Quick Action Chips */}
+            {/* 1. Primary Hero CTAs with ShinyButton */}
+            <div className="flex flex-wrap items-center justify-center gap-3.5 pt-3">
+              <Link href="/shop">
+                <ShinyButton>
+                  <ShoppingBag className="w-4 h-4 text-[#2DD4F5]" />
+                  <span>Jelajahi Digital Shop</span>
+                  <ArrowRight className="w-4 h-4 text-[#7CF2C3]" />
+                </ShinyButton>
+              </Link>
+              <Link href="/tutorials">
+                <ShinyButton>
+                  <GraduationCap className="w-4 h-4 text-[#7CF2C3]" />
+                  <span>Tutorial Class Hub</span>
+                  <Sparkles className="w-4 h-4 text-[#2DD4F5]" />
+                </ShinyButton>
+              </Link>
+            </div>
+
+            {/* 2. Quick Category Navigation Pills */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               <Link href="/ai">
                 <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
                   <Cpu className="w-3.5 h-3.5 mr-1 text-[#2DD4F5]" />
                   AI &amp; Agents
-                </Button>
-              </Link>
-              <Link href="/tutorials">
-                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
-                  <GraduationCap className="w-3.5 h-3.5 mr-1 text-[#7CF2C3]" />
-                  Tutorial Class Hub
                 </Button>
               </Link>
               <Link href="/gadget">
@@ -88,10 +101,10 @@ export default function HomePage() {
                   EV Tech
                 </Button>
               </Link>
-              <Link href="/shop">
-                <Button variant="primary" size="sm" className="rounded-full text-xs font-extrabold">
-                  <ShoppingBag className="w-3.5 h-3.5 mr-1" />
-                  Digital Shop
+              <Link href="/free-resources">
+                <Button variant="outline" size="sm" className="rounded-full text-xs font-semibold border-white/[0.10] text-[#94A3B8] hover:text-white bg-white/[0.03] backdrop-blur-md">
+                  <DownloadCloud className="w-3.5 h-3.5 mr-1 text-cyan-400" />
+                  Free Resources
                 </Button>
               </Link>
             </div>
