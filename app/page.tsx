@@ -527,19 +527,18 @@ export default function HomePage() {
         </div>
 
         {/* 4 Pricing Cards (Horizontal Carousel with Snap on Mobile, 4-Col Grid on Desktop) */}
-        <div className="flex lg:grid lg:grid-cols-4 gap-5 sm:gap-6 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory scrollbar-none pb-6 lg:pb-0 px-4 sm:px-6 lg:px-0 -mx-4 sm:-mx-6 lg:mx-0 items-stretch">
+        <div className="flex lg:grid lg:grid-cols-4 gap-5 sm:gap-6 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory scrollbar-none pt-4 pb-6 lg:pt-1 lg:pb-0 px-4 sm:px-6 lg:px-0 -mx-4 sm:-mx-6 lg:mx-0 items-stretch">
           
           {/* ========================================================================= */}
           {/* TIER 1: PAKET HARIAN (DAILY PASS)                                         */}
           {/* ========================================================================= */}
           <div
-            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-500/40 hover:-translate-y-1.5"
+            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-500/40"
             style={{
               background:
                 "linear-gradient(180deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.60)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(45, 212, 245, 0.20), rgba(255, 255, 255, 0.03)) border-box",
               border: "1px solid transparent",
-              backdropFilter: "blur(16px)",
-              boxShadow: "0 12px 30px -5px rgba(0,0,0,0.4)"
+              backdropFilter: "blur(16px)"
             }}
           >
             <div className="space-y-5">
@@ -604,13 +603,12 @@ export default function HomePage() {
           {/* TIER 2: PAKET BULANAN (MONTHLY PRO - POPULAR)                             */}
           {/* ========================================================================= */}
           <div
-            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/60 hover:-translate-y-1.5 relative overflow-hidden"
+            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/60 relative overflow-hidden"
             style={{
               background:
                 "linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.70)) padding-box, linear-gradient(120deg, rgba(45, 212, 245, 0.50), rgba(124, 242, 195, 0.40), rgba(255, 255, 255, 0.10)) border-box",
               border: "1px solid transparent",
-              backdropFilter: "blur(16px)",
-              boxShadow: "0 18px 40px -5px rgba(6, 182, 212, 0.15)"
+              backdropFilter: "blur(16px)"
             }}
           >
             <div className="space-y-5">
@@ -667,7 +665,7 @@ export default function HomePage() {
               <Button
                 type="button"
                 onClick={() => handleSelectPlan("Paket Bulanan", "Rp 149.000/bln")}
-                className="w-full text-xs font-black py-3 bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-slate-950 shadow-lg shadow-cyan-500/25"
+                className="w-full text-xs font-black py-3 bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-slate-950 "
               >
                 Pilih Paket Bulanan
               </Button>
@@ -678,13 +676,12 @@ export default function HomePage() {
           {/* TIER 3: PAKET TAHUNAN (ANNUAL MASTER - BEST VALUE)                        */}
           {/* ========================================================================= */}
           <div
-            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-purple-500/40 hover:-translate-y-1.5"
+            className="w-[85vw] max-w-[320px] sm:max-w-[340px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-purple-500/40"
             style={{
               background:
                 "linear-gradient(180deg, rgba(15, 23, 42, 0.75), rgba(11, 17, 32, 0.60)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(168, 85, 247, 0.30), rgba(255, 255, 255, 0.03)) border-box",
               border: "1px solid transparent",
-              backdropFilter: "blur(16px)",
-              boxShadow: "0 12px 30px -5px rgba(0,0,0,0.4)"
+              backdropFilter: "blur(16px)"
             }}
           >
             <div className="space-y-5">
@@ -753,13 +750,12 @@ export default function HomePage() {
           {/* TIER 4: PAKET ULTRA (UNLIMITED SEUMUR HIDUP / LIFETIME VIP - FLAGSHIP)    */}
           {/* ========================================================================= */}
           <div
-            className="w-[88vw] max-w-[330px] sm:max-w-[350px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 relative overflow-hidden group"
+            className="w-[88vw] max-w-[330px] sm:max-w-[350px] lg:w-auto lg:max-w-none shrink-0 snap-center lg:shrink rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:border-amber-400/80 relative overflow-hidden group"
             style={{
               background:
                 "linear-gradient(180deg, rgba(20, 15, 38, 0.92), rgba(11, 17, 32, 0.85)) padding-box, linear-gradient(120deg, rgba(245, 158, 11, 0.70), rgba(168, 85, 247, 0.80), rgba(45, 212, 245, 0.70), rgba(124, 242, 195, 0.60)) border-box",
               border: "1.5px solid transparent",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 20px 50px -5px rgba(168, 85, 247, 0.25), 0 0 35px -5px rgba(45, 212, 245, 0.20)"
+              backdropFilter: "blur(20px)"
             }}
           >
             {/* Holographic Glowing Sweep Light Effect */}
@@ -831,7 +827,7 @@ export default function HomePage() {
               <Button
                 type="button"
                 onClick={() => handleSelectPlan("Paket ULTRA Lifetime", "Rp 2.499.000 (Sekali Bayar)")}
-                className="w-full text-xs font-black py-3.5 bg-gradient-to-r from-amber-400 via-purple-600 to-cyan-500 hover:from-amber-300 hover:to-cyan-400 text-slate-950 shadow-xl shadow-purple-500/30 hover:shadow-cyan-500/40"
+                className="w-full text-xs font-black py-3.5 bg-gradient-to-r from-amber-400 via-purple-600 to-cyan-500 hover:from-amber-300 hover:to-cyan-400 text-slate-950 "
               >
                 Ambil Paket ULTRA Lifetime
               </Button>
