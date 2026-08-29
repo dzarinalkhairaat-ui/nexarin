@@ -43,10 +43,6 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/30 text-[#2DD4F5] text-xs font-bold tracking-wide backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Ekosistem Teknologi Terintegrasi • Nexarin by Rins</span>
-            </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
               Informasi, Edukasi, dan{" "}
