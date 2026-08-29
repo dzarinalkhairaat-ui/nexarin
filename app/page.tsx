@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { useContent } from "@/context/ContentContext";
 import { useShop } from "@/context/ShopContext";
+import { useTutorials } from "@/context/TutorialContext";
+import { TutorialCourse } from "@/types/tutorial";
 import { ArticleCard } from "@/components/portal/ArticleCard";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { AffiliateWidget } from "@/components/affiliate/AffiliateWidget";
@@ -32,6 +34,8 @@ import {
 export default function HomePage() {
   const { articles } = useContent();
   const { products, affiliates } = useShop();
+  const { courses } = useTutorials();
+  const featuredClass = courses.find((c: TutorialCourse) => c.isFeatured) || courses[0];
 
   const featuredArticle = articles.find((a) => a.featured) || articles[0];
   const latestArticles = articles.filter((a) => a.id !== featuredArticle?.id).slice(0, 4);
@@ -101,11 +105,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Stats & Ecosystem Showcase (col-span-5) */}
-            <div className="lg:col-span-5 space-y-4 sm:space-y-5">
-              {/* Stats Card */}
+            {/* Right Column: Featured Class Glassmorphic Card (col-span-5) */}
+            <div className="lg:col-span-5">
               <div
-                className="p-6 sm:p-8 rounded-3xl border border-transparent backdrop-blur-xl relative shadow-2xl transition-all duration-300 hover:shadow-cyan-500/10"
+                className="group relative p-6 sm:p-7 rounded-3xl border border-transparent backdrop-blur-xl shadow-2xl transition-all duration-300 hover:shadow-cyan-500/15 hover:-translate-y-1"
                 style={{
                   background:
                     "linear-gradient(180deg, rgba(15, 23, 42, 0.85), rgba(11, 17, 32, 0.65)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.22), rgba(45, 212, 245, 0.20), rgba(255, 255, 255, 0.05)) border-box",
@@ -115,94 +118,89 @@ export default function HomePage() {
                   boxShadow: "0 15px 40px -5px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
                 }}
               >
-                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                    <Target className="w-5 h-5 sm:w-6 sm:h-6" />
+                {/* Header Tag Bar */}
+                <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-white/[0.08]">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-[#2DD4F5] text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <GraduationCap className="w-3.5 h-3.5" />
+                    <span>Kelas Unggulan Pilihan</span>
                   </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono">
-                      150+
-                    </div>
-                    <div className="text-xs sm:text-sm text-[#94A3B8]">
-                      Solusi &amp; Artikel Terkurasi
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2.5 mb-5">
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-[#94A3B8]">Tingkat Kepuasan Pengguna</span>
-                    <span className="font-bold text-[#7CF2C3] font-mono">98.5%</span>
-                  </div>
-                  <div className="h-2 bg-slate-900 rounded-full overflow-hidden border border-white/[0.08]">
-                    <div
-                      className="h-full bg-gradient-to-r from-[#2DD4F5] to-[#7CF2C3] rounded-full"
-                      style={{ width: "98.5%" }}
-                    />
+                  <div className="flex items-center gap-1 text-amber-400 text-xs font-bold font-mono">
+                    <Star className="w-3.5 h-3.5 fill-current" />
+                    <span>5.0</span>
+                    <span className="text-[10px] text-[#64748B] font-normal">(2.300+ Siswa)</span>
                   </div>
                 </div>
 
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent my-4" />
+                {/* Class Thumbnail Preview */}
+                <div className="relative h-44 sm:h-48 w-full rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-white/[0.10]">
+                  <img
+                    src={featuredClass?.thumbnail || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"}
+                    alt={featuredClass?.title || "Kelas Unggulan"}
+                    onError={(e) => {
+                      e.currentTarget.src = "/assets/default-cover.svg";
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent opacity-80" />
 
-                <div className="grid grid-cols-3 gap-2 text-center mb-4">
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                    <div className="text-lg sm:text-xl font-bold text-white font-mono">5+</div>
-                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Tahun Inovasi</div>
+                  {/* Floating Badges inside thumbnail */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold backdrop-blur-md">
+                      {featuredClass?.level || "Beginner Friendly"}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-slate-950/80 text-cyan-300 border border-white/[0.12] text-[10px] font-mono backdrop-blur-md">
+                      {featuredClass?.duration || "2h 30m"}
+                    </span>
                   </div>
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                    <div className="text-lg sm:text-xl font-bold text-[#2DD4F5] font-mono">24/7</div>
-                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Lisensi Instan</div>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                    <div className="text-lg sm:text-xl font-bold text-[#7CF2C3] font-mono">100%</div>
-                    <div className="text-[10px] text-[#64748B] uppercase font-mono">Verified Quality</div>
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white/90">
+                    <span className="font-mono text-[11px] font-semibold text-cyan-300">
+                      {featuredClass?.categoryName || "Microsoft Skills"}
+                    </span>
+                    <span className="text-[10px] font-mono text-[#7CF2C3] font-bold">
+                      {featuredClass?.lessonCount || 4} Pelajaran Lengkap
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    LIVE PORTAL
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-mono font-bold">
-                    <Zap className="w-3 h-3 text-cyan-400" />
-                    PREMIUM SUITE
-                  </span>
+                {/* Class Info */}
+                <div className="space-y-2 mb-5">
+                  <Link href={featuredClass ? `/tutorials/${featuredClass.slug}` : "/tutorials"}>
+                    <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
+                      {featuredClass?.title || "Microsoft Excel Data Analytics & Automation Masterclass 2026"}
+                    </h3>
+                  </Link>
+                  <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
+                    {featuredClass?.tagline || "Kuasai formula XLOOKUP, Pivot Table, Power Query, dan integrasi AI Copilot dari dasar hingga mahir."}
+                  </p>
                 </div>
-              </div>
 
-              {/* Tech Stack Marquee Card */}
-              <div
-                className="p-5 rounded-2xl border border-transparent backdrop-blur-xl"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(15, 23, 42, 0.70), rgba(11, 17, 32, 0.50)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(45, 212, 245, 0.12), rgba(255, 255, 255, 0.04)) border-box",
-                  border: "1px solid transparent",
-                  backdropFilter: "blur(16px) saturate(130%)",
-                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.35)"
-                }}
-              >
-                <div className="text-xs font-mono text-[#64748B] uppercase mb-2.5 flex items-center justify-between">
-                  <span>Ekosistem Teknologi &amp; Integrasi</span>
-                  <span className="text-[#2DD4F5] text-[10px] font-bold">v2.4 Powered</span>
+                {/* Quick Syllabus Highlights */}
+                <div className="grid grid-cols-2 gap-2 mb-5 text-[11px] font-mono text-[#94A3B8]">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#7CF2C3] shrink-0" />
+                    <span className="truncate">Formula XLOOKUP &amp; Pivot</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                    <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span className="truncate">Copilot AI Prompts</span>
+                  </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-white">
-                    Next.js 16
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-cyan-300">
-                    Supabase PostgreSQL
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-[#7CF2C3]">
-                    Gemini AI 2.0
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-purple-300">
-                    React 19
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-900/80 border border-white/[0.08] text-blue-300">
-                    TypeScript
-                  </span>
-                </div>
+
+                {/* CTA Button */}
+                <Link
+                  href={featuredClass ? `/tutorials/${featuredClass.slug}` : "/tutorials"}
+                  className="block w-full"
+                >
+                  <Button
+                    variant="mint"
+                    size="md"
+                    className="w-full font-black text-xs text-slate-950 shadow-lg shadow-emerald-500/20 group-hover:shadow-cyan-500/30 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <span>Mulai Belajar Kelas Ini</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
 

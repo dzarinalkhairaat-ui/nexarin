@@ -368,6 +368,8 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+export const useTutorial = useTutorials;
+
 export function useTutorials() {
   const context = useContext(TutorialContext);
   if (!context) {
