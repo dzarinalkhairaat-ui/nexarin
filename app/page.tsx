@@ -836,24 +836,7 @@ export default function HomePage() {
 
         </div>
 
-        {/* Bottom Trust & Assurance Banner */}
-        <div className="mt-12 p-6 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 shrink-0">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-sm font-bold text-white">Jaminan Transaksi Aman &amp; Aktivasi Otomatis</div>
-              <div className="text-xs text-[#94A3B8]">Semua paket didukung aktivasi lisensi instan dan jaminan garansi kepuasan.</div>
-            </div>
-          </div>
-          <Link href="/contact">
-            <Button variant="outline" size="sm" className="text-xs border-white/15 text-white/90 hover:border-cyan-400">
-              Konsultasi dengan Kami
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-            </Button>
-          </Link>
-        </div>
+
       </section>
 
       {/* 5. AFFILIATE & NEWSLETTER SECTION */}
