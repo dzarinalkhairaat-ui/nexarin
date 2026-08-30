@@ -102,7 +102,7 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
   const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
   let csvRaw = "";
 
-  // 1. Fetch CSV via curl.exe (Windows host network)
+  // 1. Fetch CSV via curl.exe (Windows host network stack)
   try {
     const { stdout } = await execAsync(`curl.exe -s -L "${csvUrl}" || curl -s -L "${csvUrl}"`);
     if (stdout && stdout.length > 50) {
@@ -157,8 +157,8 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
       const tagsRaw = cols[6]?.trim() || "AI, Technology";
       const excerpt = cols[7]?.trim() || title;
       const content = cols[8]?.trim() || excerpt;
-      const opinion = cols[9]?.trim() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
-      const sourceName = cols[12]?.trim() || "Nexarin News Intelligence";
+      const opinion = cols[9]?.trim() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem industri.";
+      const sourceName = cols[12]?.trim() || "DATABASE PORTAL INFO NEXARIN TECH";
       const sourceUrl = cols[13]?.trim() || "https://gemini.google.com";
 
       const tags = tagsRaw
@@ -178,7 +178,7 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
         draftContent: content,
         opinionAnalysis: opinion,
         category: category.toUpperCase(),
-        tags: tags.length > 0 ? tags : ["Technology", "AI"],
+        tags: tags.length > 0 ? tags : [category.toUpperCase(), "Tech"],
         suggestedSeoTitle: `${title} — Nexarin Tech`,
         suggestedMetaDescription: excerpt,
         status: "draft",
@@ -207,53 +207,42 @@ export const geminiSyncService = {
 
         if (!artErr && artDrafts && artDrafts.length > 0) {
           clearBufferDrafts();
-          return artDrafts.map((a: any) => ({
-            id: a.id,
-            sourceId: `src-${a.id}`,
-            sourceName: a.source_name || "DATABASE PORTAL INFO NEXARIN TECH",
-            sourceUrl: a.source_url || "https://gemini.google.com",
-            scrapedAt: a.created_at,
-            title: a.title,
-            suggestedSlug: a.slug,
-            summary: a.excerpt,
-            draftContent: a.content,
-            opinionAnalysis: "Kurasi editorial otomatis siap review.",
-            category: (a.category_id || "AI").toUpperCase(),
-            tags: Array.isArray(a.tags) ? a.tags : ["AI", "Tech"],
-            suggestedSeoTitle: a.meta_title || a.title,
-            suggestedMetaDescription: a.meta_description || a.excerpt,
-            status: "draft" as const,
-            syncDate: a.created_at
-          }));
-        }
+          return artDrafts.map((a: any) => {
+            let extraMeta: any = {};
+            try {
+              if (a.source_id && a.source_id.startsWith("{")) {
+                extraMeta = JSON.parse(a.source_id);
+              }
+            } catch (e) {}
 
-        // Secondary check in editorial_drafts
-        const { data: dftData, error: dftErr } = await supabase
-          .from("editorial_drafts")
-          .select("*")
-          .eq("status", "draft_ready")
-          .order("id", { ascending: true });
+            const rawCategory = (a.category_id || "technology").toUpperCase();
+            const tags = Array.isArray(extraMeta.tags) && extraMeta.tags.length > 0
+              ? extraMeta.tags
+              : [rawCategory, "Tech"];
 
-        if (!dftErr && dftData && dftData.length > 0) {
-          clearBufferDrafts();
-          return dftData.map((d: any) => ({
-            id: d.id,
-            sourceId: `src-${d.sheet_row_id || d.id}`,
-            sourceName: d.source_name || "DATABASE PORTAL INFO NEXARIN TECH",
-            sourceUrl: d.source_url || "https://gemini.google.com",
-            scrapedAt: d.created_at,
-            title: d.title,
-            suggestedSlug: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-            summary: d.summary,
-            draftContent: d.suggested_content,
-            opinionAnalysis: "Kurasi editorial otomatis siap review.",
-            category: (d.suggested_category || "AI").toUpperCase(),
-            tags: Array.isArray(d.suggested_tags) ? d.suggested_tags : ["AI", "Tech"],
-            suggestedSeoTitle: d.title,
-            suggestedMetaDescription: d.summary,
-            status: "draft" as const,
-            syncDate: d.created_at
-          }));
+            const opinionAnalysis = extraMeta.opinion || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
+            const sourceName = extraMeta.sourceName || a.source_name || "DATABASE PORTAL INFO NEXARIN TECH";
+            const sourceUrl = extraMeta.sourceUrl || a.source_url || "https://gemini.google.com";
+
+            return {
+              id: a.id,
+              sourceId: `src-${a.id}`,
+              sourceName,
+              sourceUrl,
+              scrapedAt: a.created_at,
+              title: a.title,
+              suggestedSlug: a.slug,
+              summary: a.excerpt,
+              draftContent: a.content,
+              opinionAnalysis,
+              category: rawCategory,
+              tags,
+              suggestedSeoTitle: a.meta_title || `${a.title} — Nexarin Tech`,
+              suggestedMetaDescription: a.meta_description || a.excerpt,
+              status: "draft" as const,
+              syncDate: a.created_at
+            };
+          });
         }
 
         clearBufferDrafts();
@@ -275,23 +264,21 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
+        const extraMeta = {
+          tags: updates.tags,
+          opinion: updates.opinionAnalysis,
+          sourceName: updates.sourceName,
+          sourceUrl: updates.sourceUrl
+        };
+
         await supabase
           .from("articles")
           .update({
             title: updates.title,
             excerpt: updates.summary,
             content: updates.draftContent,
-            category_id: updates.category?.toLowerCase()
-          })
-          .eq("id", id);
-
-        await supabase
-          .from("editorial_drafts")
-          .update({
-            title: updates.title,
-            summary: updates.summary,
-            suggested_content: updates.draftContent,
-            suggested_category: updates.category
+            category_id: updates.category?.toLowerCase(),
+            source_id: JSON.stringify(extraMeta)
           })
           .eq("id", id);
       } catch (e) {}
@@ -462,14 +449,24 @@ export const geminiSyncService = {
     for (const d of sheetDrafts) {
       if (supabase) {
         try {
+          const extraMeta = {
+            tags: d.tags,
+            opinion: d.opinionAnalysis,
+            sourceName: d.sourceName,
+            sourceUrl: d.sourceUrl
+          };
+
           const { error: artErr } = await supabase.from("articles").upsert({
             id: d.id,
+            source_id: JSON.stringify(extraMeta),
             title: d.title,
             slug: d.suggestedSlug,
             excerpt: d.summary,
             content: d.draftContent,
             category_id: d.category.toLowerCase(),
             featured_image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
+            meta_title: `${d.title} — Nexarin Tech`,
+            meta_description: d.summary,
             status: "draft",
             author_name: "Redaksi Nexarin (via Gemini Spark)",
             author_avatar: "/assets/avatar-default.svg",
@@ -549,14 +546,24 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
+        const extraMeta = {
+          tags: newDraft.tags,
+          opinion: newDraft.opinionAnalysis,
+          sourceName: newDraft.sourceName,
+          sourceUrl: newDraft.sourceUrl
+        };
+
         await supabase.from("articles").upsert({
           id: newDraft.id,
+          source_id: JSON.stringify(extraMeta),
           title: newDraft.title,
           slug: newDraft.suggestedSlug,
           excerpt: newDraft.summary,
           content: newDraft.draftContent,
           category_id: category.toLowerCase(),
           featured_image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
+          meta_title: `${newDraft.title} — Nexarin Tech`,
+          meta_description: newDraft.summary,
           status: "draft",
           author_name: "Redaksi Nexarin",
           read_time_minutes: 6,
