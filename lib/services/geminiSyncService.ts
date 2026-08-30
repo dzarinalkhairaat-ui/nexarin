@@ -4,8 +4,29 @@ import { GeminiSparkDraft, Article } from "@/types/content";
 import { auditService } from "./auditService";
 import { exec } from "child_process";
 import { promisify } from "util";
+import fs from "fs";
+import path from "path";
 
 const execAsync = promisify(exec);
+const PERSIST_FILE = path.join(process.cwd(), "data", "runtime_drafts.json");
+
+function loadPersistedDrafts(): GeminiSparkDraft[] {
+  try {
+    if (fs.existsSync(PERSIST_FILE)) {
+      const content = fs.readFileSync(PERSIST_FILE, "utf-8");
+      return JSON.parse(content);
+    }
+  } catch (e) {}
+  return [];
+}
+
+function savePersistedDrafts(drafts: GeminiSparkDraft[]) {
+  try {
+    const dir = path.dirname(PERSIST_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(PERSIST_FILE, JSON.stringify(drafts, null, 2), "utf-8");
+  } catch (e) {}
+}
 
 export function extractSheetId(input: string): string {
   if (!input) return "";
@@ -24,10 +45,10 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
   const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
   let raw = "";
 
-  // 1. First attempt: standard fetch with timeout
+  // 1. Try fetch with timeout
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
     const res = await fetch(gvizUrl, {
       signal: controller.signal,
       headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
@@ -37,18 +58,14 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
     if (res.ok) {
       raw = await res.text();
     }
-  } catch (e) {
-    // WSL network timeout fallback
-  }
+  } catch (e) {}
 
-  // 2. Second attempt: curl / curl.exe fallback
+  // 2. Try curl.exe / curl fallback
   if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
     try {
       const { stdout } = await execAsync(`curl.exe -s "${gvizUrl}" || curl -s "${gvizUrl}"`);
       raw = stdout;
-    } catch (e) {
-      console.warn("curl fallback error:", e);
-    }
+    } catch (e) {}
   }
 
   if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
@@ -81,11 +98,8 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
       const excerpt = c[7]?.v?.toString() || title;
       const content = c[8]?.v?.toString() || excerpt;
       const opinion = c[9]?.v?.toString() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
-      const keyTakeaways = c[10]?.v?.toString() || "";
-      const readingTimeStr = c[11]?.v?.toString() || "5 min baca";
       const sourceName = c[12]?.v?.toString() || "Anthropic Newsroom";
       const sourceUrl = c[13]?.v?.toString() || "https://gemini.google.com";
-      const imageQuery = c[14]?.v?.toString() || "";
       const status = c[17]?.v?.toString() || "draft";
 
       const tags = tagsRaw
@@ -115,13 +129,13 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
 
     return drafts;
   } catch (error) {
-    console.error("Error parsing Google Sheets data:", error);
     return [];
   }
 }
 
 export const geminiSyncService = {
   async getDrafts(): Promise<GeminiSparkDraft[]> {
+    // 1. Try Supabase
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
@@ -150,14 +164,27 @@ export const geminiSyncService = {
             syncDate: d.created_at
           }));
 
-          const existingIds = new Set(dbDrafts.map((d: any) => d.id));
-          const fallbackDrafts = db.drafts.filter((d) => !existingIds.has(d.id));
-          return [...dbDrafts, ...fallbackDrafts];
+          savePersistedDrafts(dbDrafts);
+          return dbDrafts;
         }
-      } catch (e) {
-        console.error("Supabase drafts read error:", e);
-      }
+      } catch (e) {}
     }
+
+    // 2. Try disk persisted drafts
+    const diskDrafts = loadPersistedDrafts();
+    if (diskDrafts.length > 0) {
+      return diskDrafts;
+    }
+
+    // 3. Auto-sync from Google Sheets if currently empty
+    const sheetId = process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
+    const sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
+    if (sheetDrafts.length > 0) {
+      savePersistedDrafts(sheetDrafts);
+      db.drafts = [...sheetDrafts];
+      return sheetDrafts;
+    }
+
     return [...db.drafts];
   },
 
@@ -167,6 +194,13 @@ export const geminiSyncService = {
   },
 
   async updateDraft(id: string, updates: Partial<GeminiSparkDraft>): Promise<GeminiSparkDraft | null> {
+    const drafts = await this.getDrafts();
+    const idx = drafts.findIndex((d) => d.id === id);
+    if (idx !== -1) {
+      drafts[idx] = { ...drafts[idx], ...updates };
+      savePersistedDrafts(drafts);
+    }
+
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
@@ -180,43 +214,34 @@ export const geminiSyncService = {
             suggested_tags: updates.tags
           })
           .eq("id", id);
-      } catch (e) {
-        console.error("Supabase update draft error:", e);
-      }
+      } catch (e) {}
     }
 
-    const idx = db.drafts.findIndex((d) => d.id === id);
-    if (idx !== -1) {
-      db.drafts[idx] = { ...db.drafts[idx], ...updates };
-      return db.drafts[idx];
-    }
-    return null;
+    return drafts[idx] || null;
   },
 
   async rejectDraft(draftId: string): Promise<boolean> {
+    const drafts = await this.getDrafts();
+    const filtered = drafts.filter((d) => d.id !== draftId);
+    savePersistedDrafts(filtered);
+    db.drafts = filtered;
+
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
         await supabase.from("editorial_drafts").delete().eq("id", draftId);
-      } catch (e) {
-        console.error("Supabase delete draft error:", e);
-      }
+      } catch (e) {}
     }
 
-    const idx = db.drafts.findIndex((d) => d.id === draftId);
-    if (idx !== -1) {
-      const deletedDraft = db.drafts[idx];
-      db.drafts.splice(idx, 1);
-      await auditService.log(
-        "usr-adm-001",
-        "Rins",
-        "delete_draft",
-        "draft",
-        draftId,
-        deletedDraft.title,
-        `Menolak dan menghapus draft editorial ${draftId}`
-      );
-    }
+    await auditService.log(
+      "usr-adm-001",
+      "Rins",
+      "delete_draft",
+      "draft",
+      draftId,
+      draftId,
+      `Menolak dan menghapus draft editorial ${draftId}`
+    );
     return true;
   },
 
@@ -306,17 +331,16 @@ export const geminiSyncService = {
           .from("editorial_drafts")
           .update({ status: "published", reviewed_at: new Date().toISOString() })
           .eq("id", draftId);
-      } catch (e) {
-        console.error("Supabase publish error:", e);
-      }
+      } catch (e) {}
     }
 
     db.articles.unshift(newArticle);
 
-    const dIdx = db.drafts.findIndex((d) => d.id === draftId);
-    if (dIdx !== -1) {
-      db.drafts.splice(dIdx, 1);
-    }
+    // Remove from persisted drafts
+    const allDrafts = await this.getDrafts();
+    const updatedDrafts = allDrafts.filter((d) => d.id !== draftId);
+    savePersistedDrafts(updatedDrafts);
+    db.drafts = updatedDrafts;
 
     await auditService.log(
       "usr-adm-001",
@@ -355,11 +379,10 @@ export const geminiSyncService = {
             });
           } catch (e) {}
         }
-
-        if (!db.drafts.some((existing) => existing.id === d.id)) {
-          db.drafts.unshift(d);
-        }
       }
+
+      savePersistedDrafts(sheetDrafts);
+      db.drafts = [...sheetDrafts];
       return { syncedCount: sheetDrafts.length, newDrafts: sheetDrafts };
     }
 
@@ -402,6 +425,16 @@ export const geminiSyncService = {
       syncDate: new Date().toISOString()
     };
 
+    const drafts = await this.getDrafts();
+    const existingIdx = drafts.findIndex((d) => d.id === newDraft.id);
+    if (existingIdx !== -1) {
+      drafts[existingIdx] = newDraft;
+    } else {
+      drafts.unshift(newDraft);
+    }
+    savePersistedDrafts(drafts);
+    db.drafts = drafts;
+
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
@@ -420,7 +453,6 @@ export const geminiSyncService = {
       } catch (e) {}
     }
 
-    db.drafts.unshift(newDraft);
     return newDraft;
   },
 
@@ -446,25 +478,11 @@ export const geminiSyncService = {
       syncDate: new Date().toISOString()
     };
 
-    const supabase = getSupabaseAdminClient();
-    if (supabase) {
-      try {
-        await supabase.from("editorial_drafts").upsert({
-          id: newDraft.id,
-          source_name: newDraft.sourceName,
-          source_url: newDraft.sourceUrl,
-          title: newDraft.title,
-          summary: newDraft.summary,
-          suggested_content: newDraft.draftContent,
-          suggested_category: newDraft.category,
-          suggested_tags: newDraft.tags,
-          gemini_score: 9.8,
-          status: "draft_ready"
-        });
-      } catch (e) {}
-    }
+    const drafts = await this.getDrafts();
+    drafts.unshift(newDraft);
+    savePersistedDrafts(drafts);
+    db.drafts = drafts;
 
-    db.drafts.unshift(newDraft);
     return newDraft;
   }
 };
