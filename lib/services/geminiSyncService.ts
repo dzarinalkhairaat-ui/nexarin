@@ -122,7 +122,7 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
         tags: tags.length > 0 ? tags : ["Tech", "AI"],
         suggestedSeoTitle: `${title} — Nexarin Tech`,
         suggestedMetaDescription: excerpt,
-        status: status.toLowerCase() === "published" ? "published" : "draft",
+        status: "draft",
         syncDate: createdAt
       });
     });
@@ -135,17 +135,47 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
 
 export const geminiSyncService = {
   async getDrafts(): Promise<GeminiSparkDraft[]> {
-    // 1. Try Supabase
+    // 1. Try Supabase articles with status='draft' OR editorial_drafts
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
-        const { data, error } = await supabase
-          .from("editorial_drafts")
+        const { data: artDrafts, error: artErr } = await supabase
+          .from("articles")
           .select("*")
+          .eq("status", "draft")
           .order("created_at", { ascending: false });
 
-        if (!error && data && data.length > 0) {
-          const dbDrafts = data.map((d: any) => ({
+        if (!artErr && artDrafts && artDrafts.length > 0) {
+          const formatted = artDrafts.map((a: any) => ({
+            id: a.id,
+            sourceId: `src-${a.id}`,
+            sourceName: a.source_name || "DATABASE PORTAL INFO NEXARIN TECH",
+            sourceUrl: a.source_url || "https://gemini.google.com",
+            scrapedAt: a.created_at,
+            title: a.title,
+            suggestedSlug: a.slug,
+            summary: a.excerpt,
+            draftContent: a.content,
+            opinionAnalysis: "Kurasi editorial otomatis siap review.",
+            category: (a.category_id || "AI").toUpperCase(),
+            tags: Array.isArray(a.tags) ? a.tags : ["AI", "Tech"],
+            suggestedSeoTitle: a.meta_title || a.title,
+            suggestedMetaDescription: a.meta_description || a.excerpt,
+            status: "draft" as const,
+            syncDate: a.created_at
+          }));
+          savePersistedDrafts(formatted);
+          return formatted;
+        }
+
+        const { data: dftData, error: dftErr } = await supabase
+          .from("editorial_drafts")
+          .select("*")
+          .eq("status", "draft_ready")
+          .order("created_at", { ascending: false });
+
+        if (!dftErr && dftData && dftData.length > 0) {
+          const formatted = dftData.map((d: any) => ({
             id: d.id,
             sourceId: `src-${d.sheet_row_id || d.id}`,
             sourceName: d.source_name || "DATABASE PORTAL INFO NEXARIN TECH",
@@ -156,27 +186,26 @@ export const geminiSyncService = {
             summary: d.summary,
             draftContent: d.suggested_content,
             opinionAnalysis: "Kurasi editorial otomatis siap review.",
-            category: d.suggested_category || "AI",
+            category: (d.suggested_category || "AI").toUpperCase(),
             tags: Array.isArray(d.suggested_tags) ? d.suggested_tags : ["AI", "Tech"],
             suggestedSeoTitle: d.title,
             suggestedMetaDescription: d.summary,
-            status: (d.status === "published" ? "published" : "draft") as "draft" | "published",
+            status: "draft" as const,
             syncDate: d.created_at
           }));
-
-          savePersistedDrafts(dbDrafts);
-          return dbDrafts;
+          savePersistedDrafts(formatted);
+          return formatted;
         }
       } catch (e) {}
     }
 
-    // 2. Try disk persisted drafts
+    // 2. Load disk persisted drafts
     const diskDrafts = loadPersistedDrafts();
     if (diskDrafts.length > 0) {
       return diskDrafts;
     }
 
-    // 3. Auto-sync from Google Sheets if currently empty
+    // 3. Auto-sync from Google Sheets if completely empty
     const sheetId = process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
     const sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
     if (sheetDrafts.length > 0) {
@@ -205,13 +234,22 @@ export const geminiSyncService = {
     if (supabase) {
       try {
         await supabase
+          .from("articles")
+          .update({
+            title: updates.title,
+            excerpt: updates.summary,
+            content: updates.draftContent,
+            category_id: updates.category?.toLowerCase()
+          })
+          .eq("id", id);
+
+        await supabase
           .from("editorial_drafts")
           .update({
             title: updates.title,
             summary: updates.summary,
             suggested_content: updates.draftContent,
-            suggested_category: updates.category,
-            suggested_tags: updates.tags
+            suggested_category: updates.category
           })
           .eq("id", id);
       } catch (e) {}
@@ -229,6 +267,7 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
+        await supabase.from("articles").delete().eq("id", draftId);
         await supabase.from("editorial_drafts").delete().eq("id", draftId);
       } catch (e) {}
     }
@@ -262,7 +301,6 @@ export const geminiSyncService = {
     const draft = await this.getDraftById(draftId);
     if (!draft) return null;
 
-    draft.status = "published";
     const title = editedData?.title || draft.title;
     const rawSlug = editedData?.slug || draft.suggestedSlug || title;
     const slug = rawSlug
@@ -273,8 +311,8 @@ export const geminiSyncService = {
     const catSlug = (typeof editedData?.category === "object" ? editedData?.category?.slug : editedData?.category) || draft.category.toLowerCase() || "ai";
     const catName = catSlug === "ai" ? "Artificial Intelligence" : catSlug === "gadget" ? "Gadget" : catSlug === "automotive" ? "Automotive" : catSlug === "digital" ? "Digital" : "Technology";
 
-    const newArticle: Article = {
-      id: `art-${Date.now()}`,
+    const publishedArticle: Article = {
+      id: draftId.startsWith("NXR") ? `art-${draftId}` : draftId,
       title,
       slug: `${slug}-${Math.floor(100 + Math.random() * 900)}`,
       excerpt: editedData?.excerpt || draft.summary,
@@ -307,34 +345,36 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
-        await supabase.from("articles").insert({
-          id: newArticle.id,
-          title: newArticle.title,
-          slug: newArticle.slug,
-          excerpt: newArticle.excerpt,
-          content: newArticle.content,
+        // Upsert into articles as PUBLISHED
+        await supabase.from("articles").upsert({
+          id: publishedArticle.id,
+          title: publishedArticle.title,
+          slug: publishedArticle.slug,
+          excerpt: publishedArticle.excerpt,
+          content: publishedArticle.content,
           category_id: catSlug,
-          featured_image: newArticle.featuredImage,
-          meta_title: newArticle.metaTitle,
-          meta_description: newArticle.metaDescription,
+          featured_image: publishedArticle.featuredImage,
+          meta_title: publishedArticle.metaTitle,
+          meta_description: publishedArticle.metaDescription,
           status: "published",
-          author_name: newArticle.author.name,
-          author_avatar: newArticle.author.avatar,
-          read_time_minutes: newArticle.readingTimeMinutes,
+          author_name: publishedArticle.author.name,
+          author_avatar: publishedArticle.author.avatar,
+          read_time_minutes: publishedArticle.readingTimeMinutes,
           views_count: 1,
           is_featured: false,
           is_trending: true,
-          published_at: newArticle.publishedAt
+          published_at: publishedArticle.publishedAt
         });
 
-        await supabase
-          .from("editorial_drafts")
-          .update({ status: "published", reviewed_at: new Date().toISOString() })
-          .eq("id", draftId);
-      } catch (e) {}
+        // Delete old draft from draft records
+        await supabase.from("articles").delete().eq("id", draftId).eq("status", "draft");
+        await supabase.from("editorial_drafts").delete().eq("id", draftId);
+      } catch (e) {
+        console.error("Supabase publish error:", e);
+      }
     }
 
-    db.articles.unshift(newArticle);
+    db.articles.unshift(publishedArticle);
 
     // Remove from persisted drafts
     const allDrafts = await this.getDrafts();
@@ -347,12 +387,12 @@ export const geminiSyncService = {
       "Rins",
       "publish_article",
       "article",
-      newArticle.id,
-      newArticle.title,
-      `Menerbitkan draft editorial [${draft.id}] menjadi artikel publik: ${newArticle.title}`
+      publishedArticle.id,
+      publishedArticle.title,
+      `Menerbitkan draft editorial [${draftId}] menjadi artikel publik di Supabase: ${publishedArticle.title}`
     );
 
-    return newArticle;
+    return publishedArticle;
   },
 
   async triggerSync(customSheetId?: string): Promise<{ syncedCount: number; newDrafts: GeminiSparkDraft[] }> {
@@ -365,6 +405,25 @@ export const geminiSyncService = {
       for (const d of sheetDrafts) {
         if (supabase) {
           try {
+            // Save to Supabase articles table as status='draft'
+            await supabase.from("articles").upsert({
+              id: d.id,
+              title: d.title,
+              slug: d.suggestedSlug,
+              excerpt: d.summary,
+              content: d.draftContent,
+              category_id: d.category.toLowerCase(),
+              status: "draft",
+              author_name: "Redaksi Nexarin (via Gemini Spark)",
+              author_avatar: "/assets/avatar-default.svg",
+              read_time_minutes: 6,
+              views_count: 1,
+              is_featured: false,
+              is_trending: false,
+              created_at: d.scrapedAt
+            });
+
+            // Also save to editorial_drafts
             await supabase.from("editorial_drafts").upsert({
               id: d.id,
               source_name: d.sourceName,
@@ -438,6 +497,20 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
+        await supabase.from("articles").upsert({
+          id: newDraft.id,
+          title: newDraft.title,
+          slug: newDraft.suggestedSlug,
+          excerpt: newDraft.summary,
+          content: newDraft.draftContent,
+          category_id: category.toLowerCase(),
+          status: "draft",
+          author_name: "Redaksi Nexarin",
+          read_time_minutes: 6,
+          views_count: 1,
+          created_at: newDraft.scrapedAt
+        });
+
         await supabase.from("editorial_drafts").upsert({
           id: newDraft.id,
           source_name: newDraft.sourceName,

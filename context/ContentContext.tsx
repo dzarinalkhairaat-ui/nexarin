@@ -2,8 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Article, GeminiSparkDraft } from "@/types/content";
-import { INITIAL_ARTICLES } from "@/data/mockArticles";
-import { INITIAL_DRAFTS } from "@/data/mockDrafts";
 import { useNotification } from "@/context/NotificationContext";
 
 interface ContentContextType {
@@ -31,21 +29,45 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const { showToast } = useNotification();
 
   const loadData = async () => {
+    // 1. Instant hydration from localStorage
+    if (typeof window !== "undefined") {
+      try {
+        const cachedDrafts = localStorage.getItem("nexarin_editorial_drafts");
+        if (cachedDrafts) {
+          const parsed = JSON.parse(cachedDrafts);
+          if (Array.isArray(parsed) && parsed.length > 0) setDrafts(parsed);
+        }
+        const cachedArticles = localStorage.getItem("nexarin_published_articles");
+        if (cachedArticles) {
+          const parsed = JSON.parse(cachedArticles);
+          if (Array.isArray(parsed) && parsed.length > 0) setArticles(parsed);
+        }
+      } catch (e) {}
+    }
+
+    // 2. Fetch fresh published articles from backend
     try {
       const res = await fetch("/api/articles");
       const data = await res.json();
       if (data.success && data.data && Array.isArray(data.data)) {
         setArticles(data.data);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("nexarin_published_articles", JSON.stringify(data.data));
+        }
       }
     } catch (e) {
       console.log("Using cached articles", e);
     }
 
+    // 3. Fetch fresh drafts from backend
     try {
       const res = await fetch("/api/gemini-sync/drafts");
       const data = await res.json();
       if (data.success && data.data && Array.isArray(data.data)) {
         setDrafts(data.data);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(data.data));
+        }
       }
     } catch (e) {
       console.log("Using cached drafts", e);
@@ -94,158 +116,241 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.data) {
-        setArticles((prev) => [data.data, ...prev.filter((a) => a.id !== data.data.id)]);
-        setDrafts((prev) => prev.filter((d) => d.id !== draftId));
+        setArticles((prev) => {
+          const next = [data.data, ...prev.filter((a) => a.id !== data.data.id)];
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
+          }
+          return next;
+        });
+
+        setDrafts((prev) => {
+          const next = prev.filter((d) => d.id !== draftId);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
+          }
+          return next;
+        });
+
+        showToast({
+          type: "success",
+          title: "Artikel Berhasil Diterbitkan",
+          message: `"${data.data.title}" kini telah tayang di database Supabase dan portal publik.`
+        });
       }
     } catch (e) {
-      console.error("Publish draft error:", e);
+      showToast({
+        type: "error",
+        title: "Gagal Publikasi",
+        message: "Terjadi kesalahan saat mempublikasikan artikel."
+      });
     }
-
-    showToast({
-      type: "success",
-      title: "Artikel Berhasil Dipublikasikan",
-      message: "Draft telah diterbitkan dan langsung tayang di portal publik dan database Supabase."
-    });
-  };
-
-  const deleteMultipleDrafts = async (draftIds: string[]) => {
-    if (draftIds.length === 0) return;
-    setDrafts((prev) => prev.filter((d) => !draftIds.includes(d.id)));
-    try {
-      await Promise.all(draftIds.map(id => fetch(`/api/gemini-sync/drafts/${id}`, { method: "DELETE" })));
-    } catch (e) {
-      console.error("Bulk delete drafts error:", e);
-    }
-    showToast({
-      type: "info",
-      title: "Draft Terpilih Dihapus",
-      message: `${draftIds.length} draft artikel berhasil dihapus secara massal.`
-    });
-  };
-
-  const deleteMultipleArticles = async (articleIds: string[]) => {
-    if (articleIds.length === 0) return;
-    setArticles((prev) => prev.filter((a) => !articleIds.includes(a.id)));
-    try {
-      await Promise.all(articleIds.map(id => fetch(`/api/articles/${id}`, { method: "DELETE" })));
-    } catch (e) {
-      console.error("Bulk delete articles error:", e);
-    }
-    showToast({
-      type: "info",
-      title: "Artikel Terpilih Dihapus",
-      message: `${articleIds.length} artikel berhasil dihapus dari portal publik.`
-    });
   };
 
   const deleteDraft = async (draftId: string) => {
-    setDrafts((prev) => prev.filter((d) => d.id !== draftId));
     try {
-      await fetch(`/api/gemini-sync/drafts/${draftId}`, { method: "DELETE" });
+      const res = await fetch(`/api/gemini-sync/drafts/${draftId}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDrafts((prev) => {
+          const next = prev.filter((d) => d.id !== draftId);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
+          }
+          return next;
+        });
+        showToast({
+          type: "info",
+          title: "Draft Dihapus",
+          message: "Draft artikel telah dihapus dari antrean dan database Supabase."
+        });
+      }
     } catch (e) {
-      console.error("Delete draft error:", e);
+      showToast({
+        type: "error",
+        title: "Gagal Menghapus",
+        message: "Gagal menghapus draft dari database."
+      });
     }
-    showToast({
-      type: "info",
-      title: "Draft Dihapus",
-      message: "Draft telah dihapus secara permanen dari antrean review dan database."
-    });
+  };
+
+  const deleteMultipleDrafts = async (draftIds: string[]) => {
+    try {
+      await Promise.all(
+        draftIds.map((id) =>
+          fetch(`/api/gemini-sync/drafts/${id}`, { method: "DELETE" })
+        )
+      );
+      setDrafts((prev) => {
+        const next = prev.filter((d) => !draftIds.includes(d.id));
+        if (typeof window !== "undefined") {
+          localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
+        }
+        return next;
+      });
+      showToast({
+        type: "info",
+        title: "Draft Massal Dihapus",
+        message: `${draftIds.length} draft artikel berhasil dihapus dari database Supabase.`
+      });
+    } catch (e) {
+      showToast({
+        type: "error",
+        title: "Gagal Menghapus",
+        message: "Gagal menghapus beberapa draft terpilih."
+      });
+    }
   };
 
   const updateDraft = (draftId: string, updatedDraft: Partial<GeminiSparkDraft>) => {
-    setDrafts((prev) =>
-      prev.map((d) => (d.id === draftId ? { ...d, ...updatedDraft } : d))
-    );
+    setDrafts((prev) => {
+      const next = prev.map((d) => (d.id === draftId ? { ...d, ...updatedDraft } : d));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
+      }
+      return next;
+    });
   };
 
-  const createArticle = async (articleData: Omit<Article, "id" | "views" | "createdAt" | "updatedAt">) => {
+  const createArticle = async (article: Omit<Article, "id" | "views" | "createdAt" | "updatedAt">) => {
     try {
       const res = await fetch("/api/articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(articleData)
+        body: JSON.stringify(article)
       });
       const data = await res.json();
       if (data.success && data.data) {
-        setArticles((prev) => [data.data, ...prev]);
+        setArticles((prev) => {
+          const next = [data.data, ...prev];
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
+          }
+          return next;
+        });
+        showToast({
+          type: "success",
+          title: "Artikel Berhasil Ditambahkan",
+          message: `Artikel "${data.data.title}" telah disimpan ke Supabase.`
+        });
       }
     } catch (e) {
-      const fallbackArt: Article = {
-        ...articleData,
-        id: "art-" + Date.now(),
-        views: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      setArticles((prev) => [fallbackArt, ...prev]);
+      showToast({
+        type: "error",
+        title: "Gagal Menambahkan Artikel",
+        message: "Terjadi kesalahan saat menyimpan artikel ke database."
+      });
     }
-
-    showToast({
-      type: "success",
-      title: "Artikel Dibuat",
-      message: "Artikel baru berhasil ditambahkan ke database."
-    });
   };
 
-  const updateArticle = async (id: string, updatedData: Partial<Article>) => {
-    setArticles((prev) =>
-      prev.map((a) =>
-        a.id === id || a.slug === id ? { ...a, ...updatedData, updatedAt: new Date().toISOString() } : a
-      )
-    );
-
+  const updateArticle = async (id: string, articleUpdates: Partial<Article>) => {
     try {
-      await fetch(`/api/articles/${id}`, {
+      const res = await fetch(`/api/articles/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData)
+        body: JSON.stringify(articleUpdates)
       });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setArticles((prev) => {
+          const next = prev.map((a) => (a.id === id ? data.data : a));
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
+          }
+          return next;
+        });
+        showToast({
+          type: "success",
+          title: "Artikel Diperbarui",
+          message: `Perubahan artikel telah disimpan ke Supabase.`
+        });
+      }
     } catch (e) {
-      console.error("Update article error:", e);
+      showToast({
+        type: "error",
+        title: "Gagal Memperbarui",
+        message: "Gagal memperbarui artikel di database."
+      });
     }
-
-    showToast({
-      type: "success",
-      title: "Artikel Diperbarui",
-      message: "Perubahan artikel berhasil disimpan ke database."
-    });
   };
 
   const deleteArticle = async (id: string) => {
-    // Optimistic state update so UI removes it immediately
-    setArticles((prev) => prev.filter((a) => a.id !== id && a.slug !== id));
-
     try {
-      const res = await fetch(`/api/articles/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/articles/${id}`, {
+        method: "DELETE"
+      });
       const data = await res.json();
-      console.log("Delete article API response:", data);
+      if (data.success) {
+        setArticles((prev) => {
+          const next = prev.filter((a) => a.id !== id);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
+          }
+          return next;
+        });
+        showToast({
+          type: "info",
+          title: "Artikel Dihapus",
+          message: "Artikel telah dihapus secara permanen dari Supabase."
+        });
+      }
     } catch (e) {
-      console.error("Delete article API error:", e);
+      showToast({
+        type: "error",
+        title: "Gagal Menghapus",
+        message: "Gagal menghapus artikel dari database."
+      });
     }
+  };
 
-    showToast({
-      type: "warning",
-      title: "Artikel Berhasil Dihapus",
-      message: "Artikel telah dihapus secara permanen dari website dan database Supabase."
-    });
+  const deleteMultipleArticles = async (articleIds: string[]) => {
+    try {
+      await Promise.all(
+        articleIds.map((id) =>
+          fetch(`/api/articles/${id}`, { method: "DELETE" })
+        )
+      );
+      setArticles((prev) => {
+        const next = prev.filter((a) => !articleIds.includes(a.id));
+        if (typeof window !== "undefined") {
+          localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
+        }
+        return next;
+      });
+      showToast({
+        type: "info",
+        title: "Artikel Massal Dihapus",
+        message: `${articleIds.length} artikel telah dihapus dari Supabase.`
+      });
+    } catch (e) {
+      showToast({
+        type: "error",
+        title: "Gagal Menghapus",
+        message: "Gagal menghapus artikel terpilih."
+      });
+    }
   };
 
   const syncGeminiSpark = async () => {
     try {
       const res = await fetch("/api/gemini-sync/sync", { method: "POST" });
       const data = await res.json();
-      if (data.success && data.data?.newDrafts) {
-        setDrafts((prev) => [...data.data.newDrafts, ...prev]);
+      if (data.success) {
+        // Reload fresh drafts
+        const dftRes = await fetch("/api/gemini-sync/drafts");
+        const dftData = await dftRes.json();
+        if (dftData.success && dftData.data && Array.isArray(dftData.data)) {
+          setDrafts(dftData.data);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(dftData.data));
+          }
+        }
       }
     } catch (e) {
-      console.log("Local sync triggered");
+      console.error("Sync error:", e);
     }
-
-    showToast({
-      type: "success",
-      title: "Sinkronisasi Berhasil",
-      message: "Berhasil memeriksa dan mengimpor draft terbaru dari pipeline Gemini Spark dan Google Sheets."
-    });
   };
 
   return (
@@ -259,11 +364,11 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
         publishDraft,
         deleteDraft,
         deleteMultipleDrafts,
-        deleteMultipleArticles,
         updateDraft,
         createArticle,
         updateArticle,
         deleteArticle,
+        deleteMultipleArticles,
         syncGeminiSpark
       }}
     >
