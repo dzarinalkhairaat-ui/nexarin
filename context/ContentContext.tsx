@@ -29,48 +29,26 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const { showToast } = useNotification();
 
   const loadData = async () => {
-    // 1. Instant hydration from localStorage
-    if (typeof window !== "undefined") {
-      try {
-        const cachedDrafts = localStorage.getItem("nexarin_editorial_drafts");
-        if (cachedDrafts) {
-          const parsed = JSON.parse(cachedDrafts);
-          if (Array.isArray(parsed) && parsed.length > 0) setDrafts(parsed);
-        }
-        const cachedArticles = localStorage.getItem("nexarin_published_articles");
-        if (cachedArticles) {
-          const parsed = JSON.parse(cachedArticles);
-          if (Array.isArray(parsed) && parsed.length > 0) setArticles(parsed);
-        }
-      } catch (e) {}
-    }
-
-    // 2. Fetch fresh published articles from backend
+    // 1. Fetch fresh published articles from backend
     try {
       const res = await fetch("/api/articles");
       const data = await res.json();
-      if (data.success && data.data && Array.isArray(data.data)) {
+      if (data.success && Array.isArray(data.data)) {
         setArticles(data.data);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("nexarin_published_articles", JSON.stringify(data.data));
-        }
       }
     } catch (e) {
-      console.log("Using cached articles", e);
+      console.error("Failed to load articles from API:", e);
     }
 
-    // 3. Fetch fresh drafts from backend
+    // 2. Fetch fresh drafts from backend
     try {
       const res = await fetch("/api/gemini-sync/drafts");
       const data = await res.json();
-      if (data.success && data.data && Array.isArray(data.data)) {
+      if (data.success && Array.isArray(data.data)) {
         setDrafts(data.data);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(data.data));
-        }
       }
     } catch (e) {
-      console.log("Using cached drafts", e);
+      console.error("Failed to load drafts from API:", e);
     }
   };
 
@@ -116,21 +94,8 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.data) {
-        setArticles((prev) => {
-          const next = [data.data, ...prev.filter((a) => a.id !== data.data.id)];
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
-          }
-          return next;
-        });
-
-        setDrafts((prev) => {
-          const next = prev.filter((d) => d.id !== draftId);
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
-          }
-          return next;
-        });
+        setArticles((prev) => [data.data, ...prev.filter((a) => a.id !== data.data.id)]);
+        setDrafts((prev) => prev.filter((d) => d.id !== draftId));
 
         showToast({
           type: "success",
@@ -154,13 +119,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success) {
-        setDrafts((prev) => {
-          const next = prev.filter((d) => d.id !== draftId);
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
-          }
-          return next;
-        });
+        setDrafts((prev) => prev.filter((d) => d.id !== draftId));
         showToast({
           type: "info",
           title: "Draft Dihapus",
@@ -183,13 +142,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
           fetch(`/api/gemini-sync/drafts/${id}`, { method: "DELETE" })
         )
       );
-      setDrafts((prev) => {
-        const next = prev.filter((d) => !draftIds.includes(d.id));
-        if (typeof window !== "undefined") {
-          localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
-        }
-        return next;
-      });
+      setDrafts((prev) => prev.filter((d) => !draftIds.includes(d.id)));
       showToast({
         type: "info",
         title: "Draft Massal Dihapus",
@@ -205,13 +158,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateDraft = (draftId: string, updatedDraft: Partial<GeminiSparkDraft>) => {
-    setDrafts((prev) => {
-      const next = prev.map((d) => (d.id === draftId ? { ...d, ...updatedDraft } : d));
-      if (typeof window !== "undefined") {
-        localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(next));
-      }
-      return next;
-    });
+    setDrafts((prev) => prev.map((d) => (d.id === draftId ? { ...d, ...updatedDraft } : d)));
   };
 
   const createArticle = async (article: Omit<Article, "id" | "views" | "createdAt" | "updatedAt">) => {
@@ -223,13 +170,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.data) {
-        setArticles((prev) => {
-          const next = [data.data, ...prev];
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
-          }
-          return next;
-        });
+        setArticles((prev) => [data.data, ...prev]);
         showToast({
           type: "success",
           title: "Artikel Berhasil Ditambahkan",
@@ -254,13 +195,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success && data.data) {
-        setArticles((prev) => {
-          const next = prev.map((a) => (a.id === id ? data.data : a));
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
-          }
-          return next;
-        });
+        setArticles((prev) => prev.map((a) => (a.id === id ? data.data : a)));
         showToast({
           type: "success",
           title: "Artikel Diperbarui",
@@ -283,13 +218,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (data.success) {
-        setArticles((prev) => {
-          const next = prev.filter((a) => a.id !== id);
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
-          }
-          return next;
-        });
+        setArticles((prev) => prev.filter((a) => a.id !== id));
         showToast({
           type: "info",
           title: "Artikel Dihapus",
@@ -312,13 +241,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
           fetch(`/api/articles/${id}`, { method: "DELETE" })
         )
       );
-      setArticles((prev) => {
-        const next = prev.filter((a) => !articleIds.includes(a.id));
-        if (typeof window !== "undefined") {
-          localStorage.setItem("nexarin_published_articles", JSON.stringify(next));
-        }
-        return next;
-      });
+      setArticles((prev) => prev.filter((a) => !articleIds.includes(a.id)));
       showToast({
         type: "info",
         title: "Artikel Massal Dihapus",
@@ -338,14 +261,10 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/gemini-sync/sync", { method: "POST" });
       const data = await res.json();
       if (data.success) {
-        // Reload fresh drafts
         const dftRes = await fetch("/api/gemini-sync/drafts");
         const dftData = await dftRes.json();
-        if (dftData.success && dftData.data && Array.isArray(dftData.data)) {
+        if (dftData.success && Array.isArray(dftData.data)) {
           setDrafts(dftData.data);
-          if (typeof window !== "undefined") {
-            localStorage.setItem("nexarin_editorial_drafts", JSON.stringify(dftData.data));
-          }
         }
       }
     } catch (e) {
