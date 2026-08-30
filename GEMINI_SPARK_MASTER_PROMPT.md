@@ -18,6 +18,36 @@ Secara otomatis mencari dan meriset informasi teknologi terbaru dari internet gl
 Setiap jam berjalan, workflow WAJIB memproses 1 (satu) topik berita terhangat sesuai giliran kategori, menyusunnya menjadi artikel editorial komprehensif mendalam berbobot MINIMAL 900 KATA, dan memasukkan seluruh data terstruktur ke Google Sheets bernama "DATABASE PORTAL INFO NEXARIN TECH" dengan status awal WAJIB "draft".
 
 ==================================================
+📋 ATURAN INISIALISASI HEADER SPREADSHEET (BARIS 1)
+==================================================
+
+1. CEK JUDUL KOLOM DI BARIS PERTAMA (ROW 1):
+   - Jika spreadsheet "DATABASE PORTAL INFO NEXARIN TECH" masih kosong atau belum memiliki judul kolom, workflow WAJIB membuat 18 nama kolom di Baris 1 terlebih dahulu.
+   - Format font untuk seluruh judul kolom di Baris 1 WAJIB dicetak TEBAL (BOLD).
+   - Susunan 18 nama kolom di Baris 1 adalah:
+     Col A: id
+     Col B: created_at
+     Col C: title
+     Col D: slug
+     Col E: category
+     Col F: subcategory
+     Col G: tags
+     Col H: excerpt
+     Col I: content
+     Col J: opinion
+     Col K: key_takeaways
+     Col L: reading_time
+     Col M: source_name
+     Col N: source_url
+     Col O: image_query
+     Col P: recommended_product_name
+     Col Q: recommended_product_url
+     Col R: status
+
+2. PENAMBAHAN DATA ARTIKEL BARU:
+   - Data artikel baru SELALU dimasukkan pada baris kosong berikutnya di bawah header (Baris 2, Baris 3, dst.) secara berurutan dan DILARANG menimpa (overwrite) Baris 1 atau baris artikel yang sudah ada sebelumnya.
+
+==================================================
 ⛔ PERATURAN TEGAS & FORMAT PENULISAN (STRICT RULES)
 ==================================================
 
@@ -127,10 +157,11 @@ Masukkan data ke dalam kolom-kolom berikut secara presisi dan bersih dari simbol
 LANGKAH EKSEKUSI WORKFLOW
 ==================================================
 
-1. Cek giliran kategori rotasi jam saat ini (AI, Teknologi, Digital, Gadget, atau Otomotif).
-2. Cari berita atau rilis teknologi primer terhangat (maksimal 1 bulan terakhir).
-3. Verifikasi fakta dan pastikan belum pernah ditulis sebelumnya (anti-duplikasi).
-4. Tulis naskah artikel berbobot MINIMAL 900 KATA dengan 6 bab penomoran rapi dan 1 baris kosong per paragraf tanpa simbol # dan *.
-5. Susun opini redaksi, 3-5 key takeaways, tags tanpa simbol tagar, dan metadata SEO.
-6. Masukkan seluruh 18 kolom ke Google Sheets "DATABASE PORTAL INFO NEXARIN TECH" dengan status awal "draft".
-7. Selesai. Workflow berhenti dan menunggu jadwal jam berikutnya.
+1. Cek apakah Baris 1 (Row 1) spreadsheet sudah memiliki 18 judul kolom (Bold). Jika belum ada, buat terlebih dahulu.
+2. Cek giliran kategori rotasi jam saat ini (AI, Teknologi, Digital, Gadget, atau Otomotif).
+3. Cari berita atau rilis teknologi primer terhangat (maksimal 1 bulan terakhir).
+4. Verifikasi fakta dan pastikan belum pernah ditulis sebelumnya (anti-duplikasi).
+5. Tulis naskah artikel berbobot MINIMAL 900 KATA dengan 6 bab penomoran rapi dan 1 baris kosong per paragraf tanpa simbol # dan *.
+6. Susun opini redaksi, 3-5 key takeaways, tags tanpa simbol tagar, dan metadata SEO.
+7. Masukkan seluruh 18 kolom ke Google Sheets "DATABASE PORTAL INFO NEXARIN TECH" pada baris baru berikutnya dengan status awal "draft".
+8. Selesai. Workflow berhenti dan menunggu jadwal jam berikutnya.
