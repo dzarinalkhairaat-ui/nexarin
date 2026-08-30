@@ -11,6 +11,7 @@ import { Tabs } from "@/components/ui/Tabs";
 import { ConfirmModal } from "@/components/feedback/ConfirmModal";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { formatDate } from "@/lib/utils";
+import { Article } from "@/types/content";
 import {
   FileEdit,
   Sparkles,
@@ -25,7 +26,12 @@ import {
   CheckSquare,
   Square,
   MinusSquare,
-  AlertTriangle
+  AlertTriangle,
+  FileSpreadsheet,
+  X,
+  Save,
+  Tag,
+  Globe
 } from "lucide-react";
 
 export default function AdminContentPage() {
@@ -36,7 +42,8 @@ export default function AdminContentPage() {
     deleteArticle,
     deleteMultipleDrafts,
     deleteMultipleArticles,
-    syncGeminiSpark
+    syncGeminiSpark,
+    updateArticle
   } = useContent();
 
   const [activeTab, setActiveTab] = useState<string>("drafts");
@@ -52,6 +59,18 @@ export default function AdminContentPage() {
   const [selectedDraftIds, setSelectedDraftIds] = useState<string[]>([]);
   const [selectedArticleIds, setSelectedArticleIds] = useState<string[]>([]);
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+
+  // Google Sheets Sync Modal State
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Edit Published Article Modal State
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editExcerpt, setEditExcerpt] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [editCategory, setEditCategory] = useState("technology");
+  const [isSavingArticle, setIsSavingArticle] = useState(false);
 
   const pendingDrafts = drafts.filter((d) => d.status === "draft");
 
@@ -93,57 +112,92 @@ export default function AdminContentPage() {
   };
 
   // Single Delete Handler
-  const handleConfirmSingleDelete = () => {
+  const handleConfirmSingleDelete = async () => {
     if (!deleteTarget) return;
     if (deleteTarget.type === "draft") {
-      deleteDraft(deleteTarget.id);
+      await deleteDraft(deleteTarget.id);
       setSelectedDraftIds((prev) => prev.filter((id) => id !== deleteTarget.id));
     } else {
-      deleteArticle(deleteTarget.id);
+      await deleteArticle(deleteTarget.id);
       setSelectedArticleIds((prev) => prev.filter((id) => id !== deleteTarget.id));
     }
     setDeleteTarget(null);
   };
 
   // Bulk Delete Handler
-  const handleConfirmBulkDelete = () => {
+  const handleConfirmBulkDelete = async () => {
     if (activeTab === "drafts") {
-      deleteMultipleDrafts(selectedDraftIds);
+      await deleteMultipleDrafts(selectedDraftIds);
       setSelectedDraftIds([]);
     } else {
-      deleteMultipleArticles(selectedArticleIds);
+      await deleteMultipleArticles(selectedArticleIds);
       setSelectedArticleIds([]);
     }
     setIsBulkDeleteModalOpen(false);
   };
 
-  const currentSelectedCount =
-    activeTab === "drafts" ? selectedDraftIds.length : selectedArticleIds.length;
-  const currentTotalCount =
-    activeTab === "drafts" ? pendingDrafts.length : articles.length;
-  const isAllSelected =
-    currentTotalCount > 0 && currentSelectedCount === currentTotalCount;
+  // Trigger Sync with Sheet
+  const handleTriggerSync = async () => {
+    setIsSyncing(true);
+    try {
+      await syncGeminiSpark();
+    } finally {
+      setIsSyncing(false);
+      setIsSyncModalOpen(false);
+    }
+  };
+
+  // Open Edit Modal for Published Article
+  const handleOpenEditArticle = (art: Article) => {
+    setEditingArticle(art);
+    setEditTitle(art.title);
+    setEditExcerpt(art.excerpt);
+    setEditContent(art.content);
+    setEditCategory(art.category?.slug || "technology");
+  };
+
+  // Save Edited Article
+  const handleSaveArticle = async () => {
+    if (!editingArticle) return;
+    setIsSavingArticle(true);
+    try {
+      await updateArticle(editingArticle.id, {
+        title: editTitle,
+        excerpt: editExcerpt,
+        content: editContent,
+        category: {
+          id: editCategory,
+          name: editCategory === "ai" ? "Artificial Intelligence" : editCategory === "gadget" ? "Gadget" : editCategory === "automotive" ? "Automotive" : editCategory === "digital" ? "Digital" : "Technology",
+          slug: editCategory,
+          description: `Kanal ${editCategory}`
+        }
+      });
+      setEditingArticle(null);
+    } finally {
+      setIsSavingArticle(false);
+    }
+  };
 
   return (
-    <div suppressHydrationWarning className="space-y-8 max-w-7xl">
-      {/* 1. Page Header */}
+    <div className="space-y-8 max-w-7xl mx-auto pb-16">
+      {/* Header */}
       <AdminPageHeader
         title="Pusat Editorial & Manajemen Konten"
         description="Pipeline kurasi artikel terstruktur: Gemini Spark AI (Google Sheets) → Review & Modifikasi Manual → Live Portal Supabase."
         badge={`${pendingDrafts.length} Menunggu Review`}
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button
               variant="outline"
               size="sm"
-              onClick={syncGeminiSpark}
-              className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
+              onClick={() => setIsSyncModalOpen(true)}
+              className="border-white/10 hover:border-cyan-500/30 text-xs font-bold"
             >
-              <RefreshCw className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
-              Sync Staging
+              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-[#2DD4F5]" />
+              Sync Spreadsheet
             </Button>
             <Link href="/admin/gemini-sync">
-              <Button variant="mint" size="sm" className="font-bold text-xs text-slate-950">
+              <Button variant="primary" size="sm" className="text-xs font-bold shadow-lg shadow-cyan-500/20">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                 Pipeline AI
               </Button>
@@ -152,324 +206,427 @@ export default function AdminContentPage() {
         }
       />
 
-      {/* 2. Tabs Navigation */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={(tab) => setActiveTab(tab)} />
+      {/* Tabs */}
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={(id) => setActiveTab(id)} />
 
-      {/* 3. Bulk Action & Selection Toolbar */}
-      {currentTotalCount > 0 && (
-        <div
-          suppressHydrationWarning
-          className="p-3 sm:p-4 rounded-2xl bg-[#0F172A]/90 border border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 backdrop-blur-md"
-        >
-          {/* Left: Select All Checkbox & Count */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={
-                activeTab === "drafts"
-                  ? handleToggleSelectAllDrafts
-                  : handleToggleSelectAllArticles
-              }
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0B1120] border border-white/[0.10] hover:border-cyan-400 text-xs font-semibold text-white transition-colors"
-            >
-              {isAllSelected ? (
-                <CheckSquare className="w-4 h-4 text-[#2DD4F5]" />
-              ) : currentSelectedCount > 0 ? (
-                <MinusSquare className="w-4 h-4 text-[#2DD4F5]" />
-              ) : (
-                <Square className="w-4 h-4 text-[#64748B]" />
-              )}
-              <span>{isAllSelected ? "Batalkan Semua" : "Centang Semua"}</span>
-            </button>
-
-            <span className="text-xs font-mono text-[#94A3B8]">
-              {currentSelectedCount > 0 ? (
-                <strong className="text-[#2DD4F5]">
-                  {currentSelectedCount} dari {currentTotalCount} {activeTab === "drafts" ? "draft" : "artikel"} terpilih
-                </strong>
-              ) : (
-                <span>Total {currentTotalCount} {activeTab === "drafts" ? "draft artikel" : "artikel rilis"}</span>
-              )}
-            </span>
-          </div>
-
-          {/* Right: Bulk Delete Button */}
-          {currentSelectedCount > 0 && (
-            <Button
-              type="button"
-              variant="danger"
-              size="sm"
-              onClick={() => setIsBulkDeleteModalOpen(true)}
-              className="font-bold text-xs shadow-lg shadow-rose-500/20 animate-in fade-in"
-            >
-              <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-              Hapus ({currentSelectedCount}) {activeTab === "drafts" ? "Draft" : "Artikel"} Terpilih
-            </Button>
-          )}
-        </div>
-      )}
-
-      {/* 4. DRAFTS TAB CONTENT */}
+      {/* DRAFTS TAB */}
       {activeTab === "drafts" && (
-        <div suppressHydrationWarning className="space-y-4">
-          {pendingDrafts.length > 0 ? (
-            pendingDrafts.map((draft) => {
-              const isSelected = selectedDraftIds.includes(draft.id);
+        <div className="space-y-4">
+          {/* Action Bar */}
+          {pendingDrafts.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#0F172A]/80 border border-white/[0.08] backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleToggleSelectAllDrafts}
+                  className="flex items-center gap-2 text-xs font-mono text-slate-300 hover:text-white"
+                >
+                  {selectedDraftIds.length === pendingDrafts.length ? (
+                    <CheckSquare className="w-4 h-4 text-[#2DD4F5]" />
+                  ) : selectedDraftIds.length > 0 ? (
+                    <MinusSquare className="w-4 h-4 text-[#2DD4F5]" />
+                  ) : (
+                    <Square className="w-4 h-4 text-slate-500" />
+                  )}
+                  <span>Centang Semua ({selectedDraftIds.length}/{pendingDrafts.length})</span>
+                </button>
+              </div>
 
+              {selectedDraftIds.length > 0 && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => setIsBulkDeleteModalOpen(true)}
+                  className="text-xs font-bold"
+                >
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+                  Hapus {selectedDraftIds.length} Draft Terpilih
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Draft List */}
+          {pendingDrafts.length === 0 ? (
+            <EmptyState
+              icon={<Sparkles className="w-7 h-7 text-[#2DD4F5]" />}
+              title="Antrean Draft Kosong"
+              description="Belum ada draft artikel baru dari Google Sheets 'DATABASE PORTAL INFO NEXARIN TECH'."
+              actionText={isSyncing ? "Menyinkronkan..." : "Tarik Data dari Spreadsheet"}
+              onAction={handleTriggerSync}
+            />
+          ) : (
+            pendingDrafts.map((d) => {
+              const isSelected = selectedDraftIds.includes(d.id);
               return (
-                <AdminCard
-                  key={draft.id}
-                  className={`space-y-4 transition-all duration-200 ${
-                    isSelected
-                      ? "border-cyan-400/60 bg-cyan-500/[0.04] shadow-lg shadow-cyan-500/5"
-                      : "border-amber-500/30 hover:border-amber-500/50"
+                <div
+                  key={d.id}
+                  className={`p-6 rounded-3xl bg-[#0F172A]/80 border transition-all space-y-4 backdrop-blur-xl ${
+                    isSelected ? "border-[#2DD4F5]/50 bg-[#0F172A]" : "border-white/[0.08] hover:border-white/[0.15]"
                   }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-                    <div className="flex flex-wrap items-center gap-3">
-                      {/* Individual Checkbox */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
                       <button
                         type="button"
-                        onClick={() => handleToggleDraft(draft.id)}
-                        className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all ${
-                          isSelected
-                            ? "bg-[#2DD4F5] text-slate-950 shadow-md shadow-[#2DD4F5]/30"
-                            : "bg-[#0B1120] border border-white/20 text-transparent hover:border-cyan-400"
-                        }`}
-                        title={isSelected ? "Batalkan pilihan" : "Pilih draft ini"}
+                        onClick={() => handleToggleDraft(d.id)}
+                        className="text-slate-400 hover:text-white"
                       >
-                        <CheckSquare className="w-4 h-4" />
+                        {isSelected ? (
+                          <CheckSquare className="w-5 h-5 text-[#2DD4F5]" />
+                        ) : (
+                          <Square className="w-5 h-5 text-slate-500" />
+                        )}
                       </button>
 
-                      <Badge variant="warning" size="sm">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">
                         Menunggu Review Editor
-                      </Badge>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                        {draft.category}
                       </span>
-                      <span className="text-xs font-mono text-[#64748B]">
-                        Sumber: <strong className="text-[#F8FAFC]">{draft.sourceName}</strong>
+
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20">
+                        {d.category}
                       </span>
                     </div>
 
-                    <span className="text-xs text-[#64748B] font-mono flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-500" />
-                      Sinkron: {formatDate(draft.syncDate)}
+                    <span className="text-[11px] font-mono text-slate-400">
+                      ID: {d.id}
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 pl-0 sm:pl-9">
-                    <h3 className="text-base font-bold text-white leading-snug">
-                      {draft.title}
+                  <div>
+                    <h3 className="text-lg font-bold text-white leading-snug">
+                      {d.title}
                     </h3>
-                    <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2">
-                      {draft.summary}
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                      {d.summary}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.08] pl-0 sm:pl-9">
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-white/[0.06]">
                     <div className="flex items-center gap-2">
                       <Button
                         variant="danger"
                         size="sm"
-                        className="text-xs"
-                        onClick={() =>
-                          setDeleteTarget({
-                            id: draft.id,
-                            type: "draft",
-                            title: draft.title
-                          })
-                        }
+                        onClick={() => setDeleteTarget({ id: d.id, type: "draft", title: d.title })}
+                        className="text-xs font-bold h-8 px-3"
                       >
                         <Trash2 className="w-3.5 h-3.5 mr-1" />
                         Hapus Draft
                       </Button>
-                      <a
-                        href={draft.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/[0.08]"
-                      >
-                        <span>Sumber Asli</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
+
+                      {d.sourceUrl && (
+                        <a
+                          href={d.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-white px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.08]"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          <span>Sumber Asli ({d.sourceName || "Web"})</span>
+                        </a>
+                      )}
                     </div>
 
-                    <Link href={`/admin/content/${draft.id}/review`}>
-                      <Button variant="primary" size="sm" className="font-extrabold text-xs">
-                        <FileEdit className="w-3.5 h-3.5 mr-1.5" />
-                        Review &amp; Edit Publikasi →
+                    <Link href={`/admin/content/${d.id}/review`}>
+                      <Button variant="primary" size="sm" className="text-xs font-bold h-8 px-4 shadow-md shadow-cyan-500/20">
+                        <span>Review &amp; Edit Publikasi</span>
+                        <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                       </Button>
                     </Link>
                   </div>
-                </AdminCard>
+                </div>
               );
             })
-          ) : (
-            <EmptyState
-              title="Semua Draft Telah Direview"
-              description="Tidak ada draft artikel yang menunggu review saat ini. Klik tombol 'Sync Staging' untuk menarik artikel baru dari pipeline Gemini Spark."
-              actionText="Sinkronkan Gemini Spark"
-              onAction={syncGeminiSpark}
-            />
           )}
         </div>
       )}
 
-      {/* 5. PUBLISHED TAB CONTENT */}
+      {/* PUBLISHED TAB */}
       {activeTab === "published" && (
-        <div suppressHydrationWarning className="space-y-4">
-          {articles.length > 0 ? (
+        <div className="space-y-4">
+          {/* Action Bar */}
+          {articles.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#0F172A]/80 border border-white/[0.08] backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleToggleSelectAllArticles}
+                  className="flex items-center gap-2 text-xs font-mono text-slate-300 hover:text-white"
+                >
+                  {selectedArticleIds.length === articles.length ? (
+                    <CheckSquare className="w-4 h-4 text-[#2DD4F5]" />
+                  ) : selectedArticleIds.length > 0 ? (
+                    <MinusSquare className="w-4 h-4 text-[#2DD4F5]" />
+                  ) : (
+                    <Square className="w-4 h-4 text-slate-500" />
+                  )}
+                  <span>Centang Semua ({selectedArticleIds.length}/{articles.length})</span>
+                </button>
+              </div>
+
+              {selectedArticleIds.length > 0 && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => setIsBulkDeleteModalOpen(true)}
+                  className="text-xs font-bold"
+                >
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+                  Hapus {selectedArticleIds.length} Artikel Terpilih
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Published Articles List */}
+          {articles.length === 0 ? (
+            <EmptyState
+              icon={<Layers className="w-7 h-7 text-[#2DD4F5]" />}
+              title="Belum Ada Artikel Publik"
+              description="Belum ada artikel yang dipublikasikan ke portal publik."
+            />
+          ) : (
             articles.map((art) => {
               const isSelected = selectedArticleIds.includes(art.id);
-
+              const catSlug = art.category?.slug || "technology";
               return (
-                <AdminCard
+                <div
                   key={art.id}
-                  className={`space-y-4 transition-all duration-200 ${
-                    isSelected
-                      ? "border-cyan-400/60 bg-cyan-500/[0.04] shadow-lg shadow-cyan-500/5"
-                      : "border-white/[0.08] hover:border-cyan-500/30"
+                  className={`p-6 rounded-3xl bg-[#0F172A]/80 border transition-all space-y-4 backdrop-blur-xl ${
+                    isSelected ? "border-[#2DD4F5]/50 bg-[#0F172A]" : "border-white/[0.08] hover:border-white/[0.15]"
                   }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+                  <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      {/* Individual Checkbox */}
                       <button
                         type="button"
                         onClick={() => handleToggleArticle(art.id)}
-                        className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all ${
-                          isSelected
-                            ? "bg-[#2DD4F5] text-slate-950 shadow-md shadow-[#2DD4F5]/30"
-                            : "bg-[#0B1120] border border-white/20 text-transparent hover:border-cyan-400"
-                        }`}
-                        title={isSelected ? "Batalkan pilihan" : "Pilih artikel ini"}
+                        className="text-slate-400 hover:text-white"
                       >
-                        <CheckSquare className="w-4 h-4" />
+                        {isSelected ? (
+                          <CheckSquare className="w-5 h-5 text-[#2DD4F5]" />
+                        ) : (
+                          <Square className="w-5 h-5 text-slate-500" />
+                        )}
                       </button>
 
-                      <Badge variant="mint" size="sm">
-                        LIVE PUBLISHED
-                      </Badge>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                        {art.category.name}
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        Live Published
                       </span>
-                      <span className="text-xs font-mono text-[#64748B]">
-                        Views: <strong className="text-[#2DD4F5]">{art.views.toLocaleString()}</strong>
+
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#2DD4F5]/10 text-[#2DD4F5] border border-[#2DD4F5]/20">
+                        {art.category?.name || "Tech"}
                       </span>
                     </div>
 
-                    <span className="text-xs text-[#64748B] font-mono">
-                      Rilis: {formatDate(art.publishedAt)}
+                    <span className="text-[11px] font-mono text-slate-400">
+                      ID: {art.id}
                     </span>
                   </div>
 
-                  <div className="space-y-1 pl-0 sm:pl-9">
-                    <h3 className="text-base font-bold text-white">
+                  <div>
+                    <h3 className="text-lg font-bold text-white leading-snug">
                       {art.title}
                     </h3>
-                    <p className="text-xs text-[#94A3B8] line-clamp-2">
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
                       {art.excerpt}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.08] pl-0 sm:pl-9">
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      className="text-xs"
-                      onClick={() =>
-                        setDeleteTarget({
-                          id: art.id,
-                          type: "article",
-                          title: art.title
-                        })
-                      }
-                    >
-                      <Trash2 className="w-3.5 h-3.5 mr-1" />
-                      Hapus Artikel
-                    </Button>
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => setDeleteTarget({ id: art.id, type: "article", title: art.title })}
+                        className="text-xs font-bold h-8 px-3"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 mr-1" />
+                        Hapus Artikel
+                      </Button>
 
-                    <Link href={`/article/${art.slug}`} target="_blank">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs border-white/[0.10] text-[#94A3B8] hover:text-white"
+                        onClick={() => handleOpenEditArticle(art)}
+                        className="text-xs font-bold h-8 px-3 border-white/10"
                       >
-                        <Eye className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
-                        Lihat di Portal Publik <ExternalLink className="w-3 h-3 ml-1" />
+                        <FileEdit className="w-3.5 h-3.5 mr-1 text-[#2DD4F5]" />
+                        Edit Artikel
                       </Button>
+                    </div>
+
+                    <Link
+                      href={`/tech-info/${catSlug}/article/${art.slug}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2DD4F5] hover:underline"
+                    >
+                      <span>Lihat di Portal Tech Info</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
                     </Link>
                   </div>
-                </AdminCard>
+                </div>
               );
             })
-          ) : (
-            <div className="p-12 rounded-3xl bg-[#0F172A]/70 border border-white/[0.08] text-center space-y-3">
-              <Layers className="w-10 h-10 text-[#64748B] mx-auto" />
-              <h3 className="text-base font-bold text-white">Belum Ada Artikel Rilis</h3>
-              <p className="text-xs text-[#94A3B8]">
-                Belum ada artikel yang dipublikasikan ke portal publik.
-              </p>
-            </div>
           )}
         </div>
       )}
 
-      {/* 6. Single Item Delete Confirmation Modal */}
-      <ConfirmModal
-        isOpen={!!deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleConfirmSingleDelete}
-        title={deleteTarget?.type === "draft" ? "Hapus Draft Artikel?" : "Hapus Artikel Live?"}
-        description={`Apakah Anda yakin ingin menghapus "${deleteTarget?.title}"? Tindakan ini tidak dapat dibatalkan.`}
-        confirmText="Ya, Hapus Permanen"
-        variant="danger"
-      />
+      {/* MODAL: Single Delete Confirmation */}
+      {deleteTarget && (
+        <ConfirmModal
+          isOpen={true}
+          title={`Hapus ${deleteTarget.type === "draft" ? "Draft" : "Artikel"}?`}
+          description={`Apakah Anda yakin ingin menghapus "${deleteTarget.title}" secara permanen dari database Supabase dan memori? Tindakan ini tidak dapat dibatalkan.`}
+          confirmText="Hapus Permanen"
+          cancelText="Batal"
+          variant="danger"
+          onConfirm={handleConfirmSingleDelete}
+          onClose={() => setDeleteTarget(null)}
+        />
+      )}
 
-      {/* 7. Bulk Delete Confirmation Modal */}
+      {/* MODAL: Bulk Delete Confirmation */}
       {isBulkDeleteModalOpen && (
-        <div
-          suppressHydrationWarning
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in"
-        >
-          <div className="w-full max-w-md bg-[#0F172A] border border-rose-500/30 rounded-3xl p-6 sm:p-7 space-y-5 shadow-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
-              <AlertTriangle className="w-6 h-6" />
+        <ConfirmModal
+          isOpen={true}
+          title={`Hapus ${activeTab === "drafts" ? selectedDraftIds.length + " Draft" : selectedArticleIds.length + " Artikel"} Terpilih?`}
+          description={`Apakah Anda yakin ingin menghapus semua item yang dicentang secara permanen dari database Supabase?`}
+          confirmText="Hapus Semua Terpilih"
+          cancelText="Batal"
+          variant="danger"
+          onConfirm={handleConfirmBulkDelete}
+          onClose={() => setIsBulkDeleteModalOpen(false)}
+        />
+      )}
+
+      {/* MODAL: Sync Google Sheets Staging */}
+      {isSyncModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+          <div className="w-full max-w-lg rounded-3xl bg-[#0F172A] border border-white/[0.12] p-6 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2">
+                <FileSpreadsheet className="w-5 h-5 text-[#2DD4F5]" />
+                <h3 className="text-base font-bold text-white">Sinkronisasi Google Sheets</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSyncModalOpen(false)}
+                className="p-1 rounded-full text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <div className="text-center space-y-2">
-              <h3 className="text-base font-bold text-white">
-                Hapus {currentSelectedCount} {activeTab === "drafts" ? "Draft Artikel" : "Artikel Rilis"}?
-              </h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
-                Anda akan menghapus secara massal{" "}
-                <strong className="text-white">{currentSelectedCount} {activeTab === "drafts" ? "draft" : "artikel"} terpilih</strong>. Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
+            <div className="space-y-3">
+              <label className="block text-xs font-mono font-bold text-slate-300">
+                Nama Spreadsheet Target:
+              </label>
+              <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-[#7CF2C3]">
+                DATABASE PORTAL INFO NEXARIN TECH
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Sistem akan membaca baris data terbaru dari Google Sheets yang diisi oleh Gemini Spark 24/7 dan mengimpornya ke antrean draft Supabase.
               </p>
             </div>
 
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-300 font-mono">
-              ⚠️ Item yang dihapus akan segera dihilangkan dari antrean database.
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+              <Button variant="outline" size="sm" onClick={() => setIsSyncModalOpen(false)}>
+                Tutup
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleTriggerSync}
+                disabled={isSyncing}
+                className="font-bold"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isSyncing ? "animate-spin" : ""}`} />
+                {isSyncing ? "Sedang Menyinkronkan..." : "Mulai Sinkronisasi"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: Edit Published Article */}
+      {editingArticle && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-3xl bg-[#0F172A] border border-white/[0.12] p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2">
+                <FileEdit className="w-5 h-5 text-[#2DD4F5]" />
+                <h3 className="text-base font-bold text-white">Edit Artikel Published</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingArticle(null)}
+                className="p-1 rounded-full text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <div className="pt-2 flex items-center justify-end gap-3 border-t border-white/[0.08]">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsBulkDeleteModalOpen(false)}
-                className="text-xs border-white/[0.12]"
-              >
+            <div className="space-y-4 text-xs font-mono">
+              <div className="space-y-1.5">
+                <label className="text-slate-300 font-bold">Judul Artikel:</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-slate-300 font-bold">Kategori:</label>
+                <select
+                  value={editCategory}
+                  onChange={(e) => setEditCategory(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0B1120] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
+                >
+                  <option value="ai">Artificial Intelligence</option>
+                  <option value="technology">Technology</option>
+                  <option value="digital">Digital</option>
+                  <option value="gadget">Gadget</option>
+                  <option value="automotive">Automotive</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-slate-300 font-bold">Ringkasan (Excerpt):</label>
+                <textarea
+                  rows={3}
+                  value={editExcerpt}
+                  onChange={(e) => setEditExcerpt(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-slate-300 font-bold">Naskah Artikel (Markdown):</label>
+                <textarea
+                  rows={8}
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5] font-sans"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+              <Button variant="outline" size="sm" onClick={() => setEditingArticle(null)}>
                 Batal
               </Button>
               <Button
-                type="button"
-                variant="danger"
+                variant="primary"
                 size="sm"
-                onClick={handleConfirmBulkDelete}
-                className="text-xs font-bold shadow-lg shadow-rose-500/20"
+                onClick={handleSaveArticle}
+                disabled={isSavingArticle}
+                className="font-bold shadow-md shadow-cyan-500/20"
               >
-                Ya, Hapus ({currentSelectedCount}) Item Terpilih
+                <Save className="w-3.5 h-3.5 mr-1.5" />
+                {isSavingArticle ? "Menyimpan..." : "Simpan Perubahan"}
               </Button>
             </div>
           </div>
