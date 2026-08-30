@@ -2,6 +2,10 @@ import { db } from "@/lib/db/store";
 import { getSupabaseAdminClient } from "@/lib/db/supabase";
 import { GeminiSparkDraft, Article } from "@/types/content";
 import { auditService } from "./auditService";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 export function extractSheetId(input: string): string {
   if (!input) return "";
@@ -14,94 +18,106 @@ export function extractSheetId(input: string): string {
 }
 
 export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<GeminiSparkDraft[]> {
-  const sheetId = extractSheetId(sheetIdOrUrl);
+  const sheetId = extractSheetId(sheetIdOrUrl) || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
   if (!sheetId) return [];
 
-  // Try multiple Google Sheets public endpoints
-  const endpoints = [
-    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`,
-    `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`
-  ];
+  const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+  let raw = "";
 
-  for (const url of endpoints) {
+  // 1. First attempt: standard fetch with timeout
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(gvizUrl, {
+      signal: controller.signal,
+      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+      cache: "no-store"
+    });
+    clearTimeout(timeoutId);
+    if (res.ok) {
+      raw = await res.text();
+    }
+  } catch (e) {
+    // WSL network timeout fallback
+  }
+
+  // 2. Second attempt: curl / curl.exe fallback
+  if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
-      const res = await fetch(url, {
-        signal: controller.signal,
-        headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
-        cache: "no-store"
-      });
-      clearTimeout(timeoutId);
-
-      if (!res.ok) continue;
-
-      const raw = await res.text();
-      
-      // If GViz JSON
-      if (raw.includes("google.visualization.Query.setResponse")) {
-        const start = raw.indexOf("{");
-        const end = raw.lastIndexOf("}") + 1;
-        if (start !== -1 && end > start) {
-          const json = JSON.parse(raw.substring(start, end));
-          const rows = json.table?.rows || [];
-          const drafts: GeminiSparkDraft[] = [];
-
-          rows.forEach((r: any, idx: number) => {
-            const c = r.c || [];
-            const rawId = c[0]?.v?.toString() || `NXR-2026-${String(idx + 1).padStart(4, "0")}`;
-            const firstVal = rawId.toLowerCase();
-            if (firstVal === "id" || firstVal === "created_at") return;
-
-            const createdAt = c[1]?.v?.toString() || new Date().toISOString();
-            const title = c[2]?.v?.toString() || c[0]?.v?.toString() || "";
-            if (!title || title.trim() === "" || title.toLowerCase() === "title") return;
-
-            const slug = c[3]?.v?.toString() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-            const category = (c[4]?.v?.toString() || "AI").toUpperCase();
-            const subcategory = c[5]?.v?.toString() || "";
-            const tagsRaw = c[6]?.v?.toString() || "Tech";
-            const excerpt = c[7]?.v?.toString() || title;
-            const content = c[8]?.v?.toString() || excerpt;
-            const opinion = c[9]?.v?.toString() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
-            const sourceName = c[12]?.v?.toString() || "Gemini Spark Feed";
-            const sourceUrl = c[13]?.v?.toString() || "https://gemini.google.com";
-            const status = c[17]?.v?.toString() || "draft";
-
-            const tags = tagsRaw
-              .split(",")
-              .map((t: string) => t.trim().replace(/^#/, ""))
-              .filter(Boolean);
-
-            drafts.push({
-              id: rawId.startsWith("NXR") ? rawId.replace(/\s+/g, "-") : `dft-sheet-${idx + 1}`,
-              sourceId: `sheet-row-${idx + 1}`,
-              sourceName,
-              sourceUrl,
-              scrapedAt: createdAt,
-              title,
-              suggestedSlug: slug,
-              summary: excerpt,
-              draftContent: content,
-              opinionAnalysis: opinion,
-              category,
-              tags: tags.length > 0 ? tags : ["Tech"],
-              suggestedSeoTitle: `${title} — Nexarin Tech`,
-              suggestedMetaDescription: excerpt,
-              status: status.toLowerCase() === "published" ? "published" : "draft",
-              syncDate: createdAt
-            });
-          });
-
-          if (drafts.length > 0) return drafts;
-        }
-      }
+      const { stdout } = await execAsync(`curl.exe -s "${gvizUrl}" || curl -s "${gvizUrl}"`);
+      raw = stdout;
     } catch (e) {
-      console.warn("Endpoint fetch attempt failed:", url, e);
+      console.warn("curl fallback error:", e);
     }
   }
 
-  return [];
+  if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
+    return [];
+  }
+
+  try {
+    const start = raw.indexOf("{");
+    const end = raw.lastIndexOf("}") + 1;
+    if (start === -1 || end <= start) return [];
+
+    const json = JSON.parse(raw.substring(start, end));
+    const rows = json.table?.rows || [];
+    const drafts: GeminiSparkDraft[] = [];
+
+    rows.forEach((r: any, idx: number) => {
+      const c = r.c || [];
+      const rawId = c[0]?.v?.toString() || `NXR-2026-${String(idx + 1).padStart(4, "0")}`;
+      const firstVal = rawId.toLowerCase();
+      if (firstVal === "id" || firstVal === "created_at") return;
+
+      const createdAt = c[1]?.v?.toString() || new Date().toISOString();
+      const title = c[2]?.v?.toString() || c[0]?.v?.toString() || "";
+      if (!title || title.trim() === "" || title.toLowerCase() === "title") return;
+
+      const slug = c[3]?.v?.toString() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      const category = (c[4]?.v?.toString() || "AI").toUpperCase();
+      const subcategory = c[5]?.v?.toString() || "";
+      const tagsRaw = c[6]?.v?.toString() || "AI, Tech";
+      const excerpt = c[7]?.v?.toString() || title;
+      const content = c[8]?.v?.toString() || excerpt;
+      const opinion = c[9]?.v?.toString() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
+      const keyTakeaways = c[10]?.v?.toString() || "";
+      const readingTimeStr = c[11]?.v?.toString() || "5 min baca";
+      const sourceName = c[12]?.v?.toString() || "Anthropic Newsroom";
+      const sourceUrl = c[13]?.v?.toString() || "https://gemini.google.com";
+      const imageQuery = c[14]?.v?.toString() || "";
+      const status = c[17]?.v?.toString() || "draft";
+
+      const tags = tagsRaw
+        .split(",")
+        .map((t: string) => t.trim().replace(/^#/, ""))
+        .filter(Boolean);
+
+      drafts.push({
+        id: rawId.startsWith("NXR") ? rawId.replace(/\s+/g, "-") : `dft-sheet-${idx + 1}`,
+        sourceId: `sheet-row-${idx + 1}`,
+        sourceName,
+        sourceUrl,
+        scrapedAt: createdAt,
+        title,
+        suggestedSlug: slug,
+        summary: excerpt,
+        draftContent: content,
+        opinionAnalysis: opinion,
+        category,
+        tags: tags.length > 0 ? tags : ["Tech", "AI"],
+        suggestedSeoTitle: `${title} — Nexarin Tech`,
+        suggestedMetaDescription: excerpt,
+        status: status.toLowerCase() === "published" ? "published" : "draft",
+        syncDate: createdAt
+      });
+    });
+
+    return drafts;
+  } catch (error) {
+    console.error("Error parsing Google Sheets data:", error);
+    return [];
+  }
 }
 
 export const geminiSyncService = {
@@ -114,12 +130,12 @@ export const geminiSyncService = {
           .select("*")
           .order("created_at", { ascending: false });
 
-        if (!error && data) {
-          return data.map((d: any) => ({
+        if (!error && data && data.length > 0) {
+          const dbDrafts = data.map((d: any) => ({
             id: d.id,
             sourceId: `src-${d.sheet_row_id || d.id}`,
-            sourceName: d.source_name || "Gemini Spark Feed",
-            sourceUrl: d.source_url || "https://techcrunch.com",
+            sourceName: d.source_name || "DATABASE PORTAL INFO NEXARIN TECH",
+            sourceUrl: d.source_url || "https://gemini.google.com",
             scrapedAt: d.created_at,
             title: d.title,
             suggestedSlug: d.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -133,6 +149,10 @@ export const geminiSyncService = {
             status: (d.status === "published" ? "published" : "draft") as "draft" | "published",
             syncDate: d.created_at
           }));
+
+          const existingIds = new Set(dbDrafts.map((d: any) => d.id));
+          const fallbackDrafts = db.drafts.filter((d) => !existingIds.has(d.id));
+          return [...dbDrafts, ...fallbackDrafts];
         }
       } catch (e) {
         console.error("Supabase drafts read error:", e);
@@ -250,7 +270,7 @@ export const geminiSyncService = {
         role: "Lead Tech Architect",
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
       },
-      readingTimeMinutes: 5,
+      readingTimeMinutes: 6,
       views: 1,
       featuredImage: "https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=1600&auto=format&fit=crop",
       status: "published",
@@ -312,12 +332,8 @@ export const geminiSyncService = {
   },
 
   async triggerSync(customSheetId?: string): Promise<{ syncedCount: number; newDrafts: GeminiSparkDraft[] }> {
-    const sheetId = customSheetId || process.env.GOOGLE_SHEETS_ID || process.env.NEXT_PUBLIC_GOOGLE_SHEETS_ID;
-    let sheetDrafts: GeminiSparkDraft[] = [];
-
-    if (sheetId) {
-      sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
-    }
+    const sheetId = customSheetId || process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
+    const sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
 
     const supabase = getSupabaseAdminClient();
 
@@ -334,12 +350,12 @@ export const geminiSyncService = {
               suggested_content: d.draftContent,
               suggested_category: d.category,
               suggested_tags: d.tags,
-              gemini_score: 9.5,
+              gemini_score: 9.8,
               status: "draft_ready"
             });
           } catch (e) {}
         }
-        
+
         if (!db.drafts.some((existing) => existing.id === d.id)) {
           db.drafts.unshift(d);
         }
@@ -347,7 +363,6 @@ export const geminiSyncService = {
       return { syncedCount: sheetDrafts.length, newDrafts: sheetDrafts };
     }
 
-    // NO FAKE DUMMY DATA. Return exact count of 0 if spreadsheet is not publicly readable yet
     return { syncedCount: 0, newDrafts: [] };
   },
 
@@ -371,7 +386,7 @@ export const geminiSyncService = {
     const newDraft: GeminiSparkDraft = {
       id,
       sourceId: `direct-${Date.now()}`,
-      sourceName: draftData.sourceName || "Google Sheets Importer",
+      sourceName: draftData.sourceName || "DATABASE PORTAL INFO NEXARIN TECH",
       sourceUrl: draftData.sourceUrl || "https://gemini.google.com",
       scrapedAt: new Date().toISOString(),
       title: draftData.title,
