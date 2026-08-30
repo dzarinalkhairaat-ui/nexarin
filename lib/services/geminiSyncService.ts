@@ -10,25 +10,6 @@ import path from "path";
 const execAsync = promisify(exec);
 const BUFFER_FILE = path.join(process.cwd(), "data", "runtime_drafts.json");
 
-function loadBufferDrafts(): GeminiSparkDraft[] {
-  try {
-    if (fs.existsSync(BUFFER_FILE)) {
-      const content = fs.readFileSync(BUFFER_FILE, "utf-8");
-      const parsed = JSON.parse(content);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch (e) {}
-  return [];
-}
-
-function saveBufferDrafts(drafts: GeminiSparkDraft[]) {
-  try {
-    const dir = path.dirname(BUFFER_FILE);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(BUFFER_FILE, JSON.stringify(drafts, null, 2), "utf-8");
-  } catch (e) {}
-}
-
 function clearBufferDrafts() {
   try {
     const dir = path.dirname(BUFFER_FILE);
@@ -47,99 +28,201 @@ export function extractSheetId(input: string): string {
   return trimmed;
 }
 
+// Robust CSV Line/Field Parser supporting RFC 4180 quotes & multiline content
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  let currentRow: string[] = [];
+  let currentField = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        currentField += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      currentRow.push(currentField);
+      currentField = "";
+    } else if ((char === '\r' || char === '\n') && !inQuotes) {
+      if (char === '\r' && nextChar === '\n') {
+        i++;
+      }
+      currentRow.push(currentField);
+      if (currentRow.length > 1 || currentRow[0] !== "") {
+        rows.push(currentRow);
+      }
+      currentRow = [];
+      currentField = "";
+    } else {
+      currentField += char;
+    }
+  }
+
+  if (currentField !== "" || currentRow.length > 0) {
+    currentRow.push(currentField);
+    rows.push(currentRow);
+  }
+
+  return rows;
+}
+
 export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<GeminiSparkDraft[]> {
   const sheetId = extractSheetId(sheetIdOrUrl) || process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
   if (!sheetId) return [];
 
+  const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
   const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
-  let raw = "";
 
-  // 1. Try fetch with timeout
+  let csvRaw = "";
+
+  // 1. Try fetching CSV via curl.exe (highest reliability on Windows/WSL)
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
-    const res = await fetch(gvizUrl, {
-      signal: controller.signal,
-      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
-      cache: "no-store"
-    });
-    clearTimeout(timeoutId);
-    if (res.ok) {
-      raw = await res.text();
+    const { stdout } = await execAsync(`curl.exe -s -L "${csvUrl}" || curl -s -L "${csvUrl}"`);
+    if (stdout && stdout.length > 50) {
+      csvRaw = stdout;
     }
   } catch (e) {}
 
-  // 2. Try curl fallback
-  if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
+  // 2. Try Node fetch fallback for CSV
+  if (!csvRaw) {
     try {
-      const { stdout } = await execAsync(`curl.exe -s "${gvizUrl}" || curl -s "${gvizUrl}"`);
-      raw = stdout;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(csvUrl, {
+        signal: controller.signal,
+        headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+        cache: "no-store"
+      });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        csvRaw = await res.text();
+      }
     } catch (e) {}
   }
 
-  if (!raw || !raw.includes("google.visualization.Query.setResponse")) {
-    return [];
-  }
+  // If CSV successfully fetched, parse rows
+  if (csvRaw && csvRaw.length > 50) {
+    try {
+      const rows = parseCSV(csvRaw);
+      const drafts: GeminiSparkDraft[] = [];
 
-  try {
-    const start = raw.indexOf("{");
-    const end = raw.lastIndexOf("}") + 1;
-    if (start === -1 || end <= start) return [];
+      rows.forEach((cols, idx) => {
+        if (idx === 0) return; // Skip header row
+        const rawId = cols[0]?.trim() || `NXR-2026-${String(idx).padStart(4, "0")}`;
+        if (rawId.toLowerCase() === "id" || rawId.toLowerCase() === "created_at") return;
 
-    const json = JSON.parse(raw.substring(start, end));
-    const rows = json.table?.rows || [];
-    const drafts: GeminiSparkDraft[] = [];
+        const createdAt = cols[1]?.trim() || new Date().toISOString();
+        const title = cols[2]?.trim() || "";
+        if (!title || title.toLowerCase() === "title") return;
 
-    rows.forEach((r: any, idx: number) => {
-      const c = r.c || [];
-      const rawId = c[0]?.v?.toString() || `NXR-2026-${String(idx + 1).padStart(4, "0")}`;
-      const firstVal = rawId.toLowerCase();
-      if (firstVal === "id" || firstVal === "created_at") return;
+        const slug = cols[3]?.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+        const category = (cols[4]?.trim() || "AI").toUpperCase();
+        const subcategory = cols[5]?.trim() || "";
+        const tagsRaw = cols[6]?.trim() || "AI, Technology";
+        const excerpt = cols[7]?.trim() || title;
+        const content = cols[8]?.trim() || excerpt;
+        const opinion = cols[9]?.trim() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
+        const sourceName = cols[12]?.trim() || "Nexarin News Intelligence";
+        const sourceUrl = cols[13]?.trim() || "https://gemini.google.com";
 
-      const createdAt = c[1]?.v?.toString() || new Date().toISOString();
-      const title = c[2]?.v?.toString() || c[0]?.v?.toString() || "";
-      if (!title || title.trim() === "" || title.toLowerCase() === "title") return;
+        const tags = tagsRaw
+          .split(",")
+          .map((t) => t.trim().replace(/^#/, ""))
+          .filter(Boolean);
 
-      const slug = c[3]?.v?.toString() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-      const category = (c[4]?.v?.toString() || "AI").toUpperCase();
-      const subcategory = c[5]?.v?.toString() || "";
-      const tagsRaw = c[6]?.v?.toString() || "AI, Tech";
-      const excerpt = c[7]?.v?.toString() || title;
-      const content = c[8]?.v?.toString() || excerpt;
-      const opinion = c[9]?.v?.toString() || "Menurut analisis redaksi Nexarin, rilis ini membawa dampak strategis bagi ekosistem.";
-      const sourceName = c[12]?.v?.toString() || "Anthropic Newsroom";
-      const sourceUrl = c[13]?.v?.toString() || "https://gemini.google.com";
-      const status = c[17]?.v?.toString() || "draft";
-
-      const tags = tagsRaw
-        .split(",")
-        .map((t: string) => t.trim().replace(/^#/, ""))
-        .filter(Boolean);
-
-      drafts.push({
-        id: rawId.startsWith("NXR") ? rawId.replace(/\s+/g, "-") : `dft-sheet-${idx + 1}`,
-        sourceId: `sheet-row-${idx + 1}`,
-        sourceName,
-        sourceUrl,
-        scrapedAt: createdAt,
-        title,
-        suggestedSlug: slug,
-        summary: excerpt,
-        draftContent: content,
-        opinionAnalysis: opinion,
-        category,
-        tags: tags.length > 0 ? tags : ["Tech", "AI"],
-        suggestedSeoTitle: `${title} — Nexarin Tech`,
-        suggestedMetaDescription: excerpt,
-        status: "draft",
-        syncDate: createdAt
+        drafts.push({
+          id: rawId.startsWith("NXR") ? rawId.replace(/\s+/g, "-") : `NXR-2026-${String(idx).padStart(4, "0")}`,
+          sourceId: `sheet-row-${idx}`,
+          sourceName,
+          sourceUrl,
+          scrapedAt: createdAt,
+          title,
+          suggestedSlug: slug,
+          summary: excerpt,
+          draftContent: content,
+          opinionAnalysis: opinion,
+          category,
+          tags: tags.length > 0 ? tags : ["Technology", "AI"],
+          suggestedSeoTitle: `${title} — Nexarin Tech`,
+          suggestedMetaDescription: excerpt,
+          status: "draft",
+          syncDate: createdAt
+        });
       });
-    });
 
-    return drafts;
-  } catch (error) {
-    return [];
+      if (drafts.length > 0) {
+        return drafts;
+      }
+    } catch (e) {
+      console.error("CSV parse error:", e);
+    }
   }
+
+  // 3. Fallback: GViz JSON
+  let gvizRaw = "";
+  try {
+    const { stdout } = await execAsync(`curl.exe -s "${gvizUrl}" || curl -s "${gvizUrl}"`);
+    gvizRaw = stdout;
+  } catch (e) {}
+
+  if (gvizRaw && gvizRaw.includes("google.visualization.Query.setResponse")) {
+    try {
+      const start = gvizRaw.indexOf("{");
+      const end = gvizRaw.lastIndexOf("}") + 1;
+      if (start !== -1 && end > start) {
+        const json = JSON.parse(gvizRaw.substring(start, end));
+        const gRows = json.table?.rows || [];
+        const drafts: GeminiSparkDraft[] = [];
+
+        gRows.forEach((r: any, idx: number) => {
+          const c = r.c || [];
+          const rawId = c[0]?.v?.toString() || `NXR-2026-${String(idx + 1).padStart(4, "0")}`;
+          if (rawId.toLowerCase() === "id" || rawId.toLowerCase() === "created_at") return;
+
+          const createdAt = c[1]?.v?.toString() || new Date().toISOString();
+          const title = c[2]?.v?.toString() || "";
+          if (!title || title.toLowerCase() === "title") return;
+
+          const slug = c[3]?.v?.toString() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+          const category = (c[4]?.v?.toString() || "AI").toUpperCase();
+          const excerpt = c[7]?.v?.toString() || title;
+          const content = c[8]?.v?.toString() || excerpt;
+          const opinion = c[9]?.v?.toString() || "Menurut analisis redaksi Nexarin...";
+          const sourceName = c[12]?.v?.toString() || "Anthropic Newsroom";
+          const sourceUrl = c[13]?.v?.toString() || "https://gemini.google.com";
+
+          drafts.push({
+            id: rawId.startsWith("NXR") ? rawId.replace(/\s+/g, "-") : `NXR-2026-${String(idx + 1).padStart(4, "0")}`,
+            sourceId: `gviz-row-${idx + 1}`,
+            sourceName,
+            sourceUrl,
+            scrapedAt: createdAt,
+            title,
+            suggestedSlug: slug,
+            summary: excerpt,
+            draftContent: content,
+            opinionAnalysis: opinion,
+            category,
+            tags: ["Tech", "AI"],
+            suggestedSeoTitle: `${title} — Nexarin Tech`,
+            suggestedMetaDescription: excerpt,
+            status: "draft",
+            syncDate: createdAt
+          });
+        });
+
+        return drafts;
+      }
+    } catch (e) {}
+  }
+
+  return [];
 }
 
 export const geminiSyncService = {
@@ -156,9 +239,7 @@ export const geminiSyncService = {
 
         if (!artErr) {
           if (artDrafts && artDrafts.length > 0) {
-            // Once confirmed present in Supabase, ensure runtime buffer is clean
             clearBufferDrafts();
-
             return artDrafts.map((a: any) => ({
               id: a.id,
               sourceId: `src-${a.id}`,
@@ -179,7 +260,7 @@ export const geminiSyncService = {
             }));
           }
 
-          // Check editorial_drafts as secondary table
+          // Check editorial_drafts
           const { data: dftData, error: dftErr } = await supabase
             .from("editorial_drafts")
             .select("*")
@@ -208,19 +289,12 @@ export const geminiSyncService = {
             }));
           }
 
-          // Both Supabase tables are empty: ensure buffer is also empty and return []
           clearBufferDrafts();
           return [];
         }
       } catch (e) {
         console.error("Supabase drafts error:", e);
       }
-    }
-
-    // In case Supabase connection is temporarily unavailable, check buffer
-    const bufferDrafts = loadBufferDrafts();
-    if (bufferDrafts.length > 0) {
-      return bufferDrafts;
     }
 
     return [...db.drafts];
@@ -275,7 +349,6 @@ export const geminiSyncService = {
       } catch (e) {}
     }
 
-    // Clear from buffer as well
     clearBufferDrafts();
 
     const idx = db.drafts.findIndex((d) => d.id === draftId);
@@ -356,7 +429,6 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
-        // 1. Insert/Update into Supabase articles as published
         await supabase.from("articles").upsert({
           id: publishedArticle.id,
           title: publishedArticle.title,
@@ -377,7 +449,6 @@ export const geminiSyncService = {
           published_at: publishedArticle.publishedAt
         });
 
-        // 2. Delete old draft entry from articles and editorial_drafts
         await supabase.from("articles").delete().eq("id", draftId).eq("status", "draft");
         await supabase.from("editorial_drafts").delete().eq("id", draftId);
       } catch (e) {
@@ -385,7 +456,6 @@ export const geminiSyncService = {
       }
     }
 
-    // Clean buffer file
     clearBufferDrafts();
 
     db.articles.unshift(publishedArticle);
@@ -410,7 +480,7 @@ export const geminiSyncService = {
   async triggerSync(customSheetId?: string): Promise<{ syncedCount: number; newDrafts: GeminiSparkDraft[] }> {
     const sheetId = customSheetId || process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
     
-    // 1. Tarik baris data dari Google Sheet
+    // 1. Ekstraksi Google Sheets real-time
     const sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
 
     if (sheetDrafts.length === 0) {
@@ -418,17 +488,14 @@ export const geminiSyncService = {
       return { syncedCount: 0, newDrafts: [] };
     }
 
-    // 2. Simpan sementara di buffer runtime_drafts.json
-    saveBufferDrafts(sheetDrafts);
-
     const supabase = getSupabaseAdminClient();
-    let supabaseSuccess = false;
+    const insertedDrafts: GeminiSparkDraft[] = [];
 
-    // 3. Alihkan data sepenuhnya ke Database Supabase
-    if (supabase) {
-      try {
-        for (const d of sheetDrafts) {
-          await supabase.from("articles").upsert({
+    // 2. Alihkan data secara direct ke Database Supabase
+    for (const d of sheetDrafts) {
+      if (supabase) {
+        try {
+          const { error: artErr } = await supabase.from("articles").upsert({
             id: d.id,
             title: d.title,
             slug: d.suggestedSlug,
@@ -445,6 +512,10 @@ export const geminiSyncService = {
             created_at: d.scrapedAt
           });
 
+          if (!artErr) {
+            insertedDrafts.push(d);
+          }
+
           await supabase.from("editorial_drafts").upsert({
             id: d.id,
             source_name: d.sourceName,
@@ -457,20 +528,17 @@ export const geminiSyncService = {
             gemini_score: 9.8,
             status: "draft_ready"
           });
+        } catch (e) {
+          console.error("Supabase upsert error in sync:", e);
         }
-        supabaseSuccess = true;
-      } catch (e) {
-        console.error("Supabase upsert error in sync:", e);
+      } else {
+        insertedDrafts.push(d);
       }
     }
 
-    // 4. Ketika Data benar-benar sudah masuk ke Supabase, bersihkan buffer runtime_drafts.json
-    if (supabaseSuccess) {
-      clearBufferDrafts();
-    }
-
+    clearBufferDrafts();
     db.drafts = [...sheetDrafts];
-    return { syncedCount: sheetDrafts.length, newDrafts: sheetDrafts };
+    return { syncedCount: insertedDrafts.length || sheetDrafts.length, newDrafts: sheetDrafts };
   },
 
   async importDirectDraft(draftData: {
@@ -558,8 +626,8 @@ export const geminiSyncService = {
       title,
       suggestedSlug: slug,
       summary: `Ulasan dan panduan komprehensif mengenai ${topic} untuk engineer dan profesional teknologi.`,
-      draftContent: `# Eksplorasi: ${topic}\n\nArtikel ini menyajikan pembahasan mendalam mengenai implementasi dan strategi penerapan ${topic} dalam industri teknologi modern.\n\n## Ringkasan Eksekutif\nPerkembangan teknologi menuntut adopsi arsitektur yang tangguh dan teruji.\n\n## Langkah Implementasi\n1. Perencanaan dan audit kebutuhan.\n2. Integrasi bertahap dengan validasi berkala.\n3. Monitoring performa dan retensi pengguna.`,
-      opinionAnalysis: `Adopsi ${topic} memberikan keunggulan kompetitif bagi startup dan enterprise.`,
+      draftContent: `# Eksplorasi: ${topic}\n\nArtikel ini menyajikan pembahasan mendalam mengenai implementasi dan strategi penerapan ${topic} dalam industri teknologi modern.\n\n1. Konteks Industri dan Latar Belakang\nPerkembangan teknologi menuntut adopsi arsitektur yang tangguh dan teruji.\n\n2. Langkah Implementasi\n1. Perencanaan dan audit kebutuhan.\n2. Integrasi bertahap dengan validasi berkala.\n3. Monitoring performa dan retensi pengguna.`,
+      opinionAnalysis: `Menurut analisis redaksi Nexarin, adopsi ${topic} memberikan keunggulan kompetitif.`,
       category: "Technology",
       tags: ["Technology", "Best Practices", "Innovation"],
       suggestedSeoTitle: `${title} — Nexarin Tech`,
@@ -567,6 +635,24 @@ export const geminiSyncService = {
       status: "draft",
       syncDate: new Date().toISOString()
     };
+
+    const supabase = getSupabaseAdminClient();
+    if (supabase) {
+      try {
+        await supabase.from("articles").upsert({
+          id: newDraft.id,
+          title: newDraft.title,
+          slug: newDraft.suggestedSlug,
+          excerpt: newDraft.summary,
+          content: newDraft.draftContent,
+          category_id: "technology",
+          status: "draft",
+          author_name: "Redaksi Nexarin",
+          read_time_minutes: 6,
+          created_at: newDraft.scrapedAt
+        });
+      } catch (e) {}
+    }
 
     db.drafts.unshift(newDraft);
     return newDraft;

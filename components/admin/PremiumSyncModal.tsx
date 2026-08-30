@@ -11,7 +11,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
-  Check
+  Check,
+  FileText
 } from "lucide-react";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { Button } from "@/components/ui/Button";
@@ -35,8 +36,10 @@ export function PremiumSyncModal({
   const [stage, setStage] = useState<SyncStage>(1);
   const [statusMessage, setStatusMessage] = useState("Menghubungkan ke Google Sheets...");
   const [subMessage, setSubMessage] = useState("Mempersiapkan koneksi ke 'DATABASE PORTAL INFO NEXARIN TECH'");
+  const [activeItemTitle, setActiveItemTitle] = useState("");
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [syncedCount, setSyncedCount] = useState(0);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -45,7 +48,9 @@ export function PremiumSyncModal({
       setStage(1);
       setIsCompleted(false);
       setIsError(false);
-      setSyncedCount(0);
+      setActiveItemTitle("");
+      setActiveItemIndex(0);
+      setTotalItems(0);
       return;
     }
 
@@ -58,50 +63,79 @@ export function PremiumSyncModal({
         setStatusMessage("1. Mengambil Data Dari Spreadsheet...");
         setSubMessage("Membaca baris terbaru dari Google Sheets 'DATABASE PORTAL INFO NEXARIN TECH'...");
 
-        for (let p = 0; p <= 35; p += 2.5) {
+        for (let p = 0; p <= 35; p += 3.5) {
           if (!isMounted) return;
           setProgress(p);
-          await new Promise((r) => setTimeout(r, 60));
+          await new Promise((r) => setTimeout(r, 50));
         }
 
-        // Jalankan API Sync di backend
+        // Panggil API Sync Backend (Mengeksekusi real-time CSV + Supabase insert)
         const res = await fetch("/api/gemini-sync/sync", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sheetId: sheetId.trim() })
         });
         const result = await res.json();
-        const count = result.data?.syncedCount || 0;
-        if (isMounted) setSyncedCount(count);
+        const items: any[] = result.data?.newDrafts || result.data?.items || [];
+        const count = items.length || result.data?.syncedCount || 0;
 
-        // --- STAGE 2: Memindahkan Ke Database Nexarin (35% -> 75%) ---
+        if (isMounted) {
+          setTotalItems(count);
+        }
+
+        // --- STAGE 2: Memindahkan Ke Database Nexarin (Supabase Articles) (35% -> 85%) ---
         if (!isMounted) return;
         setStage(2);
         setStatusMessage("2. Memindahkan Ke Database Nexarin (Supabase Articles)...");
-        setSubMessage("Menginjeksi naskah 900+ kata & metadata ke tabel Supabase articles (status: draft)...");
 
-        for (let p = 35; p <= 75; p += 2.5) {
-          if (!isMounted) return;
-          setProgress(p);
-          await new Promise((r) => setTimeout(r, 60));
+        if (items.length > 0) {
+          const stepPercent = 50 / items.length;
+          let currentBase = 35;
+
+          for (let i = 0; i < items.length; i++) {
+            if (!isMounted) return;
+            const item = items[i];
+            setActiveItemIndex(i + 1);
+            setActiveItemTitle(item.title);
+            setSubMessage(
+              `Sedang memindahkan artikel (${i + 1} dari ${items.length}): "${item.title}"`
+            );
+
+            // Animate progress for this specific article
+            const targetPercent = currentBase + stepPercent;
+            for (let p = currentBase; p <= targetPercent; p += 1.5) {
+              if (!isMounted) return;
+              setProgress(Math.min(p, 85));
+              await new Promise((r) => setTimeout(r, 25));
+            }
+            currentBase = targetPercent;
+            await new Promise((r) => setTimeout(r, 350));
+          }
+        } else {
+          setSubMessage("Memverifikasi integritas database Supabase...");
+          for (let p = 35; p <= 85; p += 5) {
+            if (!isMounted) return;
+            setProgress(p);
+            await new Promise((r) => setTimeout(r, 40));
+          }
         }
 
-        // --- STAGE 3: Verifikasi Integrasi & Pembersihan Staging (75% -> 95%) ---
+        // --- STAGE 3: Verifikasi Integrasi & Pembersihan Staging Buffer (85% -> 96%) ---
         if (!isMounted) return;
         setStage(3);
         setStatusMessage("3. Memverifikasi Integrasi & Membersihkan Staging Buffer...");
-        setSubMessage("Memastikan seluruh baris terverifikasi di Supabase dan membersihkan staging sementara...");
+        setSubMessage("Memastikan seluruh naskah 900+ kata tersimpan aman di tabel Supabase articles...");
 
-        for (let p = 75; p <= 95; p += 2) {
+        for (let p = 85; p <= 96; p += 2) {
           if (!isMounted) return;
           setProgress(p);
-          await new Promise((r) => setTimeout(r, 50));
+          await new Promise((r) => setTimeout(r, 40));
         }
 
-        // Refresh context data
+        // Refresh data di ContentContext
         await onSuccess();
 
-        // --- STAGE 4: Selesai 100% ---
+        // --- STAGE 4: Selesai 100.00% ---
         if (!isMounted) return;
         setProgress(100);
         setStage(4);
@@ -109,7 +143,7 @@ export function PremiumSyncModal({
         setStatusMessage("4. Sinkronisasi Selesai 100%!");
         setSubMessage(
           count > 0
-            ? `Berhasil mengalihkan ${count} artikel baru ke Database Supabase & siap untuk direview.`
+            ? `Berhasil mengalihkan ${count} artikel lengkap ke Database Supabase & siap untuk direview!`
             : "Database Supabase telah tersinkronisasi. Belum ada baris draft baru di spreadsheet."
         );
       } catch (err) {
@@ -166,11 +200,11 @@ export function PremiumSyncModal({
         {/* Big Percentage & Progress Bar Card */}
         <div className="relative z-10 p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-4">
           <div className="flex items-end justify-between">
-            <div>
+            <div className="space-y-1 max-w-[75%]">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
                 Status Alur Kerja
               </span>
-              <h4 className="text-sm font-bold text-white mt-0.5">
+              <h4 className="text-sm font-bold text-white truncate">
                 {statusMessage}
               </h4>
             </div>
@@ -188,6 +222,19 @@ export function PremiumSyncModal({
               style={{ width: `${progress}%` }}
             />
           </div>
+
+          {/* Active Processing Item Pill */}
+          {stage === 2 && activeItemTitle && (
+            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 animate-in fade-in duration-200">
+              <FileText className="w-4 h-4 shrink-0 text-[#2DD4F5] animate-pulse" />
+              <div className="text-xs font-mono truncate">
+                <span className="font-bold text-white">
+                  Artikel ({activeItemIndex}/{totalItems}):
+                </span>{" "}
+                <span className="text-cyan-200">{activeItemTitle}</span>
+              </div>
+            </div>
+          )}
 
           <p className="text-xs text-slate-300 font-mono leading-relaxed">
             {subMessage}
@@ -216,7 +263,7 @@ export function PremiumSyncModal({
               ) : (
                 <div className="w-4 h-4 rounded-full border border-slate-600" />
               )}
-              <span className="font-bold">1. Ekstraksi Google Sheets Staging</span>
+              <span className="font-bold">1. Ekstraksi Google Sheets Real-Time</span>
             </div>
             <span className="text-[10px] uppercase font-bold">
               {stage > 1 || isCompleted ? "Selesai" : stage === 1 ? "Sedang Proses" : "Menunggu"}
@@ -233,20 +280,28 @@ export function PremiumSyncModal({
                 : "bg-white/[0.02] border-white/[0.06] text-slate-500"
             }`}
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 truncate max-w-[70%]">
               {stage > 2 || isCompleted ? (
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                   <Check className="w-3 h-3" />
                 </div>
               ) : stage === 2 ? (
-                <RefreshCw className="w-4 h-4 animate-spin text-[#2DD4F5]" />
+                <RefreshCw className="w-4 h-4 animate-spin text-[#2DD4F5] shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-slate-600" />
+                <div className="w-4 h-4 rounded-full border border-slate-600 shrink-0" />
               )}
-              <span className="font-bold">2. Injeksi Database Supabase (Articles Draft)</span>
+              <span className="font-bold truncate">
+                2. Injeksi Database Supabase (Articles Draft)
+              </span>
             </div>
-            <span className="text-[10px] uppercase font-bold">
-              {stage > 2 || isCompleted ? "Selesai" : stage === 2 ? "Sedang Proses" : "Menunggu"}
+            <span className="text-[10px] uppercase font-bold shrink-0">
+              {stage > 2 || isCompleted
+                ? `Selesai (${totalItems})`
+                : stage === 2
+                ? activeItemIndex > 0
+                  ? `Item ${activeItemIndex}/${totalItems}`
+                  : "Sedang Proses"
+                : "Menunggu"}
             </span>
           </div>
 
@@ -287,7 +342,7 @@ export function PremiumSyncModal({
 
           {isCompleted ? (
             <ShinyButton onClick={onClose} className="!py-2 !px-5 !text-xs font-bold flex items-center gap-2">
-              <span>Buka Antrean Review ({syncedCount})</span>
+              <span>Buka Antrean Review ({totalItems})</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#7CF2C3]" />
             </ShinyButton>
           ) : (
