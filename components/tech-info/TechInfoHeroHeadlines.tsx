@@ -42,7 +42,7 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
           {/* Main Lead Story (Col 8) */}
           <div className="lg:col-span-8 group">
             <Link
-              href={`/article/${leadStory.slug}`}
+              href={`/tech-info/${leadStory.category?.slug || "technology"}/article/${leadStory.slug}`}
               className="relative flex flex-col justify-end h-full min-h-[380px] sm:min-h-[460px] rounded-3xl overflow-hidden p-6 sm:p-10 border border-white/[0.12] hover:border-[#2DD4F5]/50 transition-all duration-300 backdrop-blur-xl shadow-2xl block"
             >
               {/* Background Image */}
@@ -98,7 +98,7 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
             {trendingStories.slice(0, 2).map((story, idx) => (
               <Link
                 key={story.id || idx}
-                href={`/article/${story.slug}`}
+                href={`/tech-info/${story.category?.slug || "technology"}/article/${story.slug}`}
                 className="group relative flex flex-col justify-between flex-1 rounded-3xl p-5 sm:p-6 bg-[#0F172A]/85 border border-white/[0.10] hover:border-[#7CF2C3]/40 transition-all duration-300 backdrop-blur-xl shadow-xl overflow-hidden"
               >
                 <div className="space-y-3">

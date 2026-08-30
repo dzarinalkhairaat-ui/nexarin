@@ -58,9 +58,12 @@ export function TechInfoHeader() {
     setMobileMenuOpen(false);
 
     const updateIndicator = () => {
-      const activeLink = TECH_INFO_NAV_LINKS.find(
-        (link) => pathname === link.href || (link.href !== "/tech-info" && pathname.startsWith(link.href))
-      );
+      const activeLink = TECH_INFO_NAV_LINKS.find((link) => {
+        if (link.href === "/tech-info") {
+          return pathname === "/tech-info";
+        }
+        return pathname.startsWith(link.href);
+      });
 
       if (activeLink && linkRefs.current[activeLink.href] && navContainerRef.current) {
         const el = linkRefs.current[activeLink.href];

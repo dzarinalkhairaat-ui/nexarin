@@ -26,7 +26,7 @@ export function TechInfoArticleCard({ article }: TechInfoArticleCardProps) {
     >
       <div className="space-y-4">
         {/* Cover Thumbnail 16:9 */}
-        <Link href={`/article/${article.slug}`} className="block relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/[0.08]">
+        <Link href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`} className="block relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/[0.08]">
           <img
             src={coverImage}
             alt={article.title}
@@ -53,7 +53,7 @@ export function TechInfoArticleCard({ article }: TechInfoArticleCardProps) {
         {/* Title & Excerpt */}
         <div className="space-y-2">
           <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
-            <Link href={`/article/${article.slug}`}>
+            <Link href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`}>
               {article.title}
             </Link>
           </h3>
@@ -76,7 +76,7 @@ export function TechInfoArticleCard({ article }: TechInfoArticleCardProps) {
         </div>
 
         <Link
-          href={`/article/${article.slug}`}
+          href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`}
           className="text-[#2DD4F5] font-bold flex items-center gap-1 hover:underline shrink-0"
         >
           <span>Baca</span>

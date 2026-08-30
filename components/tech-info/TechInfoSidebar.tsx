@@ -28,7 +28,7 @@ export function TechInfoSidebar({ trendingArticles, popularArticles }: TechInfoS
           {popularArticles.slice(0, 5).map((art, idx) => (
             <Link
               key={art.id || idx}
-              href={`/article/${art.slug}`}
+              href={`/tech-info/${art.category?.slug || "technology"}/article/${art.slug}`}
               className="flex items-start gap-3 group"
             >
               <span className="text-xl font-black font-mono text-[#2DD4F5] shrink-0 w-6">
@@ -60,7 +60,7 @@ export function TechInfoSidebar({ trendingArticles, popularArticles }: TechInfoS
           {trendingArticles.slice(0, 3).map((art, idx) => (
             <Link
               key={art.id || idx}
-              href={`/article/${art.slug}`}
+              href={`/tech-info/${art.category?.slug || "technology"}/article/${art.slug}`}
               className="p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] block group transition-all"
             >
               <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase block mb-1">
