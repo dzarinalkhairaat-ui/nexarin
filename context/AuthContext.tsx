@@ -59,7 +59,7 @@ const DEFAULT_CUSTOMER: CustomerUser = {
 const DEFAULT_ADMIN: AdminUser = {
   id: "usr-adm-001",
   name: "Rins (Administrator)",
-  email: "admin@nexarin.tech",
+  email: "nexarintech@administrator.com",
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
   role: "admin",
   joinedAt: "2026-01-01T00:00:00Z",
@@ -437,7 +437,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("nexarin_admin_session", JSON.stringify(adminUser));
       return { success: true };
     } catch (e) {
-      if (email === "admin@nexarin.tech" && password === "admin123") {
+      if (email === "nexarintech@administrator.com" && password === "15September2006") {
         setAdmin(DEFAULT_ADMIN);
         localStorage.setItem("nexarin_admin_session", JSON.stringify(DEFAULT_ADMIN));
         return { success: true };
@@ -457,7 +457,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = (email: string, targetRole: UserRole = "customer") => {
     if (targetRole === "admin") {
-      loginAdmin(email, "admin123");
+      loginAdmin(email, "15September2006");
     } else {
       loginCustomer(email, "password123");
     }

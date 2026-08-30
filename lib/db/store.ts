@@ -30,7 +30,7 @@ class MemoryDataStore {
     {
       id: "usr-adm-001",
       name: "Rins (Administrator)",
-      email: "admin@nexarin.tech",
+      email: "nexarintech@administrator.com",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
       role: "admin" as const,
       joinedAt: "2026-01-01T00:00:00Z",
