@@ -125,7 +125,7 @@ export function Navbar() {
     <>
       <header suppressHydrationWarning className="sticky top-3 sm:top-4 z-40 w-full px-3 sm:px-6 pointer-events-none transition-all">
         <div
-          className="max-w-6xl mx-auto rounded-full px-3.5 sm:px-5 py-2 sm:py-2.5 pointer-events-auto transition-all duration-300 flex items-center justify-between"
+          className="max-w-6xl mx-auto rounded-full px-3.5 sm:px-5 py-2 sm:py-2.5 pointer-events-auto transition-all duration-300 flex items-center justify-between relative"
           style={{
             background:
               "linear-gradient(180deg, rgba(14,16,26,0.75), rgba(14,16,26,0.45)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.25), rgba(45,212,245,0.20), rgba(255,255,255,0.06)) border-box",
@@ -136,7 +136,7 @@ export function Navbar() {
           }}
         >
           {/* 1. Left: Compact Logo & Brand */}
-          <div className="flex items-center gap-4 lg:gap-6">
+          <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2.5 group">
               <img
                 src="/assets/nexarin-logo.png"
@@ -147,13 +147,14 @@ export function Navbar() {
                 Nexarin
               </span>
             </Link>
+          </div>
 
-            {/* 2. Center: Desktop Navigation Links with Smooth Sliding Indicator */}
-            <nav
-              ref={navContainerRef}
-              suppressHydrationWarning
-              className="hidden lg:flex items-center gap-1 relative"
-            >
+          {/* 2. Center: Desktop Navigation Links (Centrally Positioned) */}
+          <nav
+            ref={navContainerRef}
+            suppressHydrationWarning
+            className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2"
+          >
               {/* Sliding Active Indicator Capsule with Spring Motion */}
               <div
                 className="absolute top-0 bottom-0 rounded-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -203,8 +204,7 @@ export function Navbar() {
                   </Link>
                 );
               })}
-            </nav>
-          </div>
+          </nav>
 
           {/* 3. Right: Actions & User State */}
           <div className="flex items-center gap-2 sm:gap-2.5">

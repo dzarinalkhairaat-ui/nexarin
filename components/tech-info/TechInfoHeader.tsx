@@ -107,7 +107,7 @@ export function TechInfoHeader() {
     <>
       <header suppressHydrationWarning className="sticky top-3 sm:top-4 z-40 w-full px-3 sm:px-6 pointer-events-none transition-all">
         <div
-          className="max-w-6xl mx-auto rounded-full px-3.5 sm:px-5 py-2 sm:py-2.5 pointer-events-auto transition-all duration-300 flex items-center justify-between"
+          className="max-w-6xl mx-auto rounded-full px-3.5 sm:px-5 py-2 sm:py-2.5 pointer-events-auto transition-all duration-300 flex items-center justify-between relative"
           style={{
             background:
               "linear-gradient(180deg, rgba(14,16,26,0.85), rgba(14,16,26,0.55)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.25), rgba(45,212,245,0.25), rgba(124,242,195,0.15)) border-box",
@@ -151,7 +151,7 @@ export function TechInfoHeader() {
           <nav
             ref={navContainerRef}
             aria-label="Tech Info Channels"
-            className="hidden lg:flex items-center relative py-1"
+            className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 py-1"
           >
             {/* Smooth Sliding Active Pill Indicator */}
             <div
