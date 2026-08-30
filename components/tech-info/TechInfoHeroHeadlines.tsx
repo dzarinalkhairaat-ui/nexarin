@@ -24,10 +24,7 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
         
         {/* Editorial Brand Headline */}
         <div className="space-y-2 max-w-3xl">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-[#2DD4F5]">
-            <Sparkles className="w-4 h-4" />
-            <span>Pusat Publikasi &amp; Berita Teknologi Terkini</span>
-          </div>
+
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
             Tech Info Newsroom
           </h1>
