@@ -23,30 +23,33 @@ flowchart TD
 
 ---
 
-## 2. SPESIFIKASI FORMAT CSV (100% SESUAI KOLOM SUPABASE `articles`)
+## 2. PEMETAAN 1-TO-1 KOLOM CSV GEMINI SPARK DENGAN DATABASE SUPABASE `articles`
 
-Setiap baris yang dihasilkan oleh Gemini Spark di file `data/incoming_articles.csv` memiliki 18 kolom terstruktur:
+Setiap baris yang dihasilkan oleh Gemini Spark di file `data/incoming_articles.csv` memiliki susunan kolom yang **100% IDENTIK dan SESUAI PERSIS** dengan kolom tabel Supabase `articles`:
 
-| No | Nama Kolom CSV | Tipe Data | Deskripsi & Contoh Nilai |
-|---|---|---|---|
-| 1 | `id` | String (PK) | Format `NXR-2026-XXXX` (contoh: `NXR-2026-0001`) |
-| 2 | `created_at` | Timestamp | Format ISO 8601 (contoh: `2026-08-31T00:00:00Z`) |
-| 3 | `title` | String | Judul editorial tajam, informatif, bebas clickbait |
-| 4 | `slug` | String (Unique) | URL slug SEO-friendly (contoh: `anthropic-model-hardware-standard`) |
-| 5 | `category_id` | String (FK) | Salah satu dari: `ai`, `technology`, `digital`, `gadget`, `automotive` |
-| 6 | `subcategory` | String | Sub-kategori spesifik (contoh: `Agentic AI & Robotics`) |
-| 7 | `tags` | String (Koma) | Kata kunci tanpa tagar (contoh: `AI, Anthropic, Robotics`) |
-| 8 | `excerpt` | String | Ringkasan eksekutif 2–3 kalimat padat wawasan |
-| 9 | `content` | Text (900+ kata) | Naskah lengkap 6 bab terstruktur, 1 baris kosong per paragraf |
-| 10 | `opinion` | Text | Analisis redaksi diawali: `"Menurut analisis redaksi Nexarin..."` |
-| 11 | `key_takeaways` | Text | 3–5 poin kesimpulan penomoran angka biasa |
-| 12 | `reading_time` | String | Estimasi waktu baca (contoh: `6 min baca`) |
-| 13 | `source_name` | String | Nama newsroom sumber (contoh: `Anthropic Newsroom`) |
-| 14 | `source_url` | String | URL valid publikasi primer sumber |
-| 15 | `featured_image` | String | URL gambar relevan Unsplash 16:9 |
-| 16 | `meta_title` | String | SEO Title artikel |
-| 17 | `meta_description` | String | SEO Description artikel |
-| 18 | `status` | String | **WAJIB SELALU `"draft"`** |
+| No | Kolom CSV Gemini Spark | Kolom DB Supabase `articles` | Tipe Data | Keterangan & Contoh Nilai |
+|:--:|---|---|---|---|
+| 1 | `id` | `id` | `VARCHAR` (PK) | ID Unik bertambah: `NXR-2026-0001` |
+| 2 | `title` | `title` | `TEXT` (NOT NULL) | Judul editorial tajam, informatif, bebas clickbait |
+| 3 | `slug` | `slug` | `TEXT` (UNIQUE) | URL slug SEO: `anthropic-model-hardware-standard` |
+| 4 | `category_id` | `category_id` | `VARCHAR` (FK) | Kategori valid: `ai`, `technology`, `digital`, `gadget`, `automotive` |
+| 5 | `excerpt` | `excerpt` | `TEXT` (NOT NULL) | Ringkasan eksekutif 2–3 kalimat padat wawasan |
+| 6 | `content` | `content` | `TEXT` (NOT NULL) | Naskah lengkap 900+ kata (6 bab terstruktur, 1 baris kosong per paragraf) |
+| 7 | `opinion` | *(stored in metadata)* | `TEXT` | Analisis redaksi: `Menurut analisis redaksi Nexarin...` |
+| 8 | `tags` | *(stored in metadata)* | `TEXT` | Kata kunci tanpa tagar: `AI, Anthropic, Hardware Driver, Robotics` |
+| 9 | `featured_image` | `featured_image` | `TEXT` (NOT NULL) | URL foto Unsplash 16:9 yang relevan |
+| 10 | `meta_title` | `meta_title` | `TEXT` | SEO Meta Title: `Judul Artikel — Nexarin Tech` |
+| 11 | `meta_description` | `meta_description` | `TEXT` | SEO Meta Description (sama seperti excerpt) |
+| 12 | `source_name` | `source_name` / meta | `TEXT` | Nama newsroom sumber: `Anthropic Newsroom` |
+| 13 | `source_url` | `source_url` / meta | `TEXT` | URL asli berita primer: `https://www.anthropic.com/news` |
+| 14 | `status` | `status` | `VARCHAR` (NOT NULL) | **WAJIB SELALU `"draft"`** |
+| 15 | `author_name` | `author_name` | `VARCHAR` (NOT NULL) | `"Redaksi Nexarin (via Gemini Spark)"` |
+| 16 | `read_time_minutes`| `read_time_minutes` | `INTEGER` (NOT NULL) | Estimasi waktu baca: `6` |
+| 17 | `views_count` | `views_count` | `INTEGER` (NOT NULL) | Default tampilan awal: `1` |
+| 18 | `is_featured` | `is_featured` | `BOOLEAN` (NOT NULL) | Default: `false` |
+| 19 | `is_trending` | `is_trending` | `BOOLEAN` (NOT NULL) | Default: `false` |
+| 20 | `created_at` | `created_at` | `TIMESTAMPTZ` (NOT NULL) | Waktu ISO 8601 pembuatan: `2026-08-31T00:00:00Z` |
+| 21 | `updated_at` | `updated_at` | `TIMESTAMPTZ` (NOT NULL) | Waktu ISO 8601 pembaruan: `2026-08-31T00:00:00Z` |
 
 ---
 
