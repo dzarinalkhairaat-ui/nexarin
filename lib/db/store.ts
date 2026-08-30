@@ -46,9 +46,9 @@ class MemoryDataStore {
       company: "SMA Nusantara Digital"
     }
   ];
-  public articles: Article[] = [...INITIAL_ARTICLES];
+  public articles: Article[] = [];
   public products: Product[] = [...INITIAL_PRODUCTS];
-  public drafts: GeminiSparkDraft[] = [...INITIAL_DRAFTS];
+  public drafts: GeminiSparkDraft[] = [];
   public affiliates: AffiliateLink[] = [...INITIAL_AFFILIATES];
   public freeResources: FreeResource[] = [
     {

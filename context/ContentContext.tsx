@@ -26,8 +26,8 @@ interface ContentContextType {
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 export function ContentProvider({ children }: { children: React.ReactNode }) {
-  const [articles, setArticles] = useState<Article[]>(INITIAL_ARTICLES);
-  const [drafts, setDrafts] = useState<GeminiSparkDraft[]>(INITIAL_DRAFTS);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [drafts, setDrafts] = useState<GeminiSparkDraft[]>([]);
   const { showToast } = useNotification();
 
   const loadData = async () => {
