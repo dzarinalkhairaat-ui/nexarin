@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Radio } from "lucide-react";
 
 export function TechInfoNewsTicker() {
   const headlines = [
@@ -15,12 +14,7 @@ export function TechInfoNewsTicker() {
 
   return (
     <div className="w-full bg-[#0F172A]/90 border-y border-white/[0.08] backdrop-blur-xl py-2.5 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex items-center gap-4 overflow-hidden text-xs font-mono">
-        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2DD4F5]/15 text-[#2DD4F5] border border-[#2DD4F5]/30 text-[10px] font-bold uppercase shrink-0 z-10 shadow-md">
-          <Radio className="w-3 h-3 text-[#2DD4F5] animate-pulse" />
-          Live Breaking Wire
-        </span>
-
+      <div className="max-w-7xl mx-auto flex items-center overflow-hidden text-xs font-mono">
         <div className="relative flex-1 overflow-hidden">
           <div className="animate-marquee flex items-center gap-8 whitespace-nowrap text-slate-300 text-xs">
             {headlines.map((text, idx) => (
