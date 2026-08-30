@@ -266,20 +266,14 @@ export default function AdminContentPage() {
         actions={
           <div className="flex items-center gap-3">
             <Button
-              variant="outline"
+              variant="primary"
               size="sm"
               onClick={() => setIsSyncModalOpen(true)}
-              className="border-white/10 hover:border-cyan-500/30 text-xs font-bold"
+              className="text-xs font-bold shadow-lg shadow-cyan-500/20"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-[#2DD4F5]" />
+              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-slate-950" />
               Sync Spreadsheet
             </Button>
-            <Link href="/admin/gemini-sync">
-              <Button variant="primary" size="sm" className="text-xs font-bold shadow-lg shadow-cyan-500/20">
-                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Pipeline AI
-              </Button>
-            </Link>
           </div>
         }
       />
