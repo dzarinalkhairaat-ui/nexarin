@@ -7,6 +7,7 @@ import { useNotification } from "@/context/NotificationContext";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminCard } from "@/components/admin/AdminCard";
 import { Button } from "@/components/ui/Button";
+import { ShinyButton } from "@/components/ui/shiny-button";
 import { Badge } from "@/components/ui/Badge";
 import { Tabs } from "@/components/ui/Tabs";
 import { ConfirmModal } from "@/components/feedback/ConfirmModal";
@@ -265,15 +266,14 @@ export default function AdminContentPage() {
         badge={`${pendingDrafts.length} Menunggu Review`}
         actions={
           <div className="flex items-center gap-3">
-            <Button
-              variant="primary"
-              size="sm"
+            <ShinyButton
               onClick={() => setIsSyncModalOpen(true)}
-              className="text-xs font-bold shadow-lg shadow-cyan-500/20"
+              className="!py-2 !px-4 !text-xs font-bold flex items-center gap-2"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-slate-950" />
-              Sync Spreadsheet
-            </Button>
+              <FileSpreadsheet className="w-4 h-4 text-[#2DD4F5]" />
+              <span>Sync Spreadsheet</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#7CF2C3]" />
+            </ShinyButton>
           </div>
         }
       />
