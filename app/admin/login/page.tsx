@@ -10,8 +10,8 @@ import { ShieldCheck, Lock, AlertCircle, Eye, EyeOff, Terminal, KeyRound } from 
 
 function AdminLoginForm() {
   useAntiInspect("Admin Login Console");
-  const [email, setEmail] = useState("admin@nexarin.tech");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -146,15 +146,7 @@ function AdminLoginForm() {
           </Button>
         </form>
 
-        {/* Demo Credentials Info Box */}
-        <div className="p-3.5 rounded-2xl bg-cyan-500/5 border border-cyan-500/15 space-y-1 text-center">
-          <div className="text-[11px] font-mono font-bold text-cyan-400">
-            Kredensial Demo Administrator
-          </div>
-          <div className="text-xs text-[#94A3B8] font-mono">
-            Email: <span className="text-white">admin@nexarin.tech</span> | Pass: <span className="text-white">admin123</span>
-          </div>
-        </div>
+
       </div>
     </div>
   );
