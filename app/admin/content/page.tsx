@@ -11,6 +11,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { Badge } from "@/components/ui/Badge";
 import { Tabs } from "@/components/ui/Tabs";
 import { ConfirmModal } from "@/components/feedback/ConfirmModal";
+import { PremiumSyncModal } from "@/components/admin/PremiumSyncModal";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { formatDate } from "@/lib/utils";
 import { Article } from "@/types/content";
@@ -572,155 +573,15 @@ export default function AdminContentPage() {
         />
       )}
 
-      {/* MODAL: Sync Google Sheets Staging */}
-      {isSyncModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-          <div className="w-full max-w-xl rounded-3xl bg-[#0F172A] border border-white/[0.12] p-6 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
-              <div className="flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-[#2DD4F5]" />
-                <h3 className="text-base font-bold text-white">Sinkronisasi Database Spreadsheet</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsSyncModalOpen(false)}
-                className="p-1 rounded-full text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Sync Tabs */}
-            <div className="flex items-center gap-2 p-1 rounded-2xl bg-white/[0.04] border border-white/[0.08]">
-              <button
-                type="button"
-                onClick={() => setSyncTab("auto")}
-                className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
-                  syncTab === "auto" ? "bg-[#2DD4F5] text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Tarik Otomatis (URL/ID Sheet)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSyncTab("manual")}
-                className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
-                  syncTab === "manual" ? "bg-[#2DD4F5] text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Impor Langsung Data Sheet
-              </button>
-            </div>
-
-            {syncTab === "auto" ? (
-              <div className="space-y-4 text-xs font-mono">
-                <div className="space-y-1.5">
-                  <label className="text-slate-300 font-bold">Spreadsheet ID / URL:</label>
-                  <input
-                    type="text"
-                    value={sheetIdInput}
-                    onChange={(e) => setSheetIdInput(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
-                    placeholder="1ydN7GW0tkRNpdwigw1IAupPaG0MNL9GXtVF-75pf7JU"
-                  />
-                </div>
-
-                <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 space-y-2 text-[11px] text-slate-300 font-sans">
-                  <div className="flex items-center gap-1.5 text-[#2DD4F5] font-bold">
-                    <HelpCircle className="w-4 h-4" />
-                    <span>Petunjuk Akses Google Sheets:</span>
-                  </div>
-                  <p className="leading-relaxed">
-                    Pastikan Google Sheet Anda diatur ke: <strong>Bagikan (Share) → "Siapa saja yang memiliki link: Pelihat"</strong> agar sistem dapat membaca baris data yang diisi oleh Gemini Spark.
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
-                  <Button variant="outline" size="sm" onClick={() => setIsSyncModalOpen(false)}>
-                    Tutup
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={handleTriggerSync}
-                    disabled={isSyncing}
-                    className="font-bold shadow-md shadow-cyan-500/20"
-                  >
-                    <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isSyncing ? "animate-spin" : ""}`} />
-                    {isSyncing ? "Menyinkronkan..." : "Mulai Tarik Data"}
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3.5 text-xs font-mono max-h-[60vh] overflow-y-auto pr-1">
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-bold">Judul Artikel (title):</label>
-                  <input
-                    type="text"
-                    value={manualTitle}
-                    onChange={(e) => setManualTitle(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
-                    placeholder="Judul dari spreadsheet..."
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-bold">Kategori:</label>
-                  <select
-                    value={manualCategory}
-                    onChange={(e) => setManualCategory(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-[#0B1120] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
-                  >
-                    <option value="ai">AI</option>
-                    <option value="technology">Technology</option>
-                    <option value="digital">Digital</option>
-                    <option value="gadget">Gadget</option>
-                    <option value="automotive">Automotive</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-bold">Ringkasan (excerpt):</label>
-                  <textarea
-                    rows={2}
-                    value={manualExcerpt}
-                    onChange={(e) => setManualExcerpt(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5]"
-                    placeholder="Ringkasan 2-3 kalimat..."
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-slate-300 font-bold">Isi Naskah Markdown (content):</label>
-                  <textarea
-                    rows={5}
-                    value={manualContent}
-                    onChange={(e) => setManualContent(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.10] text-white focus:outline-none focus:border-[#2DD4F5] font-sans"
-                    placeholder="Naskah artikel lengkap dari spreadsheet..."
-                  />
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/[0.08]">
-                  <Button variant="outline" size="sm" onClick={() => setIsSyncModalOpen(false)}>
-                    Tutup
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={handleManualImport}
-                    disabled={isImporting}
-                    className="font-bold shadow-md shadow-cyan-500/20"
-                  >
-                    <UploadCloud className="w-3.5 h-3.5 mr-1.5" />
-                    {isImporting ? "Mengimpor..." : "Impor ke Draft Supabase"}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* MODAL: Premium Cybernetic Sync Pipeline */}
+      <PremiumSyncModal
+        isOpen={isSyncModalOpen}
+        onClose={() => setIsSyncModalOpen(false)}
+        onSuccess={async () => {
+          await syncGeminiSpark();
+        }}
+        sheetId={sheetIdInput}
+      />
 
       {/* MODAL: Edit Published Article */}
       {editingArticle && (
