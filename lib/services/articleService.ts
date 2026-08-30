@@ -47,10 +47,8 @@ export const articleService = {
             metaDescription: a.meta_description || a.excerpt
           }));
 
-          // Merge with initial articles if count is small so all subcategories & editorial pieces render
-          const existingSlugs = new Set(dbArticles.map((a: any) => a.slug));
-          const fallbackMatches = db.articles.filter((a) => !existingSlugs.has(a.slug));
-          return [...dbArticles, ...fallbackMatches];
+          // Return ONLY real Supabase articles
+          return dbArticles;
         }
       } catch (e) {
         console.error("Supabase articles error, using store:", e);
