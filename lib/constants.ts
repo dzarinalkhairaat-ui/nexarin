@@ -35,7 +35,7 @@ export const NAV_LINKS = [
 
 // Contextual Tech Info Navigation Links
 export const TECH_INFO_NAV_LINKS = [
-  { label: "Semua Berita", href: "/tech-info", category: "all", icon: "Newspaper" },
+  { label: "Semua", href: "/tech-info", category: "all", icon: "Newspaper" },
   { label: "AI", href: "/tech-info/ai", category: "ai", icon: "Sparkles" },
   { label: "Technology", href: "/tech-info/technology", category: "technology", icon: "Cpu" },
   { label: "Digital", href: "/tech-info/digital", category: "digital", icon: "Globe" },

@@ -43,8 +43,6 @@ export function TechInfoHeader() {
   const { customer, isCustomerAuthenticated, logoutCustomer, admin, isAdminAuthenticated, logoutAdmin } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const navContainerRef = useRef<HTMLDivElement | null>(null);
@@ -101,6 +99,21 @@ export function TechInfoHeader() {
     };
   }, [pathname]);
 
+  // Click outside to close profile dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    }
+    if (isProfileDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileDropdownOpen]);
+
   const isAuthenticated = (isCustomerAuthenticated && !!customer) || (isAdminAuthenticated && !!admin);
 
   return (
@@ -117,13 +130,13 @@ export function TechInfoHeader() {
             boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.45)"
           }}
         >
-          {/* Brand Logo & Tech Info Title */}
-          <div className="flex items-center gap-3">
+          {/* 1. Left: Brand Logo & Tech Info Title */}
+          <div className="flex items-center">
             <Link
               href="/tech-info"
               className="flex items-center gap-2.5 group focus:outline-none"
             >
-              <div className="relative w-8 h-8 rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105">
+              <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105">
                 <img
                   src="/assets/nexarin-logo.png"
                   alt="Tech Info"
@@ -134,35 +147,36 @@ export function TechInfoHeader() {
                 />
               </div>
 
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold tracking-tight text-sm text-white group-hover:text-[#2DD4F5] transition-colors">
-                    Tech Info
-                  </span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#2DD4F5]/15 text-[#2DD4F5] border border-[#2DD4F5]/30">
-                    NEWS
-                  </span>
-                </div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold tracking-tight text-sm sm:text-base text-white group-hover:text-[#2DD4F5] transition-colors leading-none">
+                  Tech Info
+                </span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#2DD4F5]/15 text-[#2DD4F5] border border-[#2DD4F5]/30 hidden sm:inline-block">
+                  NEWS
+                </span>
               </div>
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
+          {/* 2. Center: Desktop Navigation Links (Centrally Positioned & Single Line) */}
           <nav
             ref={navContainerRef}
             aria-label="Tech Info Channels"
-            className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 py-1"
+            className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2"
           >
-            {/* Smooth Sliding Active Pill Indicator */}
+            {/* Sliding Active Indicator Capsule with Spring Motion */}
             <div
-              className="absolute top-1 bottom-1 rounded-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="absolute top-0 bottom-0 rounded-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
               style={{
-                left: `${indicatorStyle.left}px`,
+                transform: `translateX(${indicatorStyle.left}px)`,
                 width: `${indicatorStyle.width}px`,
                 opacity: indicatorStyle.opacity,
-                background: "rgba(255, 255, 255, 0.08)",
+                background:
+                  "linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)",
                 border: "1px solid rgba(45, 212, 245, 0.35)",
-                boxShadow: "0 0 16px rgba(45, 212, 245, 0.15)"
+                boxShadow: "0 0 16px rgba(45, 212, 245, 0.15)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)"
               }}
             />
 
@@ -181,33 +195,32 @@ export function TechInfoHeader() {
                     linkRefs.current[link.href] = el;
                   }}
                   className={cn(
-                    "relative z-10 px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 select-none flex items-center gap-1.5",
+                    "relative z-10 px-3.5 py-1 text-xs font-semibold rounded-full transition-all duration-200 select-none flex items-center gap-1.5 whitespace-nowrap",
                     isActive
                       ? "text-white font-bold"
-                      : "text-[#94A3B8] hover:text-[#F8FAFC]"
+                      : "text-slate-400 hover:text-white"
                   )}
                 >
-                  <IconComp className={cn("w-3.5 h-3.5 shrink-0 transition-colors", isActive ? "text-[#2DD4F5]" : "text-[#64748B]")} />
+                  <IconComp className={cn("w-3.5 h-3.5 shrink-0 transition-colors", isActive ? "text-[#2DD4F5]" : "text-slate-400")} />
                   <span>{link.label}</span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2">
-            
+          {/* 3. Right: Action Buttons */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Quick Back to Nexarin Hub Button */}
             <Link
               href="/"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all duration-200"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all duration-200 whitespace-nowrap"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#2DD4F5]" />
               <span>Nexarin Hub</span>
             </Link>
 
-            {/* User Profile / Auth State */}
-            {isAuthenticated ? (
+            {/* User Profile (Only if logged in) */}
+            {isAuthenticated && (
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
@@ -259,13 +272,6 @@ export function TechInfoHeader() {
                   </div>
                 )}
               </div>
-            ) : (
-              <Link href="/login">
-                <Button variant="primary" size="sm" className="h-8 px-3.5 text-xs font-extrabold rounded-full flex items-center gap-1.5 shadow-md shadow-cyan-500/20">
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Masuk</span>
-                </Button>
-              </Link>
             )}
 
             {/* Mobile Menu Toggle */}
