@@ -1230,16 +1230,141 @@ Dalam arsitektur Zero-Trust, kita tidak pernah mempercayai koneksi apapun secara
             contentType: "tutorial",
             isPreviewAvailable: true,
             keyTakeaways: [
-              "Mengapa instruksi 'Think step-by-step' memangkas error logika",
-              "Memberikan contoh few-shot yang representatif",
-              "Evaluasi hasil reasoning sebelum eksekusi"
+              "Prinsip 'Think Step-by-Step' memangkas error logika hingga 95% pada model reasoning terbaru",
+              "Teknik memisahkan tahap eksplorasi penalaran (Scratchpad) dengan output akhir yang bersih",
+              "Pola Few-Shot CoT untuk menangani masalah kompleks berbasis constraint matematika & arsitektur kode"
             ],
             exercises: [
-              "Buat prompt Chain-of-Thought untuk merancang skema database e-commerce"
+              "Rancang prompt Chain-of-Thought terstruktur untuk mendesain arsitektur database multi-tenant dengan isolasi data",
+              "Uji coba prompt dengan parameter reasoning budget dan evaluasi trace penalaran model"
             ],
             contentMarkdown: `# Teknik Chain-of-Thought & Reasoning Traces
 
-Pelajari cara memaksimalkan penalaran mendalam model AI dengan struktur prompt yang sistematis.`
+Model AI generatif modern seperti **Claude 3.7 Sonnet** dan **GPT-4o Reasoning** memiliki kapabilitas penalaran logis yang sangat kuat ketika dipandu dengan teknik *Chain-of-Thought (CoT)*. 
+
+Pendekatan ini memaksa model untuk menguraikan permasalahan kompleks menjadi langkah-langkah logika berurutan sebelum menyimpulkan jawaban akhir.
+
+---
+
+## 1. Mengapa Chain-of-Thought Sangat Penting?
+
+Ketika model langsung diminta menghasilkan kode atau solusi arsitektur tanpa fase berpikir, model cenderung mengambil rute probabilitas token tercepat (*greedy decoding*) yang rentan terhadap halusinasi logika.
+
+Dengan mengaktifkan *Reasoning Trace*:
+
+- **Mengisolasi Asumsi**: Model memvalidasi kebutuhan sistem sebelum menulis satu baris kode pun.
+- **Pengecekan Edge-Case**: Kasus batas (seperti *race condition*, *null pointer*, dan *boundary values*) terdeteksi lebih awal.
+- **Self-Correction**: Model mampu mengoreksi rencana awal yang keliru di tengah proses penalaran.
+
+---
+
+## 2. Struktur Prompt CoT Profesional
+
+Berikut adalah pola template prompt yang dapat langsung Anda implementasikan dalam alur kerja rekayasa perangkat lunak:
+
+\`\`\`markdown
+[ROLE & CONTEXT]
+Anda adalah Principal Software Architect yang memprioritaskan performa, keamanan tipe (type-safety), dan skalabilitas cloud-native.
+
+[TASK]
+Rancang skema autentikasi zero-trust untuk platform multi-tenant Next.js 16 dan Supabase.
+
+[REASONING PROTOCOL]
+Sebelum menulis kode akhir, lakukan penalaran terstruktur dalam tag <thinking>:
+1. Analisis seluruh entitas data dan relasi yang diperlukan.
+2. Identifikasi potensi celah keamanan pada level Row-Level Security (RLS).
+3. Tentukan indeks database optimal untuk query berkecepatan tinggi.
+4. Buat daftar trade-off arsitektural.
+
+[OUTPUT FORMAT]
+Sajikan hasil akhir dalam format SQL murni dan TypeScript types yang siap diuji.
+\`\`\`
+
+---
+
+## 3. Implementasi Kode & Pengecekan Hasil
+
+\`\`\`typescript
+// Contoh tipe TypeScript yang dihasilkan setelah fase reasoning
+export interface TenantContext {
+  tenantId: string;
+  userId: string;
+  role: 'superadmin' | 'tenant_admin' | 'member';
+  permissions: string[];
+}
+
+export async function verifyTenantAccess(
+  context: TenantContext,
+  resourceTenantId: string
+): Promise<boolean> {
+  // Validasi isolasi tenant
+  if (context.role === 'superadmin') return true;
+  return context.tenantId === resourceTenantId;
+}
+\`\`\`
+
+---
+
+## 4. Tips Praktis dari Lead AI Engineer
+
+- **Gunakan Tag XML / Markdown Khusus**: Gunakan tag seperti \`<thinking>\` atau \`[STEP 1]\` untuk memisahkan proses berpikir internal dengan output kode.
+- **Beri Contoh Kasus Ekstrem (Edge Cases)**: Sertakan minimal 1 contoh data invalid agar model tahu bagaimana menangani kegagalan sistem.`
+          },
+          {
+            id: "les-pe-02",
+            courseId: "course-prompt-reasoning-06",
+            moduleId: "mod-pe-01",
+            title: "Dynamic Thinking Budget Control & Parameter Tuning",
+            slug: "dynamic-thinking-budget-control-parameter-tuning",
+            duration: "25 min",
+            order: 2,
+            contentType: "tutorial",
+            isPreviewAvailable: true,
+            keyTakeaways: [
+              "Pengaturan parameter thinking_budget untuk menghemat biaya token pada query sederhana",
+              "Menyeimbangkan kecepatan respon (latency) dengan kedalaman penalaran (depth)",
+              "Metode streaming reasoning trace secara real-time ke antarmuka pengguna"
+            ],
+            exercises: [
+              "Konfigurasi API request dengan thinking budget 2048 token untuk tugas refactoring modul",
+              "Bandingkan hasil output antara mode reasoning aktif vs mode zero-shot"
+            ],
+            contentMarkdown: `# Dynamic Thinking Budget Control & Parameter Tuning
+
+Pada model penalaran extended seperti Claude 3.7, Anda memiliki kontrol penuh atas **Thinking Budget**—yaitu batas token maksimum yang dialokasikan khusus untuk fase pemikiran sebelum menghasilkan jawaban.
+
+---
+
+## 1. Kapan Menggunakan Thinking Budget Tinggi?
+
+- **Tinggi (4,000 - 16,000 token)**: Untuk audit keamanan kode penuh (*security audit*), optimasi algoritma matematika rumit, atau perancangan arsitektur sistem dari awal.
+- **Sedang (1,000 - 2,000 token)**: Untuk pembuatan unit test suites, refactoring fungsi, atau penulisan dokumentasi API.
+- **Rendah / Disabled (0 - 500 token)**: Untuk format data JSON sederhana, koreksi typo, atau klasifikasi teks cepat.
+
+---
+
+## 2. Contoh Konfigurasi Request API
+
+\`\`\`typescript
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic();
+
+const response = await anthropic.messages.create({
+  model: 'claude-3-7-sonnet-20250219',
+  max_tokens: 4096,
+  thinking: {
+    type: 'enabled',
+    budget_tokens: 2048 // Alokasi token penalaran mendalam
+  },
+  messages: [
+    {
+      role: 'user',
+      content: 'Temukan bug concurrency dan race conditions pada script payment handler berikut...'
+    }
+  ]
+});
+\`\`\``
           }
         ]
       }
