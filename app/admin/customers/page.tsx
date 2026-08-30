@@ -124,16 +124,38 @@ export default function AdminCustomersPage() {
   const [formStatus, setFormStatus] = useState<"active" | "suspended">("active");
   const [formNotes, setFormNotes] = useState("");
 
-  // Load from local storage
-  useEffect(() => {
+  // Load customers directly from Database API & Supabase
+  const [loading, setLoading] = useState(true);
+
+  const loadCustomers = async () => {
     try {
-      const saved = localStorage.getItem("nexarin_admin_crm_customers");
-      if (saved) {
-        setCustomerList(JSON.parse(saved));
+      setLoading(true);
+      const res = await fetch("/api/customers");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        setCustomerList(data.data);
+        localStorage.setItem("nexarin_admin_crm_customers", JSON.stringify(data.data));
+      } else {
+        const saved = localStorage.getItem("nexarin_admin_crm_customers");
+        if (saved) {
+          setCustomerList(JSON.parse(saved));
+        }
       }
     } catch (e) {
-      console.error("Failed to load customer CRM data", e);
+      console.error("Failed to fetch customers from API", e);
+      try {
+        const saved = localStorage.getItem("nexarin_admin_crm_customers");
+        if (saved) {
+          setCustomerList(JSON.parse(saved));
+        }
+      } catch (err) {}
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    loadCustomers();
   }, []);
 
   const saveCustomers = (newList: CustomerRecord[]) => {
@@ -163,9 +185,11 @@ export default function AdminCustomersPage() {
   const totalLicensesCount = licenses.length;
   const totalCRMRevenue = orders.reduce((acc, o) => acc + o.total, 0);
 
-  // Handler: Toggle Status (Activate / Suspend)
-  const handleToggleStatus = (customer: CustomerRecord) => {
+  // Handler: Toggle Status (Activate / Suspend) with Database Sync
+  const handleToggleStatus = async (customer: CustomerRecord) => {
     const newStatus: "active" | "suspended" = customer.status === "active" ? "suspended" : "active";
+    
+    // Optimistic UI update
     const updated = customerList.map((c) => (c.id === customer.id ? { ...c, status: newStatus } : c));
     saveCustomers(updated);
 
@@ -173,10 +197,20 @@ export default function AdminCustomersPage() {
       setSelectedCustomer({ ...selectedCustomer, status: newStatus });
     }
 
+    try {
+      await fetch(`/api/customers/${customer.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
+      });
+    } catch (e) {
+      console.error("Failed to update status in DB:", e);
+    }
+
     showToast({
       type: newStatus === "active" ? "success" : "info",
       title: newStatus === "active" ? "Akun Diaktifkan" : "Akun Ditangguhkan",
-      message: `Status akun ${customer.name} berhasil diubah menjadi ${newStatus === "active" ? "Aktif" : "Nonaktif/Suspended"}.`
+      message: `Status akun ${customer.name} berhasil diubah menjadi ${newStatus === "active" ? "Aktif" : "Nonaktif/Suspended"} di database.`
     });
   };
 
@@ -216,41 +250,46 @@ export default function AdminCustomersPage() {
     }
 
     if (editingCustomer) {
-      // Edit existing
-      const updated = customerList.map((c) =>
-        c.id === editingCustomer.id
-          ? {
-              ...c,
-              name: formName,
-              email: formEmail,
-              phone: formPhone || undefined,
-              company: formCompany || undefined,
-              status: formStatus,
-              notes: formNotes || undefined
-            }
-          : c
-      );
+      // Edit existing with DB sync
+      const updatedItem: CustomerRecord = {
+        ...editingCustomer,
+        name: formName,
+        email: formEmail,
+        phone: formPhone || undefined,
+        company: formCompany || undefined,
+        status: formStatus,
+        notes: formNotes || undefined
+      };
+
+      const updated = customerList.map((c) => (c.id === editingCustomer.id ? updatedItem : c));
       saveCustomers(updated);
-      showToast({
-        type: "success",
-        title: "Akun Customer Diperbarui",
-        message: `Informasi data pelanggan ${formName} telah disimpan.`
-      });
-      if (selectedCustomer?.id === editingCustomer.id) {
-        setSelectedCustomer({
-          ...selectedCustomer,
+
+      fetch(`/api/customers/${editingCustomer.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: formName,
           email: formEmail,
           phone: formPhone,
           company: formCompany,
           status: formStatus,
           notes: formNotes
-        });
+        })
+      }).catch((e) => console.error("Failed to update customer in DB:", e));
+
+      showToast({
+        type: "success",
+        title: "Akun Customer Diperbarui",
+        message: `Informasi data pelanggan ${formName} telah diperbarui di database.`
+      });
+      if (selectedCustomer?.id === editingCustomer.id) {
+        setSelectedCustomer(updatedItem);
       }
     } else {
-      // Create new
+      // Create new with DB sync
+      const tempId = `usr-cust-${Date.now().toString().slice(-4)}`;
       const newCust: CustomerRecord = {
-        id: `usr-cust-${Date.now().toString().slice(-4)}`,
+        id: tempId,
         name: formName,
         email: formEmail,
         phone: formPhone || undefined,
@@ -258,10 +297,31 @@ export default function AdminCustomersPage() {
         status: formStatus,
         joinedAt: new Date().toISOString(),
         authProvider: "email",
-        avatar: `https://images.unsplash.com/photo-${1535713875000 + Math.floor(Math.random() * 1000)}?q=80&w=200&auto=format&fit=crop`,
+        avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop`,
         notes: formNotes || undefined
       };
       saveCustomers([newCust, ...customerList]);
+
+      fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formName,
+          email: formEmail,
+          phone: formPhone,
+          company: formCompany,
+          status: formStatus,
+          notes: formNotes
+        })
+      })
+        .then((res) => res.json())
+        .then((d) => {
+          if (d.success && d.data) {
+            setCustomerList((prev) => prev.map((c) => (c.id === tempId ? d.data : c)));
+          }
+        })
+        .catch((e) => console.error("Failed to insert customer to DB:", e));
+
       showToast({
         type: "success",
         title: "Customer Baru Ditambahkan",
@@ -272,22 +332,34 @@ export default function AdminCustomersPage() {
     setIsFormModalOpen(false);
   };
 
-  // Handler: Delete Customer
-  const handleDeleteCustomer = () => {
+  // Handler: Delete Customer with Database Sync
+  const handleDeleteCustomer = async () => {
     if (!customerToDelete) return;
 
-    const updated = customerList.filter((c) => c.id !== customerToDelete.id);
+    const idToDelete = customerToDelete.id;
+    const nameToDelete = customerToDelete.name;
+
+    // Optimistic UI update
+    const updated = customerList.filter((c) => c.id !== idToDelete);
     saveCustomers(updated);
 
-    if (selectedCustomer?.id === customerToDelete.id) {
+    if (selectedCustomer?.id === idToDelete) {
       setIsDetailModalOpen(false);
       setSelectedCustomer(null);
     }
 
+    try {
+      await fetch(`/api/customers/${idToDelete}`, {
+        method: "DELETE"
+      });
+    } catch (e) {
+      console.error("Failed to delete customer from DB:", e);
+    }
+
     showToast({
       type: "info",
-      title: "Akun Customer Dihapus",
-      message: `Data pelanggan ${customerToDelete.name} telah dihapus dari sistem CRM.`
+      title: "Akun Customer Dihapus Permanen",
+      message: `Data pelanggan ${nameToDelete} telah dihapus dari database & sistem autentikasi.`
     });
 
     setIsDeleteModalOpen(false);

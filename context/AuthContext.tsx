@@ -154,68 +154,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      // 1. Try Supabase Auth first if configured
-      const supabase = getSupabaseClient();
-      if (supabase && password) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-        if (!error && data.user) {
-          const userMeta = data.user.user_metadata || {};
-          const isGoogle = data.user.app_metadata?.provider === "google" || data.user.identities?.some(i => i.provider === "google");
-          const customerUser: CustomerUser = {
-            id: data.user.id,
-            name: userMeta.full_name || userMeta.name || email.split("@")[0],
-            email: data.user.email || email,
-            avatar: userMeta.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
-            role: "customer",
-            joinedAt: data.user.created_at || new Date().toISOString(),
-            company: userMeta.company,
-            googleLinked: Boolean(isGoogle),
-            googleEmail: isGoogle ? (data.user.email || email) : undefined
-          };
-          setCustomer(customerUser);
-          localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
-          return { success: true };
-        }
-      }
-
-      // 2. Fallback to API route / Mock store
+      // 1. Always validate through customer verification API first to check deletion / suspension status
       const res = await fetch("/api/auth/customer/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
+      
       if (!res.ok || !data.success) {
-        return { success: false, error: data.error || "Gagal masuk ke akun customer." };
+        return {
+          success: false,
+          error: data.error || "Akun pelanggan tidak ditemukan atau telah dinonaktifkan."
+        };
+      }
+
+      // 2. Also authenticate Supabase session if configured
+      const supabase = getSupabaseClient();
+      if (supabase && password) {
+        try {
+          await supabase.auth.signInWithPassword({ email, password });
+        } catch (supErr) {
+          // Continue with valid profile session
+        }
       }
 
       const customerUser: CustomerUser = {
-        id: data.data.user.id || "usr-cust-001",
+        id: data.data.user.id,
         name: data.data.user.name || email.split("@")[0].replace(".", " "),
         email: data.data.user.email || email,
         avatar: data.data.user.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
         role: "customer",
         joinedAt: data.data.user.joinedAt || new Date().toISOString(),
         company: data.data.user.company,
-        googleLinked: false
+        googleLinked: Boolean(email.includes("@gmail.com"))
       };
 
       setCustomer(customerUser);
       localStorage.setItem("nexarin_customer_session", JSON.stringify(customerUser));
       return { success: true };
-    } catch (e) {
-      // Fallback in-memory
-      const fallbackUser: CustomerUser = {
-        ...DEFAULT_CUSTOMER,
-        name: email.split("@")[0].replace(".", " "),
-        email
+    } catch (e: any) {
+      return {
+        success: false,
+        error: e?.message || "Gagal menghubungi server autentikasi."
       };
-      setCustomer(fallbackUser);
-      localStorage.setItem("nexarin_customer_session", JSON.stringify(fallbackUser));
-      return { success: true };
     }
   };
 
