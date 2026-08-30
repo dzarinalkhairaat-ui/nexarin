@@ -4,8 +4,38 @@ import { GeminiSparkDraft, Article } from "@/types/content";
 import { auditService } from "./auditService";
 import { exec } from "child_process";
 import { promisify } from "util";
+import fs from "fs";
+import path from "path";
 
 const execAsync = promisify(exec);
+const BUFFER_FILE = path.join(process.cwd(), "data", "runtime_drafts.json");
+
+function loadBufferDrafts(): GeminiSparkDraft[] {
+  try {
+    if (fs.existsSync(BUFFER_FILE)) {
+      const content = fs.readFileSync(BUFFER_FILE, "utf-8");
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {}
+  return [];
+}
+
+function saveBufferDrafts(drafts: GeminiSparkDraft[]) {
+  try {
+    const dir = path.dirname(BUFFER_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(BUFFER_FILE, JSON.stringify(drafts, null, 2), "utf-8");
+  } catch (e) {}
+}
+
+function clearBufferDrafts() {
+  try {
+    const dir = path.dirname(BUFFER_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(BUFFER_FILE, "[]\n", "utf-8");
+  } catch (e) {}
+}
 
 export function extractSheetId(input: string): string {
   if (!input) return "";
@@ -24,7 +54,7 @@ export async function fetchGoogleSheetsDrafts(sheetIdOrUrl: string): Promise<Gem
   const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
   let raw = "";
 
-  // 1. Try fetch
+  // 1. Try fetch with timeout
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3500);
@@ -125,8 +155,10 @@ export const geminiSyncService = {
           .order("created_at", { ascending: false });
 
         if (!artErr) {
-          // If query succeeded, use real database records (even if empty [])
           if (artDrafts && artDrafts.length > 0) {
+            // Once confirmed present in Supabase, ensure runtime buffer is clean
+            clearBufferDrafts();
+
             return artDrafts.map((a: any) => ({
               id: a.id,
               sourceId: `src-${a.id}`,
@@ -147,7 +179,7 @@ export const geminiSyncService = {
             }));
           }
 
-          // Check editorial_drafts as secondary
+          // Check editorial_drafts as secondary table
           const { data: dftData, error: dftErr } = await supabase
             .from("editorial_drafts")
             .select("*")
@@ -155,6 +187,7 @@ export const geminiSyncService = {
             .order("created_at", { ascending: false });
 
           if (!dftErr && dftData && dftData.length > 0) {
+            clearBufferDrafts();
             return dftData.map((d: any) => ({
               id: d.id,
               sourceId: `src-${d.sheet_row_id || d.id}`,
@@ -175,12 +208,19 @@ export const geminiSyncService = {
             }));
           }
 
-          // If database is cleanly connected and empty, return pure empty array []!
+          // Both Supabase tables are empty: ensure buffer is also empty and return []
+          clearBufferDrafts();
           return [];
         }
       } catch (e) {
         console.error("Supabase drafts error:", e);
       }
+    }
+
+    // In case Supabase connection is temporarily unavailable, check buffer
+    const bufferDrafts = loadBufferDrafts();
+    if (bufferDrafts.length > 0) {
+      return bufferDrafts;
     }
 
     return [...db.drafts];
@@ -217,10 +257,11 @@ export const geminiSyncService = {
       } catch (e) {}
     }
 
-    const idx = db.drafts.findIndex((d) => d.id === id);
+    const drafts = await this.getDrafts();
+    const idx = drafts.findIndex((d) => d.id === id);
     if (idx !== -1) {
-      db.drafts[idx] = { ...db.drafts[idx], ...updates };
-      return db.drafts[idx];
+      drafts[idx] = { ...drafts[idx], ...updates };
+      return drafts[idx];
     }
     return null;
   },
@@ -233,6 +274,9 @@ export const geminiSyncService = {
         await supabase.from("editorial_drafts").delete().eq("id", draftId);
       } catch (e) {}
     }
+
+    // Clear from buffer as well
+    clearBufferDrafts();
 
     const idx = db.drafts.findIndex((d) => d.id === draftId);
     if (idx !== -1) {
@@ -312,7 +356,7 @@ export const geminiSyncService = {
     const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
-        // Upsert into Supabase articles table as PUBLISHED
+        // 1. Insert/Update into Supabase articles as published
         await supabase.from("articles").upsert({
           id: publishedArticle.id,
           title: publishedArticle.title,
@@ -333,13 +377,16 @@ export const geminiSyncService = {
           published_at: publishedArticle.publishedAt
         });
 
-        // Delete old draft from draft records
+        // 2. Delete old draft entry from articles and editorial_drafts
         await supabase.from("articles").delete().eq("id", draftId).eq("status", "draft");
         await supabase.from("editorial_drafts").delete().eq("id", draftId);
       } catch (e) {
         console.error("Supabase publish error:", e);
       }
     }
+
+    // Clean buffer file
+    clearBufferDrafts();
 
     db.articles.unshift(publishedArticle);
     const dIdx = db.drafts.findIndex((d) => d.id === draftId);
@@ -362,52 +409,68 @@ export const geminiSyncService = {
 
   async triggerSync(customSheetId?: string): Promise<{ syncedCount: number; newDrafts: GeminiSparkDraft[] }> {
     const sheetId = customSheetId || process.env.GOOGLE_SHEETS_ID || "1ydNZGWOtkRNpdwigw1IAupPaG0MNL9GXfVE-75pfZjU";
+    
+    // 1. Tarik baris data dari Google Sheet
     const sheetDrafts = await fetchGoogleSheetsDrafts(sheetId);
 
-    const supabase = getSupabaseAdminClient();
-
-    if (sheetDrafts.length > 0) {
-      for (const d of sheetDrafts) {
-        if (supabase) {
-          try {
-            await supabase.from("articles").upsert({
-              id: d.id,
-              title: d.title,
-              slug: d.suggestedSlug,
-              excerpt: d.summary,
-              content: d.draftContent,
-              category_id: d.category.toLowerCase(),
-              status: "draft",
-              author_name: "Redaksi Nexarin (via Gemini Spark)",
-              author_avatar: "/assets/avatar-default.svg",
-              read_time_minutes: 6,
-              views_count: 1,
-              is_featured: false,
-              is_trending: false,
-              created_at: d.scrapedAt
-            });
-
-            await supabase.from("editorial_drafts").upsert({
-              id: d.id,
-              source_name: d.sourceName,
-              source_url: d.sourceUrl,
-              title: d.title,
-              summary: d.summary,
-              suggested_content: d.draftContent,
-              suggested_category: d.category,
-              suggested_tags: d.tags,
-              gemini_score: 9.8,
-              status: "draft_ready"
-            });
-          } catch (e) {}
-        }
-      }
-
-      db.drafts = [...sheetDrafts];
-      return { syncedCount: sheetDrafts.length, newDrafts: sheetDrafts };
+    if (sheetDrafts.length === 0) {
+      clearBufferDrafts();
+      return { syncedCount: 0, newDrafts: [] };
     }
 
-    return { syncedCount: 0, newDrafts: [] };
+    // 2. Simpan sementara di buffer runtime_drafts.json
+    saveBufferDrafts(sheetDrafts);
+
+    const supabase = getSupabaseAdminClient();
+    let supabaseSuccess = false;
+
+    // 3. Alihkan data sepenuhnya ke Database Supabase
+    if (supabase) {
+      try {
+        for (const d of sheetDrafts) {
+          await supabase.from("articles").upsert({
+            id: d.id,
+            title: d.title,
+            slug: d.suggestedSlug,
+            excerpt: d.summary,
+            content: d.draftContent,
+            category_id: d.category.toLowerCase(),
+            status: "draft",
+            author_name: "Redaksi Nexarin (via Gemini Spark)",
+            author_avatar: "/assets/avatar-default.svg",
+            read_time_minutes: 6,
+            views_count: 1,
+            is_featured: false,
+            is_trending: false,
+            created_at: d.scrapedAt
+          });
+
+          await supabase.from("editorial_drafts").upsert({
+            id: d.id,
+            source_name: d.sourceName,
+            source_url: d.sourceUrl,
+            title: d.title,
+            summary: d.summary,
+            suggested_content: d.draftContent,
+            suggested_category: d.category,
+            suggested_tags: d.tags,
+            gemini_score: 9.8,
+            status: "draft_ready"
+          });
+        }
+        supabaseSuccess = true;
+      } catch (e) {
+        console.error("Supabase upsert error in sync:", e);
+      }
+    }
+
+    // 4. Ketika Data benar-benar sudah masuk ke Supabase, bersihkan buffer runtime_drafts.json
+    if (supabaseSuccess) {
+      clearBufferDrafts();
+    }
+
+    db.drafts = [...sheetDrafts];
+    return { syncedCount: sheetDrafts.length, newDrafts: sheetDrafts };
   },
 
   async importDirectDraft(draftData: {
@@ -478,6 +541,7 @@ export const geminiSyncService = {
       } catch (e) {}
     }
 
+    clearBufferDrafts();
     db.drafts.unshift(newDraft);
     return newDraft;
   },
