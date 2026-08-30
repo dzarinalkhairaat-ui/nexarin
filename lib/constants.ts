@@ -24,14 +24,21 @@ export const CATEGORIES = [
   { id: "news", name: "News", slug: "news", description: "Kabar terhangat dan dinamika industri teknologi global secara real-time.", icon: "Newspaper", color: "from-slate-500 to-zinc-600" },
 ];
 
+// Main 5-Pillar Global Navigation
 export const NAV_LINKS = [
   { label: "Home", href: "/", icon: "Home" },
-  { label: "AI", href: "/ai", icon: "Sparkles" },
-  { label: "Technology", href: "/technology", icon: "Cpu" },
-  { label: "Digital", href: "/digital", icon: "Globe" },
-  { label: "Gadget", href: "/gadget", icon: "Smartphone" },
-  { label: "Automotive", href: "/automotive", icon: "Car" },
+  { label: "Tech Info", href: "/tech-info", icon: "Newspaper" },
   { label: "Tutorials", href: "/tutorials", icon: "BookOpen" },
   { label: "Shop", href: "/shop", icon: "ShoppingBag" },
   { label: "Free Resources", href: "/free-resources", icon: "Download" },
+];
+
+// Contextual Tech Info Navigation Links
+export const TECH_INFO_NAV_LINKS = [
+  { label: "Semua Berita", href: "/tech-info", category: "all", icon: "Newspaper" },
+  { label: "AI", href: "/tech-info/ai", category: "ai", icon: "Sparkles" },
+  { label: "Technology", href: "/tech-info/technology", category: "technology", icon: "Cpu" },
+  { label: "Digital", href: "/tech-info/digital", category: "digital", icon: "Globe" },
+  { label: "Gadget", href: "/tech-info/gadget", category: "gadget", icon: "Smartphone" },
+  { label: "Automotive", href: "/tech-info/automotive", category: "automotive", icon: "Car" },
 ];

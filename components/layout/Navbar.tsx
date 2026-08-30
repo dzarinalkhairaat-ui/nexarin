@@ -32,7 +32,8 @@ import {
   Smartphone,
   Car,
   BookOpen,
-  Download
+  Download,
+  Newspaper
 } from "lucide-react";
 
 const NAV_ICONS: Record<string, React.ElementType> = {
@@ -44,7 +45,8 @@ const NAV_ICONS: Record<string, React.ElementType> = {
   Car,
   BookOpen,
   ShoppingBag,
-  Download
+  Download,
+  Newspaper
 };
 import { cn } from "@/lib/utils";
 
