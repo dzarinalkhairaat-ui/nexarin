@@ -3,7 +3,7 @@
 import React from "react";
 import { Article } from "@/types/content";
 import { CyberWaveBackground } from "@/components/ui/cyber-wave-background";
-import { Sparkles, ShieldCheck, Zap, Globe } from "lucide-react";
+import { ShieldCheck, Zap, Globe } from "lucide-react";
 
 interface TechInfoHeroHeadlinesProps {
   leadStory?: Article;
@@ -30,12 +30,6 @@ export function TechInfoHeroHeadlines({
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
-        {/* Top Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2DD4F5]/10 border border-[#2DD4F5]/30 text-[#2DD4F5] text-xs font-mono font-bold tracking-wide backdrop-blur-md">
-          <Sparkles className="w-3.5 h-3.5 text-[#7CF2C3]" />
-          <span>PORTAL INFORMASI &amp; JURNALISME TEKNOLOGI TERKURASI</span>
-        </div>
-
         {/* Editorial Brand Headline */}
         <div className="space-y-3 max-w-4xl">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">

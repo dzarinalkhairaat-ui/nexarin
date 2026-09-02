@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Article } from "@/types/content";
-import { Sparkles, Clock, ArrowRight, Calendar, Tag } from "lucide-react";
+import { Sparkles, Clock, ArrowRight, Calendar } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface TechInfoTopSpotlightProps {
@@ -28,17 +28,14 @@ export function TechInfoTopSpotlight({ article }: TechInfoTopSpotlightProps) {
         </span>
       </div>
 
-      {/* Modern High-End Editorial Card */}
-      <div className="group relative rounded-3xl bg-[#0F172A]/90 border border-white/[0.12] hover:border-[#2DD4F5]/40 transition-all duration-500 shadow-2xl overflow-hidden backdrop-blur-xl">
-        {/* Subtle Ambient Background Glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2DD4F5]/10 rounded-full blur-3xl pointer-events-none -mr-24 -mt-24" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
+      {/* Clean Solid Editorial Card (No Gradient Backgrounds) */}
+      <div className="group relative rounded-3xl bg-[#0F172A] border border-white/[0.08] hover:border-cyan-500/40 transition-all duration-300 shadow-xl overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-5 sm:p-6 lg:p-7 items-center">
           
-          {/* Left Column: Full-Height Visual Cover (Col 5) */}
+          {/* Left Column: Clean, Sharp Image Container (Col 5) */}
           <Link
             href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`}
-            className="lg:col-span-5 relative min-h-[260px] sm:min-h-[340px] lg:min-h-[400px] overflow-hidden bg-slate-950 block shrink-0"
+            className="lg:col-span-5 relative aspect-video lg:aspect-auto lg:h-full min-h-[220px] sm:min-h-[280px] rounded-2xl overflow-hidden bg-slate-950 border border-white/[0.08] block shrink-0"
           >
             <img
               src={article.featuredImage || "/assets/default-cover.svg"}
@@ -47,66 +44,63 @@ export function TechInfoTopSpotlight({ article }: TechInfoTopSpotlightProps) {
               onError={(e) => {
                 e.currentTarget.src = "/assets/default-cover.svg";
               }}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.85]"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
 
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#0F172A]" />
-
-            {/* Badges on Top of Cover */}
-            <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase bg-[#0B1120]/85 text-[#2DD4F5] border border-[#2DD4F5]/40 backdrop-blur-md shadow-lg">
+            {/* Badges on Top-Left of Image */}
+            <div className="absolute top-3 left-3 flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#0B1120]/85 text-[#2DD4F5] border border-cyan-500/30 backdrop-blur-md">
                 {article.category?.name || "Top Story"}
               </span>
               {article.breaking && (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-rose-500 text-white shadow-lg shadow-rose-500/40 animate-pulse">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-rose-500 text-white shadow-md animate-pulse">
                   Breaking
                 </span>
               )}
             </div>
           </Link>
 
-          {/* Right Column: Editorial Body & Meta (Col 7) */}
-          <div className="lg:col-span-7 p-6 sm:p-8 lg:p-9 flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
+          {/* Right Column: Clean Editorial Content (Col 7) */}
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
               
-              {/* Metadata Pill Row */}
-              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs font-mono">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#7CF2C3]/10 text-[#7CF2C3] font-bold border border-[#7CF2C3]/30 text-[11px]">
+              {/* Meta Header */}
+              <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400">
+                <span className="inline-flex items-center gap-1 text-[#7CF2C3] font-bold text-[11px] uppercase">
                   <Sparkles className="w-3.5 h-3.5" />
-                  SOROTAN UTAMA
+                  Sorotan Utama
                 </span>
                 <span className="text-slate-600">•</span>
-                <span className="text-slate-400 flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                <span className="flex items-center gap-1 text-slate-400">
+                  <Calendar className="w-3 h-3 text-slate-500" />
                   {article.publishedAt ? formatDate(article.publishedAt) : "Terbaru"}
                 </span>
                 <span className="text-slate-600">•</span>
-                <span className="text-slate-300 font-semibold flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#2DD4F5]" />
+                <span className="flex items-center gap-1 text-slate-300">
+                  <Clock className="w-3 h-3 text-[#2DD4F5]" />
                   {article.readingTimeMinutes || 6} min baca
                 </span>
               </div>
 
-              {/* Title with Balanced Editorial Typography */}
+              {/* Title */}
               <Link href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`}>
-                <h3 className="text-lg sm:text-2xl lg:text-[26px] font-black text-white group-hover:text-[#2DD4F5] transition-colors leading-[1.28] line-clamp-3">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
                   {article.title}
                 </h3>
               </Link>
 
               {/* Excerpt */}
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3">
+              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed line-clamp-3">
                 {article.excerpt}
               </p>
 
-              {/* Topic Tags Pills */}
+              {/* Topic Tags */}
               {article.tags && article.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {article.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono bg-white/[0.04] text-slate-400 border border-white/[0.06]"
+                      className="px-2 py-0.5 rounded-lg text-[11px] font-mono bg-white/[0.04] text-slate-400 border border-white/[0.06]"
                     >
                       #{tag}
                     </span>
@@ -115,14 +109,15 @@ export function TechInfoTopSpotlight({ article }: TechInfoTopSpotlightProps) {
               )}
             </div>
 
-            {/* Author Profile and CTA Row */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-white/[0.08]">
+            {/* Author and Action Row (Author on left, Text-only "Selengkapnya" on right) */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+              {/* Left: Author Profile */}
               <div className="flex items-center gap-3">
                 <img
                   src={article.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"}
                   alt={article.author?.name || "Author"}
                   referrerPolicy="no-referrer"
-                  className="w-10 h-10 rounded-full object-cover border border-[#2DD4F5]/40 shadow-md"
+                  className="w-9 h-9 rounded-full object-cover border border-white/20"
                 />
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-white leading-snug">
@@ -134,12 +129,13 @@ export function TechInfoTopSpotlight({ article }: TechInfoTopSpotlightProps) {
                 </div>
               </div>
 
+              {/* Right: Clean Text-Only "Selengkapnya" Link (No Background) */}
               <Link
                 href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#2DD4F5] to-[#7CF2C3] hover:from-[#2DD4F5]/90 hover:to-[#7CF2C3]/90 text-[#0B1120] font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all group/btn"
+                className="text-[#2DD4F5] hover:text-[#7CF2C3] font-bold text-xs font-mono flex items-center gap-1.5 transition-colors group/link"
               >
-                <span>Baca Analisis Lengkap</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                <span>Selengkapnya</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
               </Link>
             </div>
 
