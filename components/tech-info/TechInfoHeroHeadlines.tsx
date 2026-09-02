@@ -4,8 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Article } from "@/types/content";
 import { CyberWaveBackground } from "@/components/ui/cyber-wave-background";
-import { Clock, Calendar, ArrowRight, Sparkles, TrendingUp, ShieldCheck } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Clock, TrendingUp, ArrowRight } from "lucide-react";
 
 interface TechInfoHeroHeadlinesProps {
   leadStory: Article;
@@ -24,7 +23,6 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
         
         {/* Editorial Brand Headline */}
         <div className="space-y-2 max-w-3xl">
-
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
             Tech Info Newsroom
           </h1>
@@ -42,10 +40,14 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
               href={`/tech-info/${leadStory.category?.slug || "technology"}/article/${leadStory.slug}`}
               className="relative flex flex-col justify-end h-full min-h-[380px] sm:min-h-[460px] rounded-3xl overflow-hidden p-6 sm:p-10 border border-white/[0.12] hover:border-[#2DD4F5]/50 transition-all duration-300 backdrop-blur-xl shadow-2xl block"
             >
-              {/* Background Image */}
+              {/* Background Image with Fallback and ReferrerPolicy */}
               <img
-                src={leadStory.featuredImage || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop"}
+                src={leadStory.featuredImage || "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1600&q=80"}
                 alt={leadStory.title}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = "/assets/article-ai.svg";
+                }}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.70]"
               />
 
@@ -78,6 +80,7 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
                     <img
                       src={leadStory.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"}
                       alt={leadStory.author?.name || "Author"}
+                      referrerPolicy="no-referrer"
                       className="w-5 h-5 rounded-full object-cover border border-white/30"
                     />
                     <span className="text-white font-semibold">{leadStory.author?.name || "Rins"}</span>
@@ -90,39 +93,56 @@ export function TechInfoHeroHeadlines({ leadStory, trendingStories }: TechInfoHe
             </Link>
           </div>
 
-          {/* 2 Sub-Lead Trending Stories (Col 4) */}
+          {/* 2 Sub-Lead Trending Stories (Col 4) with Rich Images */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             {trendingStories.slice(0, 2).map((story, idx) => (
               <Link
                 key={story.id || idx}
                 href={`/tech-info/${story.category?.slug || "technology"}/article/${story.slug}`}
-                className="group relative flex flex-col justify-between flex-1 rounded-3xl p-5 sm:p-6 bg-[#0F172A]/85 border border-white/[0.10] hover:border-[#7CF2C3]/40 transition-all duration-300 backdrop-blur-xl shadow-xl overflow-hidden"
+                className="group relative flex flex-col sm:flex-row lg:flex-row gap-4 justify-between flex-1 rounded-3xl p-4 sm:p-5 bg-[#0F172A]/85 border border-white/[0.10] hover:border-[#7CF2C3]/40 transition-all duration-300 backdrop-blur-xl shadow-xl overflow-hidden"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold uppercase border border-[#7CF2C3]/30">
-                      {story.category?.name || "Trending"}
-                    </span>
-                    <span className="text-slate-500 flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3 text-[#2DD4F5]" />
-                      Trending #{idx + 1}
+                {/* Visual Thumbnail for Trending Cards */}
+                <div className="relative w-full sm:w-32 lg:w-32 h-32 sm:h-auto lg:h-full min-h-[100px] rounded-2xl overflow-hidden bg-slate-950 border border-white/[0.08] shrink-0">
+                  <img
+                    src={story.featuredImage || "/assets/article-tech.svg"}
+                    alt={story.title}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.src = "/assets/article-tech.svg";
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-[0.85]"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 left-2">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase bg-[#0B1120]/80 text-[#7CF2C3] border border-[#7CF2C3]/30 backdrop-blur-md">
+                      #{idx + 1}
                     </span>
                   </div>
-
-                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#7CF2C3] transition-colors leading-snug line-clamp-2">
-                    {story.title}
-                  </h3>
-
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {story.excerpt}
-                  </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 mt-2 border-t border-white/[0.08] text-[11px] font-mono text-slate-500">
-                  <span>{story.readingTimeMinutes || 3} min read</span>
-                  <span className="text-slate-400 group-hover:text-white font-bold flex items-center gap-1">
-                    Selengkapnya <ArrowRight className="w-3 h-3 text-[#7CF2C3]" />
-                  </span>
+                <div className="flex flex-col justify-between flex-1 space-y-2 min-w-0">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px] font-mono">
+                      <span className="px-2 py-0.5 rounded-full bg-[#7CF2C3]/15 text-[#7CF2C3] font-bold uppercase border border-[#7CF2C3]/30 text-[10px]">
+                        {story.category?.name || "Trending"}
+                      </span>
+                      <span className="text-slate-500 flex items-center gap-1 text-[10px]">
+                        <TrendingUp className="w-2.5 h-2.5 text-[#2DD4F5]" />
+                        Trending
+                      </span>
+                    </div>
+
+                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-[#7CF2C3] transition-colors leading-snug line-clamp-2">
+                      {story.title}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.08] text-[10px] font-mono text-slate-500">
+                    <span>{story.readingTimeMinutes || 3} min read</span>
+                    <span className="text-slate-400 group-hover:text-white font-bold flex items-center gap-1">
+                      Baca <ArrowRight className="w-3 h-3 text-[#7CF2C3]" />
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}

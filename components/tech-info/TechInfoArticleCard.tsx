@@ -29,6 +29,7 @@ export function TechInfoArticleCard({ article }: TechInfoArticleCardProps) {
         <Link href={`/tech-info/${article.category?.slug || "technology"}/article/${article.slug}`} className="block relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/[0.08]">
           <img
             src={coverImage}
+            referrerPolicy="no-referrer"
             alt={article.title}
             onError={(e) => {
               e.currentTarget.src =

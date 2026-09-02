@@ -181,8 +181,12 @@ export default function TechInfoArticleDetailPage() {
         {/* 3. Featured Image (16:9 Banner) */}
         <div className="relative aspect-video w-full max-w-5xl rounded-3xl overflow-hidden bg-slate-950 border border-white/[0.12] shadow-2xl">
           <img
-            src={article.featuredImage || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop"}
+            src={article.featuredImage || "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1600&q=80"}
             alt={article.title}
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.currentTarget.src = "/assets/default-cover.svg";
+            }}
             className="w-full h-full object-cover brightness-[0.85]"
           />
         </div>
@@ -334,17 +338,28 @@ export default function TechInfoArticleDetailPage() {
                     <Link
                       key={rel.id}
                       href={`/tech-info/${rel.category?.slug || categorySlug}/article/${rel.slug}`}
-                      className="block p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] group transition-all"
+                      className="flex items-center gap-3 p-2.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] group transition-all"
                     >
-                      <span className="text-[10px] font-mono text-[#7CF2C3] font-bold uppercase block mb-1">
-                        {rel.category?.name || categoryName}
-                      </span>
-                      <h4 className="text-xs font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
-                        {rel.title}
-                      </h4>
-                      <span className="text-[10px] font-mono text-slate-500 block mt-2">
-                        {rel.readingTimeMinutes || 3} min baca
-                      </span>
+                      <div className="relative w-16 h-14 rounded-xl overflow-hidden bg-slate-950 shrink-0 border border-white/[0.08]">
+                        <img
+                          src={rel.featuredImage || "/assets/default-cover.svg"}
+                          alt={rel.title}
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.src = "/assets/default-cover.svg";
+                          }}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 brightness-[0.85]"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <span className="text-[10px] font-mono text-[#7CF2C3] font-bold uppercase block">
+                          {rel.category?.name || categoryName}
+                        </span>
+                        <h4 className="text-xs font-bold text-white group-hover:text-[#2DD4F5] transition-colors leading-snug line-clamp-2">
+                          {rel.title}
+                        </h4>
+                      </div>
                     </Link>
                   ))}
                 </div>
