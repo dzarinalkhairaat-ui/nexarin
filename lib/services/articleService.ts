@@ -1,13 +1,52 @@
+import fs from "fs";
+import path from "path";
 import { db } from "@/lib/db/store";
 import { getSupabaseAdminClient } from "@/lib/db/supabase";
 import { Article } from "@/types/content";
 import { auditService } from "./auditService";
+import { INITIAL_ARTICLES } from "@/data/mockArticles";
+
+const ARTICLES_JSON_FILE = path.join(process.cwd(), "data", "articles.json");
+
+export function loadArticlesFromJson(): Article[] {
+  try {
+    if (typeof window === "undefined" && fs.existsSync(ARTICLES_JSON_FILE)) {
+      const raw = fs.readFileSync(ARTICLES_JSON_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to read data/articles.json:", e);
+  }
+  return [...INITIAL_ARTICLES];
+}
+
+export function saveArticlesToJson(articles: Article[]): void {
+  try {
+    if (typeof window === "undefined") {
+      const dir = path.dirname(ARTICLES_JSON_FILE);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(ARTICLES_JSON_FILE, JSON.stringify(articles, null, 2), "utf-8");
+    }
+  } catch (e) {
+    console.error("Failed to write data/articles.json:", e);
+  }
+}
 
 export const articleService = {
   async getAll(params?: { category?: string; query?: string; status?: string }): Promise<Article[]> {
     const targetStatus = params?.status || "published";
-    const supabase = getSupabaseAdminClient();
 
+    // 1. Always load fresh from data/articles.json database
+    const jsonArticles = loadArticlesFromJson();
+    if (db.articles.length === 0 || db.articles.length < jsonArticles.length) {
+      db.articles = [...jsonArticles];
+    }
+
+    // 2. Query Supabase if available for additional live published articles
+    const supabase = getSupabaseAdminClient();
     if (supabase) {
       try {
         let query = supabase.from("articles").select("*").order("created_at", { ascending: false });
@@ -22,9 +61,9 @@ export const articleService = {
           query = query.eq("category_id", params.category.toLowerCase());
         }
 
-        const { data, error } = await query;
-        if (!error && data) {
-          return data.map((a: any) => ({
+        const { data: supaData, error } = await query;
+        if (!error && supaData && supaData.length > 0) {
+          const supaArticles = supaData.map((a: any) => ({
             id: a.id,
             title: a.title,
             slug: a.slug,
@@ -56,6 +95,11 @@ export const articleService = {
             metaTitle: a.meta_title || a.title,
             metaDescription: a.meta_description || a.excerpt
           }));
+
+          // Merge: combine Supabase articles with JSON articles without duplicate IDs
+          const existingIds = new Set(supaArticles.map((s: any) => s.id));
+          const nonDuplicateJson = jsonArticles.filter((j) => !existingIds.has(j.id));
+          db.articles = [...supaArticles, ...nonDuplicateJson];
         }
       } catch (e) {
         console.error("Supabase articles read error:", e);
@@ -63,6 +107,10 @@ export const articleService = {
     }
 
     let result = [...db.articles];
+    if (result.length === 0) {
+      result = [...jsonArticles];
+    }
+
     if (params?.status && params.status !== "all") {
       result = result.filter((a) => (a.status || "published") === params.status);
     } else if (!params?.status) {
@@ -86,6 +134,7 @@ export const articleService = {
           a.tags.some((t) => t.toLowerCase().includes(q))
       );
     }
+
     return result;
   },
 
@@ -123,7 +172,7 @@ export const articleService = {
       author: articleData.author || {
         name: "Redaksi Nexarin",
         role: "Lead Tech Architect",
-        avatar: "/assets/avatar-default.svg"
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
       },
       readingTimeMinutes: articleData.readingTimeMinutes || 5,
       views: 1,
@@ -161,6 +210,7 @@ export const articleService = {
     }
 
     db.articles.unshift(newArticle);
+    saveArticlesToJson(db.articles);
     return newArticle;
   },
 
@@ -191,6 +241,7 @@ export const articleService = {
     const idx = db.articles.findIndex((a) => a.id === id);
     if (idx !== -1) {
       db.articles[idx] = { ...db.articles[idx], ...updates, updatedAt: new Date().toISOString() };
+      saveArticlesToJson(db.articles);
       return db.articles[idx];
     }
     return null;
@@ -211,6 +262,7 @@ export const articleService = {
     if (idx !== -1) {
       const deleted = db.articles[idx];
       db.articles.splice(idx, 1);
+      saveArticlesToJson(db.articles);
       await auditService.log(
         "usr-adm-001",
         "Rins",
